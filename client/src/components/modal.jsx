@@ -31,12 +31,12 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const handleModalClose = () => {
-  console.log("닫기 누름");
-};
-
 function Modal({ children }) {
   const [modalState, setModalState] = useState(true);
+
+  const handleModalClose = () => {
+    setModalState(false);
+  };
 
   if (modalState) {
     return (
