@@ -1,8 +1,7 @@
 import React, { Children, useState } from "react";
 import styled from "styled-components";
 // 아이콘 추가
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { IoClose } from "react-icons/io5";
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -10,7 +9,7 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   width: 50%;
-  height: 60%;
+  height: 70%;
   transform: translate(-50%, -50%);
   background-color: yellow;
   padding: 3% 5%;
@@ -23,8 +22,9 @@ const DialogBox = styled.div``;
 const FormContainer = styled.div``;
 
 const CloseButton = styled.button`
-  position: relative;
-  left: 95%;
+  position: absolute;
+  right: 3%;
+  top: 5%;
   border: none;
   background-color: inherit;
   font-size: 1rem;
@@ -43,7 +43,7 @@ function Modal({ children }) {
       <ModalContainer>
         <DialogBox>
           <CloseButton onClick={handleModalClose}>
-            <FontAwesomeIcon icon={faX} />
+            <IoClose size={25} />
           </CloseButton>
           <FormContainer>{children}</FormContainer>
         </DialogBox>

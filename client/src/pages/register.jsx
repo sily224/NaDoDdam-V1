@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Modal from "../components/modal";
+import Modal from "../components/Modal";
 
 const ModalTitle = styled.h1`
   color: blue;
@@ -14,30 +14,15 @@ const InputForm = styled.div`
   margin: 10% 0;
 `;
 
+const InputFormText = styled.span``;
+
 const Input = styled.input``;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Button = styled.button`
-  + button {
-    margin-top: 2%;
-  }
-`;
-
-const Line = styled.div`
-  content: "  ";
-  display: block;
+const RegisterBtn = styled.button`
   width: 100%;
-  height: 0.5px;
-  background-color: gray;
-  margin: 5% 0;
 `;
 
-const SocialLogin = styled.div``;
-const SocialButton = styled.button``;
+const LoginBtn = styled.button``;
 
 function Register() {
   return (
@@ -45,18 +30,18 @@ function Register() {
       <Modal>
         <ModalTitle>회원가입</ModalTitle>
         <InputForm>
-          <Input placeholder="이메일" />
-          <Input placeholder="비밀번호" />
+          <InputFormText>이메일</InputFormText>
+          <Input />
+          <InputFormText>비밀번호</InputFormText>
+          <Input placeholder="영문, 숫자, 특수문자 조합 최소 8자" />
+          <Input placeholder="비밀번호 확인" />
+          <InputFormText>이름</InputFormText>
+          <Input />
+          <InputFormText>전화번호</InputFormText>
+          <Input placeholder="숫자만 입력해주세요" />
         </InputForm>
-        <ButtonWrapper>
-          <Button>로그인</Button>
-          <Button>회원가입</Button>
-        </ButtonWrapper>
-        <Line />
-        <SocialLogin>
-          <SocialButton></SocialButton>
-          <SocialButton></SocialButton>
-        </SocialLogin>
+        <RegisterBtn>가입하기</RegisterBtn>
+        <LoginBtn>로그인하기</LoginBtn>
       </Modal>
     </>
   );
