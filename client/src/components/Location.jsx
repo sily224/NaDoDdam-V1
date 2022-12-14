@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import styled from 'styled-components';
 
 const { kakao } = window;
 
@@ -26,13 +27,13 @@ const Location = ({latitude,longitude}) =>{
         marker.setMap(map);
     }, []);
 
-
-
     return (
-        <div>
-            <div id="map" style={{width:"500px", height:"400px"}}></div>
-        </div>
+        <MapDiv id="map"></MapDiv>
     );
 }
 
+const MapDiv = styled.div`
+    width:100%;
+    height:400px;
+`;
 export default Location;

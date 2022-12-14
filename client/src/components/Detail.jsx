@@ -34,7 +34,7 @@ const Detail = ({ datas }) => {
                                         }                                       
                                     </div>
                                 </Period>
-                                <Review review={data.reveiw}>후기</Review>
+                                <Review review={data.review}>후기</Review>
                                 <p>찾아오는길</p>
                                 <Location latitude ={data.latitude} longitude={data.longitude} ></Location>
                                 <Company>
@@ -80,7 +80,6 @@ const DetailContainer = styled.div`
 `;
 const Content = styled.div`
     display:flex;
-    justify-content: space-evenly;
 `;
 
 const Period = styled(Content)`
@@ -93,12 +92,17 @@ const Period = styled(Content)`
 `;
 const Inform = styled.div`
     width: 100%;
-`;
-const Company = styled.div`
-    border : 1px solid black;
+    margin-right : 3%;
 `;
 const Form = styled.form`
+    width: 25%;
     height: 200px;
+    border : 1px solid black;
+    position: sticky;
+    margin: 0 3%;
+    top: 20%;
+`;
+const Company = styled.div`
     border : 1px solid black;
 `;
 

@@ -7,7 +7,18 @@
     "grade": "4.5",
     "price": 7000,
     "times" : ["8:00 ~ 9:45", "10:00 ~ 11:45", "14:00 ~ 15:45"],
-    "review": [ {"user1": ["userId","이것은 리뷰1입니다."]},{"user2": ["userId2","이것은 리뷰2입니다."]}],
+    "review": [
+    {
+        "id": "userId1",
+        "name":"username1",
+        "content":"이것은 리뷰1입니다."
+    },
+    {
+        "id" :"userId2",
+        "name":"username2",
+        "content" : "이것은 리뷰2입니다."
+    }  
+    ],
     "company" : { "name": "땡글땡글 감", "tel": "052-3334-1111" , "id":"siejf124D", "ceo":"박지혜"},
     "latitude": 33.450701,
     "longitude":126.570667
