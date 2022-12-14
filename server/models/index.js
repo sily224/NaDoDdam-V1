@@ -1,45 +1,14 @@
-'use strict';
-import fs from'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
-import process from 'process';
-import Users from "./Users.js";
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const basename = path.basename(__filename);
+import initModels from "./init-models.js";
+// import { fileURLToPath } from 'url';
+// const __filename = fileURLToPath(import.meta.url);
 // const env = process.env.NODE_ENV || 'development';
 import {config} from  '../config/config.js'
-const db = {};
+console.log(config);
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-// let sequelize;
-// if (config.use_env_variable) {
-//   sequelize = new Sequelize(process.env[config.use_env_variable], config);
-// } else {
-//   sequelize = new Sequelize(config.database, config.username, config.password, config);
-// }
-
-// fs
-//   .readdirSync(__dirname)
-//   .filter(file => {
-//     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-//   })
-//   .forEach(file => {
-//     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-//     db[model.name] = model;
-//   });
-
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db);
-//   }
-// });
-
-db.sequelize = sequelize;
-
-db.Users = Users;
-Users.init(sequelize);
-
+const db = initModels(sequelize);
 
 export {db, sequelize};

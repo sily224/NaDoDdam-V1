@@ -1,52 +1,67 @@
-import { Sequelize } from "sequelize";
+import _sequelize from 'sequelize';
+const { Model, Sequelize } = _sequelize;
 
-export default class Users extends Sequelize.Model{
-    static init(sequielize) {
-        return super.init(
-            {
-                id: {
-                    type: Sequelize.UUID,
-                    defaultVlue: Sequelize.UUIDV4,
-                    allowNull: false,
-                    unique: true,
-                    primaryKey: true,
-                    comment: "고유번호 UUID"
-                },
-                email: {
-                    type: Sequelize.STRING(255),
-                    validate: {
-                        isEmail: true,
-                    },
-                    comment: "이메일",
-                }, 
-                password: {
-                    type: Sequelize.STRING(255),
-                    comment: "비밀번호"
-                },
-                name: {
-                    type: Sequelize.STRING(255),
-                    comment: "이름"
-                },
-                phone_number: {
-                    type: Sequelize.STRING(72),
-                    comment: "전화번호"
-                },
-                likefarms: {
-                    type: Sequelize.INTEGER(),
-                    comment: "관심농장"
-                },
-            }, {
-                sequielize,
-                underscored: false,
-                modelNmae: "Users",
-                tableName: "Users",
-                charset: "utf8",
-                collate: "utf8_general_ci",
-                tableName: "Users",
-                timestamps: true,
-                paranoid: true, //deletedAt 컬럼 생성
-            }
-        );
+export default class users extends Model {
+  static init(sequelize, DataTypes) {
+  return super.init({
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
+    email: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      unique: "email_UNIQUE"
+    },
+    password: {
+      type: DataTypes.STRING(255),
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING(64),
+      allowNull: false,
+      unique: "name_UNIQUE"
+    },
+    phoneNum: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    role: {
+      type: DataTypes.STRING(32),
+      allowNull: false,
+      defaultValue: "member"
     }
-    static associate(db){}
-};
+  }, {
+    sequelize,
+    tableName: 'users',
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "email_UNIQUE",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "email" },
+        ]
+      },
+      {
+        name: "name_UNIQUE",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "name" },
+        ]
+      },
+    ]
+  });
+  }
+}
