@@ -1,14 +1,24 @@
-import path from 'path';
 import Sequelize from 'sequelize';
-import initModels from "./init-models.js";
+import Users from "./users.js";
+import Reservations from './reservations.js';
 // import { fileURLToPath } from 'url';
 // const __filename = fileURLToPath(import.meta.url);
 // const env = process.env.NODE_ENV || 'development';
 import {config} from  '../config/config.js'
-console.log(config);
 
+const db = {};
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-const db = initModels(sequelize);
+db.Users = Users(sequelize, Sequelize);
+db.Reservations = Reservations(sequelize, Sequelize);
 
-export {db, sequelize};
+Object.keys(db).forEach((modelName)=> {
+  if(db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+export default db;
