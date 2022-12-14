@@ -7,18 +7,18 @@ module.exports = (sequelize, DataTypes) => {
             comment: "고유번호 UUID"
         },
         email: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING(255),
             validate: {
                 isEmail: true,
             },
             comment: "이메일",
         }, 
         password: {
-            type: DataTypes.STRING(60),
+            type: DataTypes.STRING(255),
             comment: "비밀번호"
         },
         name: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING(255),
             comment: "이름"
         },
         phone_number: {

@@ -1,7 +1,7 @@
-const express = require('express');
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const {sequelize} =  require('./models');
+import cors from "cors";
+import express from "express";
+import bodyParser from "body-parser";
+import {sequelize} from './models';
 
 const app = express();
 const PORT = process.env.PORT || 3000;

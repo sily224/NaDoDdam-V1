@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "NumberOne",
-    "password": "NumberOneZZang",
+    "username": "farmer",
+    "password": "farmer1234",
     "database": "Fruit_Farm",
-    "host": "192.168.45.60",
+    "host": "db-nadoddam.cg9zbydf2xfc.ap-northeast-2.rds.amazonaws.com",
     "dialect": "mysql"
   },
   "test": {
