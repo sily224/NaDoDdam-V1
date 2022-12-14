@@ -1,0 +1,100 @@
+[
+  {
+    "postNumber" : "1",
+    "imageURL" : "assets/potato.jpg",
+    "address": "강원도 영월군",
+    "name": "나눔드리농장",
+    "price": "20000"
+  },
+  {
+    "postNumber" : "2",
+    "imageURL" : "assets/strawberry.jpg",
+    "address": "충청남도 논산시",
+    "name": "아침애딸기농장",
+    "price": "30000"
+  },
+  {
+    "postNumber" : "3",
+    "imageURL" : "assets/peach.jpg",
+    "address": "경상북도 청도군",
+    "name": "SC복숭아체험농원",
+    "price": "40000"
+  },
+  {
+    "postNumber" : "4",
+    "imageURL" : "assets/potato.jpg",
+    "address": "강원도 영월군",
+    "name": "나눔드리농장",
+    "price": "20000"
+  },
+  {
+    "postNumber" : "5",
+    "imageURL" : "assets/strawberry.jpg",
+    "address": "충청남도 논산시",
+    "name": "아침애딸기농장",
+    "price": "30000"
+  },
+  {
+    "postNumber" : "6",
+    "imageURL" : "assets/peach.jpg",
+    "address": "경상북도 청도군",
+    "name": "SC복숭아체험농원",
+    "price": "40000"
+  },
+  {
+    "postNumber" : "7",
+    "imageURL" : "assets/potato.jpg",
+    "address": "강원도 영월군",
+    "name": "나눔드리농장",
+    "price": "20000"
+  },
+  {
+    "postNumber" : "8",
+    "imageURL" : "assets/strawberry.jpg",
+    "address": "충청남도 논산시",
+    "name": "아침애딸기농장",
+    "price": "30000"
+  },
+  {
+    "postNumber" : "9",
+    "imageURL" : "assets/peach.jpg",
+    "address": "경상북도 청도군",
+    "name": "SC복숭아체험농원",
+    "price": "40000"
+  },
+  {
+    "postNumber" : "10",
+    "imageURL" : "assets/potato.jpg",
+    "address": "강원도 영월군",
+    "name": "나눔드리농장",
+    "price": "20000"
+  },
+  {
+    "postNumber" : "11",
+    "imageURL" : "assets/strawberry.jpg",
+    "address": "충청남도 논산시",
+    "name": "아침애딸기농장",
+    "price": "30000"
+  },
+  {
+    "postNumber" : "12",
+    "imageURL" : "assets/peach.jpg",
+    "address": "경상북도 청도군",
+    "name": "SC복숭아체험농원",
+    "price": "40000"
+  },
+  {
+    "postNumber" : "13",
+    "imageURL" : "assets/potato.jpg",
+    "address": "강원도 영월군",
+    "name": "나눔드리농장",
+    "price": "20000"
+  },
+  {
+    "postNumber" : "14",
+    "imageURL" : "assets/strawberry.jpg",
+    "address": "충청남도 논산시",
+    "name": "아침애딸기농장",
+    "price": "30000"
+  }
+]
