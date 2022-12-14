@@ -7,6 +7,7 @@ const StyledContainer = styled.footer`
     border-top: 1px solid lightgray;
     width: 100%;
     padding: 1% 2.1%;
+    background-color:#fff;
 `;
 
 const StyledFooter= styled.div`
