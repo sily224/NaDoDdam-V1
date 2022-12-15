@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Layout from "./pages/Layout/Layout";
-import MyPage from './pages/UserPage/MyPage';
+import Layout from "./pages/Layout";
+import MyPage from './pages/MyPage';
 
 function App() {
   return <div className="App">
