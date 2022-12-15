@@ -5,10 +5,13 @@ const Container = styled.div`
   width: 80%;
   margin: 0 auto;
 `
-const StyledTitle = styled.span`
+
+const StyledTitle = styled.div`
   font-size: 2rem;
   font-weight: bold;
   position: relative;
+  margin-bottom: 6%;
+  display: inline-block;
 
   &::after {
     content:'';
@@ -155,6 +158,12 @@ const MyPage = () => {
                 )}
               </StyledInfoSubmit>
               <StyledButton onClick={handleInfoChangeBtn}>{!change ? '비밀번호 재설정' : '취소'}</StyledButton>
+            </StyledUserInfo>
+          </div>
+          <div>
+            <StyledInfoTitle>회원탈퇴</StyledInfoTitle>
+            <StyledUserInfo>
+              <StyledButton onClick={handleInfoChangeBtn}>회원탈퇴</StyledButton>
             </StyledUserInfo>
           </div>
     </Container>
