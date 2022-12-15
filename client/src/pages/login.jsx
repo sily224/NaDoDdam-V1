@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Modal from "../components/modal";
+import Modal from "../components/Modal";
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
