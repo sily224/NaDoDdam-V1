@@ -42,8 +42,8 @@ const Users = (sequelize, DataTypes) => {
     });
   };
 
-  Users.findByUsername = (name)=> {
-    return Users.findOne({where: {name}})
+  Users.findByUserEmail = (email)=> {
+    return Users.findOne({where: {email}})
   }
 
   Users.getUsers = ()=> {

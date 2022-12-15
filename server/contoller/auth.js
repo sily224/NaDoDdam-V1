@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import 'express-async-errors';
-// import * as Users from '../models/auth.js';
 import { config } from '../config/config.js';
 import {Router} from "express";
 import db from '../models/index.js';
@@ -10,9 +9,9 @@ const userRouter = Router();
 
 export async function signup(req, res, next) {
   const { phoneNum, password, name, email, role} = req.body;
-  const found = await  db['Users'].findByUsername(name);
+  const found = await  db['Users'].findByUserEmail(email);
   if (found) {
-    return res.status(409).json({ message: `${name} already exists`});
+    return res.status(409).json({ message: `${email} already exists`});
   }
   const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
   const userId = await  db['Users'].createUser({
@@ -24,13 +23,13 @@ export async function signup(req, res, next) {
     role,
   });
   const token = createJwtToken(userId);
-  res.status(201).json({ token, name });
+  res.status(201).json({ token, email });
 }
 
 
 export async function login(req, res, next) {
-  const { username, password } = req.body;
-  const user = await  db['Users'].findByUsername(username);
+  const { email, password } = req.body;
+  const user = await  db['Users'].findByUserEmail(email);
   if (!user) {
     return res.status(401).json({ message: 'Invalid user or password' });
   }
@@ -39,7 +38,7 @@ export async function login(req, res, next) {
     return res.status(401).json({ message: 'Invalid user or password' });
   }
   const token = createJwtToken(user.id);
-  res.status(200).json({ token, username });
+  res.status(200).json({ token, email });
 }
 
 export async function me(req, res, next) {
@@ -47,7 +46,7 @@ export async function me(req, res, next) {
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
-  res.status(200).json({ token: req.token, name: user.name });
+  res.status(200).json({ token: req.token, email: user.email });
 }
 
 const createJwtToken = (id) => {
