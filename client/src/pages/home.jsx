@@ -1,11 +1,11 @@
 // import getAllFarmData from '../lib/getAllFarmData';
-import ItemList from '../components/itemList';
+import FarmList from '../components/ItemList';
 import {useState, useEffect} from 'react';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 
-const NUMBER_OF_ITEMS_TO_GET = 10;
+const NUMBER_OF_ITEMS_TO_GET = 50;
 
 const Home = () => {
 
@@ -30,14 +30,12 @@ const Home = () => {
   }
 
   return (
-    <>
       <InfiniteScroll 
       dataLength={contents.length}
       next={getData}
       hasMore={true}>
-        <ItemList contents={contents}/>
+        <FarmList contents={contents}/>
       </InfiniteScroll>
-    </>
   )
 }
 

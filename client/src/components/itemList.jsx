@@ -32,6 +32,8 @@ const FarmList = ({contents}) => {
 
 const Container = styled.div`
   display : flex;
+  height : auto;
+  overflow : hidden;
   justify-content : center;
 `
 
