@@ -12,13 +12,13 @@ const buildCalendar = ()=> {
 
 const day = () =>{
     const days = ["일","월","화","수","목","금","토"];
-    return days.map( d => <Day key={`${d}`}>{d}</Day>)
+    return days.map( d => <td key={`${d}`}>{d}</td>)
 }
 const Calender = ()=>{
     
     return (
         <div>
-            <table id="calendar">
+            <Table>
                 <tbody>
                     <tr>
                         <td><label onClick={prevCalendar}>{'<'}</label></td>
@@ -29,13 +29,13 @@ const Calender = ()=>{
                         {day()}
                     </tr> 
                 </tbody>
-            </table>
+            </Table>
         </div>
     );
 }
-
-const Day = styled.td`
+const Table = styled.table`
     text-align:center;
+    margin:auto;
 `;
 
 export default Calender;

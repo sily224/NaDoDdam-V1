@@ -28,7 +28,10 @@ const Location = ({latitude,longitude}) =>{
     }, []);
 
     return (
-        <MapDiv id="map"></MapDiv>
+        <div>
+            <p>찾아오는길</p>
+            <MapDiv id="map"></MapDiv>
+        </div>
     );
 }
 

@@ -4,17 +4,19 @@ import Calender from "./Calender";
 import Location from "./Location";
 import Review from "./Review";
 
-const Detail = ({ datas }) => {
+const Detail = ({ data }) => {
     const [Selected, setSelected] = useState(1);
+ 
     const handleSelect = (e) => {
         setSelected(e.target.value);
     };
 
     return (
         <div>
-            {datas.map( (data,idx) => {
-                return (
-                    <DetailContainer key={`${data.title}-${idx}`}>
+            {
+                data &&
+    
+                <DetailContainer key={`${data.title}-${new Date()}`}>
                         <div className="header">
                             <h1 className="title">{data.title}</h1>
                             <p>{data.location}</p>
@@ -29,13 +31,12 @@ const Detail = ({ datas }) => {
                                     <div className="time">
                                         { 
                                             data.times.map( (time,idx)=>{
-                                                return <button key={`${idx}-${time}`}>{idx+1}타임  {time}</button>
+                                                return <TimeButton key={`${idx}-${time}`}>{idx+1}타임  {time}</TimeButton>
                                             })
-                                        }                                       
+                                        }                                        
                                     </div>
                                 </Period>
                                 <Review review={data.review}>후기</Review>
-                                <p>찾아오는길</p>
                                 <Location latitude ={data.latitude} longitude={data.longitude} ></Location>
                                 <Company>
                                     <p>업체정보</p>
@@ -63,9 +64,7 @@ const Detail = ({ datas }) => {
 
                         </Content>
                     </DetailContainer>
-                    )
                 }
-            )}
         </div>
     );
 };
@@ -89,6 +88,9 @@ const Period = styled(Content)`
         height: 200px;
         border:1px solid black;
     }
+    & :not(:last-child) {
+        margin-right:3%;
+    }
 `;
 const Inform = styled.div`
     width: 100%;
@@ -106,5 +108,10 @@ const Company = styled.div`
     border : 1px solid black;
 `;
 
+const TimeButton = styled.button`
+    width : 100%;
+    height: 20%;
+    background-color : white;
+`;
 
 export default Detail;

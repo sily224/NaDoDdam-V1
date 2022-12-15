@@ -3,7 +3,7 @@ import axios from 'axios';
 import Detail from "../components/Detail";
 
 const DetailPage =  () => {
-    const [detailData, setDetailData] = useState([]);
+    const [detailData, setDetailData] = useState(null);
 
     const fetchData = async () => {
         try {
@@ -11,7 +11,9 @@ const DetailPage =  () => {
                 console.log(res.data);
                 setDetailData(res.data);
             });
+            
         }
+
         catch(e){
             console.log(e);
         }
@@ -21,9 +23,13 @@ const DetailPage =  () => {
         fetchData();
     }, []);
 
+    useEffect (() => {
+        console.log(detailData);
+    }, [detailData]);
+
     return (
         <div>
-            <Detail datas={detailData}/>
+            <Detail data={detailData}/>
         </div>
     );
 }

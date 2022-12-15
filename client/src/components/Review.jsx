@@ -5,11 +5,11 @@ const Review = ({review})=>{
     return (
         <>
             <p>후기</p>
-            <ReviewContainer>
-                <ReviewContent> 
+            <ReviewContainer >
+                <ReviewContent len={review.length}> 
                     {
-                        
                         review.map((value, idx) => {
+                            if(idx >5){return;}
                             return( 
                                 <ReviewDiv key = {`reveiw-${idx}`} className = {value.id} >
                                     <p className="reveiwItem id" key = {`${value.id}-${idx}`}>{value.id}</p>
@@ -20,7 +20,7 @@ const Review = ({review})=>{
                         })  
                     }
                 </ReviewContent>
-                <button>모두보기</button>
+                {review.length > 6 && <button>모두보기</button>}
             </ReviewContainer>
         </>
     );
@@ -31,10 +31,11 @@ const ReviewContainer  = styled.div`
     padding: 10px;
     width: 100%;
 `;
+
 const ReviewContent = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-rows: ${(props) => props.len > 6 ? `repeat(3,1fr)` : `repeat(${Math.ceil(props.len/2)},1fr)`};
     gap: 10px 20px;
 `; 
 
