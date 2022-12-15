@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
-import Users from "./users.js";
-import Reservations from './reservations.js';
+import Users from "./auth.js";
+import Reservations from './Reservations.js';
 // import { fileURLToPath } from 'url';
 // const __filename = fileURLToPath(import.meta.url);
 // const env = process.env.NODE_ENV || 'development';
