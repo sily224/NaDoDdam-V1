@@ -1,15 +1,17 @@
 import React,{useState,useEffect} from 'react';
 import styled from 'styled-components';
-import Calender from "./Calender";
+import Calender from "./ReactCalender";
 import Location from "./Location";
 import Review from "./Review";
 
 const Detail = ({ data }) => {
-    const [Selected, setSelected] = useState(1);
- 
+    const [selected, setSelected] = useState(1);
+
     const handleSelect = (e) => {
         setSelected(e.target.value);
     };
+
+
 
     return (
         <div>
@@ -27,7 +29,7 @@ const Detail = ({ data }) => {
                                 <h3>{data.grade}점</h3>
                                 <p>{data.description}</p>
                                 <Period className="reservationTime">
-                                    <Calender>캘린더</Calender>
+                                    <Calender period ={data.period} className="calender"></Calender>
                                     <div className="time">
                                         { 
                                             data.times.map( (time,idx)=>{
@@ -48,6 +50,7 @@ const Detail = ({ data }) => {
                                 </Company>
                                 
                             </Inform>
+                            
                             <Form>
                                 <p>{data.price}원/명</p>
                                 <select onChange={handleSelect}>
@@ -58,13 +61,14 @@ const Detail = ({ data }) => {
                                     {data.times.map((time,idx) => <option  key={`${idx}-${time}`} value={time}>{time}</option>)}
                                 </select>
                                 <button type="submit">예약하기</button>
-                                <p>총 합게 : { Selected * data.price }</p>
+                                <p>총 합게 : { selected * data.price }</p>
                             </Form>
 
 
                         </Content>
+
                     </DetailContainer>
-                }
+            }
         </div>
     );
 };
@@ -83,13 +87,14 @@ const Content = styled.div`
 
 const Period = styled(Content)`
     justify-content: flex-start;
-    & div{    
-        flex-basis: 200px;
-        height: 200px;
-        border:1px solid black;
-    }
-    & :not(:last-child) {
+
+    div:first-child{
         margin-right:3%;
+    }
+    .time{    
+        flex-basis: 400px;
+        height: 220px;
+        border:1px solid black;
     }
 `;
 const Inform = styled.div`
