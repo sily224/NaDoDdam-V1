@@ -13,7 +13,10 @@ const config = {
     "password": MYSQL_PASSWORD,
     "database": MYSQL_DATABASE,
     "host": MYSQL_HOST,
-    "dialect": "mysql"
+    "dialect": "mysql",
+    bcrypt: {
+      saltRounds: 12,
+    },
 }
 
 const test = {

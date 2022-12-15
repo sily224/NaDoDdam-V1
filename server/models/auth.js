@@ -1,6 +1,3 @@
-import SQ from "sequelize";
-// import { sequelize } from "../db/database.js";
-const DataTypes = SQ.DataTypes;
 const Users = (sequelize, DataTypes) => {
   const Users = sequelize.define(
     "Users",
@@ -44,19 +41,22 @@ const Users = (sequelize, DataTypes) => {
       targetKey: "id",
     });
   };
+
+  Users.findByUsername = (name)=> {
+    return Users.findOne({where: {name}})
+  }
+
+  Users.getUsers = ()=> {
+    return Users.findAll();
+  }
+
+  Users.findById = (id) => {
+    return Users.findByPk(id);
+  }
+
+  Users.createUser = (user)=> {
+    return Users.create(user).then((data) => data.dataValues.id);
+  }
   return Users;
 };
-
-export async function findByUsername(username) {
-  return Users.findOne({ where: { username } });
-}
-
-export async function findById(id) {
-  return Users.findByPk(id);
-}
-
-export async function createUser(user) {
-  return Users.create(user).then((data) => data.dataValues.id);
-}
-
 export default Users;

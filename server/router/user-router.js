@@ -31,7 +31,7 @@ const validateSignup = [
 ];
 
 // signup
-router.post('/signup', validateSignup, authController.signup);
+// router.post('/signup', authController.signup);
 // login
 router.post('/login', validateCredential, authController.login);
 // me
