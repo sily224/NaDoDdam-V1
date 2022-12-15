@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import axios from "axios";
+import * as userApi from "../lib/userApi";
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -54,7 +55,7 @@ function Register() {
       .required("이름을 입력해주세요")
       .min(2, "최소 2자 이상 가능합니다")
       .max(15, "최대 15자까지 가능합니다"),
-    phoneNumber: yup
+    phoneNum: yup
       .string()
       .matches(/^[0-9]+$/, "숫자만 입력주세요")
       .min(5, "5자 이상의 전화번호를 입력해주세요")
@@ -69,13 +70,13 @@ function Register() {
 
   const navigate = useNavigate();
 
-  const joinUser = async ({ email, name, password, phoneNumber }) => {
+  const joinUser = async ({ email, name, password, phoneNum }) => {
     try {
-      const joinData = { email, name, password, phoneNumber };
+      const joinData = { email, password, phoneNum, name };
 
-      const join = await axios.get("/join.json").then((res) => {
+      const join = await userApi.post("/api/signup", joinData).then((res) => {
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("refreshToken", res.data.refreshToken);
+        // localStorage.setItem("refreshToken", res.data.refreshToken);
         localStorage.setItem("loggedIn", "true");
 
         alert(`정상적으로 회원가입되었습니다.`);
@@ -122,14 +123,14 @@ function Register() {
           <Input id="name" {...register("name")} />
           {errors.name && <small role="alert">{errors.name.message}</small>}
 
-          <Label htmlFor="phoneNumber">전화번호</Label>
+          <Label htmlFor="phoneNum">전화번호</Label>
           <Input
-            id="phoneNumber"
+            id="phoneNum"
             placeholder="숫자만 입력해주세요"
-            {...register("phoneNumber")}
+            {...register("phoneNum")}
           />
-          {errors.phoneNumber && (
-            <small role="alert">{errors.phoneNumber.message}</small>
+          {errors.phoneNum && (
+            <small role="alert">{errors.phoneNum.message}</small>
           )}
 
           <RegisterBtn type="submit" disabled={isSubmitting}>

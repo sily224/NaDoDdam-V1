@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import axios from "axios";
+import * as userApi from "../lib/userApi";
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -67,7 +68,7 @@ function Login() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors }, // 제출중이라면 가입하기 버튼 disabled됨
+    formState: { isSubmitting, errors }, // isSubmitting: 제출중인지 여부
   } = useForm({ mode: "onChange", resolver: yupResolver(formSchema) });
 
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ function Login() {
   const loginUser = async (data) => {
     try {
       console.log("전달되는 데이터", data);
-      const res = await axios.get("/join.json");
+      const res = await userApi.post("/api/login");
       const token = res.data.token;
       const refreshToken = res.data.refreshToken;
 
