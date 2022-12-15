@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import 'express-async-errors';
-import * as userRepository from '../data/auth.js';
-import { config } from '../config.js';
+import * as userRepository from '../models/auth.js';
+import { config } from '../config/config.js';
 
 export async function signup(req, res, next) {
   const { username, password, name, email, url } = req.body;

@@ -3,6 +3,7 @@ import express from "express";
 import bodyParser from "body-parser";
 // import sequelize from("./models");
 import db from "./models/index.js";
+import router from "./router/user-router.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,6 +37,7 @@ db.sequelize
     console.log(err);
   });
 
+app.get('/api', router);
 
 app.listen(PORT, () => {
   console.log(`Server On : http://localhost:${PORT}/`);

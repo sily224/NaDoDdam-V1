@@ -1,22 +1,7 @@
-// router.get("/register", async(req, res, next)=> {
-//     const id = req.body.id;
-//     const email = req.body.email;
-//     const password = req.body.password;
-//     const phoneNum = req.body.phoneNum;
-//     const role = req.body.role;
-
-//     const newUser = await userServie.addUser({
-//         id, email, password, phoneNum, role
-//     })
-
-//     res.status(201).json(newUser);
-// })
-
-// export {router};
 import express from 'express';
 import 'express-async-errors';
 import { body } from 'express-validator';
-import { validate } from '../middleware/validator.js';
+import { validate } from '../middleware/validate.js';
 import * as authController from '../contoller/auth.js';
 import { isAuth } from '../middleware/auth.js';
 
