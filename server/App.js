@@ -3,8 +3,8 @@ import express from "express";
 import bodyParser from "body-parser";
 // import sequelize from("./models");
 import db from "./models/index.js";
-// import router from "./router/user-router.js";
-import { userRouter } from "./contoller/auth.js";
+import router from "./router/user-router.js";
+// import { userRouter } from "./contoller/auth.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +20,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', (req, res) => {
     res.send('Server Response Success');
 })
+
+app.use("/api", router);
 
 // sequelize.sync({force: false})
 // .then(()=> {
@@ -38,7 +40,6 @@ db.sequelize
     console.log(err);
   });
 
-app.use("/api", userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server On : http://localhost:${PORT}/`);

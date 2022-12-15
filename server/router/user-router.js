@@ -8,7 +8,7 @@ import { isAuth } from '../middleware/auth.js';
 const router = express.Router();
 
 const validateCredential = [
-  body('username')
+  body('name')
     .trim()
     .notEmpty()
     .withMessage('username should be not empty'),
@@ -21,20 +21,17 @@ const validateCredential = [
 
 const validateSignup = [
   ...validateCredential,
-  body('name').trim().notEmpty().withMessage('name is missing'),
+  body('phonNum').trim().notEmpty().isMobilePhone().withMessage("phoneNum should be not empty"),
   body('email').trim().normalizeEmail().isEmail().withMessage('invalid email'),
-  body('url')
-    .isURL()
-    .withMessage('invalid URL')
-    .optional({ nullable: true, checkFalsy: true }),
   validate,
 ];
 
 // signup
-// router.post('/signup', authController.signup);
+router.post('/signup', validateCredential, authController.signup);
 // login
 router.post('/login', validateCredential, authController.login);
 // me
-router.get('/me', isAuth, authController.me);
+router.get('/me', isAuth, authController.me); //회원정보 조회
+router.get("/userlist", authController.totalUser);
 
 export default router;
