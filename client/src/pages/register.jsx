@@ -84,13 +84,13 @@ function Register() {
           localStorage.setItem("loggedIn", "true");
 
           alert(`정상적으로 회원가입되었습니다.`);
-
           // 로그인 페이지 이동
           // ** 수정 = 자동로그인이 되니깐 홈으로보내
           navigate("/login");
         });
     } catch (err) {
       console.error("회원가입 실패", err);
+      alert(err.message);
     }
   };
 

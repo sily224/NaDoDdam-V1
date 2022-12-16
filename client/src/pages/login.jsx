@@ -80,7 +80,6 @@ function Login() {
       console.log("전달되는 데이터", data);
       const res = await userApi.post("//localhost:3500/api/login", data);
       const token = res.data.token;
-      const refreshToken = res.data.refreshToken;
 
       localStorage.setItem("token", token);
       localStorage.setItem("loggedIn", "true");
@@ -88,6 +87,7 @@ function Login() {
       alert(`로그인되었습니다.`);
       navigate("/");
     } catch (err) {
+      alert(err.message);
       console.error("로그인 실패", err);
     }
   };
