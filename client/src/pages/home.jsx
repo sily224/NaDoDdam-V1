@@ -12,14 +12,13 @@ const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [contents, setContents] = useState([]);
 
-  console.log(contents);
 
   useEffect(()=>{
     getData();
   },[])
 
   const getData = async () => {
-    axios.get('mock_data/farms.json').then(res=>{
+    await axios.get('mock_data/farms.json').then(res=>{
       return res.data;
     }).then(res=>{
       const data = res.slice(currentIndex, currentIndex+NUMBER_OF_ITEMS_TO_GET);
@@ -32,32 +31,12 @@ const Home = () => {
   return (
       <InfiniteScroll 
       dataLength={contents.length}
-      next={getData}
-      hasMore={true}>
+      next={()=>getData()}
+      hasMore={true}
+      scrollThreshold="1">
         <FarmList contents={contents}/>
       </InfiniteScroll>
   )
 }
 
 export default Home;
-
-// const Home = () => {
-
-//   const [ref, inView] = useInView();
-//   const [contents, setContents] = useState([]);
-
-//   useEffect(()=>{
-//     getAllFarmData().then(res=>{
-//       setContents(res);
-//     })
-//   }, [])
-
-//   return (
-//     <>
-//       <ItemList contents={contents}/>
-//     </>
-//   );
-// };
-
-// export default Home;
-

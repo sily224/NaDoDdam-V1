@@ -32,14 +32,13 @@ const FarmList = ({contents}) => {
 
 const Container = styled.div`
   display : flex;
-  height : auto;
   overflow : hidden;
   justify-content : center;
+  
 `
 
 const ItemList = styled.div`
   display : grid;
-  width : 100vw;
   grid-template-columns : repeat(auto-fill, minmax(400px, auto));
   grid-gap : 25px;
   max-width : 2100px;
@@ -50,6 +49,7 @@ const Item = styled.div`
   flex-direction : column;
   flex-basis : auto;
   height : auto;
+  width : auto;
   border : 1px solid black;
   position : relative;
 
