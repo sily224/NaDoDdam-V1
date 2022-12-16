@@ -1,5 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import React, { useState } from "react";
+=======
+import React from "react";
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import axios from "axios";
@@ -49,8 +53,11 @@ const SocialButton = styled.button`
 `;
 
 function Login() {
+<<<<<<< HEAD
   const [modalOpen, setModalOpen] = useState(true);
 
+=======
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
   const formSchema = yup.object({
     email: yup
       .string()
@@ -78,11 +85,19 @@ function Login() {
   const loginUser = async (data) => {
     try {
       console.log("전달되는 데이터", data);
+<<<<<<< HEAD
       const res = await userApi.post("//localhost:3500/api/login", data);
+=======
+      const res = await userApi.post("/api/login");
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
       const token = res.data.token;
       const refreshToken = res.data.refreshToken;
 
       localStorage.setItem("token", token);
+<<<<<<< HEAD
+=======
+      localStorage.setItem("refreshToken", refreshToken);
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
       localStorage.setItem("loggedIn", "true");
       // // 기본 페이지로 이동
       alert(`로그인되었습니다.`);
@@ -94,6 +109,7 @@ function Login() {
 
   return (
     <>
+<<<<<<< HEAD
       {modalOpen && (
         <Modal setModalOpen={setModalOpen}>
           <ModalTitle>로그인</ModalTitle>
@@ -127,6 +143,39 @@ function Login() {
           </SocialLogin>
         </Modal>
       )}
+=======
+      <Modal>
+        <ModalTitle>로그인</ModalTitle>
+        <InputForm onSubmit={handleSubmit((data) => loginUser(data))}>
+          <Label htmlFor="email">이메일</Label>
+          <Input id="email" type="email" {...register("email")} />
+          {errors.email && <small role="alert">{errors.email.message}</small>}
+
+          <Label htmlFor="password">비밀번호</Label>
+          <Input
+            id="password"
+            type="password"
+            placeholder="영문, 숫자, 특수문자 조합 최소 8자"
+            {...register("password")}
+          />
+          {errors.password && (
+            <small role="alert">{errors.password.message}</small>
+          )}
+          <Button type="submit" disabled={isSubmitting}>
+            로그인
+          </Button>
+        </InputForm>
+
+        <Link to="/register">
+          <Button>회원가입</Button>
+        </Link>
+        <Line />
+        <SocialLogin>
+          <SocialButton>카카오</SocialButton>
+          <SocialButton>구글</SocialButton>
+        </SocialLogin>
+      </Modal>
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
     </>
   );
 }

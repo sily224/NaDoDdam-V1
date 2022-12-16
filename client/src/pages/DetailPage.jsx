@@ -34,4 +34,8 @@ const DetailPage =  () => {
 }
 
 
+<<<<<<< HEAD
 export default DetailPage;
+=======
+export default DetailPage;
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c

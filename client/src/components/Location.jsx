@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 import React, { useEffect , useContext } from 'react'
+=======
+import React, { useEffect , useContext} from 'react'
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 import styled from 'styled-components';
 import { DetailContext } from "../pages/DetailPage"
 
 const { kakao } = window;
 
 const Location = () =>{
+<<<<<<< HEAD
     const {detailData : data} = useContext(DetailContext);
     const { latitude, longitude } = data;
+=======
+    const { detailData : data } = useContext(DetailContext);
+    const { latitude, longitude } = data;
+
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
     useEffect(() => {
 
         const mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -35,7 +45,11 @@ const Location = () =>{
             <MapDiv id="map"></MapDiv>
         </div>
     );
+<<<<<<< HEAD
 };
+=======
+}
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 
 const MapDiv = styled.div`
     width:100%;

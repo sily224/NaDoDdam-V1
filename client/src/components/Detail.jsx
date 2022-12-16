@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 import React,{useState,useEffect,useContext,useMemo} from 'react';
+=======
+import React,{useState,useContext,useMemo} from 'react';
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 import styled from 'styled-components';
 import Calender from "./ReactCalender";
 import Location from "./Location";
 import Review from "./Review";
+<<<<<<< HEAD
 import TimeBtns from "./TimeBtns";
+=======
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 import { DetailContext } from "../pages/DetailPage"
 
 
@@ -23,6 +30,20 @@ const DetailDescription = ({description})=>{
     return <p>{description}</p>
 };
 
+<<<<<<< HEAD
+=======
+const DetailTimeBtns = ({times, btnActive, funActive}) =>{
+    return times.map( (time,idx)=>{
+        return <div key= {`TimeButtonContainer-${idx}`}>
+                <TimeButton 
+                    key= {`TimeButton-${idx}`}
+                    className={"btn" + (idx == btnActive ? " active" : "")} 
+                    value ={idx} onClick={funActive}>{`${idx+1}타임  ${time}`}
+                </TimeButton>
+            </div>
+    });
+};
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 
 const DetailCompany = ({company}) => {
     return (
@@ -37,6 +58,7 @@ const DetailCompany = ({company}) => {
     );
 };
 
+<<<<<<< HEAD
 const FloatingForm = ({price,times,handleHeadCount,headCount,totalPrice}) =>{
     return(
         <Form>
@@ -91,6 +113,74 @@ const Detail = () => {
                     </DetailContent>
                 </DetailContainer>
             } 
+=======
+const Detail = () => {
+    // const [price, setPrice] = useState(0);
+    const { detailData : data } = useContext(DetailContext);
+
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [headCount, setHeadCount] = useState(1);
+    const [timeBtnActive, setTimeBtnActive] = useState("");
+    
+    const handleHeadCount = (e) => {
+        setHeadCount(e.target.value);
+    };
+    const handleTimeSelect = (e) => {
+        console.log(e.target.value);
+        setTimeBtnActive(e.target.value);
+    };
+    const handlePrice = () => {
+        setTotalPrice(headCount * data.price);
+    }
+    // useEffect(() =>{
+    //     setPrice(data.price);
+    // },[]);
+
+    // useEffect (() => {
+    //     setTotalPrice(selected*price);
+    // },[selected])
+    // useMemo(() => handlePrice(), [headCount]);
+    
+    return (
+        <>
+            {
+                data &&
+    
+                <DetailContainer key={`${data.title}-${new Date()}`}>
+                        <DetailHeader title={data.title} location={data.location} />
+                        <DetailContent>
+                            <DetailInform>
+                                <DetailGrade grade={data.grade} />
+                                <DetailDescription description={data.description} />
+                                <DetailPeriod>
+                                    <div className="calender"><Calender /></div>
+                                    <TimButtonContainer>
+                                        <DetailTimeBtns times={data.times} btnActive={timeBtnActive} funActive={handleTimeSelect} />
+                                    </TimButtonContainer>
+                                </DetailPeriod>
+                                <Review />
+                                <Location />
+                                <DetailCompany company={data.company} />
+                                
+                            </DetailInform>
+                            
+                            <Form>
+                                <p>{data.price}원/명</p>
+                                <select onChange={handleHeadCount} value={headCount}>
+                                    {[...Array(10).keys()].map(n => <option key={`HeadCount-${n+1}`} value={n+1}  >{n+1}</option>)} 
+                                </select>
+                                <select>
+                                    <option defaultValue="선택하세요">선택하세요</option>
+                                    {data.times.map((time,idx) => <option  key={`${idx}-${time}`} value={time}>{time}</option>)}
+                                </select>
+                                <button type="submit">예약하기</button>
+                                <p>총 합게 : {totalPrice}</p> 
+                                {/* totalPrice */}
+                            </Form>
+                        </DetailContent>
+                    </DetailContainer>
+            }
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
         </>
     );
 };
@@ -133,6 +223,22 @@ const TimButtonContainer = styled.div`
     flex-direction: column;
     justify-content:center;
 `;
+<<<<<<< HEAD
 
+=======
+const TimeButton = styled.button`
+    display:block;
+    width : 100%;
+    height : 90px;
+    font-size : 1rem;
+    background-color : white;
+    border : 1px orange solid;
+    &.active {
+        background-color : orange;
+        opacity: 0.5;
+        color : white;
+    }
+`;
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 
 export default Detail;

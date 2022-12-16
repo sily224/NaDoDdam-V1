@@ -1,5 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import React, { useState } from "react";
+=======
+import React from "react";
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import axios from "axios";
@@ -32,8 +36,11 @@ const RegisterBtn = styled.button`
 const LoginBtn = styled.button``;
 
 function Register() {
+<<<<<<< HEAD
   const [modalOpen, setModalOpen] = useState(true);
 
+=======
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
   // 입력값 유효성 검사할 형태
   const formSchema = yup.object({
     email: yup
@@ -76,6 +83,7 @@ function Register() {
     try {
       const joinData = { email, password, phoneNum, name };
 
+<<<<<<< HEAD
       const join = await userApi
         .post("//localhost:3500/api/signup", joinData)
         .then((res) => {
@@ -89,6 +97,19 @@ function Register() {
           // ** 수정 = 자동로그인이 되니깐 홈으로보내
           navigate("/login");
         });
+=======
+      const join = await userApi.post("/api/signup", joinData).then((res) => {
+        localStorage.setItem("token", res.data.token);
+        // localStorage.setItem("refreshToken", res.data.refreshToken);
+        localStorage.setItem("loggedIn", "true");
+
+        alert(`정상적으로 회원가입되었습니다.`);
+
+        // 로그인 페이지 이동
+        // ** 수정 = 자동로그인이 되니깐 홈으로보내
+        navigate("/login");
+      });
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
     } catch (err) {
       console.error("회원가입 실패", err);
     }
@@ -96,6 +117,7 @@ function Register() {
 
   return (
     <>
+<<<<<<< HEAD
       {modalOpen && (
         <Modal setModalOpen={setModalOpen}>
           <ModalTitle>회원가입</ModalTitle>
@@ -148,6 +170,58 @@ function Register() {
           </Link>
         </Modal>
       )}
+=======
+      <Modal>
+        <ModalTitle>회원가입</ModalTitle>
+        <InputForm onSubmit={handleSubmit((data) => joinUser(data))}>
+          <Label htmlFor="email">이메일</Label>
+          <Input id="email" type="email" {...register("email")} />
+          {errors.email && <small role="alert">{errors.email.message}</small>}
+
+          <Label htmlFor="password">비밀번호</Label>
+          <Input
+            id="password"
+            type="password"
+            placeholder="영문, 숫자, 특수문자 조합 최소 8자"
+            {...register("password")}
+          />
+          {errors.password && (
+            <small role="alert">{errors.password.message}</small>
+          )}
+
+          <Input
+            placeholder="비밀번호를 다시 입력해주세요"
+            type="password"
+            {...register("passwordConfirm")}
+          />
+          {errors.passwordConfirm && (
+            <small role="alert">{errors.passwordConfirm.message}</small>
+          )}
+
+          <Label htmlFor="name">이름</Label>
+          <Input id="name" {...register("name")} />
+          {errors.name && <small role="alert">{errors.name.message}</small>}
+
+          <Label htmlFor="phoneNum">전화번호</Label>
+          <Input
+            id="phoneNum"
+            placeholder="숫자만 입력해주세요"
+            {...register("phoneNum")}
+          />
+          {errors.phoneNum && (
+            <small role="alert">{errors.phoneNum.message}</small>
+          )}
+
+          <RegisterBtn type="submit" disabled={isSubmitting}>
+            가입하기
+          </RegisterBtn>
+        </InputForm>
+
+        <Link to="/login">
+          <LoginBtn>로그인하기</LoginBtn>
+        </Link>
+      </Modal>
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
     </>
   );
 }

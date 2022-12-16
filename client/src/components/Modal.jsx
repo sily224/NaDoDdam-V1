@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { Children, useState, useEffect, useRef } from "react";
+=======
+import React, { Children, useState } from "react";
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
 import styled from "styled-components";
 // 아이콘 추가
 import { IoClose } from "react-icons/io5";
@@ -11,7 +15,11 @@ const ModalContainer = styled.div`
   width: 50%;
   height: 70%;
   transform: translate(-50%, -50%);
+<<<<<<< HEAD
   background-color: #f9d762;
+=======
+  background-color: #lightgray;
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
   border: solid 1px;
   padding: 3% 5%;
   box-sizing: border-box;
@@ -32,6 +40,7 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+<<<<<<< HEAD
 function Modal({ children, setModalOpen }) {
   let modalBox = useRef();
 
@@ -49,11 +58,19 @@ function Modal({ children, setModalOpen }) {
   };
 
   // x 클릭했을 때 모달 닫힘
+=======
+function Modal({ children , setModalOpen }) {
+
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
   const handleModalClose = () => {
     setModalOpen(false);
   };
   return (
+<<<<<<< HEAD
     <ModalContainer ref={modalBox}>
+=======
+    <ModalContainer>
+>>>>>>> 6ab9594a01e054a966bb724b0e69b7b5384baf0c
       <DialogBox>
         <CloseButton onClick={handleModalClose}>
           <IoClose size={25} />
