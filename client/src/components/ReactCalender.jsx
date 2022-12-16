@@ -4,9 +4,9 @@ import 'react-calendar/dist/Calendar.css'; // css import
 
 
 const ReactCalender = ({period}) => {
-
     const [start,end] = period;
     const [value, onChange] = useState(new Date(start));
+    
     useEffect(() => {
         console.log(value)
     },[value]);
