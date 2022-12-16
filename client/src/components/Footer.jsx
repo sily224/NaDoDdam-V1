@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const StyledContainer = styled.footer`
-    position:sticky;
+    position:fixed;
     bottom:0;
     font-size: 1rem;
     border-top: 1px solid lightgray;

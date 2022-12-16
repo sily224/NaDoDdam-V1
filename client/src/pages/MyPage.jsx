@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styled, {css} from 'styled-components';
 import MyPageEdit from '../components/MyPageEdit';
+import * as userApi from "../lib/userApi";
+import axios from "axios";
 
 const Container = styled.div`
   width: 80%;
@@ -80,7 +82,19 @@ const StyledButton = styled.button`
 `
 
 const MyPage = () => {
-  const token = localStorage.getItem('token');
+  const getToken = localStorage.getItem('token');
+  console.log(getToken);
+  const getUserInfo = async() => {
+    await axios
+      .get(`http://localhost:3500/api/me`, {
+        headers: {
+          authorization: getToken,
+        },
+      })
+      .then((res) => console.log("가져오는데이터", res))
+  }
+
+  getUserInfo();
 
   const user = {
     name : '홍길동',

@@ -33,7 +33,7 @@ export async function login(req, res, next) {
   if (!user) {
     return res.status(401).json({ message: 'Invalid user or password' });
   }
-  const isValidPassword = bcrypt.compare(password, user.password);
+  const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
     return res.status(401).json({ message: 'Invalid user or password' });
   }
