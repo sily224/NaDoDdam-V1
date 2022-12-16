@@ -1,6 +1,9 @@
+import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import styled from "styled-components";
-import Modal from "../components/modal";
+import Modal from "../components/Modal";
+import axios from "axios";
+import * as userApi from "../lib/userApi";
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,7 +15,7 @@ const ModalTitle = styled.h1`
   font-size: 1.5rem;
 `;
 
-const InputForm = styled.div`
+const InputForm = styled.form`
   display: flex;
   flex-direction: column;
   margin: 10% 0;
@@ -22,15 +25,8 @@ const Label = styled.label``;
 
 const Input = styled.input``;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const Button = styled.button`
-  + button {
-    margin-top: 2%;
-  }
+  width: 100%;
 `;
 
 const Line = styled.div`
@@ -72,14 +68,34 @@ function Login() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors }, // 제출중이라면 가입하기 버튼 disabled됨
+    formState: { isSubmitting, errors }, // isSubmitting: 제출중인지 여부
   } = useForm({ mode: "onChange", resolver: yupResolver(formSchema) });
+
+  const navigate = useNavigate();
+
+  const loginUser = async (data) => {
+    try {
+      console.log("전달되는 데이터", data);
+      const res = await userApi.post("/api/login");
+      const token = res.data.token;
+      const refreshToken = res.data.refreshToken;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("loggedIn", "true");
+      // // 기본 페이지로 이동
+      alert(`로그인되었습니다.`);
+      navigate("/");
+    } catch (err) {
+      console.error("로그인 실패", err);
+    }
+  };
 
   return (
     <>
       <Modal>
         <ModalTitle>로그인</ModalTitle>
-        <InputForm>
+        <InputForm onSubmit={handleSubmit((data) => loginUser(data))}>
           <Label htmlFor="email">이메일</Label>
           <Input id="email" type="email" {...register("email")} />
           {errors.email && <small role="alert">{errors.email.message}</small>}
@@ -87,17 +103,21 @@ function Login() {
           <Label htmlFor="password">비밀번호</Label>
           <Input
             id="password"
+            type="password"
             placeholder="영문, 숫자, 특수문자 조합 최소 8자"
             {...register("password")}
           />
           {errors.password && (
             <small role="alert">{errors.password.message}</small>
           )}
+          <Button type="submit" disabled={isSubmitting}>
+            로그인
+          </Button>
         </InputForm>
-        <ButtonWrapper>
-          <Button>로그인</Button>
-          <Button>회원가입하기</Button>
-        </ButtonWrapper>
+
+        <Link to="/register">
+          <Button>회원가입</Button>
+        </Link>
         <Line />
         <SocialLogin>
           <SocialButton>카카오</SocialButton>
