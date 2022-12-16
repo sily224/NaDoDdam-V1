@@ -37,16 +37,16 @@ const StyledUserInfo = styled.div`
 `
 
 const StyledUserInfoWrap = styled.div`
-position: relative;
-padding-bottom: 2%;
-&::after {
-  content:'';
-  width: 100%;
-  height: 2px;
-  background-color:lightgray;
-  display: block;
-  position: absolute;
-  bottom: 0;
+  position: relative;
+  padding-bottom: 2%;
+  &::after {
+    content:'';
+    width: 100%;
+    height: 2px;
+    background-color:lightgray;
+    display: block;
+    position: absolute;
+    bottom: 0;
 }
 `
 // const StyledInfoSubmit = styled.form`
@@ -85,7 +85,7 @@ const StyledButton = styled.button`
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({}); 
   
-const getUserInfo = async() => {
+const getUserInfo = async () => {
   const getToken = localStorage.getItem('token');
   const res = await userApi.get("//localhost:3500/api/me", {
     headers: {
@@ -101,9 +101,10 @@ const getUserInfo = async() => {
   useEffect(() => {
     getUserInfo();
   },[])
-  console.log(userInfo)
 
   const {name, tel, email, password} = userInfo;
+
+  
 
   const list = [
     {
@@ -138,10 +139,13 @@ const getUserInfo = async() => {
   };
 
   const handleCancle = (e) => {
+    const { id } = e.target;
+    console.log(id)
     setUserInfo({
-      ...userInfo
+      ...userInfo, 
+      [name]: id 
     });
-  }
+  };
 
   return (
     <Container>
@@ -152,6 +156,7 @@ const getUserInfo = async() => {
               id={item.id}
               name={item.name}
               title={item.title}
+              setname={item.setname}
               onChangeValue={handleInfoChange}
               onClickCancle={handleCancle}
            />

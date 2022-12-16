@@ -1,6 +1,7 @@
 import styled, {css} from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyledButton, StyledInfoTitle, StyledUserInfo } from '../pages/MyPage';
+import { express } from 'express';
 
 const StyledUserInfoWrap = styled.div`
   position: relative;
@@ -16,7 +17,7 @@ const StyledUserInfoWrap = styled.div`
 }
 `
 
-const MyPageEdit = ({id, name, title, onChangeValue,handleCancle}) => {
+const MyPageEdit = ({id, name, title, onChangeValue, handleCancle, setname}) => {
   let replaceName = '';
 
   if(id === 'tel') {
@@ -33,13 +34,14 @@ const MyPageEdit = ({id, name, title, onChangeValue,handleCancle}) => {
     setChange(cur => !cur)
   }
 
+
   return(
     <StyledUserInfoWrap>
       <div>
         <div><h4>{title}</h4></div>
           <StyledUserInfo>
             <div>
-               <span style={{display:`${!change ? "block" : "none"}`}}>{replaceName}</span>
+               <span style={{display:`${!change ? "block" : "none"}`}}>{gname}</span>
             </div>
            <div>
              {!change ? 
@@ -54,8 +56,7 @@ const MyPageEdit = ({id, name, title, onChangeValue,handleCancle}) => {
                   setChange(cur => !cur);
                   }}
                 >확인</StyledButton> 
-                <StyledButton 
-                  onClick={(e) => {
+                <StyledButton type="reset" onClick={(e) => {
                   setChange(cur => !cur);
                   }}>취소</StyledButton>
               </>
@@ -67,8 +68,9 @@ const MyPageEdit = ({id, name, title, onChangeValue,handleCancle}) => {
           <form>
             <label></label>
             <input 
+              id={setname}
               name={id} 
-              type={id === "password" ? "password" : "type"} 
+              type={id === "password" ? "password" : "text"} 
               value={name} 
               onChange={(e) => onChangeValue(e)}
             />

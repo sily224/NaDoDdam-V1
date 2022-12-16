@@ -22,9 +22,9 @@ async function post(endpoint, data) {
   return res;
 }
 
-// api 로 GET 요청 
+// api 로 user정보 GET 요청 
 async function get(endpoint) {
-  const apiUrl = endpoint
+  const apiUrl = endpoint;
   console.log(`%cGET 요청: ${apiUrl} `, "color: #a25cd1;");
 
   const res = await axios(apiUrl, {
