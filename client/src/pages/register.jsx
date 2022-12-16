@@ -76,17 +76,19 @@ function Register() {
     try {
       const joinData = { email, password, phoneNum, name };
 
-      const join = await userApi.post("/api/signup", joinData).then((res) => {
-        localStorage.setItem("token", res.data.token);
-        // localStorage.setItem("refreshToken", res.data.refreshToken);
-        localStorage.setItem("loggedIn", "true");
+      const join = await userApi
+        .post("//localhost:3500/api/signup", joinData)
+        .then((res) => {
+          localStorage.setItem("token", res.data.token);
+          // localStorage.setItem("refreshToken", res.data.refreshToken);
+          localStorage.setItem("loggedIn", "true");
 
-        alert(`정상적으로 회원가입되었습니다.`);
+          alert(`정상적으로 회원가입되었습니다.`);
 
-        // 로그인 페이지 이동
-        // ** 수정 = 자동로그인이 되니깐 홈으로보내
-        navigate("/login");
-      });
+          // 로그인 페이지 이동
+          // ** 수정 = 자동로그인이 되니깐 홈으로보내
+          navigate("/login");
+        });
     } catch (err) {
       console.error("회원가입 실패", err);
     }
