@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
+import MyPageEdit from '../components/MyPageEdit';
 
 const Container = styled.div`
   width: 80%;
@@ -30,47 +31,58 @@ const StyledUserInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  position: relative;
-  padding-bottom: 2%;
-
-  &::after {
-    content:'';
-    width: 100%;
-    height: 2px;
-    background-color:lightgray;
-    display: block;
-    position: absolute;
-    bottom: 0;
-  }
 `
-const StyledInfoSubmit = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-direction: column;
 
-  > input {
-    border:1px solid black;
-    border-radius: 10px;
-    padding: 5%;
-    margin-bottom: 4%;
-  }
-
-  > button {
-    background: lightgray;
-    border:none;
-    border-radius:10px;
-    padding: 5% 10%;
-  }
+const StyledUserInfoWrap = styled.div`
+position: relative;
+padding-bottom: 2%;
+&::after {
+  content:'';
+  width: 100%;
+  height: 2px;
+  background-color:lightgray;
+  display: block;
+  position: absolute;
+  bottom: 0;
+}
 `
+// const StyledInfoSubmit = styled.form`
+//   ${props=>props.action && css`
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: baseline;
+//   flex-direction: column;
+
+//   > input {
+//     border:1px solid black;
+//     border-radius: 10px;
+//     padding: 5%;
+//     margin-bottom: 4%;
+//   }
+
+//   > button {
+//     background: lightgray;
+//     border:none;
+//     border-radius:10px;
+//     padding: 5% 10%;
+//   }
+//   `}
+//   display: none;
+// `
 const StyledButton = styled.button`
   border: none;
   position: relative;
   background: none;
   text-decoration: underline;
+  &:action {
+    background: #000;
+  }
 `
 
+
+
 const MyPage = () => {
+  const token = localStorage.getItem('token');
   const user = {
     name : '홍길동',
     tel: '010-1234-5678',
@@ -87,25 +99,70 @@ const MyPage = () => {
 
   const {name, tel, email, password} = userInfo;
 
+  const list = [
+    {
+     id:"name",
+     title: "이름",
+     name: `${name}`,
+     isClicked: false,
+    },
+    {
+      id:"tel",
+      title:"전화번호",
+      name: `${tel}`,
+      isClicked: false,
+    },
+    {
+      id:"email",
+      title:"이메일",
+      name: `${email}`,
+      isClicked: false,
+    },
+    {
+      id:"password",
+      title:"비밀번호",
+      name: `${password}`,
+      isClicked: false,
+    }
+  ]
+
+  
   const handleInfoChange = (e) => {
-    const { value, name } = e.target; 
+    const { value, name } = e.target;
+    console.log(e.target)
       setUserInfo({
         ...userInfo, 
         [name]: value 
       });
   };
 
-  const [change, setChange] = useState(false)
-
-  const handleInfoChangeBtn = () => {
-    setChange(current => !current)
-  }
-
   return (
     <Container>
       <StyledTitle>내 정보 관리</StyledTitle>
-          <div>
-            <StyledInfoTitle>이름</StyledInfoTitle>
+          {list.map((item) => (
+            <MyPageEdit 
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              title={item.title}
+              onChangeValue={handleInfoChange}
+           />
+          ))}
+            {/* {list.map(item => {
+              return (<div key={item.id}>
+                <StyledInfoTitle>{item.title}</StyledInfoTitle>
+                <StyledUserInfo>
+                  {!change ? <span>{item.name}</span> : (
+                    <StyledInfoSubmit>
+                      <input name={item.id} type={item.id === "password" ? "password" : "type"} value={item.name} onChange={handleInfoChange} />
+                      <button>저장하기</button>
+                    </StyledInfoSubmit>
+                  )}
+                {!change ? <StyledButton type="button" onClick={(e)=>console.log(e.target)}>수정</StyledButton> : <StyledButton>취소</StyledButton>}
+              </StyledUserInfo>
+              </div>)
+            })} */}
+            {/* <StyledInfoTitle>이름</StyledInfoTitle>
               <StyledUserInfo>
                 <StyledInfoSubmit>
                   {!change ? `${name}` : (
@@ -159,11 +216,11 @@ const MyPage = () => {
               </StyledInfoSubmit>
               <StyledButton onClick={handleInfoChangeBtn}>{!change ? '비밀번호 재설정' : '취소'}</StyledButton>
             </StyledUserInfo>
-          </div>
+          </div> */}
           <div>
             <StyledInfoTitle>회원탈퇴</StyledInfoTitle>
             <StyledUserInfo>
-              <StyledButton onClick={handleInfoChangeBtn}>회원탈퇴</StyledButton>
+              <StyledButton>회원탈퇴</StyledButton>
             </StyledUserInfo>
           </div>
     </Container>
