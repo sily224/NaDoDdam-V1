@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import axios from "axios";
+import * as userApi from "../lib/userApi";
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,6 +32,8 @@ const RegisterBtn = styled.button`
 const LoginBtn = styled.button``;
 
 function Register() {
+  const [modalOpen, setModalOpen] = useState(true);
+
   // 입력값 유효성 검사할 형태
   const formSchema = yup.object({
     email: yup
@@ -54,7 +57,7 @@ function Register() {
       .required("이름을 입력해주세요")
       .min(2, "최소 2자 이상 가능합니다")
       .max(15, "최대 15자까지 가능합니다"),
-    phoneNumber: yup
+    phoneNum: yup
       .string()
       .matches(/^[0-9]+$/, "숫자만 입력주세요")
       .min(5, "5자 이상의 전화번호를 입력해주세요")
@@ -69,21 +72,23 @@ function Register() {
 
   const navigate = useNavigate();
 
-  const joinUser = async ({ email, name, password, phoneNumber }) => {
+  const joinUser = async ({ email, name, password, phoneNum }) => {
     try {
-      const joinData = { email, name, password, phoneNumber };
+      const joinData = { email, password, phoneNum, name };
 
-      const join = await axios.get("/join.json").then((res) => {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("refreshToken", res.data.refreshToken);
-        localStorage.setItem("loggedIn", "true");
+      const join = await userApi
+        .post("//localhost:3500/api/signup", joinData)
+        .then((res) => {
+          localStorage.setItem("token", res.data.token);
+          // localStorage.setItem("refreshToken", res.data.refreshToken);
+          localStorage.setItem("loggedIn", "true");
 
-        alert(`정상적으로 회원가입되었습니다.`);
+          alert(`정상적으로 회원가입되었습니다.`);
 
-        // 로그인 페이지 이동
-        // ** 수정 = 자동로그인이 되니깐 홈으로보내
-        navigate("/login");
-      });
+          // 로그인 페이지 이동
+          // ** 수정 = 자동로그인이 되니깐 홈으로보내
+          navigate("/login");
+        });
     } catch (err) {
       console.error("회원가입 실패", err);
     }
@@ -91,56 +96,58 @@ function Register() {
 
   return (
     <>
-      <Modal>
-        <ModalTitle>회원가입</ModalTitle>
-        <InputForm onSubmit={handleSubmit((data) => joinUser(data))}>
-          <Label htmlFor="email">이메일</Label>
-          <Input id="email" type="email" {...register("email")} />
-          {errors.email && <small role="alert">{errors.email.message}</small>}
+      {modalOpen && (
+        <Modal setModalOpen={setModalOpen}>
+          <ModalTitle>회원가입</ModalTitle>
+          <InputForm onSubmit={handleSubmit((data) => joinUser(data))}>
+            <Label htmlFor="email">이메일</Label>
+            <Input id="email" type="email" {...register("email")} />
+            {errors.email && <small role="alert">{errors.email.message}</small>}
 
-          <Label htmlFor="password">비밀번호</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="영문, 숫자, 특수문자 조합 최소 8자"
-            {...register("password")}
-          />
-          {errors.password && (
-            <small role="alert">{errors.password.message}</small>
-          )}
+            <Label htmlFor="password">비밀번호</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="영문, 숫자, 특수문자 조합 최소 8자"
+              {...register("password")}
+            />
+            {errors.password && (
+              <small role="alert">{errors.password.message}</small>
+            )}
 
-          <Input
-            placeholder="비밀번호를 다시 입력해주세요"
-            type="password"
-            {...register("passwordConfirm")}
-          />
-          {errors.passwordConfirm && (
-            <small role="alert">{errors.passwordConfirm.message}</small>
-          )}
+            <Input
+              placeholder="비밀번호를 다시 입력해주세요"
+              type="password"
+              {...register("passwordConfirm")}
+            />
+            {errors.passwordConfirm && (
+              <small role="alert">{errors.passwordConfirm.message}</small>
+            )}
 
-          <Label htmlFor="name">이름</Label>
-          <Input id="name" {...register("name")} />
-          {errors.name && <small role="alert">{errors.name.message}</small>}
+            <Label htmlFor="name">이름</Label>
+            <Input id="name" {...register("name")} />
+            {errors.name && <small role="alert">{errors.name.message}</small>}
 
-          <Label htmlFor="phoneNumber">전화번호</Label>
-          <Input
-            id="phoneNumber"
-            placeholder="숫자만 입력해주세요"
-            {...register("phoneNumber")}
-          />
-          {errors.phoneNumber && (
-            <small role="alert">{errors.phoneNumber.message}</small>
-          )}
+            <Label htmlFor="phoneNum">전화번호</Label>
+            <Input
+              id="phoneNum"
+              placeholder="숫자만 입력해주세요"
+              {...register("phoneNum")}
+            />
+            {errors.phoneNum && (
+              <small role="alert">{errors.phoneNum.message}</small>
+            )}
 
-          <RegisterBtn type="submit" disabled={isSubmitting}>
-            가입하기
-          </RegisterBtn>
-        </InputForm>
+            <RegisterBtn type="submit" disabled={isSubmitting}>
+              가입하기
+            </RegisterBtn>
+          </InputForm>
 
-        <Link to="/login">
-          <LoginBtn>로그인하기</LoginBtn>
-        </Link>
-      </Modal>
+          <Link to="/login">
+            <LoginBtn>로그인하기</LoginBtn>
+          </Link>
+        </Modal>
+      )}
     </>
   );
 }
