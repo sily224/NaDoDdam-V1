@@ -1,14 +1,17 @@
-import {useState} from "react";
+import React,{useState,useEffect,useContext} from "react";
 import styled from 'styled-components';
 import Modal from "../components/Modal";
+import { DetailContext } from "../pages/DetailPage"
 
 
 const ReviewItems = ({review,all}) =>{
-
+    // all : 리뷰전체보기 props
+    // 일반적으로 상세페이지에서는 6개의 리뷰만 보임
+    // 따라서 총 리뷰의 개수가 6개 이상이면서 all이면 전체내역이
+    // all이 false면 6개만 보이도록 return ;
     return review.map((value, idx) => {
         if(idx >5){if(!all){return;}}
         return( 
-            
             <ReviewItem key = {`reveiw-${idx}`} className = {value.id} >
                 <p className="reveiwItem id" key = {`${value.id}-${idx}`}>{value.id}</p>
                 <p className="reveiwItem name" key = {`${value.name}-${idx}`}>{value.name}</p>
@@ -18,7 +21,10 @@ const ReviewItems = ({review,all}) =>{
     })
 }
 
-const Review = ({review})=>{
+const Review = () => {
+    const { detailData : data } = useContext(DetailContext);
+    const review = [...data.review];
+    
     const [modalOpen, setModalOpen] = useState(false);
 
     return (

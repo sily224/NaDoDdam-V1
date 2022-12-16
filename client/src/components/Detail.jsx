@@ -1,16 +1,60 @@
-import React,{useState} from 'react';
+import React,{useState,useContext,useMemo} from 'react';
 import styled from 'styled-components';
 import Calender from "./ReactCalender";
 import Location from "./Location";
 import Review from "./Review";
+import { DetailContext } from "../pages/DetailPage"
 
 
-const Detail = ({ data }) => {
+const DetailHeader = ({title,location}) =>{
+    return <div className="header">
+        <h1 className="title">{title}</h1>
+        <p>{location}</p>
+        <img src="" alt={`${title}이미지`}/>
+    </div>
+};
+
+const DetailGrade = ({grade})=>{
+    return <p>{grade}점 </p>
+};
+
+const DetailDescription = ({description})=>{
+    return <p>{description}</p>
+};
+
+const DetailTimeBtns = ({times, btnActive, funActive}) =>{
+    return times.map( (time,idx)=>{
+        return <div key= {`TimeButtonContainer-${idx}`}>
+                <TimeButton 
+                    key= {`TimeButton-${idx}`}
+                    className={"btn" + (idx == btnActive ? " active" : "")} 
+                    value ={idx} onClick={funActive}>{`${idx+1}타임  ${time}`}
+                </TimeButton>
+            </div>
+    });
+};
+
+const DetailCompany = ({company}) => {
+    return (
+        <DetailCompanyContainer>
+            <p>업체정보</p>    
+            {
+                Object.entries(company).map((values,idx) => {
+                    return <p key={`idx${idx}-${values[0]}`}>{`${values[0]}`} : {`${values[1]}`}</p>
+                })
+            }
+        </DetailCompanyContainer>
+    );
+};
+
+const Detail = () => {
     // const [price, setPrice] = useState(0);
+    const { detailData : data } = useContext(DetailContext);
+
     const [totalPrice, setTotalPrice] = useState(0);
     const [headCount, setHeadCount] = useState(1);
     const [timeBtnActive, setTimeBtnActive] = useState("");
-
+    
     const handleHeadCount = (e) => {
         setHeadCount(e.target.value);
     };
@@ -18,7 +62,9 @@ const Detail = ({ data }) => {
         console.log(e.target.value);
         setTimeBtnActive(e.target.value);
     };
-
+    const handlePrice = () => {
+        setTotalPrice(headCount * data.price);
+    }
     // useEffect(() =>{
     //     setPrice(data.price);
     // },[]);
@@ -26,66 +72,48 @@ const Detail = ({ data }) => {
     // useEffect (() => {
     //     setTotalPrice(selected*price);
     // },[selected])
-
+    // useMemo(() => handlePrice(), [headCount]);
+    
     return (
-        <div>
+        <>
             {
                 data &&
     
                 <DetailContainer key={`${data.title}-${new Date()}`}>
-                        <div className="header">
-                            <h1 className="title">{data.title}</h1>
-                            <p>{data.location}</p>
-                            <img src="" alt={`${data.title}이미지`}/>
-                        </div>
-                        <Content>
-                            <Inform>
-                                <h3>{data.grade}점</h3>
-                                <p>{data.description}</p>
-                                <Period className="reservationTime">
-                                    <Calender period ={data.period} className="calender"></Calender>
+                        <DetailHeader title={data.title} location={data.location} />
+                        <DetailContent>
+                            <DetailInform>
+                                <DetailGrade grade={data.grade} />
+                                <DetailDescription description={data.description} />
+                                <DetailPeriod>
+                                    <div className="calender"><Calender /></div>
                                     <TimButtonContainer>
-                                        { 
-                                            data.times.map( (time,idx)=>{
-                                                return <div >
-                                                    <TimeButton className={"btn" + (idx == timeBtnActive ? " active" : "")} 
-                                                    value ={idx} onClick={handleTimeSelect}>{idx+1}타임  {time}</TimeButton>
-                            
-                                                    </div>
-                                            })
-                                        }                                        
+                                        <DetailTimeBtns times={data.times} btnActive={timeBtnActive} funActive={handleTimeSelect} />
                                     </TimButtonContainer>
-                                </Period>
-                                <Review review={data.review}></Review>
-                                <Location latitude ={data.latitude} longitude={data.longitude} ></Location>
-                                <Company>
-                                    <p>업체정보</p>
-                                    {
-                                        Object.entries(data.company).map((values,idx) => {
-                                            return <p key={`idx${idx}-${values[0]}`}>{`${values[0]}`} : {`${values[1]}`}</p>
-                                        })
-                                    }
-                                </Company>
+                                </DetailPeriod>
+                                <Review />
+                                <Location />
+                                <DetailCompany company={data.company} />
                                 
-                            </Inform>
+                            </DetailInform>
                             
                             <Form>
                                 <p>{data.price}원/명</p>
-                                <select onChange={handleHeadCount}>
-                                    {[...Array(10).keys()].map(n => <option key={`HeadCount-${n+1}`} value={n+1} >{n+1}</option>)} 
+                                <select onChange={handleHeadCount} value={headCount}>
+                                    {[...Array(10).keys()].map(n => <option key={`HeadCount-${n+1}`} value={n+1}  >{n+1}</option>)} 
                                 </select>
                                 <select>
                                     <option defaultValue="선택하세요">선택하세요</option>
                                     {data.times.map((time,idx) => <option  key={`${idx}-${time}`} value={time}>{time}</option>)}
                                 </select>
                                 <button type="submit">예약하기</button>
-                                <p>총 합게 : {data.price * headCount }</p> 
+                                <p>총 합게 : {totalPrice}</p> 
                                 {/* totalPrice */}
                             </Form>
-                        </Content>
+                        </DetailContent>
                     </DetailContainer>
             }
-        </div>
+        </>
     );
 };
 
@@ -99,23 +127,17 @@ const DetailContainer = styled.div`
         width:100%;
     }
 `;
-const Content = styled.div`
+const DetailContent = styled.div`
     display:flex;
 `;
 
-const Period = styled(Content)`
+const DetailPeriod = styled(DetailContent)`
     justify-content: flex-start;
-
-    div:first-child{
+    .calender:first-child{
         margin-right:3%;
     }
-    .time{    
-        flex-basis: 400px;
-        height: 220px;
-        border:1px solid black;
-    }
 `;
-const Inform = styled.div`
+const DetailInform = styled.div`
     width: 100%;
     margin-right : 3%;
 `;
@@ -125,7 +147,7 @@ const Form = styled.form`
     position: sticky;
     top: 20%;
 `;
-const Company = styled.div`
+const DetailCompanyContainer = styled.div`
     border : 1px solid black;
 `;
 const TimButtonContainer = styled.div`
@@ -134,7 +156,8 @@ const TimButtonContainer = styled.div`
     justify-content:center;
 `;
 const TimeButton = styled.button`
-    width : 300px;
+    display:block;
+    width : 100%;
     height : 90px;
     font-size : 1rem;
     background-color : white;
