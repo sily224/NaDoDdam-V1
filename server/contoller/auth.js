@@ -46,7 +46,9 @@ export async function me(req, res, next) {
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
-  res.status(200).json({ token: req.token, email: user.email });
+  res.status(200).json({
+    user: { name: user.name, email: user.email, phoneNum: user.phoneNum },
+  });
 }
 
 const createJwtToken = (id) => {

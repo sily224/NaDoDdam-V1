@@ -3,6 +3,7 @@ import styled, {css} from 'styled-components';
 import MyPageEdit from '../components/MyPageEdit';
 import * as userApi from "../lib/userApi";
 import axios from "axios";
+import { useEffect } from 'react';
 
 const Container = styled.div`
   width: 80%;
@@ -82,33 +83,25 @@ const StyledButton = styled.button`
 `
 
 const MyPage = () => {
+  const [userInfo, setUserInfo] = useState({}); 
+  
+const getUserInfo = async() => {
   const getToken = localStorage.getItem('token');
-  console.log(getToken);
-  const getUserInfo = async() => {
-    await axios
-      .get(`http://localhost:3500/api/me`, {
-        headers: {
-          authorization: getToken,
-        },
-      })
-      .then((res) => console.log("가져오는데이터", res))
-  }
-
-  getUserInfo();
-
-  const user = {
-    name : '홍길동',
-    tel: '010-1234-5678',
-    email: '1234@test.com',
-    password: '123456',
-  }
-
-  const [userInfo, setUserInfo] = useState({
-    name: `${user.name}`,
-    tel: `${user.tel}`,
-    email: `${user.email}`,
-    password: `${user.password}`
-  }); 
+  const res = await userApi.get("//localhost:3500/api/me", {
+    headers: {
+      authorization: getToken,
+    },
+  })
+  setUserInfo({
+    name: res.data.user.name,
+    tel: res.data.user.phoneNum,
+    email: res.data.user.email
+  })
+}
+  useEffect(() => {
+    getUserInfo();
+  },[])
+  console.log(userInfo)
 
   const {name, tel, email, password} = userInfo;
 
@@ -117,29 +110,24 @@ const MyPage = () => {
      id:"name",
      title: "이름",
      name: `${name}`,
-     isClicked: false,
     },
     {
       id:"tel",
       title:"전화번호",
       name: `${tel}`,
-      isClicked: false,
     },
     {
       id:"email",
       title:"이메일",
       name: `${email}`,
-      isClicked: false,
     },
     {
       id:"password",
       title:"비밀번호",
       name: `${password}`,
-      isClicked: false,
     }
   ]
 
-  
   const handleInfoChange = (e) => {
     const { value, name } = e.target;
     console.log(e.target)

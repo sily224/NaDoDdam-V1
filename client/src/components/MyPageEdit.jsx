@@ -20,7 +20,7 @@ const MyPageEdit = ({id, name, title, onChangeValue,handleCancle}) => {
   let replaceName = '';
 
   if(id === 'tel') {
-    replaceName =  name.slice(0, 4) + "*".repeat(name.length - 8) + name.slice(-5);
+    replaceName =  name.slice(0, 3) + "*".repeat(name.length - 6) + name.slice(-4);
   }else if(id === 'password'){
      replaceName =  "*".repeat(name.length)
   }else{
@@ -29,8 +29,6 @@ const MyPageEdit = ({id, name, title, onChangeValue,handleCancle}) => {
 
   const [change, setChange] = useState(false);
   const [gname, setName] = useState(replaceName);
-  console.log(gname);
-  
   const handleCancleButton = () => {
     setChange(cur => !cur)
   }
