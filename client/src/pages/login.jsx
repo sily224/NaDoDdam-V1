@@ -78,12 +78,11 @@ function Login() {
   const loginUser = async (data) => {
     try {
       console.log("전달되는 데이터", data);
-      const res = await userApi.post("/api/login");
+      const res = await userApi.post("//localhost:3500/api/login", data);
       const token = res.data.token;
       const refreshToken = res.data.refreshToken;
 
       localStorage.setItem("token", token);
-      localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("loggedIn", "true");
       // // 기본 페이지로 이동
       alert(`로그인되었습니다.`);
