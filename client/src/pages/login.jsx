@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import axios from "axios";
@@ -49,6 +49,8 @@ const SocialButton = styled.button`
 `;
 
 function Login() {
+  const [modalOpen, setModalOpen] = useState(true);
+
   const formSchema = yup.object({
     email: yup
       .string()
@@ -93,37 +95,39 @@ function Login() {
 
   return (
     <>
-      <Modal>
-        <ModalTitle>로그인</ModalTitle>
-        <InputForm onSubmit={handleSubmit((data) => loginUser(data))}>
-          <Label htmlFor="email">이메일</Label>
-          <Input id="email" type="email" {...register("email")} />
-          {errors.email && <small role="alert">{errors.email.message}</small>}
+      {modalOpen && (
+        <Modal setModalOpen={setModalOpen}>
+          <ModalTitle>로그인</ModalTitle>
+          <InputForm onSubmit={handleSubmit((data) => loginUser(data))}>
+            <Label htmlFor="email">이메일</Label>
+            <Input id="email" type="email" {...register("email")} />
+            {errors.email && <small role="alert">{errors.email.message}</small>}
 
-          <Label htmlFor="password">비밀번호</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="영문, 숫자, 특수문자 조합 최소 8자"
-            {...register("password")}
-          />
-          {errors.password && (
-            <small role="alert">{errors.password.message}</small>
-          )}
-          <Button type="submit" disabled={isSubmitting}>
-            로그인
-          </Button>
-        </InputForm>
+            <Label htmlFor="password">비밀번호</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="영문, 숫자, 특수문자 조합 최소 8자"
+              {...register("password")}
+            />
+            {errors.password && (
+              <small role="alert">{errors.password.message}</small>
+            )}
+            <Button type="submit" disabled={isSubmitting}>
+              로그인
+            </Button>
+          </InputForm>
 
-        <Link to="/register">
-          <Button>회원가입</Button>
-        </Link>
-        <Line />
-        <SocialLogin>
-          <SocialButton>카카오</SocialButton>
-          <SocialButton>구글</SocialButton>
-        </SocialLogin>
-      </Modal>
+          <Link to="/register">
+            <Button>회원가입</Button>
+          </Link>
+          <Line />
+          <SocialLogin>
+            <SocialButton>카카오</SocialButton>
+            <SocialButton>구글</SocialButton>
+          </SocialLogin>
+        </Modal>
+      )}
     </>
   );
 }
