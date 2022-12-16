@@ -10,9 +10,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 var corsOptions = {
-    origin: "http://localhost:8081"
+  origin: "http://localhost:3000",
+  credentials: true, 
 };
-
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

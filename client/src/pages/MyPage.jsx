@@ -23,7 +23,7 @@ const StyledTitle = styled.div`
     position: absolute;
   }
 `
-const StyledInfoTitle = styled.p`
+const StyledInfoTitle = styled.span`
   font-weight: 700;
 `
 
@@ -79,10 +79,9 @@ const StyledButton = styled.button`
   }
 `
 
-
-
 const MyPage = () => {
   const token = localStorage.getItem('token');
+
   const user = {
     name : '홍길동',
     tel: '010-1234-5678',
@@ -136,6 +135,12 @@ const MyPage = () => {
       });
   };
 
+  const handleCancle = (e) => {
+    setUserInfo({
+      ...userInfo
+    });
+  }
+
   return (
     <Container>
       <StyledTitle>내 정보 관리</StyledTitle>
@@ -146,77 +151,9 @@ const MyPage = () => {
               name={item.name}
               title={item.title}
               onChangeValue={handleInfoChange}
+              onClickCancle={handleCancle}
            />
           ))}
-            {/* {list.map(item => {
-              return (<div key={item.id}>
-                <StyledInfoTitle>{item.title}</StyledInfoTitle>
-                <StyledUserInfo>
-                  {!change ? <span>{item.name}</span> : (
-                    <StyledInfoSubmit>
-                      <input name={item.id} type={item.id === "password" ? "password" : "type"} value={item.name} onChange={handleInfoChange} />
-                      <button>저장하기</button>
-                    </StyledInfoSubmit>
-                  )}
-                {!change ? <StyledButton type="button" onClick={(e)=>console.log(e.target)}>수정</StyledButton> : <StyledButton>취소</StyledButton>}
-              </StyledUserInfo>
-              </div>)
-            })} */}
-            {/* <StyledInfoTitle>이름</StyledInfoTitle>
-              <StyledUserInfo>
-                <StyledInfoSubmit>
-                  {!change ? `${name}` : (
-                    <>
-                      <input name="name" type="text" value={name} onChange={handleInfoChange} />
-                      <button>저장하기</button>
-                    </>
-                  )}
-                </StyledInfoSubmit>
-                <StyledButton onClick={handleInfoChangeBtn}>{!change ? '수정' : '취소'}</StyledButton>
-              </StyledUserInfo>
-          </div>
-          <div>
-              <StyledInfoTitle>전화번호</StyledInfoTitle>
-              <StyledUserInfo>
-                <StyledInfoSubmit>
-                  {!change ? `${tel}` : (
-                    <>
-                      <input name="tel" type="text" value={tel} onChange={handleInfoChange} />
-                      <button>저장하기</button>
-                    </>
-                  )}
-                </StyledInfoSubmit>
-                <StyledButton onClick={handleInfoChangeBtn}>{!change ? '수정' : '취소'}</StyledButton>
-              </StyledUserInfo>
-          </div>
-          <div>
-            <StyledInfoTitle>이메일</StyledInfoTitle>
-            <StyledUserInfo>
-              <StyledInfoSubmit>
-                {!change ? `${email}` : (
-                  <>
-                    <input name="email" type="text" value={email} onChange={handleInfoChange} />
-                    <button>저장하기</button>
-                  </>
-                )}
-              </StyledInfoSubmit>
-              <StyledButton onClick={handleInfoChangeBtn}>{!change ? '수정' : '취소'}</StyledButton>
-            </StyledUserInfo>
-          </div>
-          <div>
-            <StyledInfoTitle>비밀번호</StyledInfoTitle>
-            <StyledUserInfo>
-              <StyledInfoSubmit>
-                {!change ? `${password}` : (
-                  <>
-                    <input name="password" type="text" value={password} onChange={handleInfoChange} />
-                    <button>저장하기</button>
-                  </>
-                )}
-              </StyledInfoSubmit>
-              <StyledButton onClick={handleInfoChangeBtn}>{!change ? '비밀번호 재설정' : '취소'}</StyledButton>
-            </StyledUserInfo>
-          </div> */}
           <div>
             <StyledInfoTitle>회원탈퇴</StyledInfoTitle>
             <StyledUserInfo>
@@ -227,4 +164,4 @@ const MyPage = () => {
   )
 }
 
-export default MyPage;
+export { MyPage, StyledButton, StyledInfoTitle, StyledUserInfo };

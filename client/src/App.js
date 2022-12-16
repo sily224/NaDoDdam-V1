@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import DetailPage from "./pages/DetailPage";
-import MyPage from './pages/MyPage';
+import {MyPage} from './pages/MyPage';
 
 function App() {
   return (
