@@ -1,7 +1,6 @@
 import styled, {css} from 'styled-components';
 import { useState, useEffect } from 'react';
 import { StyledButton, StyledInfoTitle, StyledUserInfo } from '../pages/MyPage';
-import { express } from 'express';
 
 const StyledUserInfoWrap = styled.div`
   position: relative;
@@ -18,64 +17,87 @@ const StyledUserInfoWrap = styled.div`
 `
 
 const MyPageEdit = ({id, name, title, onChangeValue, handleCancle, setname}) => {
-  let replaceName = '';
+  const [gname, setName] = useState({})
 
-  if(id === 'tel') {
-    replaceName =  name.slice(0, 3) + "*".repeat(name.length - 6) + name.slice(-4);
-  }else if(id === 'password'){
-     replaceName =  "*".repeat(name.length)
-  }else{
-    replaceName = name;
-  }
+  useEffect(() => {
+    let replaceName = '';
+
+    if(id === 'tel') {
+      replaceName =  name.slice(0, 3) + "*".repeat(name.length - 6) + name.slice(-4);
+    }else if(id === 'password'){
+      replaceName =  "*".repeat(name.length)
+    }else{
+      replaceName = name;
+    }
+
+    console.log(replaceName)
+    
+    setName({
+      value: replaceName,
+      isEditMode: false,
+    })
+  },[name])
 
   const [change, setChange] = useState(false);
-  const [gname, setName] = useState(replaceName);
-  const handleCancleButton = () => {
-    setChange(cur => !cur)
+ 
+  const changeEditMode = () => {
+    setName({
+      ...gname,
+      isEditMode: true,
+    })
   }
 
+  console.log(gname.value)
 
-  return(
-    <StyledUserInfoWrap>
+  const DefaultView = () => {
+    return (
       <div>
-        <div><h4>{title}</h4></div>
           <StyledUserInfo>
             <div>
-               <span style={{display:`${!change ? "block" : "none"}`}}>{gname}</span>
+               <span>{gname.value}</span>
             </div>
            <div>
-             {!change ? 
               <StyledButton 
-                onClick={() => setChange(cur => !cur)}>
+                onClick={changeEditMode}
+                >
                 수정
               </StyledButton> 
-              : 
-              <>
-                <StyledButton
-                onClick={(e) => {
-                  setChange(cur => !cur);
-                  }}
-                >확인</StyledButton> 
-                <StyledButton type="reset" onClick={(e) => {
-                  setChange(cur => !cur);
-                  }}>취소</StyledButton>
-              </>
-            }
            </div>
             </StyledUserInfo>
-        </div>
-        {!change ? null : (
-          <form>
-            <label></label>
+      </div>
+    )
+  }
+
+  const RenderEditView = () => {
+    return (
+      <StyledUserInfo>
+      <form>
+          <label></label>
             <input 
               id={setname}
               name={id} 
               type={id === "password" ? "password" : "text"} 
-              value={name} 
-              onChange={(e) => onChangeValue(e)}
+              defaultValue={gname.value}
             />
-        </form> 
-        )}
+        </form>
+        <StyledButton
+        onClick={(e) => {
+          setChange(cur => !cur);
+          }}
+        >확인</StyledButton> 
+        <StyledButton type="reset" onClick={(e) => {
+          setChange(cur => !cur);
+          }}>취소</StyledButton>
+      </StyledUserInfo>
+    )
+  }
+
+  
+
+  return(
+    <StyledUserInfoWrap>
+      <div><h4>{title}</h4></div>
+      {gname.isEditMode ? <RenderEditView/> : <DefaultView />}
     </StyledUserInfoWrap>  
     )
    

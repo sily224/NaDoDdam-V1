@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled, {css} from 'styled-components';
 import MyPageEdit from '../components/MyPageEdit';
 import * as userApi from "../lib/userApi";
-import axios from "axios";
 import { useEffect } from 'react';
 
 const Container = styled.div`
@@ -85,26 +84,21 @@ const StyledButton = styled.button`
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({}); 
   
-const getUserInfo = async () => {
-  const getToken = localStorage.getItem('token');
-  const res = await userApi.get("//localhost:3500/api/me", {
-    headers: {
-      authorization: getToken,
-    },
-  })
-  setUserInfo({
-    name: res.data.user.name,
-    tel: res.data.user.phoneNum,
-    email: res.data.user.email
-  })
-}
+  const getUserInfo = async () => {
+    const getToken = localStorage.getItem('token');
+    const res = await userApi.get("//localhost:3500/api/me", {
+      headers: {
+        authorization: getToken,
+      },
+    });
+    console.log(res)
+  }
+  
   useEffect(() => {
     getUserInfo();
   },[])
-
+  console.log(userInfo)
   const {name, tel, email, password} = userInfo;
-
-  
 
   const list = [
     {
@@ -138,15 +132,6 @@ const getUserInfo = async () => {
       });
   };
 
-  const handleCancle = (e) => {
-    const { id } = e.target;
-    console.log(id)
-    setUserInfo({
-      ...userInfo, 
-      [name]: id 
-    });
-  };
-
   return (
     <Container>
       <StyledTitle>내 정보 관리</StyledTitle>
@@ -158,7 +143,6 @@ const getUserInfo = async () => {
               title={item.title}
               setname={item.setname}
               onChangeValue={handleInfoChange}
-              onClickCancle={handleCancle}
            />
           ))}
           <div>
