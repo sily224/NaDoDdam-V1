@@ -1,3 +1,5 @@
+import Sequelize from 'sequelize';
+const Op = Sequelize.Op;
 const Farms = (sequelize, DataTypes) => {
   const Farms = sequelize.define(
     'Farms',
@@ -50,6 +52,16 @@ const Farms = (sequelize, DataTypes) => {
 
   Farms.getByType = (type) => {
     return Farms.findAll({ where: { type } });
+  };
+
+  Farms.getByAddress = (address) => {
+    return Farms.findAll({
+      where: {
+        address: {
+          [Op.like]: '%' + address + '%',
+        },
+      },
+    });
   };
 
   Farms.createFarm = (farmInfo) => {
