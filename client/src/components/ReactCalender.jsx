@@ -10,20 +10,20 @@ const ReactCalender = () => {
     const {detailData : data} = useContext(DetailContext);
     const [start,end] = data.period;
 
-    const [value, setValue] = useState(new Date());
+    const [date, setDate] = useState(new Date());
     const dispatch = useDispatch();
     const stateValue = useSelector(state=>state.date);
 
     useEffect(() => {
-        console.log(value);
-        dispatch(getDate(value.toString()));
-    },[value]);
+        const dateFormat =`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+        dispatch(getDate(dateFormat));
+    },[date]);
 
     return (
         <>
         {/* <p>{stateValue}</p> */}
         <div>
-            <Calendar calendarType="US" onChange={setValue} value={value} minDate={new Date(start)} maxDate={new Date(end)}/>
+            <Calendar calendarType="US" onChange={setDate} value={date} minDate={new Date(start)} maxDate={new Date(end)}/>
         </div>
         </>
     );
