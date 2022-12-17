@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import db from './models/index.js';
 import authRouter from './router/auth.js';
 import farmRouter from './router/farm.js';
@@ -14,20 +15,12 @@ var corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.send('Server Response Success');
-});
-
 app.use('/api', authRouter);
 app.use('/api/farms', farmRouter);
-app.get('/', (req, res) => {
-  res.send('Server Response Success');
-});
-
-app.use('/api', authRouter);
 app.use('/api', reserveRouter);
 
 db.sequelize
@@ -42,5 +35,3 @@ db.sequelize
 app.listen(PORT, () => {
   console.log(`Server On : http://localhost:${PORT}/`);
 });
-
-export { app };
