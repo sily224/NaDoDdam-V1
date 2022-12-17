@@ -1,10 +1,8 @@
-import bcrypt, { compareSync } from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import 'express-async-errors';
 import { config } from '../config/config.js';
-import { Router } from 'express';
 import db from '../models/index.js';
-const userRouter = Router();
 
 export async function signup(req, res, next) {
   const { phoneNum, password, name, email, role } = req.body;
@@ -43,13 +41,12 @@ export async function login(req, res, next) {
 
 export async function me(req, res, next) {
   const user = await db['Users'].findById(req.userId);
-  console.log(user);
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
-  res.status(200).json({
-    user: { name: user.name, email: user.email, phoneNum: user.phoneNum },
-  });
+  res
+    .status(200)
+    .json({ email: user.email, name: user.name, phoneNum: user.phoneNum });
 }
 
 const createJwtToken = (id) => {
@@ -66,4 +63,32 @@ export async function totalUser(req, res, next) {
   res.status(200).json(users);
 }
 
-export { userRouter };
+// export async function update(req, res, next) {
+//   try {
+//     if(is.emptyObject(req.body)) {
+//       throw new Error( "headers의 Content-Type을 application/json으로 설정해주세요");
+//     }
+
+//     const userId = req.params.userId;
+//     const {name, email, password, phoneNum} = req.body;
+
+//     const currentPassword = req.body.currentPassword;
+
+//     const userInfoRequired = { userId, currentPassword };
+
+//     const toUpdate = {
+//       ...(name && { name }),
+//       ...(email && { email }),
+//       ...(password && { password }),
+//       ...(phoneNum && { phoneNum }),
+//     };
+
+//     const updatedUserInfo = await db['Users'].updateUser(
+//       userInfoRequired,
+//       toUpdate
+//     );
+//    res.status(200).json(updatedUserInfo);
+//   } catch(err) {
+//     next(err);
+//   }
+// }

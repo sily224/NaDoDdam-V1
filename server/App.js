@@ -4,14 +4,15 @@ import bodyParser from 'body-parser';
 import db from './models/index.js';
 import authRouter from './router/auth.js';
 import farmRouter from './router/farm.js';
+import reserveRouter from './router/reserve.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 var corsOptions = {
-  origin: 'http://localhost:8081',
+  origin: 'http://localhost:3000',
+  credentials: true,
 };
-
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,6 +23,12 @@ app.get('/', (req, res) => {
 
 app.use('/api', authRouter);
 app.use('/api/farms', farmRouter);
+app.get('/', (req, res) => {
+  res.send('Server Response Success');
+});
+
+app.use('/api', authRouter);
+app.use('/api', reserveRouter);
 
 db.sequelize
   .sync()

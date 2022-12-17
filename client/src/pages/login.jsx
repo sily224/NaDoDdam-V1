@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import axios from "axios";
+import * as userApi from "../lib/userApi";
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -48,6 +49,8 @@ const SocialButton = styled.button`
 `;
 
 function Login() {
+  const [modalOpen, setModalOpen] = useState(true);
+
   const formSchema = yup.object({
     email: yup
       .string()
@@ -67,7 +70,7 @@ function Login() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors }, // 제출중이라면 가입하기 버튼 disabled됨
+    formState: { isSubmitting, errors }, // isSubmitting: 제출중인지 여부
   } = useForm({ mode: "onChange", resolver: yupResolver(formSchema) });
 
   const navigate = useNavigate();
@@ -75,12 +78,17 @@ function Login() {
   const loginUser = async (data) => {
     try {
       console.log("전달되는 데이터", data);
-      const res = await axios.get("/join.json");
+      const res = await userApi.post("//localhost:3500/api/login", data);
+
+      if(res.status !== 200) {
+        alert("로그인 실패");
+        window.location.assign = "/login";
+      }
+      
       const token = res.data.token;
-      const refreshToken = res.data.refreshToken;
+      // const refreshToken = res.data.refreshToken;
 
       localStorage.setItem("token", token);
-      localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("loggedIn", "true");
       // // 기본 페이지로 이동
       alert(`로그인되었습니다.`);
@@ -92,37 +100,39 @@ function Login() {
 
   return (
     <>
-      <Modal>
-        <ModalTitle>로그인</ModalTitle>
-        <InputForm onSubmit={handleSubmit((data) => loginUser(data))}>
-          <Label htmlFor="email">이메일</Label>
-          <Input id="email" type="email" {...register("email")} />
-          {errors.email && <small role="alert">{errors.email.message}</small>}
+      {modalOpen && (
+        <Modal setModalOpen={setModalOpen}>
+          <ModalTitle>로그인</ModalTitle>
+          <InputForm onSubmit={handleSubmit((data) => loginUser(data))}>
+            <Label htmlFor="email">이메일</Label>
+            <Input id="email" type="email" {...register("email")} />
+            {errors.email && <small role="alert">{errors.email.message}</small>}
 
-          <Label htmlFor="password">비밀번호</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="영문, 숫자, 특수문자 조합 최소 8자"
-            {...register("password")}
-          />
-          {errors.password && (
-            <small role="alert">{errors.password.message}</small>
-          )}
-          <Button type="submit" disabled={isSubmitting}>
-            로그인
-          </Button>
-        </InputForm>
+            <Label htmlFor="password">비밀번호</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="영문, 숫자, 특수문자 조합 최소 8자"
+              {...register("password")}
+            />
+            {errors.password && (
+              <small role="alert">{errors.password.message}</small>
+            )}
+            <Button type="submit" disabled={isSubmitting}>
+              로그인
+            </Button>
+          </InputForm>
 
-        <Link to="/register">
-          <Button>회원가입</Button>
-        </Link>
-        <Line />
-        <SocialLogin>
-          <SocialButton>카카오</SocialButton>
-          <SocialButton>구글</SocialButton>
-        </SocialLogin>
-      </Modal>
+          <Link to="/register">
+            <Button>회원가입</Button>
+          </Link>
+          <Line />
+          <SocialLogin>
+            <SocialButton>카카오</SocialButton>
+            <SocialButton>구글</SocialButton>
+          </SocialLogin>
+        </Modal>
+      )}
     </>
   );
 }

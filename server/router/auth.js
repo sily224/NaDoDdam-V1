@@ -29,6 +29,9 @@ router.post('/signup', validateSignup, authController.signup); // 회원가입
 router.post('/login', validateCredential, authController.login); //로그인
 // me
 router.get('/me', isAuth, authController.me); //개인 회원정보 조회
+
+// Router.patch("/me/userId", isAuth, authController.update);
+
 router.get('/userlist', authController.totalUser); // 모든 회원 정보 조회
 
 export default router;
