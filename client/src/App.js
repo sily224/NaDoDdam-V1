@@ -18,7 +18,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/detail" element={<DetailPage />} />
           <Route path="/pay" element={<Payment />} />
-            <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage" element={<MyPage />} />
           {/* 해당부분에 라우터 넣으면 됩니다. */}
         </Route>
       </Routes>
