@@ -28,7 +28,7 @@ export async function getByLocation(req, res, next) {
 
 export async function createFarm(req, res, next) {
   const { type, name, address, description, owner } = req.body;
-  const farm = await db['Farms'].createFarm({
+  const farm = await db['Farms'].create({
     type,
     name,
     address,
@@ -37,3 +37,42 @@ export async function createFarm(req, res, next) {
   });
   res.status(201).json(farm);
 }
+
+// 농장 소유자가 update를 해야함으로 농장소유자의 테이블을 만들고 농장소유자의 id 값을 확인 후
+// 해당 농장 소유자가 맞으면 데이터 수정
+// => 미구현
+// export async function updateFarm(req, res, next) {
+//   const { type, name, address, description, owner } = req.body;
+//   const { id } = req.params;
+//   const user = await db.Farms.findById(id);
+//   //console.log(user);
+//   if (!user) {
+//     return res.status(404).json({ message: `User not found: ${id}` });
+//   }
+//   if (user.id !== req.userId) {
+//     return res.sendStatus(403);
+//   }
+//   const updated = await db.Farms.update(
+//     id,
+//     type,
+//     name,
+//     address,
+//     description,
+//     owner
+//   );
+//   res.status(200).json(updated);
+// }
+
+// export async function updateTweet(req, res, next) {
+//   const id = req.params.id;
+//   const text = req.body.text;
+//   const tweet = await tweetRepository.getById(id);
+//   if (!tweet) {
+//     return res.status(404).json({ message: `Tweet not found: ${id}` });
+//   }
+//   if (tweet.userId !== req.userId) {
+//     return res.sendStatus(403);
+//   }
+//   const updated = await tweetRepository.update(id, text);
+//   res.status(200).json(updated);
+// }
