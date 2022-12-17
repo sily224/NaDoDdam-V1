@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
 import { HiUserCircle, HiMenu } from "react-icons/hi";
+import Selector from "./Selector";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -55,12 +56,13 @@ const ActiveSearchBar = styled.div`
     }
   }
 
-  div {
+  & > div {
     display: flex;
     justify-content: space-around;
     width: 100%;
   }
 `;
+
 const SearchOption = styled.div`
   display: flex;
   align-items: center;
@@ -69,17 +71,17 @@ const SearchOption = styled.div`
   border-radius: 20px;
   height: 60px;
 
-  div {
+  & > div {
     display: flex;
     align-items: center;
     border-radius: 20px;
     height: 100%;
     z-index: 9999;
+  }
 
-    &:hover {
-      cursor: pointer;
-      background-color: lightgray;
-    }
+  & > div:hover {
+    cursor: pointer;
+    background-color: lightgray;
   }
 `;
 
@@ -96,7 +98,7 @@ const SearchContainer = styled.div`
   border: 1px solid black;
   background-color:white;
   top : 150px;
-
+  z-index: 9999;
 `
 
 const StyledNav = styled.div`
@@ -209,16 +211,17 @@ const afterLoginList = [
   },
 ];
 
-const Header = () => {
-  const [isOpenSearchBar, setIsOpenSearchBar] = useState(false);
-  const [searchOption, setSearchOption] = useState("location");
-  const [option, setOption] = useState(null);
+const Header = ({setGlobalState}) => {
+
+  const [isOpenSearchBar, setIsOpenSearchBar] = useState(false); // 검색 바 상태
+  const [searchOption, setSearchOption] = useState("location"); // 지역, 과일 선택
+  const [option, setOption] = useState(null); // 검색 세부 옵션
   const [toggleMenu, setToggleMenu] = useState(false);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const params = useParams();
   const ref = useRef();
-  const searchRef = useRef();
+  const searchRef = useRef(); // 검색 바 참조
 
   const handleToggleMenu = () => {
     setToggleMenu((prev) => !prev);
@@ -231,16 +234,16 @@ const Header = () => {
     }
 
     if (isOpenSearchBar && !searchRef.current.contains(e.target)){
-      setIsOpenSearchBar(false);
-      setOption(false);
+      setIsOpenSearchBar(false); // 검색 바 원복
+      setOption(false); // 검색 세부 옵션 원복
     }
   };
 
   useEffect(() => {
     if (toggleMenu) document.addEventListener("mousedown", handleClickOutSide);
-    if (isOpenSearchBar) document.addEventListener("mousedown", handleClickOutSide);
+    if (isOpenSearchBar) document.addEventListener("mousedown", handleClickOutSide); // 이벤트 등록
     return () => {
-      document.removeEventListener("mousedown", handleClickOutSide);
+      document.removeEventListener("mousedown", handleClickOutSide); // 이벤트 제거
     };
   });
 
@@ -253,15 +256,15 @@ const Header = () => {
     navigate("/");
   };
 
-  const handleSearchBar = () => {
+  const handleSearchBar = () => { // 검색 바 핸들러
     if (!isOpenSearchBar) setIsOpenSearchBar(true);
   };
 
-  const handleSearchOption = (e) => {
+  const handleSearchOption = (e) => { // 검색 옵션 핸들러
     setSearchOption(e.target.name);
   };
 
-  const handleSearchMenu = (e) => {
+  const handleSearchMenu = (e) => { // 검색 세부 옵션 핸들러
     setOption(e.target.id);
   };
 
@@ -285,14 +288,14 @@ const Header = () => {
               <div id="fruit" onClick={e=>handleSearchMenu(e)}>과일</div>
             )}
             <div id="date" onClick={e=>handleSearchMenu(e)}>날짜</div>
-            <div id="number" onClick={e=>handleSearchMenu(e)}>인원</div>
-            {
-              option === "location" && searchOption === 'location' && <SearchMenu children={<div>지역 테스트</div>}/> ||
-              option === "date" && <SearchMenu children={<div>날짜 테스트</div>}/> ||
-              option === "number" && <SearchMenu children={<div>사람 수 테스트</div>}/> ||
-              option === "fruit" && searchOption === 'fruit' && <SearchMenu children={<div>과일 테스트</div>}/>
-            }
+            <div id="capacity" onClick={e=>handleSearchMenu(e)}>인원</div>
           </SearchOption>
+          {
+            option === "location" && searchOption === 'location' && <SearchMenu children={<Selector searchType={option} setGlobalState={setGlobalState}/>}/> ||
+            option === "date" && <SearchMenu children={<div>날짜 테스트</div>}/> ||
+            option === "capacity" && <SearchMenu children={<div>사람 수 테스트</div>}/> ||
+            option === "fruit" && searchOption === 'fruit' && <SearchMenu children={<Selector searchType={option} setGlobalState={setGlobalState}/>}/>
+          }
         </ActiveSearchBar>
       )}
       <StyledSearchBar toggle={isOpenSearchBar} onClick={handleSearchBar}>

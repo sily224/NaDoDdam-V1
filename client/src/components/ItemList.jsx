@@ -21,6 +21,8 @@ const FarmList = ({contents}) => {
                   <div>주소 : {content.address}</div>
                   <div>농장 : {content.name}</div>
                   <div>가격 : {content.price}</div>
+                  <div>기간 : {content.period}</div>
+                  <div>인원 : {content.capacity}</div>
                 </TextContainer>
               </Item>)
           })}
