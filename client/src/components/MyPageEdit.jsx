@@ -1,23 +1,17 @@
-import styled, {css} from 'styled-components';
-import { useState, useEffect } from 'react';
-import { StyledButton, StyledInfoTitle, StyledUserInfo } from '../pages/MyPage';
+import { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components'
+import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage';
 
-const StyledUserInfoWrap = styled.div`
-  position: relative;
-  padding-bottom: 2%;
-  &::after {
-    content:'';
-    width: 100%;
-    height: 2px;
-    background-color:lightgray;
-    display: block;
-    position: absolute;
-    bottom: 0;
-}
+const Input = styled.input`
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  padding: 10px;
 `
 
-const MyPageEdit = ({id, name, title, onChangeValue, handleCancle, setname}) => {
+const MyPageEdit = ({id, name, title}) => {
   const [gname, setName] = useState({})
+  const [change, setChange] = useState(false);
+  const textInput = useRef();
 
   useEffect(() => {
     let replaceName = '';
@@ -29,78 +23,61 @@ const MyPageEdit = ({id, name, title, onChangeValue, handleCancle, setname}) => 
     }else{
       replaceName = name;
     }
-
-    console.log(replaceName)
     
     setName({
       value: replaceName,
-      isEditMode: false,
     })
   },[name])
-
-  const [change, setChange] = useState(false);
  
   const changeEditMode = () => {
+    setChange(cur => !cur)
+  }
+
+  const upDateComponents = () => {
+    setChange(cur => !cur)
     setName({
       ...gname,
-      isEditMode: true,
+      value: textInput.current.value
     })
   }
 
-  console.log(gname.value)
-
   const DefaultView = () => {
     return (
-      <div>
-          <StyledUserInfo>
-            <div>
-               <span>{gname.value}</span>
-            </div>
-           <div>
-              <StyledButton 
-                onClick={changeEditMode}
-                >
-                수정
-              </StyledButton> 
-           </div>
-            </StyledUserInfo>
-      </div>
+      <StyledUserInfo>
+        <div><span>{gname.value === undefined ? ".." : gname.value}</span></div>
+        <div>
+          <StyledButton onClick={changeEditMode}>수정</StyledButton> 
+        </div>
+      </StyledUserInfo>
     )
   }
 
   const RenderEditView = () => {
     return (
       <StyledUserInfo>
-      <form>
-          <label></label>
-            <input 
-              id={setname}
-              name={id} 
-              type={id === "password" ? "password" : "text"} 
-              defaultValue={gname.value}
-            />
-        </form>
-        <StyledButton
-        onClick={(e) => {
-          setChange(cur => !cur);
-          }}
-        >확인</StyledButton> 
-        <StyledButton type="reset" onClick={(e) => {
-          setChange(cur => !cur);
-          }}>취소</StyledButton>
+        <div>
+          <Input 
+            id={id}
+            name={id} 
+            type={id === "password" ? "password" : "text"} 
+            defaultValue={gname.value}
+            ref={textInput}
+          />
+        </div>
+        <div>
+          <StyledButton onClick={upDateComponents}>확인</StyledButton> 
+          <StyledButton onClick={changeEditMode}>취소</StyledButton>
+        </div>
       </StyledUserInfo>
     )
   }
 
-  
-
   return(
     <StyledUserInfoWrap>
       <div><h4>{title}</h4></div>
-      {gname.isEditMode ? <RenderEditView/> : <DefaultView />}
+      {change ? <RenderEditView/> : <DefaultView />}
     </StyledUserInfoWrap>  
-    )
-   
+  )
 }
 
-export default MyPageEdit
+export default MyPageEdit;

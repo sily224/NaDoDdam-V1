@@ -13,7 +13,7 @@ const StyledTitle = styled.div`
   font-size: 2rem;
   font-weight: bold;
   position: relative;
-  margin-bottom: 6%;
+  margin-bottom: 3%;
   display: inline-block;
 
   &::after {
@@ -25,17 +25,12 @@ const StyledTitle = styled.div`
     position: absolute;
   }
 `
-const StyledInfoTitle = styled.span`
-  font-weight: 700;
-`
-
 const StyledUserInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
 `
-
-const StyledUserInfoWrap = styled.div`
+const StyledUserInfoWrap = styled.form`
   position: relative;
   padding-bottom: 2%;
   &::after {
@@ -48,37 +43,12 @@ const StyledUserInfoWrap = styled.div`
     bottom: 0;
 }
 `
-// const StyledInfoSubmit = styled.form`
-//   ${props=>props.action && css`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: baseline;
-//   flex-direction: column;
-
-//   > input {
-//     border:1px solid black;
-//     border-radius: 10px;
-//     padding: 5%;
-//     margin-bottom: 4%;
-//   }
-
-//   > button {
-//     background: lightgray;
-//     border:none;
-//     border-radius:10px;
-//     padding: 5% 10%;
-//   }
-//   `}
-//   display: none;
-// `
 const StyledButton = styled.button`
   border: none;
   position: relative;
   background: none;
   text-decoration: underline;
-  &:action {
-    background: #000;
-  }
+  font-size: 1rem;
 `
 
 const MyPage = () => {
@@ -91,13 +61,17 @@ const MyPage = () => {
         authorization: getToken,
       },
     });
-    console.log(res)
+    setUserInfo({
+      name: res.data.name,
+      tel: res.data.phoneNum,
+      email: res.data.email
+    })
   }
   
   useEffect(() => {
     getUserInfo();
   },[])
-  console.log(userInfo)
+
   const {name, tel, email, password} = userInfo;
 
   const list = [
@@ -123,36 +97,28 @@ const MyPage = () => {
     }
   ]
 
-  const handleInfoChange = (e) => {
-    const { value, name } = e.target;
-    console.log(e.target)
-      setUserInfo({
-        ...userInfo, 
-        [name]: value 
-      });
-  };
-
   return (
     <Container>
       <StyledTitle>내 정보 관리</StyledTitle>
-          {list.map((item) => (
-            <MyPageEdit 
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              title={item.title}
-              setname={item.setname}
-              onChangeValue={handleInfoChange}
-           />
-          ))}
-          <div>
-            <StyledInfoTitle>회원탈퇴</StyledInfoTitle>
-            <StyledUserInfo>
+      {list.map((item) => (
+        <MyPageEdit 
+          key={item.id}
+          id={item.id}
+          name={item.name}
+          title={item.title}
+        />
+      ))}
+      <StyledUserInfoWrap>
+        <div><h4>회원탈퇴</h4></div>
+          <StyledUserInfo>
+            <span>탈퇴 시 복구 할 수 없습니다.</span>
               <StyledButton>회원탈퇴</StyledButton>
-            </StyledUserInfo>
-          </div>
+          </StyledUserInfo>
+      </StyledUserInfoWrap>
+    <button>저장하기</button>
+    <button>취소</button>
     </Container>
   )
 }
 
-export { MyPage, StyledButton, StyledInfoTitle, StyledUserInfo };
+export { MyPage, StyledButton, StyledUserInfo, StyledUserInfoWrap };
