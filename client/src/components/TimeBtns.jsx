@@ -9,22 +9,20 @@ const TimeBtns = () =>{
     const {detailData : data} = useContext(DetailContext);
     const times = data.times;
 
-    const [timeBtnActive, setTimeBtnActive] = useState("");
-    
+    const [timeBtnActive, setTimeBtnActive] = useState(0);
     const dispatch = useDispatch();
-    const stateValue = useSelector(state=>state.time);
 
     const handleTimeSelect = (e) => {
-        setTimeBtnActive(e.target.value);
+        setTimeBtnActive(e.target.value); //index
     };
     
     useEffect(()=>{
         dispatch(getTime(times[timeBtnActive]));
     },[timeBtnActive]);
 
+    
     return  times.map( (time,idx)=>{
         return <div key= {`TimeButtonContainer-${idx}`}>
-                {/* <p>{stateValue}</p> */}
                 <TimeButton 
                     key= {`TimeButton-${idx}`}
                     className={"btn" + (idx == timeBtnActive ? " active" : "")} 
