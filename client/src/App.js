@@ -5,7 +5,7 @@ import Home from "./pages/Layout/Home";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import DetailPage from "./pages/DetailPage";
-import Payment from "./pages/Pay/Payment";
+import Payment from "./pages/Payment";
 
 function App() {
   return (
