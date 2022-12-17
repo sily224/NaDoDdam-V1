@@ -2,6 +2,12 @@ const Farms = (sequelize, DataTypes) => {
   const Farms = sequelize.define(
     'Farms',
     {
+      farm_id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+      },
       type: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -38,10 +44,16 @@ const Farms = (sequelize, DataTypes) => {
   //     targetKey: 'id',
   //   });
   // };
+  Farms.getAll = () => {
+    return Farms.findAll();
+  };
+
+  Farms.getByType = (type) => {
+    return Farms.findAll({ where: { type } });
+  };
 
   Farms.createFarm = (farmInfo) => {
     return Farms.create(farmInfo).then((data) => {
-      console.log('콘솔로그', data.dataValues);
       return data;
     });
   };
