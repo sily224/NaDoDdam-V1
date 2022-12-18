@@ -17,7 +17,7 @@ const Users = (sequelize, DataTypes) => {
         unique: true,
       },
       phoneNum: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(64),
         allowNull: false,
       },
       role: {
@@ -31,7 +31,7 @@ const Users = (sequelize, DataTypes) => {
       charset: "utf8",
       collate: "utf8_general_ci", //한글 저장
       tableName: "Users",
-      timestamps: true,
+      timestamps: false,
     }
   );
 
@@ -42,9 +42,14 @@ const Users = (sequelize, DataTypes) => {
     });
   };
 
+  Users.findByUserId = (id)=> {
+    return Users.findOne({where: {id}})
+  }
+
   Users.findByUserEmail = (email)=> {
     return Users.findOne({where: {email}})
   }
+
 
   Users.getUsers = ()=> {
     return Users.findAll();
@@ -57,6 +62,13 @@ const Users = (sequelize, DataTypes) => {
   Users.createUser = (user)=> {
     return Users.create(user).then((data) => data.dataValues.id);
   }
+
+  Users.updateUser = ({userId, update})=> {
+
+    return Users.update(update, {where: {id: userId}})
+    // return {"update_count": result, update};
+  }
+
   return Users;
 };
 export default Users;
