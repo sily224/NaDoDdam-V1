@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import styled from "styled-components";
-import Modal from "../components/Modal";
+import ModalContainer from "../components/Modal";
 import axios from "axios";
 import * as userApi from "../lib/userApi";
 // 입력 폼, 유효성 검사 패키지
@@ -96,58 +96,56 @@ function Register() {
 
   return (
     <>
-      {modalOpen && (
-        <Modal setModalOpen={setModalOpen}>
-          <ModalTitle>회원가입</ModalTitle>
-          <InputForm onSubmit={handleSubmit((data) => joinUser(data))}>
-            <Label htmlFor="email">이메일</Label>
-            <Input id="email" type="email" {...register("email")} />
-            {errors.email && <small role="alert">{errors.email.message}</small>}
+      <ModalContainer isOpen={true}>
+        <ModalTitle>회원가입</ModalTitle>
+        <InputForm onSubmit={handleSubmit((data) => joinUser(data))}>
+          <Label htmlFor="email">이메일</Label>
+          <Input id="email" type="email" {...register("email")} />
+          {errors.email && <small role="alert">{errors.email.message}</small>}
 
-            <Label htmlFor="password">비밀번호</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="영문, 숫자, 특수문자 조합 최소 8자"
-              {...register("password")}
-            />
-            {errors.password && (
-              <small role="alert">{errors.password.message}</small>
-            )}
+          <Label htmlFor="password">비밀번호</Label>
+          <Input
+            id="password"
+            type="password"
+            placeholder="영문, 숫자, 특수문자 조합 최소 8자"
+            {...register("password")}
+          />
+          {errors.password && (
+            <small role="alert">{errors.password.message}</small>
+          )}
 
-            <Input
-              placeholder="비밀번호를 다시 입력해주세요"
-              type="password"
-              {...register("passwordConfirm")}
-            />
-            {errors.passwordConfirm && (
-              <small role="alert">{errors.passwordConfirm.message}</small>
-            )}
+          <Input
+            placeholder="비밀번호를 다시 입력해주세요"
+            type="password"
+            {...register("passwordConfirm")}
+          />
+          {errors.passwordConfirm && (
+            <small role="alert">{errors.passwordConfirm.message}</small>
+          )}
 
-            <Label htmlFor="name">이름</Label>
-            <Input id="name" {...register("name")} />
-            {errors.name && <small role="alert">{errors.name.message}</small>}
+          <Label htmlFor="name">이름</Label>
+          <Input id="name" {...register("name")} />
+          {errors.name && <small role="alert">{errors.name.message}</small>}
 
-            <Label htmlFor="phoneNum">전화번호</Label>
-            <Input
-              id="phoneNum"
-              placeholder="숫자만 입력해주세요"
-              {...register("phoneNum")}
-            />
-            {errors.phoneNum && (
-              <small role="alert">{errors.phoneNum.message}</small>
-            )}
+          <Label htmlFor="phoneNum">전화번호</Label>
+          <Input
+            id="phoneNum"
+            placeholder="숫자만 입력해주세요"
+            {...register("phoneNum")}
+          />
+          {errors.phoneNum && (
+            <small role="alert">{errors.phoneNum.message}</small>
+          )}
 
-            <RegisterBtn type="submit" disabled={isSubmitting}>
-              가입하기
-            </RegisterBtn>
-          </InputForm>
+          <RegisterBtn type="submit" disabled={isSubmitting}>
+            가입하기
+          </RegisterBtn>
+        </InputForm>
 
-          <Link to="/login">
-            <LoginBtn>로그인하기</LoginBtn>
-          </Link>
-        </Modal>
-      )}
+        <Link to="/login">
+          <LoginBtn>로그인하기</LoginBtn>
+        </Link>
+      </ModalContainer>
     </>
   );
 }
