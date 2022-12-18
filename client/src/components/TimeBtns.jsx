@@ -1,9 +1,9 @@
-import {useState,useContext} from 'react';
+import {useState,useContext} from "react";
 import { DetailContext } from "../pages/DetailPage";
-import { useSelector, useDispatch } from "react-redux";
-import { getTime } from "../store/FormStore";
-import styled from 'styled-components';
-import { useEffect } from 'react';
+import { useDispatch } from "react-redux";
+import { getTime } from "../store/FormSlice";
+import styled from "styled-components";
+import { useEffect } from "react";
 
 const TimeBtns = () =>{
     const {detailData : data} = useContext(DetailContext);

@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import styled from "styled-components";
-import Modal from "../components/Modal";
-import axios from "axios";
+import ModalContainer from "../components/Modal";
 import * as userApi from "../lib/userApi";
+import { useSelector } from "react-redux";
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -49,7 +49,8 @@ const SocialButton = styled.button`
 `;
 
 function Login() {
-  const [modalOpen, setModalOpen] = useState(true);
+  const loginModalState = useSelector((state) => state.modal.loginModal);
+  console.log("로그인 열림", loginModalState);
 
   const formSchema = yup.object({
     email: yup
@@ -80,13 +81,12 @@ function Login() {
       console.log("전달되는 데이터", data);
       const res = await userApi.post("//localhost:3500/api/login", data);
 
-      if(res.status !== 200) {
+      if (res.status !== 200) {
         alert("로그인 실패");
         window.location.assign = "/login";
       }
-      
+
       const token = res.data.token;
-      // const refreshToken = res.data.refreshToken;
 
       localStorage.setItem("token", token);
       localStorage.setItem("loggedIn", "true");
@@ -94,14 +94,15 @@ function Login() {
       alert(`로그인되었습니다.`);
       navigate("/");
     } catch (err) {
+      alert(err.message);
       console.error("로그인 실패", err);
     }
   };
 
-  return (
-    <>
-      {modalOpen && (
-        <Modal setModalOpen={setModalOpen}>
+  if (loginModalState) {
+    return (
+      <>
+        <ModalContainer>
           <ModalTitle>로그인</ModalTitle>
           <InputForm onSubmit={handleSubmit((data) => loginUser(data))}>
             <Label htmlFor="email">이메일</Label>
@@ -122,7 +123,6 @@ function Login() {
               로그인
             </Button>
           </InputForm>
-
           <Link to="/register">
             <Button>회원가입</Button>
           </Link>
@@ -131,10 +131,10 @@ function Login() {
             <SocialButton>카카오</SocialButton>
             <SocialButton>구글</SocialButton>
           </SocialLogin>
-        </Modal>
-      )}
-    </>
-  );
+        </ModalContainer>
+      </>
+    );
+  }
 }
 
 export default Login;
