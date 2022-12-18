@@ -1,9 +1,9 @@
-import {useState,useEffect,useContext} from 'react';
+import {useState,useEffect,useContext} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getHeadCount ,getTotalPrice} from "../store/FormStore";
+import { getHeadCount ,getTotalPrice} from "../store/FormSlice";
 import { useNavigate } from "react-router-dom";
 import { DetailContext } from "../pages/DetailPage";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const FloatingForm = () =>{
     const {detailData:data} = useContext(DetailContext);
@@ -14,19 +14,19 @@ const FloatingForm = () =>{
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const state = useSelector(state => state);
+    const formData = useSelector(state => state.form);
 
     const handleHeadCount = (e) => {
         setHeadCount(e.target.value);  
     };
 
     const handleSubmit = (e) =>{    
-        // console.log({
-        //     ...state,
-        //     "price":price,
-        //     "farm": company.name,
-        //     "programName":title
-        // });     
+        console.log({
+            ...formData,
+            "price":price,
+            "farm": company.name,
+            "programName":title
+        });     
 
         // 페이지 이동전, 인원이 초과 되는 지 확인을 위한 get 요청 
         // 인원초과 되면 alert창 + return 
@@ -34,7 +34,7 @@ const FloatingForm = () =>{
 
         navigate("/pay",{
             paymentData : {
-                ...state,
+                ...formData,
                 "price":price,
                 "farm": company.name,
                 "programName":title
@@ -45,7 +45,7 @@ const FloatingForm = () =>{
     useEffect(()=>{
         setTotalPrice(headCount*price);
         dispatch(getHeadCount(headCount));
-    },[headCount])
+    },[headCount,price])
 
     useEffect(()=>{
         dispatch(getTotalPrice(totalPrice));
@@ -53,8 +53,8 @@ const FloatingForm = () =>{
 
     return(
         <Form onSubmit={handleSubmit}>
-            <p>{state.date}</p>
-            <p>{state.time}</p>
+            <p>{formData.date}</p>
+            <p>{formData.time}</p>
             <p>{price}원/명</p>
             <SelectBox onChange={handleHeadCount} value={headCount}>
                 {[...Array(10).keys()].map(n => <option key={`HeadCount-${n+1}`} value={n+1} >{n+1}</option>)}

@@ -1,13 +1,11 @@
-import React,{useState,useEffect,useContext} from 'react';
-import { useDispatch, useSelector } from "react-redux";
-
-import styled from 'styled-components';
+import React,{useContext} from "react";
+import styled from "styled-components";
 import Calender from "./ReactCalender";
 import Location from "./Location";
 import Review from "./Review";
 import TimeBtns from "./TimeBtns";
 import { DetailContext } from "../pages/DetailPage"
-import FloatingForm from './FloatingForm';
+import FloatingForm from "./FloatingForm";
 
 
 const DetailHeader = ({title,location}) =>{
@@ -45,16 +43,12 @@ const DetailCompany = ({company}) => {
 
 
 const Detail = () => {
-    const [formData,setFormData] = useState({})
     const {detailData : data} = useContext(DetailContext);
 
     const getDataFuntion = (value) => {
         console.log(value);
     };
 
-    useEffect(() => {
-        console.log(formData);
-    },[formData]);
 
     return (
         <>

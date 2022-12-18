@@ -1,9 +1,9 @@
-import React, { useState,useEffect,useContext } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { getDate } from "../store/FormStore";
+import React, { useState,useEffect,useContext } from "react";
+import { useDispatch } from "react-redux";
+import { getDate } from "../store/FormSlice";
 import { DetailContext } from "../pages/DetailPage"
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; // css import
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css"; // css import
 
 
 const ReactCalender = () => {
