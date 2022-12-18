@@ -53,6 +53,7 @@ const StyledNav = styled.div`
 `;
 
 const StyledMenu = styled.div`
+<<<<<<< HEAD
   display: none;
   ${(props) =>
     props.toggle &&
@@ -70,6 +71,24 @@ const StyledMenu = styled.div`
   padding: 1% 0;
   box-sizing: border-box;
 `;
+=======
+ display: none;
+ ${props => props.toggle && css`
+    display: block;
+ `}
+ position: absolute;
+ top: 10%;
+ right: 5%;
+ background: #fff;
+ border-radius: 10px;
+ box-shadow: -1px -1px 10px rgba(0,0,0,0.18);
+ border: 1px solid rgba(0,0,0,0.18);
+ width: 20%;
+ padding: 1% 0;
+ box-sizing: border-box;
+ z-index: 100;
+`
+>>>>>>> 4818e69f0a85527dd21350acca9288a53b351582
 const StyledLink = styled(Link)`
   padding: 5%;
 
@@ -108,8 +127,13 @@ const StyledLogout = styled.div`
 const afterLoginList = [
   {
     id: 3,
+<<<<<<< HEAD
     name: "내정보관리",
     path: "/login",
+=======
+    name :'내정보관리',
+    path : '/mypage',
+>>>>>>> 4818e69f0a85527dd21350acca9288a53b351582
   },
   {
     id: 4,
