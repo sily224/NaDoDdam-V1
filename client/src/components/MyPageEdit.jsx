@@ -9,11 +9,11 @@ const Input = styled.input`
 `
 
 const MyPageEdit = ({id, name, title}) => {
-  const [gname, setName] = useState({})
+  const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
   const textInput = useRef();
 
-  useEffect(() => {
+  const setReplaceName = () => {
     let replaceName = '';
 
     if(id === 'tel') {
@@ -22,35 +22,39 @@ const MyPageEdit = ({id, name, title}) => {
       replaceName =  "*".repeat(name.length)
     }else{
       replaceName = name;
-    }
+    };
     
-    setName({
+    setReName({
       value: replaceName,
-    })
-  },[name])
+    });
+  };
+
+  useEffect(() => {
+    setReplaceName();
+  },[name]);
  
   const changeEditMode = () => {
-    setChange(cur => !cur)
-  }
+    setChange(cur => !cur);
+  };
 
   const upDateComponents = () => {
-    setChange(cur => !cur)
-    setName({
-      ...gname,
-      value: textInput.current.value
-    })
-  }
+    setChange(cur => !cur);
+    setReName({
+      ...reName,
+      value: textInput.current.value,
+    });
+  };
 
   const DefaultView = () => {
     return (
       <StyledUserInfo>
-        <div><span>{gname.value === undefined ? ".." : gname.value}</span></div>
+        <div><span>{reName.value === undefined ? ".." : reName.value}</span></div>
         <div>
           <StyledButton onClick={changeEditMode}>수정</StyledButton> 
         </div>
       </StyledUserInfo>
     )
-  }
+  };
 
   const RenderEditView = () => {
     return (
@@ -60,7 +64,7 @@ const MyPageEdit = ({id, name, title}) => {
             id={id}
             name={id} 
             type={id === "password" ? "password" : "text"} 
-            defaultValue={gname.value}
+            defaultValue={reName.value}
             ref={textInput}
           />
         </div>
@@ -70,7 +74,7 @@ const MyPageEdit = ({id, name, title}) => {
         </div>
       </StyledUserInfo>
     )
-  }
+  };
 
   return(
     <StyledUserInfoWrap>
