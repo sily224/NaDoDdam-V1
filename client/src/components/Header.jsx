@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
 import { HiUserCircle, HiMenu } from "react-icons/hi";
 import { useSelector, useDispatch } from "react-redux";
-import { showLogin, showRegister } from "../store/modalSlice";
+import { showLogin, showModal, showRegister } from "../store/ModalSlice";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -53,7 +53,6 @@ const StyledNav = styled.div`
 `;
 
 const StyledMenu = styled.div`
-<<<<<<< HEAD
   display: none;
   ${(props) =>
     props.toggle &&
@@ -70,25 +69,8 @@ const StyledMenu = styled.div`
   width: 20%;
   padding: 1% 0;
   box-sizing: border-box;
+  z-index: 2;
 `;
-=======
- display: none;
- ${props => props.toggle && css`
-    display: block;
- `}
- position: absolute;
- top: 10%;
- right: 5%;
- background: #fff;
- border-radius: 10px;
- box-shadow: -1px -1px 10px rgba(0,0,0,0.18);
- border: 1px solid rgba(0,0,0,0.18);
- width: 20%;
- padding: 1% 0;
- box-sizing: border-box;
- z-index: 100;
-`
->>>>>>> 4818e69f0a85527dd21350acca9288a53b351582
 const StyledLink = styled(Link)`
   padding: 5%;
 
@@ -97,6 +79,10 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const StyledBtnWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 const StyledBtn = styled.button``;
 
 const StyledLogout = styled.div`
@@ -127,13 +113,8 @@ const StyledLogout = styled.div`
 const afterLoginList = [
   {
     id: 3,
-<<<<<<< HEAD
     name: "내정보관리",
-    path: "/login",
-=======
-    name :'내정보관리',
-    path : '/mypage',
->>>>>>> 4818e69f0a85527dd21350acca9288a53b351582
+    path: "/mypage",
   },
   {
     id: 4,
@@ -154,7 +135,6 @@ const afterLoginList = [
 
 const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
   const loginModalState = useSelector((state) => state.modal.loginModal);
-  console.log("로긴모달", loginModalState);
   const dispatch = useDispatch();
 
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -205,14 +185,24 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
         </StyledNav>
         <StyledMenu toggle={toggleMenu} ref={ref}>
           {token === null ? (
-            <div>
-              <StyledBtn onClick={() => dispatch(showLogin())}>
+            <StyledBtnWrapper>
+              <StyledBtn
+                onClick={() => {
+                  dispatch(showLogin());
+                  setToggleMenu(false);
+                }}
+              >
                 로그인
               </StyledBtn>
-              <StyledBtn onClick={() => dispatch({ type: "showRegister" })}>
+              <StyledBtn
+                onClick={() => {
+                  dispatch(showRegister());
+                  setToggleMenu(false);
+                }}
+              >
                 회원가입
               </StyledBtn>
-            </div>
+            </StyledBtnWrapper>
           ) : (
             <div>
               {afterLoginList.map((item) => (
