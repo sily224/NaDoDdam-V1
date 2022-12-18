@@ -17,9 +17,7 @@ export async function getFarms(req, res, next) {
 
 export async function getByLocation(req, res, next) {
   const { address } = req.query;
-  console.log(address);
   const data = await db.Farms.getByAddress(address);
-  console.log('data = ', data.dataValues);
   if (!data) {
     return res.status(404).json({ message: '해당지역에는 농장이 없습니다.' });
   }
