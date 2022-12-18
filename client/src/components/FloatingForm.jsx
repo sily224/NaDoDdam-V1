@@ -67,13 +67,14 @@ const FloatingForm = () =>{
 };
 
 const Form = styled.form`
+    width : 50%;
     height: 200px;
     border : 1px solid black;
+    padding : 5%;
     position: sticky;
     top: 20%;
 `;
 const SelectBox = styled.select`
-    
 `;
 
 export default FloatingForm;

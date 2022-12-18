@@ -12,7 +12,6 @@ const ReactCalender = () => {
 
     const [date, setDate] = useState(new Date());
     const dispatch = useDispatch();
-    const stateValue = useSelector(state=>state.date);
 
     useEffect(() => {
         const dateFormat =`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
@@ -20,12 +19,7 @@ const ReactCalender = () => {
     },[date]);
 
     return (
-        <>
-        {/* <p>{stateValue}</p> */}
-        <div>
-            <Calendar calendarType="US" onChange={setDate} value={date} minDate={new Date(start)} maxDate={new Date(end)}/>
-        </div>
-        </>
+        <Calendar calendarType="US" onChange={setDate} value={date} minDate={new Date(start)} maxDate={new Date(end)}/>
     );
 };
 export default ReactCalender;
