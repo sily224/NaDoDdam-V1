@@ -1,6 +1,8 @@
+import db from './index.js';
+
 const TimeTables = (sequelize, DataTypes) => {
-	const TimeTables = sequelize.define(
-		'timeTables',
+	const timeTable = sequelize.define(
+		'timeTable',
 		{
 			id: {
 				type: DataTypes.INTEGER,
@@ -35,21 +37,44 @@ const TimeTables = (sequelize, DataTypes) => {
 		},
 	);
 
-	TimeTables.associate = (db) => {
+	timeTable.associate = (db) => {
 		db.TimeTables.belongsTo(db.Farms);
 	};
 
-	TimeTables.getAll = () => {
-		return TimeTables.findAll();
+	timeTable.getAll = () => {
+		return timeTable.findAll({
+			attributes: [
+				'id',
+				'date',
+				'price',
+				'start_time',
+				'end_time',
+				// [DataTypes.col('farm.type'), 'type'],
+				// [DataTypes.col('farm.type'), 'type'],
+			],
+			include: {
+				model: db.Farms,
+				//attributes: [],
+			},
+		});
 	};
 
-	TimeTables.getByDate = (date) => {};
+	timeTable.getByDate = (date) => {};
 
-	TimeTables.createTable = (tableInfo, farmId) => {
-		return TimeTables.create(tableInfo, farmId);
+	timeTable.getById = (id) => {
+		return timeTable.findOne({
+			where: { id },
+		});
 	};
 
-	return TimeTables;
+	timeTable.createTable = (tableInfo) => {
+		return timeTable.create(tableInfo).then((data) => {
+			console.log(data);
+			return data;
+		});
+	};
+
+	return timeTable;
 };
 
 export default TimeTables;

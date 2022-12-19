@@ -1,11 +1,9 @@
 import Sequelize from 'sequelize';
 const Op = Sequelize.Op;
 
-import db from '../models/index.js';
-
 const Farms = (sequelize, DataTypes) => {
-	const Farms = sequelize.define(
-		'Farms',
+	const farm = sequelize.define(
+		'farm',
 		{
 			type: {
 				type: DataTypes.STRING,
@@ -31,28 +29,26 @@ const Farms = (sequelize, DataTypes) => {
 		},
 		{
 			charset: 'utf8',
-			collate: 'utf8_general_ci', //한글 저장
-			tableName: 'Farms',
-			timestamps: true,
+			collate: 'utf8_general_ci',
 		},
 	);
 
-	Farms.findById = (id) => {
-		return Farms.findByPk(id).then((data) => {
+	farm.findById = (id) => {
+		return farm.findByPk(id).then((data) => {
 			return data.dataValues.id;
 		});
 	};
 
-	Farms.getAll = () => {
-		return Farms.findAll();
+	farm.getAll = () => {
+		return farm.findAll();
 	};
 
-	Farms.getByType = (type) => {
-		return Farms.findAll({ where: { type } });
+	farm.getByType = (type) => {
+		return farm.findAll({ where: { type } });
 	};
 
-	Farms.getByAddress = (address) => {
-		return Farms.findAll({
+	farm.getByAddress = (address) => {
+		return farm.findAll({
 			where: {
 				address: {
 					[Op.like]: '%' + address + '%',
@@ -61,19 +57,19 @@ const Farms = (sequelize, DataTypes) => {
 		});
 	};
 
-	Farms.updateFarm = (id, updateInfo) => {
-		return Farms.update(updateInfo, { where: { id } });
+	farm.updateFarm = (id, updateInfo) => {
+		return farm.update(updateInfo, { where: { id } });
 	};
 
-	Farms.createFarm = (farmInfo) => {
-		return Farms.create(farmInfo);
+	farm.createFarm = (farmInfo) => {
+		return farm.create(farmInfo);
 	};
 
-	Farms.remove = (id) => {
-		return Farms.findByPk(id).then((farm) => farm.destroy());
+	farm.remove = (id) => {
+		return farm.findByPk(id).then((farm) => farm.destroy());
 	};
 
-	return Farms;
+	return farm;
 };
 
 export default Farms;
