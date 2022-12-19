@@ -67,7 +67,6 @@ const TimeTables = (sequelize, DataTypes) => {
 
 	timeTable.createTable = (tableInfo) => {
 		return timeTable.create(tableInfo).then((data) => {
-			console.log(data);
 			return data;
 		});
 	};
