@@ -63,7 +63,7 @@ const ReservationInfo = ({ data }) => {
 	const EditHandler = () => {
 		console.log('나와라');
 		setIsEdit(!isEdit);
-		// <Modal></Modal>;
+		<Modal>1</Modal>;
 	};
 
 	return (
@@ -77,8 +77,8 @@ const ReservationInfo = ({ data }) => {
 			<H3>인원</H3>
 			<Info>{data.count}</Info>
 			<Button onClick={() => EditHandler()}>예약정보수정</Button>
-			{/* <ReactCalender></ReactCalender>
-			<TimeBtns></TimeBtns> */}
+			{/* <ReactCalender></ReactCalender> */}
+			{/* <TimeBtns></TimeBtns> */}
 			{/* {isEdit ? <ReactCalender></ReactCalender> : null} */}
 			<Line />
 		</>
@@ -87,39 +87,35 @@ const ReservationInfo = ({ data }) => {
 
 //SideBar
 const SideBar = ({ data }) => {
-	const price = data.programPrice;
-	const counter = data.count;
 	const [totalPrice, setTotalPrice] = useState('');
 
-	console.log(`typeof price`, typeof price);
-	console.log(`price`, price);
-	console.log(`typeof counter`, typeof counter);
-	console.log(`counter`, counter);
-	console.log(`typeof totoalPrice`, typeof totalPrice);
-	console.log(`totoalPrice`, totalPrice);
-
 	useEffect(() => {
-		setTotalPrice(price * counter);
+		const { count, programPrice } = data;
+		setTotalPrice(count * programPrice);
 	}, [data]);
 
 	return (
 		<>
-			<PayboxTop>
-				<Image src={data.img}></Image>
-				<PayboxName>
-					<NameInfo>{data.farmName}</NameInfo>
-					<NameInfo>{data.programName}</NameInfo>
-				</PayboxName>
-			</PayboxTop>
-			<H3>요금 세부정보</H3>
-			<NameInfo>1인 체험권</NameInfo>
-			<Info>
-				{data.programPrice}원 X{data.count}
-			</Info>
-			<Info>{totalPrice}</Info>
-			<Line />
-			<Info>결제 예정 금액</Info>
-			<Info>{totalPrice}</Info>
+			{data && (
+				<div>
+					<PayboxTop>
+						<Image src={data.img}></Image>
+						<PayboxName>
+							<NameInfo>{data.farmName}</NameInfo>
+							<NameInfo>{data.programName}</NameInfo>
+						</PayboxName>
+					</PayboxTop>
+					<H3>요금 세부정보</H3>
+					<NameInfo>1인 체험권</NameInfo>
+					<Info>
+						{data.programPrice}원 X{data.count}
+					</Info>
+					<Info>{totalPrice || null}</Info>
+					<Line />
+					<Info>결제 예정 금액</Info>
+					<Info>{totalPrice || null}</Info>
+				</div>
+			)}
 		</>
 	);
 };
