@@ -1,14 +1,14 @@
-import { createSlice, configureStore } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    date: "",
+    date: new Date().toISOString().substring(0,10),
     totalPrice : 0,
     headCount : 0,
     time:"",
 };
 
-const FormDataSlice = createSlice({
-    name: 'formData',
+const formSlice = createSlice({
+    name: "form",
     initialState,
     reducers: {
         getDate(state,action) {
@@ -26,6 +26,5 @@ const FormDataSlice = createSlice({
     }
 });
 
-const FormStore = configureStore({ reducer: FormDataSlice.reducer });
-export default FormStore;
-export const {getDate,getTotalPrice,getHeadCount,getTime} = FormDataSlice.actions;
+export default formSlice.reducer;
+export const {getDate,getTotalPrice,getHeadCount,getTime} = formSlice.actions;
