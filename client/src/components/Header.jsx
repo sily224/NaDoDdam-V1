@@ -149,10 +149,9 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
   };
 
   const handleClickOutSide = (e) => {
-    console.log(ref.current.contains(e.target));
     if (toggleMenu && !ref.current.contains(e.target)) {
       setToggleMenu(false);
-    }
+    };
   };
 
   useEffect(() => {
