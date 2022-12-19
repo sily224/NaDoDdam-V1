@@ -37,16 +37,10 @@ const Farms = (sequelize, DataTypes) => {
 		},
 	);
 
-	// Farms.associate = (db) => {
-	// 	db.Farms.hasMany(db.TimeTables, {
-	// 		foreignKey: 'farm_id',
-	// 		targetKey: 'id',
-	// 	});
-	// };
-
 	Farms.findById = (id) => {
-		return db.Users.findByPk(id).then((data) => {
-			return data.dataValues.id;
+		return Farms.findByPk(id).then((data) => {
+			console.log(data);
+			return data;
 		});
 	};
 
@@ -68,22 +62,18 @@ const Farms = (sequelize, DataTypes) => {
 		});
 	};
 
-	// Farms.update = (id, type, name, address, description, owner) => {
-	//   return Farms.findByPk(id).then((data) => {
-	//     return (
-	//       (data.type = type),
-	//       (data.name = name),
-	//       (data.address = address),
-	//       (data.description = description),
-	//       (data.owner = owner)
-	//     );
-	//   });
-	// };
-
-	Farms.create = (farmInfo) => {
-		return Farms.create(farmInfo).then((data) => {
+	Farms.updateFarm = (id, updateInfo) => {
+		return Farms.update(updateInfo, { where: { id } }).then((data) => {
 			return data;
 		});
+	};
+
+	Farms.create = (farmInfo) => {
+		return Farms.create(farmInfo);
+	};
+
+	Farms.remove = (id) => {
+		return Farms.findByPk(id).then((farm) => farm.destroy());
 	};
 
 	return Farms;

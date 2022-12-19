@@ -6,7 +6,7 @@ export async function reserve(req, res, next) {
 	const user_id = req.userId;
 
 	try {
-		const new_reserve = await db['Reservations'].createReserve({
+		const new_reserve = await db.Reservations.createReserve({
 			date,
 			total_price,
 			time,
@@ -22,7 +22,7 @@ export async function reserve(req, res, next) {
 
 export async function reserveList(req, res, next) {
 	try {
-		const reserves = await db['Reservations'].getUsers();
+		const reserves = await db.Reservations.getUsers();
 		if (!reserve) {
 			return res.status(404).json({ message: '예약 찾을 수 없음' });
 		}
@@ -37,7 +37,7 @@ export async function reserveDrop(req, res, next) {
 	try {
 		const reserve_id = req.params.id;
 
-		const reserve = await db['Reservations'].deleteReserve(reserve_id);
+		const reserve = await db.Reservations.deleteReserve(reserve_id);
 
 		res.status(200).json({ reserve_id: reserve_id, message: 'delete !' });
 	} catch (err) {
@@ -48,13 +48,13 @@ export async function reserveDrop(req, res, next) {
 async function serReserve(reserveInfo, toUpdate) {
 	const { reserve_id } = reserveInfo;
 
-	let reserve = await db['Reservations'].findByReserveId(reserve_id);
+	let reserve = await db.Reservations.findByReserveId(reserve_id);
 
 	if (!reserve) {
 		throw new Error('해당 예약이 없습니다. 다시 한 번 확인해 주세요.');
 	}
 
-	reserve = await db['Reservations'].updateReserve({
+	reserve = await db.Reservations.updateReserve({
 		reserve_id,
 		update: toUpdate,
 	});
