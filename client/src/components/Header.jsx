@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { AiOutlineSearch } from "react-icons/ai";
 import { HiUserCircle, HiMenu } from "react-icons/hi";
+import { getToken } from "../utils/utils";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -137,7 +138,7 @@ const afterLoginList = [
 
 const Header = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const token = localStorage.getItem('token');
+  const token = getToken();
   const navigate = useNavigate();
   const params = useParams();
   const ref = useRef();
