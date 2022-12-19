@@ -6,6 +6,57 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
 
 
+const ReviewContainer  = styled.div`
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+`;
+const ReviewDiv = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: ${(props) => props.len > 6 ? `repeat(3,1fr)` : `repeat(${Math.ceil(props.len/2)},1fr)`};
+    gap: 10px 20px;
+`; 
+const ReviewId = styled.p`
+    font-size: 1rem;
+    font-weight: bold;
+`;
+
+const ReviewName = styled.p`
+    font-size: 0.7rem;
+`;
+const ReviewContent= styled.p`
+    display:block;
+    width:100%;
+    font-size: 0.8rem;
+    ${props =>props.active && css`
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+    `};
+`;
+const ReviewItem = styled.div`
+    border  : 1px solid black;
+    padding : 5px;
+    overflow: hidden;   
+    p {  margin : 5px; }
+`;
+const ModalLayout = styled.div`
+    display: felx;
+    margin-top : 5%;
+`;
+const ModalTitle = styled.div`
+    width: 30%;
+    margin-right:5%;
+`;
+const ModalContent =styled.div`
+    width: 60%;
+    height: 600px;
+    overflow-y:auto;
+    overflow-x:hidden;
+`;
+
 
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
@@ -59,61 +110,5 @@ const Review = ()=>{
         </>
     );
 }
-
-const ReviewContainer  = styled.div`
-    border: 1px solid black;
-    border-radius: 10px;
-    padding: 10px;
-    width: 100%;
-`;
-
-const ReviewDiv = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: ${(props) => props.len > 6 ? `repeat(3,1fr)` : `repeat(${Math.ceil(props.len/2)},1fr)`};
-    gap: 10px 20px;
-`; 
-
-const ReviewId = styled.p`
-    font-size: 1rem;
-    font-weight: bold;
-`;
-
-const ReviewName = styled.p`
-    font-size: 0.7rem;
-`;
-
-const ReviewContent= styled.p`
-    display:block;
-    width:100%;
-    font-size: 0.8rem;
-    ${props =>props.active && css`
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis; 
-    `};
-`;
-
-const ReviewItem = styled.div`
-    border  : 1px solid black;
-    padding : 5px;
-    overflow: hidden;   
-    p {  margin : 5px; }
-`;
-
-const ModalLayout = styled.div`
-    display: felx;
-    margin-top : 5%;
-`;
-const ModalTitle = styled.div`
-    width: 30%;
-    margin-right:5%;
-`;
-const ModalContent =styled.div`
-    width: 60%;
-    height: 600px;
-    overflow-y:auto;
-    overflow-x:hidden;
-`;
 
 export default Review;

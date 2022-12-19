@@ -8,6 +8,52 @@ import { DetailContext } from '../pages/DetailPage';
 import FloatingForm from './FloatingForm';
 
 
+const DisplayFlex = styled.div`
+    display:flex;
+    flex-direction:column;
+`;
+
+const DetailContainer = styled(DisplayFlex)`
+    width:100%;
+    text-align: left;
+`;
+
+const Header = styled(DisplayFlex)`
+    width:100%;
+`;
+
+const Title = styled.h1`
+    display: block;
+    width : 100%;
+`;
+
+const DetailContent = styled.div`
+    display: flex;
+`;
+
+const DetailPeriod = styled(DetailContent)`
+    justify-content: flex-start;
+`;
+const DetailInform = styled.div`
+    display: block;
+    width: 100%;
+    flex: 3.5;
+`;
+const FloatingFormDiv = styled.div`
+    display : felx;
+    justify-content : flex-end;
+    flex: 1;
+`;
+const DetailCompanyContainer = styled.div`
+    border : 1px solid black;
+`;
+const TimButtonContainer = styled(DisplayFlex)`
+    justify-content:center;
+    margin-left : 3%;
+`;
+
+
+
 const DetailHeader = ({ title, location }) => {
     return (
         <Header>
@@ -74,49 +120,5 @@ const Detail = () => {
         </>
     );
 };
-
-const DisplayFlex = styled.div`
-    display:flex;
-    flex-direction:column;
-`;
-
-const DetailContainer = styled(DisplayFlex)`
-    width:100%;
-    text-align: left;
-`;
-
-const Header = styled(DisplayFlex)`
-    width:100%;
-`;
-
-const Title = styled.h1`
-    display: block;
-    width : 100%;
-`;
-
-const DetailContent = styled.div`
-    display: flex;
-`;
-
-const DetailPeriod = styled(DetailContent)`
-    justify-content: flex-start;
-`;
-const DetailInform = styled.div`
-    display: block;
-    width: 100%;
-    flex: 3.5;
-`;
-const FloatingFormDiv = styled.div`
-    display : felx;
-    justify-content : flex-end;
-    flex: 1;
-`;
-const DetailCompanyContainer = styled.div`
-    border : 1px solid black;
-`;
-const TimButtonContainer = styled(DisplayFlex)`
-    justify-content:center;
-    margin-left : 3%;
-`;
 
 export default Detail;
