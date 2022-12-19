@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import styled from "styled-components";
-import Modal from "../components/Modal";
-import axios from "axios";
+import ModalContainer from "../components/Modal";
 import * as userApi from "../lib/userApi";
+import { useSelector } from "react-redux";
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -32,7 +32,7 @@ const RegisterBtn = styled.button`
 const LoginBtn = styled.button``;
 
 function Register() {
-  const [modalOpen, setModalOpen] = useState(true);
+  const registerModalState = useSelector((state) => state.modal.registerModal);
 
   // 입력값 유효성 검사할 형태
   const formSchema = yup.object({
@@ -80,24 +80,22 @@ function Register() {
         .post("//localhost:3500/api/signup", joinData)
         .then((res) => {
           localStorage.setItem("token", res.data.token);
-          // localStorage.setItem("refreshToken", res.data.refreshToken);
           localStorage.setItem("loggedIn", "true");
 
           alert(`정상적으로 회원가입되었습니다.`);
 
-          // 로그인 페이지 이동
-          // ** 수정 = 자동로그인이 되니깐 홈으로보내
           navigate("/login");
         });
     } catch (err) {
       console.error("회원가입 실패", err);
+      alert(err.message);
     }
   };
 
-  return (
-    <>
-      {modalOpen && (
-        <Modal setModalOpen={setModalOpen}>
+  if (registerModalState) {
+    return (
+      <>
+        <ModalContainer>
           <ModalTitle>회원가입</ModalTitle>
           <InputForm onSubmit={handleSubmit((data) => joinUser(data))}>
             <Label htmlFor="email">이메일</Label>
@@ -142,14 +140,13 @@ function Register() {
               가입하기
             </RegisterBtn>
           </InputForm>
-
           <Link to="/login">
             <LoginBtn>로그인하기</LoginBtn>
           </Link>
-        </Modal>
-      )}
-    </>
-  );
+        </ModalContainer>
+      </>
+    );
+  }
 }
 
 export default Register;

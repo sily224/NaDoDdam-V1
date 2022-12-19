@@ -1,18 +1,23 @@
-import {useState, useContext} from "react";
-import styled from 'styled-components';
-import Modal from "../components/Modal";
-import { DetailContext } from "../pages/DetailPage"
+import {useState, useContext} from 'react';
+import styled, {css} from 'styled-components';
+import Modal from '../components/Modal';
+import { DetailContext } from '../pages/DetailPage'
 
-const ReviewItems = ({review,all}) =>{
+const ReviewItems = ({review,showAll}) =>{
+    const [tab, setTab] = useState(true);
+    const MaxLength = 20;
 
     return review.map((value, idx) => {
-        if(idx >5){if(!all){return;}}
-        return( 
-            
-            <ReviewItem key = {`reveiw-${idx}`} className = {value.id} >
-                <p className="reveiwItem id" key = {`${value.id}-${idx}`}>{value.id}</p>
-                <p className="reveiwItem name" key = {`${value.name}-${idx}`}>{value.name}</p>
-                <p className="reveiwItem content" key = {`content-${idx}`}>{value.content}</p>
+        const {id, name,content}= value;
+        const isTextOverflow = MaxLength < value.content.length;
+        
+        if (idx >5) if(!showAll) return;
+        return(      
+            <ReviewItem key = {`reveiw-${idx}`} >
+                <ReviewId  key = {`${value.id}-${idx}`}>{id}</ReviewId>
+                <ReviewName key = {`${value.name}-${idx}`}>{name}</ReviewName>
+                <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
+                { isTextOverflow && <button onClick={()=> setTab(!tab)} >더보기</button>}
             </ReviewItem>
         );
     })
@@ -27,9 +32,9 @@ const Review = ()=>{
         <>
             <p>후기</p>
             <ReviewContainer >
-                <ReviewContent len={review.length}> 
+                <ReviewDiv len={review.length}> 
                     <ReviewItems review={review}/>
-                </ReviewContent>
+                </ReviewDiv>
                 {review.length > 6 && <button onClick={()=>setModalOpen(true)}>모두보기</button>}
                 { modalOpen &&
                     <Modal setModalOpen={setModalOpen}>
@@ -39,7 +44,7 @@ const Review = ()=>{
                                 <p>후기 {review.length}개</p>
                             </ModalTitle>
                             <ModalContent >
-                                <ReviewItems review={review} all/>
+                                <ReviewItems review={review} showAll/>
                             </ModalContent>
                         </ModalLayout>
                     </Modal>
@@ -56,28 +61,38 @@ const ReviewContainer  = styled.div`
     width: 100%;
 `;
 
-const ReviewContent = styled.div`
+const ReviewDiv = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: ${(props) => props.len > 6 ? `repeat(3,1fr)` : `repeat(${Math.ceil(props.len/2)},1fr)`};
     gap: 10px 20px;
 `; 
 
+const ReviewId = styled.p`
+    font-size: 1rem;
+    font-weight: bold;
+`;
+
+const ReviewName = styled.p`
+    font-size: 0.7rem;
+`;
+
+const ReviewContent= styled.p`
+    display:block;
+    width:100%;
+    font-size: 0.8rem;
+    ${props =>props.active && css`
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+    `};
+`;
+
 const ReviewItem = styled.div`
-    border: 1px solid black;
-    .reveiwItem {
-        margin : 5px;
-    }
-    .id{
-        font-size: 1rem;
-        font-weight: bold;
-    }
-    .name{
-        font-size: 0.7rem;
-    }
-    .content{
-        font-size: 0.8rem;
-    }
+    border  : 1px solid black;
+    padding : 5px;
+    overflow: hidden;   
+    p {  margin : 5px; }
 `;
 
 const ModalLayout = styled.div`
