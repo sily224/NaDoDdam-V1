@@ -68,7 +68,7 @@ const Farms = (sequelize, DataTypes) => {
 		});
 	};
 
-	Farms.create = (farmInfo) => {
+	Farms.createFarm = (farmInfo) => {
 		return Farms.create(farmInfo);
 	};
 

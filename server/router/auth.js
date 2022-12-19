@@ -28,8 +28,8 @@ router.post('/signup', validateSignup, authController.signup); // 회원가입
 // login
 router.post('/login', validateCredential, authController.login); //로그인
 // me
-router.get('/me', isAuth, authController.me); //개인 회원정보 조회
+router.get('/myInfo', isAuth, authController.me); //개인 회원정보 조회
 
-router.patch('/me/:userId', isAuth, authController.userUpdate);
+router.patch('/myInfo/:userId', isAuth, authController.userUpdate);
 
 export default router;

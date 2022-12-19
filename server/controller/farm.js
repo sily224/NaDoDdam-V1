@@ -24,7 +24,7 @@ export async function getByLocation(req, res, next) {
 
 export async function createFarm(req, res, next) {
 	const { type, name, address, description, owner } = req.body;
-	const farm = await db.Farms.create({
+	const farm = await db.Farms.createFarm({
 		type,
 		name,
 		address,

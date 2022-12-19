@@ -39,7 +39,7 @@ export async function login(req, res, next) {
 	res.status(200).json({ token, email });
 }
 
-export async function me(req, res, next) {
+export async function myInfo(req, res, next) {
 	const user = await db.Users.findById(req.userId);
 	const { email, name, phoneNum } = user;
 	if (!user) {
