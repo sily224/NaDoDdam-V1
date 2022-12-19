@@ -5,7 +5,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { HiUserCircle, HiMenu } from "react-icons/hi";
 import { useSelector, useDispatch } from "react-redux";
 import { showLogin, showModal, showRegister } from "../store/ModalSlice";
-import { getToken } from "../utils/utils";
+import { getToken, logout } from "../utils/utils";
+// import { getToken } from './../utils/utils';
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -137,10 +138,12 @@ const afterLoginList = [
 const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
   const loginModalState = useSelector((state) => state.modal.loginModal);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [toggleMenu, setToggleMenu] = useState(false);
   const token = getToken();
-  const navigate = useNavigate();
+
+  console.log(token)
   const params = useParams();
   const ref = useRef();
 
@@ -165,10 +168,11 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
     setToggleMenu(false);
   }, [params]);
 
-  const logout = () => {
+ const logout = () => {
     localStorage.clear();
-    navigate("/");
-  };
+    navigate('/')
+};
+
 
   return (
     <StyledHeader>

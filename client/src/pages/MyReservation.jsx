@@ -1,32 +1,73 @@
+import styled from "styled-components";
+
+const StyledNavWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2%;
+`
+
+const StyledList = styled.div`
+    border: 1px solid lightgray;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 3%;
+    box-sizing: border-box;
+`
+
+const StyledListInner = styled.div`
+    display:flex;
+    align-items: center;
+    
+`
+
+const StyledImageWrap = styled.div`
+    border: 1px solid #000;
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+`
+
 const MyReservation = () => {
     return (
         <>
         <h1>예약조회</h1>
-        <button>전체</button>
+        <StyledNavWrapper>
+            <div>
+               <button>전체</button>
         <button>예약완료</button>
         <button>예약취소</button>
-        <button>체험완료</button>
+        <button>체험완료</button> 
+            </div>
+        
         <select>
             <option>지난 3개월</option>
             <option>지난 6개월</option>
             <option>지난 1년</option>
         </select>
-        <div>
-            <div>농장이미지</div>
-            <div>
+        </StyledNavWrapper>
+        <StyledList>
+            <StyledListInner>
+                <StyledImageWrap>농장이미지</StyledImageWrap>
                 <div>
-                  <h3>농장명 / 체험명</h3> 
-                  <div>예약완료</div> 
+                    <div>
+                    <h3>농장명 / 체험명</h3> 
+                    <div>예약완료</div> 
+                    </div>
+                    <div>날짜</div>
+                    <div>4명</div>
+                    <div>결제금액 : 23,000원</div>
                 </div>
-                <div>날짜</div>
-                <div>4명</div>
-                <div>결제금액 : 23,000원</div>
-            </div>
+                </StyledListInner>
             <div>
                 <button>더보기</button>
                 <button>예약취소</button>
             </div>
-        </div>
+        </StyledList>
         </>
     )
 }
+
+export default MyReservation;

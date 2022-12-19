@@ -106,6 +106,7 @@ const MyPage = () => {
           id={item.id}
           name={item.name}
           title={item.title}
+          userInfo={userInfo}
         />
       ))}
       <StyledUserInfoWrap>

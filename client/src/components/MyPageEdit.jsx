@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components'
 import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage';
+import * as userApi from "../lib/userApi";
 
 const Input = styled.input`
   border-radius: 10px;
@@ -8,17 +9,16 @@ const Input = styled.input`
   padding: 10px;
 `
 
-const MyPageEdit = ({id, name, title}) => {
+const MyPageEdit = ({id, name, title, userInfo}) => {
   const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
+  const [users, setUsers] = useState({});
   const textInput = useRef();
 
   const setReplaceName = () => {
     let replaceName = '';
-
-    if(id === 'tel') {
-      replaceName =  name.slice(0, 3) + "*".repeat(name.length - 6) + name.slice(-4);
-    }else if(id === 'password'){
+    
+    if(id === 'password'){
       replaceName =  "*".repeat(name.length)
     }else{
       replaceName = name;
@@ -31,9 +31,10 @@ const MyPageEdit = ({id, name, title}) => {
 
   useEffect(() => {
     setReplaceName();
+    setUsers(userInfo);
   },[name]);
  
-  const changeEditMode = () => {
+  const changeEditMode = (e) => {
     setChange(cur => !cur);
   };
 
@@ -43,7 +44,14 @@ const MyPageEdit = ({id, name, title}) => {
       ...reName,
       value: textInput.current.value,
     });
+
+    setUsers({
+      ...users,
+      [textInput.current.dataset.id]: textInput.current.value,
+    })
   };
+
+  console.log(users)
 
   const DefaultView = () => {
     return (
@@ -66,6 +74,7 @@ const MyPageEdit = ({id, name, title}) => {
             type={id === "password" ? "password" : "text"} 
             defaultValue={reName.value}
             ref={textInput}
+            data-id={id}
           />
         </div>
         <div>
