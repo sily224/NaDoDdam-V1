@@ -20,7 +20,7 @@ const Farms = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			description: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				defaultValue: '설명 없음',
 			},
@@ -39,8 +39,7 @@ const Farms = (sequelize, DataTypes) => {
 
 	Farms.findById = (id) => {
 		return Farms.findByPk(id).then((data) => {
-			console.log(data);
-			return data;
+			return data.dataValues.id;
 		});
 	};
 
@@ -63,9 +62,7 @@ const Farms = (sequelize, DataTypes) => {
 	};
 
 	Farms.updateFarm = (id, updateInfo) => {
-		return Farms.update(updateInfo, { where: { id } }).then((data) => {
-			return data;
-		});
+		return Farms.update(updateInfo, { where: { id } });
 	};
 
 	Farms.createFarm = (farmInfo) => {
