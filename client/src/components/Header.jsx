@@ -1,11 +1,11 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-import styled, { css } from "styled-components";
-import { AiOutlineSearch } from "react-icons/ai";
-import { HiUserCircle, HiMenu } from "react-icons/hi";
-import { useSelector, useDispatch } from "react-redux";
-import { showLogin, showModal, showRegister } from "../store/ModalSlice";
-import { getToken } from "../utils/utils";
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import styled, { css } from 'styled-components';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { HiUserCircle, HiMenu } from 'react-icons/hi';
+import { useSelector, useDispatch } from 'react-redux';
+import { showLogin, showModal, showRegister } from '../store/ModalSlice';
+import { getToken } from '../utils/utils';
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -102,7 +102,7 @@ const StyledLogout = styled.div`
   }
 
   &::before {
-    content: "";
+    content: '';
     display: block;
     height: 1px;
     width: 100%;
@@ -114,23 +114,23 @@ const StyledLogout = styled.div`
 const afterLoginList = [
   {
     id: 3,
-    name: "내정보관리",
-    path: "/mypage",
+    name: '내정보관리',
+    path: '/mypage',
   },
   {
     id: 4,
-    name: "예약조회",
-    path: "/register",
+    name: '예약조회',
+    path: '/register',
   },
   {
     id: 5,
-    name: "나의후기",
-    path: "/register",
+    name: '나의후기',
+    path: '/register',
   },
   {
     id: 6,
-    name: "찜목록",
-    path: "/register",
+    name: '찜목록',
+    path: '/register',
   },
 ];
 
@@ -155,9 +155,9 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
   };
 
   useEffect(() => {
-    if (toggleMenu) document.addEventListener("mousedown", handleClickOutSide);
+    if (toggleMenu) document.addEventListener('mousedown', handleClickOutSide);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutSide);
+      document.removeEventListener('mousedown', handleClickOutSide);
     };
   });
 
@@ -167,12 +167,12 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 
   const logout = () => {
     localStorage.clear();
-    navigate("/");
+    navigate('/');
   };
 
   return (
     <StyledHeader>
-      <img src="" alt="logo" />
+      <img src='' alt='logo' />
       <StyledSearchBar>
         <AiOutlineSearch size={25} />
       </StyledSearchBar>
