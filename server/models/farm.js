@@ -40,7 +40,7 @@ const Farms = (sequelize, DataTypes) => {
 	};
 
 	farm.getAll = () => {
-		return farm.findAll();
+		return farm.findAll(); // 내림차순으로 정렬해야하나 오름차순으로 정렬해야하나
 	};
 
 	farm.getByType = (type) => {

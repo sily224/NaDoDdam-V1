@@ -59,18 +59,22 @@ const TimeTables = (sequelize, DataTypes) => {
 		});
 	};
 
-	timeTable.getByDate = (date) => {};
+	// timeTable.getByDate = (date) => {};
 
 	timeTable.getById = (id) => {
-		return timeTable.findOne({
-			where: { id },
-		});
+		return timeTable.findOne({ id });
 	};
 
 	timeTable.createTable = (tableInfo) => {
 		return timeTable.create(tableInfo).then((data) => {
 			console.log(data);
 			return data;
+		});
+	};
+
+	timeTable.updateTable = (updateInfo, id) => {
+		return timeTable.update(updateInfo, {
+			where: { id },
 		});
 	};
 
