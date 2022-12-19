@@ -40,5 +40,6 @@ const Location = () =>{
 const MapDiv = styled.div`
     width:100%;
     height:400px;
+    z-index: -1;
 `;
 export default React.memo(Location);

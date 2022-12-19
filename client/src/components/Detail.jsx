@@ -45,11 +45,6 @@ const DetailCompany = ({ company }) => {
 const Detail = () => {
     const { detailData: data } = useContext(DetailContext);
 
-    const getDataFuntion = (value) => {
-        console.log(value);
-    };
-
-
     return (
         <>
             {
@@ -62,7 +57,7 @@ const Detail = () => {
                             <DetailGrade grade={data.grade} />
                             <DetailDescription description={data.description} />
                             <DetailPeriod>
-                                <Calender propFunction={getDataFuntion} />
+                                <Calender />
                                 <TimButtonContainer>
                                     <TimeBtns />
                                 </TimButtonContainer>

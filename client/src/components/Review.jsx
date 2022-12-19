@@ -1,7 +1,11 @@
 import {useState, useContext} from 'react';
 import styled, {css} from 'styled-components';
-import Modal from '../components/Modal';
 import { DetailContext } from '../pages/DetailPage'
+import ModalContainer from './../components/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { showModal } from '../store/ModalSlice';
+
+
 
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
@@ -26,8 +30,10 @@ const ReviewItems = ({review,showAll}) =>{
 const Review = ()=>{
     const {detailData : data} = useContext(DetailContext);
     const {review} = data;
-    const [modalOpen, setModalOpen] = useState(false);
 
+    const dispatch = useDispatch();
+    const modalOpen = useSelector((state) => state.modal.modal);
+    
     return (
         <>
             <p>후기</p>
@@ -35,9 +41,9 @@ const Review = ()=>{
                 <ReviewDiv len={review.length}> 
                     <ReviewItems review={review}/>
                 </ReviewDiv>
-                {review.length > 6 && <button onClick={()=>setModalOpen(true)}>모두보기</button>}
+                {review.length > 6 && <button onClick = {() => dispatch(showModal())}>모두보기</button>}
                 { modalOpen &&
-                    <Modal setModalOpen={setModalOpen}>
+                    <ModalContainer>
                         <ModalLayout>
                             <ModalTitle>
                                 <p>리뷰</p>
@@ -47,7 +53,7 @@ const Review = ()=>{
                                 <ReviewItems review={review} showAll/>
                             </ModalContent>
                         </ModalLayout>
-                    </Modal>
+                    </ModalContainer>
                 }
             </ReviewContainer>
         </>
@@ -105,7 +111,7 @@ const ModalTitle = styled.div`
 `;
 const ModalContent =styled.div`
     width: 60%;
-    height: 420px;
+    height: 600px;
     overflow-y:auto;
     overflow-x:hidden;
 `;
