@@ -4,6 +4,8 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import StickyBox from 'react-sticky-box';
 import Modal from '../components/Modal';
+import { useLocation } from 'react-router-dom';
+
 // import ReactCalender from '../components/ReactCalender';
 // import TimeBtns from '../components/TimeBtns';
 
@@ -57,7 +59,7 @@ const PayboxName = styled.div`
 `;
 
 // 예약정보
-const ReservationInfo = ({ data }) => {
+const ReservationInfo = ({ reservationData }) => {
 	const [isEdit, setIsEdit] = useState(false);
 
 	const EditHandler = () => {
@@ -71,11 +73,11 @@ const ReservationInfo = ({ data }) => {
 			<H1>예약 및 결제</H1>
 			<H2>예약 정보</H2>
 			<H3>날짜</H3>
-			<Info>{data.date}</Info>
+			<Info>{reservationData.date}</Info>
 			<H3>시간</H3>
-			<Info>{data.time}</Info>
+			<Info>{reservationData.time}</Info>
 			<H3>인원</H3>
-			<Info>{data.count}</Info>
+			<Info>{reservationData.headCount}</Info>
 			<Button onClick={() => EditHandler()}>예약정보수정</Button>
 			{/* <ReactCalender></ReactCalender> */}
 			{/* <TimeBtns></TimeBtns> */}
@@ -86,29 +88,30 @@ const ReservationInfo = ({ data }) => {
 };
 
 //SideBar
-const SideBar = ({ data }) => {
-	const [totalPrice, setTotalPrice] = useState('');
+const SideBar = ({ userData, reservationData }) => {
+	const { img, farmName, programName, programPrice, count } = userData;
+	const { price, headCount, totalPrice } = reservationData;
+	// const [totalPrice, setTotalPrice] = useState('');
 
-	useEffect(() => {
-		const { count, programPrice } = data;
-		setTotalPrice(count * programPrice);
-	}, [data]);
+	// useEffect(() => {
+	// 	setTotalPrice(count * programPrice);
+	// }, [userData]);
 
 	return (
 		<>
-			{data && (
+			{userData && (
 				<div>
 					<PayboxTop>
-						<Image src={data.img}></Image>
+						<Image src={img}></Image>
 						<PayboxName>
-							<NameInfo>{data.farmName}</NameInfo>
-							<NameInfo>{data.programName}</NameInfo>
+							<NameInfo>{farmName}</NameInfo>
+							<NameInfo>{programName}</NameInfo>
 						</PayboxName>
 					</PayboxTop>
 					<H3>요금 세부정보</H3>
 					<NameInfo>1인 체험권</NameInfo>
 					<Info>
-						{data.programPrice}원 X{data.count}
+						{price}원 X{headCount}
 					</Info>
 					<Info>{totalPrice || null}</Info>
 					<Line />
@@ -121,19 +124,19 @@ const SideBar = ({ data }) => {
 };
 
 // 예약자 정보
-const SubscriberInfo = ({ data }) => {
+const SubscriberInfo = ({ userData }) => {
 	const [nameOpen, setNameOpen] = useState(false);
-	const [name, setName] = useState(data.name);
+	const [name, setName] = useState(userData.name);
 	const [phoneNumberOpen, setPhoneNumberOpen] = useState(false);
-	const [phoneNumber, setPhoneNumber] = useState(data.phoneNumber);
+	const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber);
 	const [emailOpen, setEmailOpen] = useState(false);
-	const [email, setEmail] = useState(data.email);
+	const [email, setEmail] = useState(userData.email);
 
 	useEffect(() => {
-		setName(data.name);
-		setPhoneNumber(data.phoneNumber);
-		setEmail(data.email);
-	}, [data]);
+		setName(userData.name);
+		setPhoneNumber(userData.phoneNumber);
+		setEmail(userData.email);
+	}, [userData]);
 
 	return (
 		<>
@@ -233,14 +236,20 @@ const PaymentInfo = () => {
 };
 
 const Payment = () => {
-	const [data, setData] = useState('');
+	const [userData, setUserData] = useState({});
+	const [reservationData, setReservationData] = useState({});
+	const location = useLocation();
+
+	const paymentData = location.state;
+	console.log(paymentData);
+	setReservationData(paymentData);
 
 	const GetData = async () => {
 		try {
 			const res = await axios.get('/pay.json');
 			const data = await res.data;
 			console.log(data);
-			setData(data);
+			setUserData(data);
 		} catch (e) {
 			console.log(e);
 		}
@@ -253,13 +262,13 @@ const Payment = () => {
 		<>
 			<div style={{ display: 'flex', alignItems: 'flex-start' }}>
 				<Context>
-					<ReservationInfo data={data}></ReservationInfo>
-					<SubscriberInfo data={data}></SubscriberInfo>
+					<ReservationInfo reservationData={reservationData}></ReservationInfo>
+					<SubscriberInfo userData={userData}></SubscriberInfo>
 					<PaymentInfo></PaymentInfo>
 				</Context>
 				<StickyBox offsetTop={20} offsetBottom={20}>
 					<SideBarDiv>
-						<SideBar data={data}></SideBar>
+						<SideBar reservationData={reservationData}></SideBar>
 					</SideBarDiv>
 				</StickyBox>
 			</div>
