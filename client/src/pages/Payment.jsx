@@ -6,12 +6,8 @@ import StickyBox from 'react-sticky-box';
 import Modal from '../components/Modal';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
-	crossorigin="anonymous"
-></link>;
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 // import ReactCalender from '../components/ReactCalender';
 // import TimeBtns from '../components/TimeBtns';
 
@@ -206,45 +202,44 @@ const SubscriberInfo = ({ data }) => {
 
 //결제 수단
 const PaymentInfo = () => {
-	const openHandler = () => {
-		// 모달창으로 구현할 예정
-		alert(
-			'취소 및 환불 규정\n예약일로부터 7일 전 : 100% 환불\n예약일로부터 3일 전 : 50% 환불\n예약일로부터 1일 전 : 환불 불가\n',
-		);
-	};
 	return (
 		<>
 			<H3>결제 수단</H3>
 			<Select name="cardOption">
 				<Option value="card">신용카드 또는 체크카드</Option>
 			</Select>
-			<Accordion defaultActiveKey="0">
+			<Accordion>
 				<Accordion.Item eventKey="0">
-					<Accordion.Header>정보제공 수집 및 제공 동의</Accordion.Header>
+					<Accordion.Header>
+						<p>정보제공 수집 및 제공 동의</p>
+					</Accordion.Header>
 					<Accordion.Body>
-						예약 서비스 이용을 위한 개인정보 수집 및 제3자 제공, 취소/환불
-						규정에 동의합니다.
+						<P>
+							예약 서비스 이용을 위한 개인정보 수집 및 제3자 제공, 취소/환불
+							규정에 동의합니다.
+						</P>
 					</Accordion.Body>
 				</Accordion.Item>
 				<Accordion.Item eventKey="1">
 					<Accordion.Header>
-						<H3>환불 정책 동의</H3>
+						<p>환불 정책 동의</p>
 					</Accordion.Header>
 					<Accordion.Body>
 						<P>
 							체험 특성상 7일 전부터 취소가 불가합니다.그 이후에는 취소 시점에
 							따라 환불액이 결정됩니다.
+							<br />
+							<br /> *취소 및 환불 규정*
+							<br />
+							예약일로부터 7일 전 : 100% 환불
+							<br />
+							예약일로부터 3일 전 : 50% 환불
+							<br />
+							예약일로부터 1일 전 : 환불 불가
 						</P>
 					</Accordion.Body>
 				</Accordion.Item>
 			</Accordion>
-			<Button
-				onClick={() => {
-					openHandler();
-				}}
-			>
-				More
-			</Button>
 			<Line />
 			<P>주문 내용을 확인하였으며, 위 내용에 동의합니다.</P>
 			<Button>확인 및 결제</Button>
