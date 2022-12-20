@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const FarmList = ({contents}) => {
   if (contents.length === 0){
     return (
-      <div>게시물 없음</div>
+      <Container>게시물 없음</Container>
     );
   } else {
     return (

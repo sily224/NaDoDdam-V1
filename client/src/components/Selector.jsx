@@ -1,7 +1,19 @@
 import styled from "styled-components";
+import React from 'react';
 import axios from 'axios';
 
-const Selector = ({searchType, setGlobalState}) => {
+// 옵션 변경
+const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
+
+  const setOption = async (e) => {
+    await setTemp({
+      ...temp,
+      [searchType]: e.target.id
+    });
+
+    
+    setOptions(temp);
+  };
 
   const getDataByLocation = async (e) => {
     await axios.get('mock_data/farms2.json').then(res=>{
@@ -9,12 +21,12 @@ const Selector = ({searchType, setGlobalState}) => {
     }).then(res=>{
       const data = res.filter(x=>x.address.split(' ')[0] === e.target.id);
 
-      setGlobalState(
-        {
-          contents : data,
-          currentIndex: data.length
-        }
-      )
+      // setGlobalState(
+      //   {
+      //     contents : data,
+      //     currentIndex: data.length
+      //   }
+      // )
     })
   }
 
@@ -24,13 +36,13 @@ const Selector = ({searchType, setGlobalState}) => {
       return res.data;
     }).then(res=>{
       const data = res.filter(x=>x.produce === e.target.id);
-      
-      setGlobalState(
-        {
-          contents: data,
-          currentIndex: data.length
-        }
-      )
+
+      // setGlobalState(
+      //   {
+      //     contents: data,
+      //     currentIndex: data.length
+      //   }
+      // )
     })
   }
 
@@ -38,36 +50,36 @@ const Selector = ({searchType, setGlobalState}) => {
     searchType === "location" && (
       <Container>
         {location.map((x, i) => (
-          <Item key={i} id={x} onClick={e=>getDataByLocation(e)}>{location[i]}</Item>
+          <Item key={i} id={x[1]} onClick={e=>setOption(e)}>{location[i][0]}</Item>
         ))}
       </Container>
     ) || searchType === "fruit" && (
       <Container>
         {produces.map((x, i)=>(
-          <Item key={i} id={x} onClick={e=>getDataByProduces(e)}>{produces[i]}</Item>
+          <Item key={i} id={x} onClick={e=>setOption(e)}>{produces[i]}</Item>
         ))}
       </Container>
     )
   );
-};
+});
 
 const location = [
-  "인천",
-  "서울",
-  "경기",
-  "강원",
-  "충남",
-  "충북",
-  "대전",
-  "경북",
-  "경남",
-  "대구",
-  "울산",
-  "부산",
-  "전북",
-  "광주",
-  "전남",
-  "제주",
+  ["인천", 'Incheon'],
+  ["서울", 'Seoul'],
+  ["경기", 'Gyeonggi'],
+  ["강원", 'Gangwon'],
+  ["충남", 'Chungnam'],
+  ["충북", 'Chungbuk'],
+  ["대전", 'Daejeon'],
+  ["경북", 'Gyeongbuk'],
+  ["경남", 'Gyeongnam'],
+  ["대구", 'Daegu'],
+  ["울산", 'Ulsan'],
+  ["부산", 'Busan'],
+  ["전북", 'Jeonbuk'],
+  ["광주", 'Gwangju'],
+  ["전남", 'Jeonnam'],
+  ["제주", 'Jeju'],
 ];
 
 const produces = [

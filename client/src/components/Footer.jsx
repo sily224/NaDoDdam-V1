@@ -21,7 +21,7 @@ const StyledFooterMenu = styled.a`
  font-size: 0.9rem;
 `
 
-const Footer = () => {
+const Footer = (() => {
     return (
         <StyledContainer>
             <StyledFooter>
@@ -32,6 +32,6 @@ const Footer = () => {
             </StyledFooter>
         </StyledContainer>
     )
-}
+});
 
 export default Footer;

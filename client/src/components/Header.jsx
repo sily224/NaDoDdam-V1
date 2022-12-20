@@ -1,9 +1,11 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
 import { HiUserCircle, HiMenu } from "react-icons/hi";
 import Selector from "./Selector";
+import Calendar from 'react-calendar';
+
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -175,6 +177,7 @@ const StyledLogout = styled.div`
   }
 `;
 
+
 const beforeLoginList = [
   {
     id: 1,
@@ -211,11 +214,14 @@ const afterLoginList = [
   },
 ];
 
-const Header = ({setGlobalState}) => {
+const Header = ({setOptions}) => {
 
   const [isOpenSearchBar, setIsOpenSearchBar] = useState(false); // 검색 바 상태
   const [searchOption, setSearchOption] = useState("location"); // 지역, 과일 선택
   const [option, setOption] = useState(null); // 검색 세부 옵션
+  const [temp, setTemp] = useState({}); // option 임시로 저장
+  const [date, setDate] = useState(new Date());
+
   const [toggleMenu, setToggleMenu] = useState(false);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -261,13 +267,22 @@ const Header = ({setGlobalState}) => {
   };
 
   const handleSearchOption = (e) => { // 검색 옵션 핸들러
+    // setOptions({});
     setSearchOption(e.target.name);
   };
 
   const handleSearchMenu = (e) => { // 검색 세부 옵션 핸들러
     setOption(e.target.id);
+    setTemp({
+      [e.target.id] : ""
+    })
+    // setOptions({
+    //   ...options,
+    //   [e.target.id] : "",
+    // });
   };
 
+  
   return (
     <StyledHeader>
       <img src="" alt="logo" />
@@ -288,13 +303,12 @@ const Header = ({setGlobalState}) => {
               <div id="fruit" onClick={e=>handleSearchMenu(e)}>과일</div>
             )}
             <div id="date" onClick={e=>handleSearchMenu(e)}>날짜</div>
-            <div id="capacity" onClick={e=>handleSearchMenu(e)}>인원</div>
           </SearchOption>
           {
-            option === "location" && searchOption === 'location' && <SearchMenu children={<Selector searchType={option} setGlobalState={setGlobalState}/>}/> ||
+            option === "location" && searchOption === 'location' && <SearchMenu children={<Selector searchType={option} temp={temp} setTemp={setTemp} setOptions={setOptions}/>}/> ||
             option === "date" && <SearchMenu children={<div>날짜 테스트</div>}/> ||
             option === "capacity" && <SearchMenu children={<div>사람 수 테스트</div>}/> ||
-            option === "fruit" && searchOption === 'fruit' && <SearchMenu children={<Selector searchType={option} setGlobalState={setGlobalState}/>}/>
+            option === "fruit" && searchOption === 'fruit' && <SearchMenu children={<Selector searchType={option} temp={temp} setTemp={setTemp}  setOptions={setOptions}/>}/>
           }
         </ActiveSearchBar>
       )}
@@ -335,4 +349,4 @@ const Header = ({setGlobalState}) => {
   );
 };
 
-export default Header;
+export default React.memo(Header);
