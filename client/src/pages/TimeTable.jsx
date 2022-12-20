@@ -61,6 +61,23 @@ const TimeTable = ()=>{
     const createTime = () =>{
         setTimeList([...timeList, [startTime,endTime]]);
     }
+    const delTime = (e) =>{
+        const idx = e.target.value;
+        timeList.splice(idx,1);
+        setTimeList([...timeList]);
+        console.log(timeList);
+    }
+    const renderTime = () =>{
+        return (
+        <div>{
+            timeList.map((time,idx) => { return (
+                                    <div key={`${time[0]}-${time[1]}-${idx}`}>
+                                        <button onClick={delTime} value={idx}>-</button>
+                                        <li>{idx+1}타임  {time[0]} : {time[1]}</li>
+                                    </div>)}  
+            )}    
+        </div>);
+    };
     const handleStartTime = (e) =>{
         setStartTime(e.target.value);
     };
@@ -80,10 +97,13 @@ const TimeTable = ()=>{
     useEffect (() => {
         setEndDate(date);
     },[endCalenderOpen]);
+    
+    useEffect (() => {
+        renderTime();
+    },[timeList]);
 
     return (
         <>
-        
         <FarmFormat>
             { timeTable && <button onClick = {() => dispatch(showModal())}>추가하기</button>}
         </FarmFormat>
@@ -119,12 +139,20 @@ const TimeTable = ()=>{
                         <button type='button' onClick={createTime}>+</button>
                         <label>시작시간</label><input type='time' value={startTime} onChange={handleStartTime}/>
                         <label>끝나는시간</label><input type='time' value={endTime} onChange={handleEndTime}/>
-                        {
-                            timeList && (
-                                <div>{
-                                    timeList.map((time,idx) => { return <li key={`${time[0]}-${time[1]}-${idx}`}>{idx+1}타임  {time[0]} : {time[1]}</li>})       
-                                }</div>
-                        )}
+                        
+                        <div>
+                            {/* 렌더링 순서가 이상함 
+                                { timeList && timeList.map((time,idx) => { return (
+                                    <div key={`${time[0]}-${time[1]}-${idx}`}>
+                                        <button onClick={delTime} value={idx}>-</button>
+                                        <li>{idx+1}타임  {time[0]} : {time[1]}</li>
+                                    </div>
+                                    )})       
+                                }*/
+                                renderTime()    
+                            }
+                        </div>
+                        
                     </div>
                     <div>
                         <h3>체험 비용</h3>
