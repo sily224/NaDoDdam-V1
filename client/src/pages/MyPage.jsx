@@ -54,7 +54,19 @@ const StyledButton = styled.button`
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({}); 
-  const [change, setChange] = useState(false)
+  const [change, setChange] = useState(false);
+  const [pwd, setPwd] = useState({
+    currentPassword: '',
+    newPassword: '',
+  })
+
+  const onChange = (e) => {
+    const {name, value} = e.target
+    setPwd({
+      ...pwd,
+      [name]: value,
+    })
+  }
   
   const getUserInfo = async () => {
     const token = getToken();
@@ -68,17 +80,14 @@ const MyPage = () => {
       name: res.data.name,
       phoneNum: res.data.phoneNum,
       email: res.data.email,
-      password: res.data.password,
     })
-  }
-
-
+  };
   
   useEffect(() => {
     getUserInfo();
-  },[])
+  },[]);
 
-  const {id, name, phoneNum, email, password} = userInfo;
+  const {id, name, phoneNum, email} = userInfo;
 
   const list = [
     {
@@ -98,6 +107,15 @@ const MyPage = () => {
     },
   ]
 
+  const upDatePassword = async(e) => {
+    e.preventDefault();
+    await userApi.passwordPatch(`//localhost:3500/myPasword/${id}`, {
+      currentPassword: pwd.newPassword, 
+      data: pwd.currentPassword
+    }); 
+  }
+  
+
   return (
     <Container>
       <StyledTitle>내 정보 관리</StyledTitle>
@@ -108,19 +126,19 @@ const MyPage = () => {
           name={item.name}
           title={item.title}
           userId={id}
-          userPassword={password}
         />
       ))}
       <StyledUserInfoWrap>
         <div><h4>비밀번호</h4></div>
           <StyledUserInfo>
-            {!change ? <span></span> : (<>
+            {!change ? <span></span> : (<form onSubmit={upDatePassword}>
               <label>현재비밀번호</label>
-              <input type="password"></input>
+              <input type="password" name="currentPassword" onChange={onChange}></input>
               <label>새비밀번호</label>
-              <input type="password"></input>
+              <input type="password"  name="newPassword" onChange={onChange}></input>
               <input type="password" placeholder='비밀번호 확인'></input>
-              </>
+              <button type="submit">저장</button>
+              </form>
             )}
               <StyledButton onClick={(e) => {
                 setChange(prev => !prev)

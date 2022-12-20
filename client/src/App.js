@@ -24,7 +24,7 @@ function App() {
 					<Route path="/mypage" element={<MyPage />} />
 					<Route path="/farm" element={<Farm />} />
 					<Route path="/farm/timetable" element={<TimeTable />} />
-          <Route path="/myreservation" element={<MyReservation />} />
+         			<Route path="/myreservation" element={<MyReservation />} />
 					{/* 해당부분에 라우터 넣으면 됩니다. */}
 				</Route>
 			</Routes>

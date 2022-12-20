@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components'
-import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage1';
+import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage';
 import * as userApi from "../lib/userApi";
 import { useNavigate } from 'react-router-dom';
 
@@ -39,15 +39,22 @@ const MyPageEdit = ({id, name, title, userId,  userPassword}) => {
   };
 
   const upDateComponents = async() => {
-    setChange(cur => !cur);
-    setReName({
+    if(textInput.current.dataset.id === "email"){
+      
+    }
+    try {
+      setChange(cur => !cur);
+      setReName({
       ...reName,
       value: textInput.current.value,
-    });
-
-    await userApi.patch(`//localhost:3500/api/myInfo/${userId}`, {
+      });
+     await userApi.patch(`//localhost:3500/api/myInfo/${userId}`, {
       [textInput.current.dataset.id]: textInput.current.value,
-    });
+      }); 
+    } catch(err) {
+      console.log(err)
+    }
+    
     navigate('/mypage')
   }
 

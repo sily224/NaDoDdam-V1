@@ -14,12 +14,6 @@ async function post(endpoint, data) {
     data: bodyData,
   });
 
-  // 응답 코드가 4XX 계열일 때 (400, 403 등)
-  // if (!res.ok) {
-  //   console.log("에러 답변", res);
-  //   throw new Error(res);
-  // }
-
 	return res;
 }
 
@@ -40,6 +34,8 @@ async function get(endpoint) {
 async function patch(endpoint, data) {
 	const apiUrl = endpoint;
 	const bodyData = JSON.stringify(data);
+	console.log(`%cPATCH 요청: ${apiUrl}`, "color: #296aba;");
+	console.log(`%cPATCH 요청 데이터: ${bodyData}`, "color: #296aba;");
   
 	const res = await fetch(apiUrl, {
 	  method: "PATCH",
@@ -47,10 +43,39 @@ async function patch(endpoint, data) {
 		"Content-Type": "application/json",
 		Authorization: `Bearer ${localStorage.getItem("token")}`,
 	  },
-	  data: bodyData,
+	  body: bodyData,
 	});
-  
-	return res;
+	//   응답 코드가 4XX 계열일 때 (400, 403 등)
+  if (!res.ok) {
+    console.log("에러 답변", res);
+    throw new Error(res);
   }
+	return res;
+}
+
+async function passwordPatch(endpoint, data, password) {
+	const apiUrl = endpoint;
+	const bodyData = JSON.stringify(data);
+	console.log(`%cPATCH 요청: ${apiUrl}`, "color: #296aba;");
+	console.log(`%cPATCH 요청 데이터: ${bodyData}`, "color: #296aba;");
   
-export { post, get, patch };
+	const res = await fetch(apiUrl, {
+	  method: "PATCH",
+	  headers: {
+		"Content-Type": "application/json",
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	  },
+	  body: {
+		currentPassword: password,
+  		data: bodyData,
+	  }
+	});
+	//   응답 코드가 4XX 계열일 때 (400, 403 등)
+  if (!res.ok) {
+    console.log("에러 답변", res);
+    throw new Error(res);
+  }
+	return res;
+}
+  
+export { post, get, patch, passwordPatch};
