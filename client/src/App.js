@@ -7,7 +7,8 @@ import Register from './pages/register';
 import DetailPage from './pages/DetailPage';
 import Payment from './pages/Payment';
 import { MyPage } from './pages/MyPage';
-import FarmManagement from './pages/FarmManagement';
+import Farm from './pages/Farm';
+import TimeTable from './pages/TimeTable';
 import MyReservation from "./pages/MyReservation";
 
 function App() {
@@ -21,7 +22,8 @@ function App() {
 					<Route path="/detail" element={<DetailPage />} />
 					<Route path="/pay" element={<Payment />} />
 					<Route path="/mypage" element={<MyPage />} />
-					<Route path="/farm" element={<FarmManagement />} />
+					<Route path="/farm" element={<Farm />} />
+					<Route path="/farm/timetable" element={<TimeTable />} />
           <Route path="/myreservation" element={<MyReservation />} />
 					{/* 해당부분에 라우터 넣으면 됩니다. */}
 				</Route>

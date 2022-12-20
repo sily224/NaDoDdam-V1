@@ -71,6 +71,8 @@ const MyPage = () => {
       password: res.data.password,
     })
   }
+
+
   
   useEffect(() => {
     getUserInfo();
@@ -135,5 +137,6 @@ const MyPage = () => {
     </Container>
   )
 }
+
 
 export { MyPage, StyledButton, StyledUserInfo, StyledUserInfoWrap };

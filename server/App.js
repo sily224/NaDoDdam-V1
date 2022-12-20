@@ -26,7 +26,7 @@ app.use('/api', authRouter);
 app.use('/api/farms', farmRouter);
 app.use('/api', reserveRouter);
 app.use('/api', reviewRouter);
-app.use('/api/timetable', timeTableRouter);
+app.use('/api/timetables', timeTableRouter);
 
 app.get('/', (req, res) => {
 	res.send('Server Response Success');

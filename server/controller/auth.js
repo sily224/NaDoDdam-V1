@@ -49,7 +49,7 @@ export async function login(req, res, next) {
 	}
 }
 
-export async function me(req, res, next) {
+export async function myInfo(req, res, next) {
 	try {
 		const user = await db.Users.findById(req.userId);
 		if (!user) {
@@ -70,7 +70,7 @@ const createJwtToken = (id) => {
 };
 
 async function setUser(userInfoRequired, toUpdate) {
-	const { userId, currentPassword } = userInfoRequired;
+	const { userId } = userInfoRequired;
 
 	let user = await db.Users.findById(userId);
 
@@ -78,12 +78,14 @@ async function setUser(userInfoRequired, toUpdate) {
 		throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
 	}
 
-	//비밀번호 일치 여부 확인
+	// // //비밀번호 일치 여부 확인
 	// const corretPasswordHash = user.password;
 	// const isPasswordCorrect = await bcrypt.compare(
 	// 	currentPassword,
 	// 	corretPasswordHash,
 	// );
+
+	// console.log(currentPassword, corretPasswordHash);
 
 	// if (!isPasswordCorrect) {
 	// 	throw new Error(
@@ -118,9 +120,8 @@ export async function userUpdate(req, res, next) {
 
 	try {
 		// body data로 부터 확인용으로 사용할 현재 비밀번호 추출함.
-		const currentPassword = req.body.currentPassword;
 
-		const userInfoRequired = { userId, currentPassword };
+		const userInfoRequired = { userId };
 
 		const toUpdate = {
 			...(name && { name }),
@@ -128,6 +129,16 @@ export async function userUpdate(req, res, next) {
 			...(password && { password }),
 			...(phoneNum && { phoneNum }),
 		};
+
+		if(toUpdate.email) {
+			const isEmail = await db.Users.findByUserEmail(toUpdate.email);
+			if(isEmail) {
+				throw new Error(
+					'해당 이메일이 존재합니다. 다시 한 번 확인해 주세요.',
+				);
+			}
+		}
+		
 
 		const updatedUserInfo = await setUser(userInfoRequired, toUpdate);
 		res.status(200).json(updatedUserInfo);

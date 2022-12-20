@@ -13,6 +13,6 @@ router.get('/review/:id', isAuth, reviewController.getReveiwData); // 본인 리
 
 router.delete('/review/:id', isAuth, reviewController.reviewDrop); //리뷰 삭제
 
-// router.put('/review/:id',isAuth,  reviewController.reserveUpdate); //리뷰 수정
+router.put('/review/:id',isAuth,  reviewController.reserveUpdate); //리뷰 수정
 
 export default router;
