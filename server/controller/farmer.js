@@ -28,6 +28,43 @@ export async function signup(req, res, next) {
 	}
 }
 
+export async function login(req, res, next) {
+	const { email, password } = req.body;
+
+	try {
+		const farmer = await db.Farmers.findByFarmerEmail(email);
+		if (!farmer) {
+			throw new Error('유효하지 않은 농장주 또는 비밀번호 입니다.');
+		}
+
+		const isValidPassword = await bcrypt.compare(password, farmer.password);
+
+		if (!isValidPassword) {
+			throw new Error('유효하지 않은 농장주 또는 비밀번호 입니다.');
+		}
+		const token = createJwtToken({ id: farmer.id, role: farmer.role });
+		res.status(200).json({ token, email });
+	} catch (err) {
+		next(err);
+	}
+}
+
+export async function information(req, res, next) {
+	try {
+		const farmer = await db.Farmers.findById(req.farmerId);
+		if (!farmer) {
+			throw new Error('해당 종장주를 찾을 수 없습니다.');
+		}
+		res.status(200).json({
+			email: farmer.email,
+			name: farmer.name,
+			phoneNum: farmer.phoneNum,
+		});
+	} catch (err) {
+		next(err);
+	}
+}
+
 const createJwtToken = (id) => {
 	return jwt.sign({ id }, config.jwt, {
 		expiresIn: '2d',

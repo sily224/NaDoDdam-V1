@@ -31,17 +31,17 @@ const Farmers = (sequelize, DataTypes) => {
 		},
 	);
 
-	farmer.findByUserId = (id) => {
-		return farmer.findOne({ where: { id } });
-	};
+	// farmer.findByUserId = (id) => {
+	// 	return farmer.findOne({ where: { id } });
+	// };
 
 	farmer.findByFarmerEmail = (email) => {
 		return farmer.findOne({ where: { email } });
 	};
 
-	farmer.getUsers = () => {
-		return farmer.findAll();
-	};
+	// farmer.getUsers = () => {
+	// 	return farmer.findAll();
+	// };
 
 	farmer.findById = (id) => {
 		return farmer.findByPk(id);
@@ -51,13 +51,13 @@ const Farmers = (sequelize, DataTypes) => {
 		return farmer.create(user).then((data) => data.dataValues.id);
 	};
 
-	farmer.updateUser = ({ userId, update }) => {
-		return farmer.update(update, { where: { id: userId } });
-	};
+	// farmer.updateUser = ({ userId, update }) => {
+	// 	return farmer.update(update, { where: { id: userId } });
+	// };
 
-	farmer.deleteUser = (userId) => {
-		return farmer.destroy({ where: { id: userId } });
-	};
+	// farmer.deleteUser = (userId) => {
+	// 	return farmer.destroy({ where: { id: userId } });
+	// };
 
 	return farmer;
 };
