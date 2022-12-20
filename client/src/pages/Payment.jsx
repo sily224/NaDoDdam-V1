@@ -4,8 +4,14 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import StickyBox from 'react-sticky-box';
 import Modal from '../components/Modal';
-import { useLocation } from 'react-router-dom';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import Accordion from 'react-bootstrap/Accordion';
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+	crossorigin="anonymous"
+></link>;
 // import ReactCalender from '../components/ReactCalender';
 // import TimeBtns from '../components/TimeBtns';
 
@@ -59,7 +65,7 @@ const PayboxName = styled.div`
 `;
 
 // 예약정보
-const ReservationInfo = ({ reservationData }) => {
+const ReservationInfo = ({ payData }) => {
 	const [isEdit, setIsEdit] = useState(false);
 
 	const EditHandler = () => {
@@ -73,11 +79,11 @@ const ReservationInfo = ({ reservationData }) => {
 			<H1>예약 및 결제</H1>
 			<H2>예약 정보</H2>
 			<H3>날짜</H3>
-			<Info>{reservationData.date}</Info>
+			<Info>{payData.date || '날짜'}</Info>
 			<H3>시간</H3>
-			<Info>{reservationData.time}</Info>
+			<Info>{payData.time || '시간'}</Info>
 			<H3>인원</H3>
-			<Info>{reservationData.headCount}</Info>
+			<Info>{payData.headCount || '인원'}</Info>
 			<Button onClick={() => EditHandler()}>예약정보수정</Button>
 			{/* <ReactCalender></ReactCalender> */}
 			{/* <TimeBtns></TimeBtns> */}
@@ -88,23 +94,24 @@ const ReservationInfo = ({ reservationData }) => {
 };
 
 //SideBar
-const SideBar = ({ userData, reservationData }) => {
-	const { img, farmName, programName, programPrice, count } = userData;
-	const { price, headCount, totalPrice } = reservationData;
+const SideBar = ({ payData }) => {
+	const { farm, programName, price, headCount, totalPrice } = payData;
 	// const [totalPrice, setTotalPrice] = useState('');
 
 	// useEffect(() => {
+	// 	const { count, programPrice } = data;
 	// 	setTotalPrice(count * programPrice);
-	// }, [userData]);
+	// }, [data]);
 
 	return (
 		<>
-			{userData && (
+			{payData && (
 				<div>
 					<PayboxTop>
-						<Image src={img}></Image>
+						{/* img 데이터 받기 */}
+						<Image></Image>
 						<PayboxName>
-							<NameInfo>{farmName}</NameInfo>
+							<NameInfo>{farm}</NameInfo>
 							<NameInfo>{programName}</NameInfo>
 						</PayboxName>
 					</PayboxTop>
@@ -124,19 +131,19 @@ const SideBar = ({ userData, reservationData }) => {
 };
 
 // 예약자 정보
-const SubscriberInfo = ({ userData }) => {
+const SubscriberInfo = ({ data }) => {
 	const [nameOpen, setNameOpen] = useState(false);
-	const [name, setName] = useState(userData.name);
+	const [name, setName] = useState(data.name);
 	const [phoneNumberOpen, setPhoneNumberOpen] = useState(false);
-	const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber);
+	const [phoneNumber, setPhoneNumber] = useState(data.phoneNumber);
 	const [emailOpen, setEmailOpen] = useState(false);
-	const [email, setEmail] = useState(userData.email);
+	const [email, setEmail] = useState(data.email);
 
 	useEffect(() => {
-		setName(userData.name);
-		setPhoneNumber(userData.phoneNumber);
-		setEmail(userData.email);
-	}, [userData]);
+		setName(data.name);
+		setPhoneNumber(data.phoneNumber);
+		setEmail(data.email);
+	}, [data]);
 
 	return (
 		<>
@@ -211,16 +218,26 @@ const PaymentInfo = () => {
 			<Select name="cardOption">
 				<Option value="card">신용카드 또는 체크카드</Option>
 			</Select>
-			<H3>정보제공 수집 및 제공 동의</H3>
-			<P>
-				예약 서비스 이용을 위한 개인정보 수집 및 제3자 제공, 취소/환불 규정에
-				동의합니다.
-			</P>
-			<H3>환불 정책 동의</H3>
-			<P>
-				체험 특성상 7일 전부터 취소가 불가합니다.그 이후에는 취소 시점에 따라
-				환불액이 결정됩니다.
-			</P>
+			<Accordion defaultActiveKey="0">
+				<Accordion.Item eventKey="0">
+					<Accordion.Header>정보제공 수집 및 제공 동의</Accordion.Header>
+					<Accordion.Body>
+						예약 서비스 이용을 위한 개인정보 수집 및 제3자 제공, 취소/환불
+						규정에 동의합니다.
+					</Accordion.Body>
+				</Accordion.Item>
+				<Accordion.Item eventKey="1">
+					<Accordion.Header>
+						<H3>환불 정책 동의</H3>
+					</Accordion.Header>
+					<Accordion.Body>
+						<P>
+							체험 특성상 7일 전부터 취소가 불가합니다.그 이후에는 취소 시점에
+							따라 환불액이 결정됩니다.
+						</P>
+					</Accordion.Body>
+				</Accordion.Item>
+			</Accordion>
 			<Button
 				onClick={() => {
 					openHandler();
@@ -236,20 +253,21 @@ const PaymentInfo = () => {
 };
 
 const Payment = () => {
-	const [userData, setUserData] = useState({});
-	const [reservationData, setReservationData] = useState({});
 	const location = useLocation();
-
-	const paymentData = location.state;
-	console.log(paymentData);
-	setReservationData(paymentData);
+	const navigate = useNavigate();
+	const [payData, setPayData] = useState({});
+	const [data, setData] = useState({});
+	useEffect(() => {
+		console.log(location.state);
+		setPayData(location.state);
+	}, []);
 
 	const GetData = async () => {
 		try {
 			const res = await axios.get('/pay.json');
 			const data = await res.data;
-			console.log(data);
-			setUserData(data);
+			// console.log(data);
+			setData(data);
 		} catch (e) {
 			console.log(e);
 		}
@@ -258,20 +276,28 @@ const Payment = () => {
 		GetData();
 	}, []);
 
+	const goDetail = () => {
+		navigate('/detail');
+	};
+
 	return (
 		<>
-			<div style={{ display: 'flex', alignItems: 'flex-start' }}>
-				<Context>
-					<ReservationInfo reservationData={reservationData}></ReservationInfo>
-					<SubscriberInfo userData={userData}></SubscriberInfo>
-					<PaymentInfo></PaymentInfo>
-				</Context>
-				<StickyBox offsetTop={20} offsetBottom={20}>
-					<SideBarDiv>
-						<SideBar reservationData={reservationData}></SideBar>
-					</SideBarDiv>
-				</StickyBox>
-			</div>
+			{payData && data ? (
+				<div style={{ display: 'flex', alignItems: 'flex-start' }}>
+					<Context>
+						<ReservationInfo payData={payData}></ReservationInfo>
+						<SubscriberInfo data={data}></SubscriberInfo>
+						<PaymentInfo></PaymentInfo>
+					</Context>
+					<StickyBox offsetTop={20} offsetBottom={20}>
+						<SideBarDiv>
+							<SideBar payData={payData}></SideBar>
+						</SideBarDiv>
+					</StickyBox>
+				</div>
+			) : (
+				<div>{goDetail()}</div>
+			)}
 		</>
 	);
 };
