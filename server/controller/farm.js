@@ -40,21 +40,21 @@ export async function createFarm(req, res, next) {
 export async function updateFarm(req, res, next) {
 	const { type, name, address, description, owner } = req.body;
 	const { id } = req.params;
-	const farm = await db.Farms.findById(id);
-	if (!farm) {
+	const farmId = await db.Farms.findById(id);
+	if (!farmId) {
 		return res.status(404).json({ message: `Farm not found: ${id}` });
 	}
 	// if (farm.id !== req.userId) { // 해당 농장주의 소유 농장인지 확인
 	// 	return res.sendStatus(403);
 	// }
-	const updated = {
+	const updateInfo = {
 		...(type && { type }),
 		...(name && { name }),
 		...(address && { address }),
 		...(description && { description }),
 		...(owner && { owner }),
 	};
-	const updatedFarm = await db.Farms.updateFarm(id, updated);
+	const updatedFarm = await db.Farms.updateFarm(id, updateInfo);
 	res.status(200).json(updatedFarm);
 }
 
