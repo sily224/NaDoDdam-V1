@@ -28,9 +28,11 @@ router.post('/signup', validateSignup, authController.signup); // 회원가입
 // login
 router.post('/login', validateCredential, authController.login); //로그인
 // me
-router.get('/myInfo', isAuth, authController.me); //개인 회원정보 조회
+router.get('/myInfo', isAuth, authController.myInfo); //개인 회원정보 조회
 
-router.patch('/myInfo/:userId', isAuth, authController.userUpdate); //개인 정보 수정
+router.put("/myPasword/:userId", isAuth, authController.passwordUpdate); //비밀번호 수정
+
+router.put('/myInfo/:userId', isAuth, authController.userUpdate); //개인 정보 수정
 
 router.delete('/myInfo/:userId', isAuth, authController.userDrop); // 회원 삭제
 

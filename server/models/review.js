@@ -46,7 +46,7 @@ const Reviews = (sequelize, DataTypes) => {
 		return Reviews.destroy({ where: { id } });
 	};
 
-	Reviews.updateReveiw = ({ id, update }) => {
+	Reviews.updateReview = ({ id, update }) => {
 		return Reviews.update(update, { where: { id } });
 	};
 
