@@ -1,8 +1,10 @@
+import db from './index.js';
+
 const TimeTables = (sequelize, DataTypes) => {
-	const TimeTables = sequelize.define(
-		'TimeTables',
+	const timeTable = sequelize.define(
+		'timeTable',
 		{
-			timetable_id: {
+			id: {
 				type: DataTypes.INTEGER,
 				unique: true,
 				primaryKey: true,
@@ -21,30 +23,61 @@ const TimeTables = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			start_time: {
-				type: DataTypes.DATE,
+				type: DataTypes.TIME,
 				allowNull: false,
 			},
 			end_time: {
-				type: DataTypes.DATE,
+				type: DataTypes.TIME,
 				allowNull: false,
 			},
 		},
 		{
 			charset: 'utf8',
 			collate: 'utf8_general_ci', //한글 저장
-			tableName: 'TimeTables',
-			timestamps: false,
 		},
 	);
 
-	TimeTables.associate = (db) => {
-		db.TimeTables.belongsTo(db.Farms, {
-			foreignKey: 'farm_id',
-			targetKey: 'id',
+	timeTable.associate = (db) => {
+		db.TimeTables.belongsTo(db.Farms);
+	};
+
+	timeTable.getAll = () => {
+		return timeTable.findAll({
+			attributes: [
+				'id',
+				'date',
+				'price',
+				'start_time',
+				'end_time',
+				// [DataTypes.col('farm.type'), 'type'],
+				// [DataTypes.col('farm.type'), 'type'],
+			],
+			include: {
+				model: db.Farms,
+				//attributes: [],
+			},
 		});
 	};
 
-	return TimeTables;
+	// timeTable.getByDate = (date) => {};
+
+	timeTable.getById = (id) => {
+		return timeTable.findOne({ id });
+	};
+
+	timeTable.createTable = (tableInfo) => {
+		return timeTable.create(tableInfo).then((data) => {
+			return data;
+		});
+	};
+
+	timeTable.updateTable = (updateInfo, id) => {
+		return timeTable.update(updateInfo, {
+			where: { id },
+		});
+	};
+
+	return timeTable;
 };
 
 export default TimeTables;

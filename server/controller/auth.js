@@ -49,7 +49,7 @@ export async function login(req, res, next) {
 	}
 }
 
-export async function me(req, res, next) {
+export async function myInfo(req, res, next) {
 	try {
 		const user = await db.Users.findById(req.userId);
 		if (!user) {
@@ -57,7 +57,7 @@ export async function me(req, res, next) {
 		}
 		res
 			.status(200)
-			.json({ email: user.email, name: user.name, phoneNum: user.phoneNum });
+			.json({ id: user.id, email: user.email, name: user.name, phoneNum: user.phoneNum });
 	} catch (err) {
 		next(err);
 	}
