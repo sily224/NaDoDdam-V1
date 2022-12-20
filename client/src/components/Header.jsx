@@ -5,7 +5,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { HiUserCircle, HiMenu } from 'react-icons/hi';
 import { useSelector, useDispatch } from 'react-redux';
 import { showLogin, showRegister } from '../store/ModalSlice';
-import { getToken } from '../utils/utils';
+import { getToken, logout } from '../utils/utils';
 
 const StyledHeader = styled.header`
 	width: 100%;
@@ -84,23 +84,20 @@ const StyledBtnWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 `;
-const StyledBtn = styled.button``;
+const StyledBtn = styled.button`
+	background: none;
+	border: none;
+	padding: 5%;
+	font-size: 1rem;
+	width: 100%;
+	text-align: left;
+
+	&:hover {
+		background: lightgray;
+	}
+`;
 
 const StyledLogout = styled.div`
-	> button {
-		background: none;
-		border: none;
-		padding: 5%;
-		font-size: 1rem;
-		width: 100%;
-		text-align: left;
-		font-weight: bold;
-
-		&:hover {
-			background: lightgray;
-		}
-	}
-
 	&::before {
 		content: '';
 		display: block;
@@ -144,10 +141,6 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 	const params = useParams();
 	const ref = useRef();
 
-	const handleToggleMenu = () => {
-		setToggleMenu((prev) => !prev);
-	};
-
 	const handleClickOutSide = (e) => {
 		if (toggleMenu && !ref.current.contains(e.target)) {
 			setToggleMenu(false);
@@ -165,11 +158,6 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 		setToggleMenu(false);
 	}, [params]);
 
-	const logout = () => {
-		localStorage.clear();
-		navigate('/');
-	};
-
 	return (
 		<StyledHeader>
 			<img src="" alt="logo" />
@@ -178,7 +166,7 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 			</StyledSearchBar>
 			<div ref={ref}>
 				<StyledNav toggle={toggleMenu} ref={ref}>
-					<button onClick={handleToggleMenu}>
+					<button onClick={() => setToggleMenu((prev) => !prev)}>
 						<HiMenu size={25} />
 						<HiUserCircle size={30} />
 					</button>
@@ -211,7 +199,14 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 								</StyledLink>
 							))}
 							<StyledLogout>
-								<button onClick={logout}>로그아웃</button>
+								<StyledBtn
+									onClick={() => {
+										setToggleMenu(false);
+										logout();
+									}}
+								>
+									로그아웃
+								</StyledBtn>
 							</StyledLogout>
 						</div>
 					)}
