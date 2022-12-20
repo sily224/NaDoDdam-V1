@@ -130,12 +130,15 @@ export async function userUpdate(req, res, next) {
 			...(phoneNum && { phoneNum }),
 		};
 
-		const isEmail = db.Users.findByUserEmail(toUpdate.email)
-		if(isEmail) {
-			throw new Error(
-				'해당 이메일이 존재합니다. 다시 한 번 확인해 주세요.',
-			);
+		if(toUpdate.email) {
+			const isEmail = await db.Users.findByUserEmail(toUpdate.email);
+			if(isEmail) {
+				throw new Error(
+					'해당 이메일이 존재합니다. 다시 한 번 확인해 주세요.',
+				);
+			}
 		}
+		
 
 		const updatedUserInfo = await setUser(userInfoRequired, toUpdate);
 		res.status(200).json(updatedUserInfo);
