@@ -1,117 +1,124 @@
-import React,{useState,useEffect} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import Calender from "./Calender";
-import Location from "./Location";
-import Review from "./Review";
-
-const Detail = ({ data }) => {
-    const [Selected, setSelected] = useState(1);
- 
-    const handleSelect = (e) => {
-        setSelected(e.target.value);
-    };
-
-    return (
-        <div>
-            {
-                data &&
-    
-                <DetailContainer key={`${data.title}-${new Date()}`}>
-                        <div className="header">
-                            <h1 className="title">{data.title}</h1>
-                            <p>{data.location}</p>
-                            <img src="" alt={`${data.title}이미지`}/>
-                        </div>
-                        <Content>
-                            <Inform>
-                                <h3>{data.grade}점</h3>
-                                <p>{data.description}</p>
-                                <Period className="reservationTime">
-                                    <Calender>캘린더</Calender>
-                                    <div className="time">
-                                        { 
-                                            data.times.map( (time,idx)=>{
-                                                return <TimeButton key={`${idx}-${time}`}>{idx+1}타임  {time}</TimeButton>
-                                            })
-                                        }                                        
-                                    </div>
-                                </Period>
-                                <Review review={data.review}>후기</Review>
-                                <Location latitude ={data.latitude} longitude={data.longitude} ></Location>
-                                <Company>
-                                    <p>업체정보</p>
-                                    {
-                                        Object.entries(data.company).map((values,idx) => {
-                                            return <p key={`idx${idx}-${values[0]}`}>{`${values[0]}`} : {`${values[1]}`}</p>
-                                        })
-                                    }
-                                </Company>
-                                
-                            </Inform>
-                            <Form>
-                                <p>{data.price}원/명</p>
-                                <select onChange={handleSelect}>
-                                    {[...Array(10).keys()].map(n => <option key={`HeadCount-${n+1}`} value={n+1}>{n+1}</option>)} 
-                                </select>
-                                <select>
-                                    <option defaultValue="선택하세요">선택하세요</option>
-                                    {data.times.map((time,idx) => <option  key={`${idx}-${time}`} value={time}>{time}</option>)}
-                                </select>
-                                <button type="submit">예약하기</button>
-                                <p>총 합게 : { Selected * data.price }</p>
-                            </Form>
+import Calender from './ReactCalender';
+import Location from './Location';
+import Review from './Review';
+import TimeBtns from './TimeBtns';
+import { DetailContext } from '../pages/DetailPage';
+import FloatingForm from './FloatingForm';
 
 
-                        </Content>
-                    </DetailContainer>
-                }
-        </div>
-    );
-};
-const DetailContainer = styled.div`
+const DisplayFlex = styled.div`
     display:flex;
     flex-direction:column;
+`;
+
+const DetailContainer = styled(DisplayFlex)`
+    width:100%;
     text-align: left;
-    .header .title{
-        display:flex;
-        width:100%;
-    }
-`;
-const Content = styled.div`
-    display:flex;
 `;
 
-const Period = styled(Content)`
-    justify-content: flex-start;
-    & div{    
-        flex-basis: 200px;
-        height: 200px;
-        border:1px solid black;
-    }
-    & :not(:last-child) {
-        margin-right:3%;
-    }
-`;
-const Inform = styled.div`
-    width: 100%;
-    margin-right : 3%;
-`;
-const Form = styled.form`
-    width: 25%;
-    height: 200px;
-    border : 1px solid black;
-    position: sticky;
-    margin: 0 3%;
-    top: 20%;
-`;
-const Company = styled.div`
-    border : 1px solid black;
+const Header = styled(DisplayFlex)`
+    width:100%;
 `;
 
-const TimeButton = styled.button`
+const Title = styled.h1`
+    display: block;
     width : 100%;
-    height: 20%;
-    background-color : white;
 `;
+
+const DetailContent = styled.div`
+    display: flex;
+`;
+
+const DetailPeriod = styled(DetailContent)`
+    justify-content: flex-start;
+`;
+const DetailInform = styled.div`
+    display: block;
+    width: 100%;
+    flex: 3.5;
+`;
+const FloatingFormDiv = styled.div`
+    display : felx;
+    justify-content : flex-end;
+    flex: 1;
+`;
+const DetailCompanyContainer = styled.div`
+    border : 1px solid black;
+`;
+const TimButtonContainer = styled(DisplayFlex)`
+    justify-content:center;
+    margin-left : 3%;
+`;
+
+
+
+const DetailHeader = ({ title, location }) => {
+    return (
+        <Header>
+            <Title>{title}</Title>
+            <p>{location}</p>
+            <img src='' alt={`${title}이미지`} />
+        </Header>
+    );
+};
+
+const DetailGrade = ({ grade }) => {
+    return <p>{grade}점 </p>
+};
+
+const DetailDescription = ({ description }) => {
+    return <p>{description}</p>
+};
+
+
+const DetailCompany = ({ company }) => {
+    return (
+        <DetailCompanyContainer>
+            <p>업체정보</p>
+            {
+                Object.entries(company).map((values, idx) => {
+                    return <p key={`idx${idx}-${values[0]}`}>{`${values[0]}`} : {`${values[1]}`}</p>
+                })
+            }
+        </DetailCompanyContainer>
+    );
+};
+
+
+
+const Detail = () => {
+    const { detailData: data } = useContext(DetailContext);
+
+    return (
+        <>
+            {
+                data &&
+                <DetailContainer key={`${data.title}-${new Date()}`}>
+                    <DetailHeader title={data.title} location={data.location} />
+
+                    <DetailContent>
+                        <DetailInform>
+                            <DetailGrade grade={data.grade} />
+                            <DetailDescription description={data.description} />
+                            <DetailPeriod>
+                                <Calender />
+                                <TimButtonContainer>
+                                    <TimeBtns />
+                                </TimButtonContainer>
+                            </DetailPeriod>
+                            <Review />
+                            <Location />
+                            <DetailCompany company={data.company} />
+                        </DetailInform>
+                        <FloatingFormDiv><FloatingForm /></FloatingFormDiv>
+                    </DetailContent>
+
+                </DetailContainer>
+            }
+        </>
+    );
+};
 
 export default Detail;

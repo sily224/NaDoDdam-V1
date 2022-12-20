@@ -1,4 +1,3 @@
-// import getAllFarmData from '../lib/getAllFarmData';
 import FarmList from '../components/ItemList';
 import React, {useState, useEffect, useCallback} from 'react';
 

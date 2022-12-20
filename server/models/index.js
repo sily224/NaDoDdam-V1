@@ -1,39 +1,35 @@
-'use strict';
+import Sequelize from 'sequelize';
+import Users from './auth.js';
+import Reservations from './Reservations.js';
+import Farms from './farm.js';
+import Reviews from './review.js';
+import TimeTables from './timetable.js';
+// import { fileURLToPath } from 'url';
+// const __filename = fileURLToPath(import.meta.url);
+// const env = process.env.NODE_ENV || 'development';
+import { config } from '../config/config.js';
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
+const sequelize = new Sequelize(
+	config.database,
+	config.username,
+	config.password,
+	config,
+);
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+db.Users = Users(sequelize, Sequelize);
+db.Reservations = Reservations(sequelize, Sequelize);
+db.Farms = Farms(sequelize, Sequelize);
+db.Reviews = Reviews(sequelize, Sequelize);
+db.TimeTables = TimeTables(sequelize, Sequelize);
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+Object.keys(db).forEach((modelName) => {
+	if (db[modelName].associate) {
+		db[modelName].associate(db);
+	}
 });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-
-module.exports = db;
+export default db;
