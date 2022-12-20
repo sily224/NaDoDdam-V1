@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components'
 import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage';
 import * as userApi from "../lib/userApi";
@@ -10,29 +10,21 @@ const Input = styled.input`
   padding: 10px;
 `
 
-const MyPageEdit = ({id, name, title, userId,  userPassword}) => {
+const MyPageEdit = ({id, name, title, userId}) => {
   const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
   const textInput = useRef();
   const navigate = useNavigate()
 
-  const setReplaceName = () => {
-    let replaceName = '';
-    
-    if(id === 'password'){
-      replaceName =  "*".repeat(name.length)
-    }else{
-      replaceName = name;
-    };
-    
+  const setReplaceName = useCallback(() => {
     setReName({
-      value: replaceName,
+      value: name,
     });
-  };
+  },[name]);
 
   useEffect(() => {
     setReplaceName();
-  },[name]);
+  },[setReplaceName]);
  
   const changeEditMode = (e) => {
     setChange(cur => !cur);
