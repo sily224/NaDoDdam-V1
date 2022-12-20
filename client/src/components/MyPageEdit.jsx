@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components'
-import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage';
+import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage1';
 import * as userApi from "../lib/userApi";
+import { useNavigate } from 'react-router-dom';
 
 const Input = styled.input`
   border-radius: 10px;
@@ -9,11 +10,11 @@ const Input = styled.input`
   padding: 10px;
 `
 
-const MyPageEdit = ({id, name, title, userInfo}) => {
+const MyPageEdit = ({id, name, title, userId,  userPassword}) => {
   const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
-  const [users, setUsers] = useState({});
   const textInput = useRef();
+  const navigate = useNavigate()
 
   const setReplaceName = () => {
     let replaceName = '';
@@ -31,32 +32,29 @@ const MyPageEdit = ({id, name, title, userInfo}) => {
 
   useEffect(() => {
     setReplaceName();
-    setUsers(userInfo);
   },[name]);
  
   const changeEditMode = (e) => {
     setChange(cur => !cur);
   };
 
-  const upDateComponents = () => {
+  const upDateComponents = async() => {
     setChange(cur => !cur);
     setReName({
       ...reName,
       value: textInput.current.value,
     });
 
-    setUsers({
-      ...users,
+    await userApi.patch(`//localhost:3500/api/myInfo/${userId}`, {
       [textInput.current.dataset.id]: textInput.current.value,
-    })
-  };
-
-  console.log(users)
+    });
+    navigate('/mypage')
+  }
 
   const DefaultView = () => {
     return (
       <StyledUserInfo>
-        <div><span>{reName.value === undefined ? ".." : reName.value}</span></div>
+        <div><span>{reName.value}</span></div>
         <div>
           <StyledButton onClick={changeEditMode}>수정</StyledButton> 
         </div>

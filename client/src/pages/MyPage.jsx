@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import styled, {css} from 'styled-components';
+import styled from 'styled-components';
 import MyPageEdit from '../components/MyPageEdit';
 import * as userApi from "../lib/userApi";
 import { useEffect } from 'react';
+import { getToken } from '../utils/utils';
 
 const Container = styled.div`
   width: 80%;
@@ -30,7 +31,7 @@ const StyledUserInfo = styled.div`
   justify-content: space-between;
   align-items: baseline;
 `
-const StyledUserInfoWrap = styled.form`
+const StyledUserInfoWrap = styled.div`
   position: relative;
   padding-bottom: 2%;
   &::after {
@@ -53,18 +54,21 @@ const StyledButton = styled.button`
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({}); 
+  const [change, setChange] = useState(false)
   
   const getUserInfo = async () => {
-    const getToken = localStorage.getItem('token');
-    const res = await userApi.get("//localhost:3500/api/me", {
+    const token = getToken();
+    const res = await userApi.get("//localhost:3500/api/myInfo", {
       headers: {
-        authorization: getToken,
+        authorization: token,
       },
     });
     setUserInfo({
+      id:res.data.id,
       name: res.data.name,
-      tel: res.data.phoneNum,
-      email: res.data.email
+      phoneNum: res.data.phoneNum,
+      email: res.data.email,
+      password: res.data.password,
     })
   }
   
@@ -72,7 +76,7 @@ const MyPage = () => {
     getUserInfo();
   },[])
 
-  const {name, tel, email, password} = userInfo;
+  const {id, name, phoneNum, email, password} = userInfo;
 
   const list = [
     {
@@ -81,20 +85,15 @@ const MyPage = () => {
      name: `${name}`,
     },
     {
-      id:"tel",
+      id:"phoneNum",
       title:"전화번호",
-      name: `${tel}`,
+      name: `${phoneNum}`,
     },
     {
       id:"email",
       title:"이메일",
       name: `${email}`,
     },
-    {
-      id:"password",
-      title:"비밀번호",
-      name: `${password}`,
-    }
   ]
 
   return (
@@ -106,9 +105,26 @@ const MyPage = () => {
           id={item.id}
           name={item.name}
           title={item.title}
-          userInfo={userInfo}
+          userId={id}
+          userPassword={password}
         />
       ))}
+      <StyledUserInfoWrap>
+        <div><h4>비밀번호</h4></div>
+          <StyledUserInfo>
+            {!change ? <span></span> : (<>
+              <label>현재비밀번호</label>
+              <input type="password"></input>
+              <label>새비밀번호</label>
+              <input type="password"></input>
+              <input type="password" placeholder='비밀번호 확인'></input>
+              </>
+            )}
+              <StyledButton onClick={(e) => {
+                setChange(prev => !prev)
+                }}>{!change ? '비밀번호재설정' : '취소'}</StyledButton>
+          </StyledUserInfo>
+      </StyledUserInfoWrap>
       <StyledUserInfoWrap>
         <div><h4>회원탈퇴</h4></div>
           <StyledUserInfo>
@@ -116,8 +132,6 @@ const MyPage = () => {
               <StyledButton>회원탈퇴</StyledButton>
           </StyledUserInfo>
       </StyledUserInfoWrap>
-    <button>저장하기</button>
-    <button>취소</button>
     </Container>
   )
 }

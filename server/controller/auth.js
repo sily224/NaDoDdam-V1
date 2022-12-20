@@ -57,7 +57,7 @@ export async function me(req, res, next) {
 		}
 		res
 			.status(200)
-			.json({ email: user.email, name: user.name, phoneNum: user.phoneNum });
+			.json(user);
 	} catch (err) {
 		next(err);
 	}
@@ -78,18 +78,18 @@ async function setUser(userInfoRequired, toUpdate) {
 		throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
 	}
 
-	// //비밀번호 일치 여부 확인
-	const corretPasswordHash = user.password;
-	const isPasswordCorrect = await bcrypt.compare(
-		currentPassword,
-		corretPasswordHash,
-	);
+	//비밀번호 일치 여부 확인
+	// const corretPasswordHash = user.password;
+	// const isPasswordCorrect = await bcrypt.compare(
+	// 	currentPassword,
+	// 	corretPasswordHash,
+	// );
 
-	if (!isPasswordCorrect) {
-		throw new Error(
-			'현재 비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.',
-		);
-	}
+	// if (!isPasswordCorrect) {
+	// 	throw new Error(
+	// 		'현재 비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.',
+	// 	);
+	// }
 
 	//업데이트 시작
 
