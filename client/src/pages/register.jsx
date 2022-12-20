@@ -1,5 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ModalContainer from '../components/Modal';
 import * as userApi from '../lib/userApi';
@@ -35,7 +34,6 @@ const LoginBtn = styled.button``;
 function Register() {
 	const registerModalState = useSelector((state) => state.modal.registerModal);
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
 	// 입력값 유효성 검사할 형태
 	const formSchema = yup.object({
@@ -70,6 +68,7 @@ function Register() {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { isSubmitting, errors }, // 제출중이라면 가입하기 버튼 disabled됨
 	} = useForm({ mode: 'onChange', resolver: yupResolver(formSchema) });
 
@@ -87,6 +86,12 @@ function Register() {
 			alert(err.response.data.message);
 		}
 	};
+
+	useEffect(() => {
+		reset({
+			data: {},
+		});
+	}, [registerModalState]);
 
 	if (registerModalState) {
 		return (

@@ -1,5 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ModalContainer from '../components/Modal';
 import * as userApi from '../lib/userApi';
@@ -52,7 +51,7 @@ const SocialButton = styled.button`
 function Login() {
 	const loginModalState = useSelector((state) => state.modal.loginModal);
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	console.log('로그인 상태', loginModalState);
 
 	const formSchema = yup.object({
 		email: yup
@@ -65,6 +64,7 @@ function Login() {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { isSubmitting, errors }, // isSubmitting: 제출중인지 여부
 	} = useForm({ mode: 'onChange', resolver: yupResolver(formSchema) });
 
@@ -82,6 +82,12 @@ function Login() {
 			alert(err.response.data.message);
 		}
 	};
+
+	useEffect(() => {
+		reset({
+			data: {},
+		});
+	}, [loginModalState]);
 
 	if (loginModalState) {
 		return (
