@@ -4,6 +4,12 @@ import { DetailContext } from '../pages/DetailPage';
 
 const { kakao } = window;
 
+const MapDiv = styled.div`
+    width:100%;
+    height:400px;
+    z-index: -1;
+`;
+
 const Location = () =>{
     const {detailData : data} = useContext(DetailContext);
     const { latitude, longitude } = data;
@@ -37,8 +43,4 @@ const Location = () =>{
     );
 };
 
-const MapDiv = styled.div`
-    width:100%;
-    height:400px;
-`;
-export default React.memo(Location);
+export default Location;
