@@ -30,7 +30,7 @@ const TimeBtns = (props) =>{
     const [timeBtnActive, setTimeBtnActive] = useState(0);
     const dispatch = useDispatch();
 
-    let times = "";
+    let times = '';
 
 
     // 캘린더 사용법! 사용하신 후 지워주세요~
