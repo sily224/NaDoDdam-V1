@@ -57,7 +57,7 @@ export async function myInfo(req, res, next) {
 		}
 		res
 			.status(200)
-			.json({ id: user.id, email: user.email, name: user.name, phoneNum: user.phoneNum });
+			.json(user);
 	} catch (err) {
 		next(err);
 	}
@@ -70,7 +70,7 @@ const createJwtToken = (id) => {
 };
 
 async function setUser(userInfoRequired, toUpdate) {
-	const { userId, currentPassword } = userInfoRequired;
+	const { userId } = userInfoRequired;
 
 	let user = await db.Users.findById(userId);
 
@@ -78,18 +78,20 @@ async function setUser(userInfoRequired, toUpdate) {
 		throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
 	}
 
-	// //비밀번호 일치 여부 확인
-	const corretPasswordHash = user.password;
-	const isPasswordCorrect = await bcrypt.compare(
-		currentPassword,
-		corretPasswordHash,
-	);
+	// // //비밀번호 일치 여부 확인
+	// const corretPasswordHash = user.password;
+	// const isPasswordCorrect = await bcrypt.compare(
+	// 	currentPassword,
+	// 	corretPasswordHash,
+	// );
 
-	if (!isPasswordCorrect) {
-		throw new Error(
-			'현재 비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.',
-		);
-	}
+	// console.log(currentPassword, corretPasswordHash);
+
+	// if (!isPasswordCorrect) {
+	// 	throw new Error(
+	// 		'현재 비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.',
+	// 	);
+	// }
 
 	//업데이트 시작
 
@@ -118,9 +120,8 @@ export async function userUpdate(req, res, next) {
 
 	try {
 		// body data로 부터 확인용으로 사용할 현재 비밀번호 추출함.
-		const currentPassword = req.body.currentPassword;
 
-		const userInfoRequired = { userId, currentPassword };
+		const userInfoRequired = { userId };
 
 		const toUpdate = {
 			...(name && { name }),

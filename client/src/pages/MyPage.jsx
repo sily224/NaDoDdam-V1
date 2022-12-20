@@ -56,7 +56,7 @@ const MyPage = () => {
   
   const getUserInfo = async () => {
     const getToken = localStorage.getItem('token');
-    const res = await userApi.get("//localhost:3500/api/me", {
+    const res = await userApi.get("//localhost:3500/api/myInfo", {
       headers: {
         authorization: getToken,
       },
@@ -65,8 +65,10 @@ const MyPage = () => {
       name: res.data.name,
       tel: res.data.phoneNum,
       email: res.data.email
-    })
+    });
   }
+
+
   
   useEffect(() => {
     getUserInfo();
@@ -120,5 +122,6 @@ const MyPage = () => {
     </Container>
   )
 }
+
 
 export { MyPage, StyledButton, StyledUserInfo, StyledUserInfoWrap };

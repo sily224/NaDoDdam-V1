@@ -55,3 +55,42 @@ export async function reviewList(req, res, next) {
 		next(err);
 	}
 }
+
+async function setReview(reviewInfo, toUpdate) {
+	const {id} = reviewInfo;
+
+	let review = await db.Reviews.findByReviewId(id);
+
+	if(!review) {
+		throw new Error("해당 리뷰가 없습니다. 다시 한 번 확인해 주세요.");
+	}
+
+	review = await db.Reviews.updateReview({
+		id,
+		update: toUpdate,
+	});
+
+	return review;
+}
+
+
+export async function reserveUpdate(req, res, next) {
+	const id = req.params.id;
+	const {content, type, type_id, rating} = req.body;
+
+	try {
+		const reviewInfo = {id};
+
+		const toUpdate = {
+			...(content && {content}),
+			...(type && {type}),
+			...(type_id && {type_id}),
+			...(rating && {rating}),
+		};
+
+		const updateReview = await setReview(reviewInfo, toUpdate);
+		res.status(200).json(updateReview);
+	}catch(err) {
+		next(err);
+	}
+}

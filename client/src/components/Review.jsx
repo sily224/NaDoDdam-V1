@@ -44,7 +44,6 @@ const ReviewItem = styled.div`
 `;
 const ModalLayout = styled.div`
     display: felx;
-    margin-top : 5%;
 `;
 const ModalTitle = styled.div`
     width: 30%;
@@ -52,7 +51,8 @@ const ModalTitle = styled.div`
 `;
 const ModalContent =styled.div`
     width: 60%;
-    height: 600px;
+    height: 450px;
+    margin-top : 5%;
     overflow-y:auto;
     overflow-x:hidden;
 `;

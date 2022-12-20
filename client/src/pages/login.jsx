@@ -51,7 +51,6 @@ const SocialButton = styled.button`
 function Login() {
 	const loginModalState = useSelector((state) => state.modal.loginModal);
 	const dispatch = useDispatch();
-	console.log('로그인 상태', loginModalState);
 
 	const formSchema = yup.object({
 		email: yup
@@ -76,7 +75,7 @@ function Login() {
 			localStorage.setItem('token', token);
 			localStorage.setItem('loggedIn', 'true');
 
-			alert(`로그인되었습니다.`);
+			alert(`로그인 되었습니다.`);
 			dispatch(closeModal());
 		} catch (err) {
 			alert(err.response.data.message);

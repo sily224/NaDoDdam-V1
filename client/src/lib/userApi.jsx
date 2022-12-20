@@ -4,8 +4,6 @@ import axios from 'axios';
 async function post(endpoint, data) {
 	const apiUrl = endpoint;
 	const bodyData = JSON.stringify(data);
-	console.log(`%cPOST 요청: ${apiUrl}`, 'color: #296aba;');
-	console.log(`%cPOST 요청 데이터: ${bodyData}`, 'color: #296aba;');
 
 	const res = await axios(apiUrl, {
 		method: 'POST',
@@ -22,7 +20,6 @@ async function post(endpoint, data) {
 // api 로 user정보 GET 요청
 async function get(endpoint) {
 	const apiUrl = endpoint;
-	console.log(`%cGET 요청: ${apiUrl} `, 'color: #a25cd1;');
 
 	const res = await axios(apiUrl, {
 		method: 'GET',

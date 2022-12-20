@@ -14,7 +14,7 @@
             "cost": 40000,
             "method": "카드결제"
         },
-        "state" : "예약완료"
+        "status" : "예약완료"
     },
     {
         "id" : "qweasdzxc221220128",
@@ -31,7 +31,7 @@
             "cost": 28000,
             "method": "카드결제"
         },
-        "state" : "예약완료"
+        "status" : "예약완료"
     },
     {
         "id" : "qweasdzxc221201753",
@@ -48,7 +48,7 @@
             "cost": 31000,
             "method": "계좌이체"
         },
-        "state" : "체험완료"
+        "status" : "체험완료"
     },
     {
         "id" : "zxcsdzxc221201753",
@@ -65,7 +65,7 @@
             "cost": 31000,
             "method": "계좌이체"
         },
-        "state" : "체험완료"
+        "status" : "체험완료"
     },
         {
         "id" : "qweasdzxc221201754",
@@ -82,6 +82,6 @@
             "cost": 10000,
             "method": "계좌이체"
         },
-        "state" : "체험완료"
+        "status" : "체험완료"
     }
 ]

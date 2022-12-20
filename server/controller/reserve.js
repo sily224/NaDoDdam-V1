@@ -66,7 +66,7 @@ async function setReserve(reserveInfo, toUpdate) {
 		throw new Error('해당 예약이 없습니다. 다시 한 번 확인해 주세요.');
 	}
 
-	reserve = await db['Reservations'].updateReserve({
+	reserve = await db.Reservations.updateReserve({
 		id,
 		update: toUpdate,
 	});
