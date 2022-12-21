@@ -8,6 +8,20 @@ const Subject = styled.h2`
 	margin-top: 7%;
 	margin-bottom: 3%;
 `;
+const FilterWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+`;
+
+const FilterBtn = styled.button`
+	width: 5rem;
+	margin-right: 0.5rem;
+`;
+
+const FilterSelect = styled.select`
+	margin-left: auto;
+`;
 
 const Table = styled.table`
 	width: 100%;
@@ -17,6 +31,7 @@ const Table = styled.table`
 `;
 
 const Thead = styled.thead``;
+
 const Tr = styled.tr`
 	border: 1px solid black;
 	padding: 10px;
@@ -37,27 +52,84 @@ const BtnTd = styled.td`
 const Button = styled.button``;
 
 const FarmManagement = () => {
-	const [reservation, setReservation] = useState(null);
+	const [data, setData] = useState(null);
+	const [filteredStatus, setFilteredStatus] = useState('전체');
+	const [filteredDate, setFilteredDate] = useState('최근순');
+
 	const fetchData = async () => {
-		try {
-			await axios.get('/reservation.json').then((res) => {
-				console.log(res.data);
-				setReservation(res.data);
-			});
-		} catch (e) {
-			console.log(e);
+		if (filteredStatus === '전체') {
+			try {
+				await axios.get('/reservation.json').then((res) => {
+					console.log(res.data);
+					setData(res.data);
+				});
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		if (filteredStatus === '예약대기') {
+			try {
+				await axios.get('/reservation.json').then((res) => {
+					console.log(res.data);
+					setData(res.data);
+				});
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		if (filteredStatus === '예약완료') {
+			try {
+				await axios.get('/reservation.json').then((res) => {
+					console.log(res.data);
+					setData(res.data);
+				});
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		if (filteredStatus === '예약취소') {
+			try {
+				await axios.get('/reservation.json').then((res) => {
+					console.log(res.data);
+					setData(res.data);
+				});
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		if (filteredStatus === '체험완료') {
+			// 여기 수정하는 중임
+			try {
+				await axios.get('/reservation.json').then((res) => {
+					console.log(res.data);
+					setData(res.data);
+				});
+			} catch (e) {
+				console.log(e);
+			}
 		}
 	};
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [filteredStatus, filteredDate]);
 
 	return (
 		<>
-			{reservation && (
+			{data && (
 				<FarmFormat>
 					<Subject>예약관리</Subject>
+					<FilterWrapper>
+						<FilterBtn>전체</FilterBtn>
+						<FilterBtn>예약대기</FilterBtn>
+						<FilterBtn>예약완료</FilterBtn>
+						<FilterBtn>예약취소</FilterBtn>
+						<FilterBtn>체험완료</FilterBtn>
+						<FilterSelect>
+							<option>최근순</option>
+							<option>오래된순</option>
+						</FilterSelect>
+					</FilterWrapper>
 					<Table>
 						<Thead>
 							<Tr>
@@ -69,8 +141,8 @@ const FarmManagement = () => {
 							</Tr>
 						</Thead>
 						<tbody>
-							{reservation.map((data) => {
-								const { id, user, content, pay, status } = data;
+							{data.map((oneReservation) => {
+								const { id, user, content, pay, status } = oneReservation;
 								return (
 									<Tr key={id}>
 										<Td>{id}</Td>
