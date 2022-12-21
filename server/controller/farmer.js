@@ -36,6 +36,7 @@ export async function login(req, res, next) {
 		if (!farmer) {
 			throw new Error('유효하지 않은 농장주 또는 비밀번호 입니다.');
 		}
+		const role = farmer.dataValues.role;
 
 		const isValidPassword = await bcrypt.compare(password, farmer.password);
 
@@ -43,7 +44,7 @@ export async function login(req, res, next) {
 			throw new Error('유효하지 않은 농장주 또는 비밀번호 입니다.');
 		}
 		const token = createJwtToken({ id: farmer.id, role: farmer.role });
-		res.status(200).json({ token, email });
+		res.status(200).json({ token, email, role });
 	} catch (err) {
 		next(err);
 	}

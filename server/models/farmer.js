@@ -31,7 +31,11 @@ const Farmers = (sequelize, DataTypes) => {
 		},
 	);
 
-	// farmer.findByUserId = (id) => {
+	farmer.associate = (db) => {
+		db.Farmers.belongsTo(db.Farms);
+	};
+
+	// farmer.findByFarmerId = (id) => {
 	// 	return farmer.findOne({ where: { id } });
 	// };
 
@@ -39,7 +43,7 @@ const Farmers = (sequelize, DataTypes) => {
 		return farmer.findOne({ where: { email } });
 	};
 
-	// farmer.getUsers = () => {
+	// farmer.getFarmers = () => {
 	// 	return farmer.findAll();
 	// };
 
@@ -51,12 +55,12 @@ const Farmers = (sequelize, DataTypes) => {
 		return farmer.create(user).then((data) => data.dataValues.id);
 	};
 
-	// farmer.updateUser = ({ userId, update }) => {
-	// 	return farmer.update(update, { where: { id: userId } });
+	// farmer.updateFarmer = ({ farmerId, update }) => {
+	// 	return farmer.update(update, { where: { id: farmerId } });
 	// };
 
-	// farmer.deleteUser = (userId) => {
-	// 	return farmer.destroy({ where: { id: userId } });
+	// farmer.deleteFarmer = (farmerId) => {
+	// 	return farmer.destroy({ where: { id: farmerId } });
 	// };
 
 	return farmer;
