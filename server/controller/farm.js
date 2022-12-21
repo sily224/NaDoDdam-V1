@@ -24,46 +24,71 @@ export async function getByLocation(req, res, next) {
 
 export async function createFarm(req, res, next) {
 	const { type, name, address, description, owner } = req.body;
-	const farm = await db.Farms.createFarm({
-		type,
-		name,
-		address,
-		description,
-		owner,
-	});
-	res.status(201).json(farm);
+	try {
+		const farmerId = req.farmerId;
+		const foundFarmer = db.Farmers.findById(farmerId);
+		if (!foundFarmer) {
+			throw new Error('농장등록은 농장주만 등록할 수 있습니다.');
+		}
+		const farm = await db.Farms.createFarm({
+			type,
+			name,
+			address,
+			description,
+			owner,
+		});
+		//console.log(farm.dataValues.id);
+		const checkFarmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
+		if (checkFarmId) {
+			throw new Error('농장주는 하나의 농장만 등록할 수 있습니다');
+		}
+		await db.Farmers.registeFarmId(farm.dataValues.id, farmerId);
+		res.status(201).json(farm);
+	} catch (err) {
+		next(err);
+	}
 }
 
 // 농장 소유자가 update를 해야함으로 농장소유자의 테이블을 만들고 농장소유자의 id 값을 확인 후
 // 해당 농장 소유자가 맞으면 데이터 수정
 // => 미구현
 export async function updateFarm(req, res, next) {
-	const { type, name, address, description, owner } = req.body;
-	const { id } = req.params;
-	const farmId = await db.Farms.findById(id);
-	if (!farmId) {
-		return res.status(404).json({ message: `Farm not found: ${id}` });
+	const { name, address, description } = req.body;
+	try {
+		const { id } = req.params;
+		const farmerId = req.farmerId;
+		if (!id) {
+			throw new Error('해당 농장을 찾지 못 했습니다.');
+		}
+		const foundFarmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
+		if (parseInt(id) !== foundFarmId) {
+			throw new Error('농장수정은 해당 농장주만 수정할 수 있습니다.');
+		}
+		const updatedFarm = await db.Farms.updateFarm(id, {
+			name,
+			address,
+			description,
+		});
+		res.status(200).json(updatedFarm);
+	} catch (err) {
+		next(err);
 	}
-	// if (farm.id !== req.userId) { // 해당 농장주의 소유 농장인지 확인
-	// 	return res.sendStatus(403);
-	// }
-	const updateInfo = {
-		...(type && { type }),
-		...(name && { name }),
-		...(address && { address }),
-		...(description && { description }),
-		...(owner && { owner }),
-	};
-	const updatedFarm = await db.Farms.updateFarm(id, updateInfo);
-	res.status(200).json(updatedFarm);
 }
 
 export async function removeFarm(req, res, next) {
 	const { id } = req.params;
-	const farm = await db.Farms.findById(id);
-	if (!farm) {
-		return res.status(404).json({ message: `Farm not found ${id}` });
+	const farmerId = req.farmerId;
+	try {
+		if (!id) {
+			throw new Error('해당 농장을 찾지 못 했습니다.');
+		}
+		const foundFarmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
+		if (parseInt(id) !== foundFarmId) {
+			throw new Error('농장삭제는 해당 농장주만 삭제할 수 있습니다.');
+		}
+		await db.Farms.remove(id);
+		res.sendStatus(204);
+	} catch (err) {
+		next(err);
 	}
-	await db.Farms.remove(id);
-	res.sendStatus(204);
 }

@@ -51,6 +51,12 @@ const Farmers = (sequelize, DataTypes) => {
 		return farmer.findByPk(id);
 	};
 
+	farmer.getFarmIdFromFarmer = (id) => {
+		return farmer.findByPk(id).then((data) => {
+			return data.dataValues.farmId;
+		});
+	};
+
 	farmer.createFarmer = (user) => {
 		return farmer.create(user).then((data) => data.dataValues.id);
 	};
@@ -58,6 +64,10 @@ const Farmers = (sequelize, DataTypes) => {
 	// farmer.updateFarmer = ({ farmerId, update }) => {
 	// 	return farmer.update(update, { where: { id: farmerId } });
 	// };
+
+	farmer.registeFarmId = (id, farmerId) => {
+		return farmer.update({ farmId: id }, { where: { id: farmerId } }); // id가 어디인데서
+	};
 
 	// farmer.deleteFarmer = (farmerId) => {
 	// 	return farmer.destroy({ where: { id: farmerId } });
