@@ -70,7 +70,7 @@ const createJwtToken = (id) => {
 };
 
 async function setUser(userInfoRequired, toUpdate) {
-	const { userId, currentPassword } = userInfoRequired;
+	const { userId } = userInfoRequired;
 
 	let user = await db.Users.findById(userId);
 

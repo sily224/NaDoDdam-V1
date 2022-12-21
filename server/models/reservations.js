@@ -13,21 +13,41 @@ const Reservations = (sequelize, DataTypes) => {
 			status: {
 				type: DataTypes.STRING(64),
 				allowNull: false,
-				defaultValue: '결제완료',
+				defaultValue: '예약 대기',
 			},
-			time: {
-				type: DataTypes.DATE,
+			start_time: {
+				type: DataTypes.TIME,
 				allowNull: false,
-				defaultValue: DataTypes.NOW,
 			},
-			farm_id: {
-				type: DataTypes.INTEGER,
+			end_time: {
+				type: DataTypes.TIME,
 				allowNull: false,
 			},
 			personnel: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
+			farm_id: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
+			},
+			payment: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			name: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			email: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			phoneNum: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			}
+
 		},
 		{
 			charset: 'utf8',

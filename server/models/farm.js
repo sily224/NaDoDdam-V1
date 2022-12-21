@@ -34,7 +34,7 @@ const Farms = (sequelize, DataTypes) => {
 	);
 
 	farm.findById = (id) => {
-		return Users.findByPk(id);
+		return farm.findByPk(id);
 	};
 
 	farm.getAll = () => {
