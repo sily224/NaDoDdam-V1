@@ -6,7 +6,7 @@
 	"main": "app.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon App.js",
+		"start": "set PORT=3500 && nodemon App.js",
 		"server": "node App.js",
 		"dev": "nodemon App.js"
 	},
