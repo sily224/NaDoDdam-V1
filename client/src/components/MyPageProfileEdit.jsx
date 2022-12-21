@@ -10,7 +10,7 @@ const Input = styled.input`
   padding: 10px;
 `
 
-const MyPageEdit = ({id, name, title, userId}) => {
+const MyPageProfileEdit = ({id, name, title, userId}) => {
   const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
   const textInput = useRef();
@@ -90,4 +90,4 @@ const MyPageEdit = ({id, name, title, userId}) => {
   )
 }
 
-export default MyPageEdit;
+export default MyPageProfileEdit;
