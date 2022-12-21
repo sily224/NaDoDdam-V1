@@ -91,6 +91,11 @@ export const handlers = [
       return res(ctx.status(200), ctx.json(data));
     }
   }),
+
+  rest.get('/api/farms', (req, res, ctx)=>{
+    const data = testContents;
+    return res(ctx.status(200), ctx.json(data));
+  })
 ]
 // page = 1 : 100 ~ 109
 // page = 2 : 110 ~ 119

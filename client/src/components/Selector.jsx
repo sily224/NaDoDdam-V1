@@ -1,9 +1,22 @@
 import styled from "styled-components";
-import React from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
+
+import {Link} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import optionSlice from '../store/OptionSlice';
+import { setLocation, setFruit } from "../store/OptionSlice";
+import store from '../store/Store';
 
 // 옵션 변경
 const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
+
+  const dispatch = useDispatch();
+  const option = useSelector(state=>state.option);
+  
+  useEffect(()=>{
+    console.log(option);
+  }, [option])
 
   const setOption = async (e) => {
     await setTemp({
@@ -50,13 +63,15 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
     searchType === "location" && (
       <Container>
         {location.map((x, i) => (
-          <Item key={i} id={x[1]} onClick={e=>setOption(e)}>{location[i][0]}</Item>
+          <Item to="/" key={i} id={x[1]} onClick={e=>{
+            dispatch(setLocation(e.target.id));
+          }}>{location[i][0]}</Item>
         ))}
       </Container>
     ) || searchType === "fruit" && (
       <Container>
         {produces.map((x, i)=>(
-          <Item key={i} id={x} onClick={e=>setOption(e)}>{produces[i]}</Item>
+          <Item to="/" key={i} id={x} onClick={e=>dispatch(setFruit(e.target.id))}>{produces[i]}</Item>
         ))}
       </Container>
     )
@@ -102,7 +117,7 @@ const Container = styled.div`
   z-index:9999;
 `;
 
-const Item = styled.div`
+const Item = styled(Link)`
   border: 1px solid black;
 
   &:hover {
