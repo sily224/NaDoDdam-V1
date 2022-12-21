@@ -2,7 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import { body } from 'express-validator';
 import { validate } from '../middleware/validate.js';
-import { isAuth } from '../middleware/auth.js';
+import { isFarmer } from '../middleware/farmerAuth.js';
 import * as farmController from '../controller/farm.js';
 
 const router = express.Router();
@@ -15,11 +15,11 @@ router.get('/', farmController.getFarms);
 router.get('/location', farmController.getByLocation);
 
 // 농장 등록하기 post
-router.post('/', isAuth, farmController.createFarm);
+router.post('/', isFarmer, farmController.createFarm);
 
 // 농장 정보 수정하기 put
-router.put('/:id', isAuth, farmController.updateFarm);
+router.put('/:id', isFarmer, farmController.updateFarm);
 
 // 농장 정보 삭제하기 delete
-router.delete('/:id', isAuth, farmController.removeFarm);
+router.delete('/:id', isFarmer, farmController.removeFarm);
 export default router;

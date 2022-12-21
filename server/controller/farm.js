@@ -49,9 +49,6 @@ export async function createFarm(req, res, next) {
 	}
 }
 
-// 농장 소유자가 update를 해야함으로 농장소유자의 테이블을 만들고 농장소유자의 id 값을 확인 후
-// 해당 농장 소유자가 맞으면 데이터 수정
-// => 미구현
 export async function updateFarm(req, res, next) {
 	const { name, address, description } = req.body;
 	try {

@@ -3,7 +3,7 @@ import 'express-async-errors';
 import { body } from 'express-validator';
 import { validate } from '../middleware/validate.js';
 import * as farmerController from '../controller/farmer.js';
-import { isAuth } from '../middleware/auth.js';
+import { isFarmer } from '../middleware/farmerAuth.js';
 
 const router = express.Router();
 
@@ -30,7 +30,7 @@ router.post('/signup', validateSignup, farmerController.signup); // 농장주 �
 router.post('/login', validateCredential, farmerController.login); //농장주 로그인
 
 // api/farmer/information
-router.get('/information', isAuth, farmerController.information); //개인 회원정보 조회
+router.get('/information', isFarmer, farmerController.information); //개인 회원정보 조회
 
 //농장주 정보 수정
 
