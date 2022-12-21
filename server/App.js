@@ -8,6 +8,7 @@ import farmRouter from './router/farm.js';
 import reserveRouter from './router/reserve.js';
 import reviewRouter from './router/review.js';
 import timeTableRouter from './router/timetable.js';
+import farmerRouter from './router/farmer.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,7 @@ app.use('/api/farms', farmRouter);
 app.use('/api', reserveRouter);
 app.use('/api', reviewRouter);
 app.use('/api/timetables', timeTableRouter);
+app.use('/api/farmers', farmerRouter);
 
 app.get('/', (req, res) => {
 	res.send('Server Response Success');
