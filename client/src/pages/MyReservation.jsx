@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import {useState} from 'react';
-// 목데이터
+import { useState } from 'react';
 import axios from 'axios';
 import { useEffect } from 'react';
+import MyReservationEdit from "../components/MyReservationEdit";
 
 const StyledNavWrapper = styled.div`
   display: flex;
@@ -34,30 +34,40 @@ const StyledImageWrap = styled.div`
   margin-right: 20px;
 `
 
+
 const MyReservation = () => {
-  const [resrvedata, setData] = useState(null)
-  
+  const [reservationData, setReservationData] = useState([]);
+  const [filterdData, setFilter] =useState([]);
+
   const getReservationData = async() => {
     await axios.get("/reservationData.json").then((res) => {
-      console.log(res.data)
-      setData(res.data)
-    })
-  }
+      setReservationData(res.data.reservation);
+      setFilter(res.data.reservation);
+    });
+  };
 
   useEffect(() => {
     getReservationData();
-  },[])
+  },[]);
 
+  const list = ["전체", "예약완료", "예약취소", "체험완료"];
+
+  const setdList = (e) => {
+    let type = e.target.name;
+    const filterdData = reservationData.filter(item => item.status === type);
+    type !== "전체" ?
+    setFilter(filterdData)
+    : setFilter(reservationData);
+  }
 
   return (
     <>
       <h1>예약조회</h1>
       <StyledNavWrapper>
       <div>
-        <button>전체</button>
-        <button>예약완료</button>
-        <button>예약취소</button>
-        <button>체험완료</button> 
+        {list.map((item) => (
+          <button key={item} name={item} onClick={setdList}>{item}</button>
+        ))}
       </div>
       <select>
         <option>지난 3개월</option>
@@ -65,27 +75,9 @@ const MyReservation = () => {
         <option>지난 1년</option>
       </select>
       </StyledNavWrapper>
-        <StyledList>
-          {resrvedata.reservation.map}
-            <StyledListInner>
-                <StyledImageWrap>농장이미지</StyledImageWrap>
-                <div>
-                    <div>
-                    <h3>농장명 / 체험명</h3> 
-                    <div>예약완료</div> 
-                    </div>
-                    <div>날짜</div>
-                    <div>4명</div>
-                    <div>결제금액 : 23,000원</div>
-                </div>
-                </StyledListInner>
-            <div>
-                <button>더보기</button>
-                <button>예약취소</button>
-            </div>
-        </StyledList>
-        </>
+      <MyReservationEdit filterdData={filterdData}/>
+    </>
     )
 }
 
-export default MyReservation;
+export {StyledList, StyledListInner, StyledImageWrap, MyReservation };

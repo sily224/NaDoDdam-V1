@@ -10,7 +10,7 @@ import { MyPage } from './pages/MyPage';
 import Farm from './pages/Farm';
 import FarmReservation from './pages/FarmReservation';
 import TimeTable from './pages/TimeTable';
-import MyReservation from './pages/MyReservation';
+import {MyReservation} from './pages/MyReservation';
 
 function App() {
 	return (

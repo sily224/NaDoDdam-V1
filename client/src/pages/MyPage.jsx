@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import MyPageProfileEdit from '../components/MyPageProfileEdit';
-import MyPageSecurityEdit from '../components/MyPageSecurityEdit';
+import {MyPageProfileEdit,MyPageSecurityEdit} from '../components/MyPageEdit';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -71,6 +70,8 @@ const MyPage = () => {
       email: res.data.email,
     })
   };
+
+  console.log(userInfo)
   
   useEffect(() => {
     getUserInfo();

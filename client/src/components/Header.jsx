@@ -181,19 +181,6 @@ const StyledLogout = styled.div`
 	}
 `;
 
-const beforeLoginList = [
-  {
-    id: 1,
-    name: "로그인",
-    path: "/login",
-  },
-  {
-    id: 2,
-    name: "회원가입",
-    path: "/register",
-  },
-];
-
 const afterLoginList = [
 	{
 		id: 3,
@@ -203,7 +190,7 @@ const afterLoginList = [
 	{
 		id: 4,
 		name: '예약조회',
-		path: '/register',
+		path: '/myreservation',
 	},
 	{
 		id: 5,
