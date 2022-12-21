@@ -1,8 +1,11 @@
-import { useState } from 'react';
-import styled, {css} from 'styled-components';
-import MyPageEdit from '../components/MyPageEdit';
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import MyPageProfileEdit from '../components/MyPageProfileEdit';
+import MyPageSecurityEdit from '../components/MyPageSecurityEdit';
+import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
-import { useEffect } from 'react';
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+
 
 const Container = styled.div`
   width: 80%;
@@ -30,13 +33,13 @@ const StyledUserInfo = styled.div`
   justify-content: space-between;
   align-items: baseline;
 `
-const StyledUserInfoWrap = styled.form`
+const StyledUserInfoWrap = styled.div`
   position: relative;
-  padding-bottom: 2%;
+  padding-bottom: 1%;
   &::after {
     content:'';
     width: 100%;
-    height: 2px;
+    height: 1px;
     background-color:lightgray;
     display: block;
     position: absolute;
@@ -53,26 +56,27 @@ const StyledButton = styled.button`
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({}); 
-  
+
   const getUserInfo = async () => {
-    const getToken = localStorage.getItem('token');
-    const res = await userApi.get("//localhost:3500/api/me", {
+    const token = getToken();
+    const res = await userApi.get("//localhost:3500/api/myInfo", {
       headers: {
-        authorization: getToken,
+        authorization: token,
       },
     });
     setUserInfo({
+      id:res.data.id,
       name: res.data.name,
-      tel: res.data.phoneNum,
-      email: res.data.email
+      phoneNum: res.data.phoneNum,
+      email: res.data.email,
     })
-  }
+  };
   
   useEffect(() => {
     getUserInfo();
-  },[])
+  },[]);
 
-  const {name, tel, email, password} = userInfo;
+  const {id, name, phoneNum, email} = userInfo;
 
   const list = [
     {
@@ -81,44 +85,37 @@ const MyPage = () => {
      name: `${name}`,
     },
     {
-      id:"tel",
+      id:"phoneNum",
       title:"전화번호",
-      name: `${tel}`,
+      name: `${phoneNum}`,
     },
     {
       id:"email",
       title:"이메일",
       name: `${email}`,
     },
-    {
-      id:"password",
-      title:"비밀번호",
-      name: `${password}`,
-    }
   ]
 
   return (
     <Container>
       <StyledTitle>내 정보 관리</StyledTitle>
+      <h4>기본정보<AiOutlineExclamationCircle/></h4>
       {list.map((item) => (
-        <MyPageEdit 
+        <MyPageProfileEdit 
           key={item.id}
           id={item.id}
           name={item.name}
           title={item.title}
+          userId={id}
         />
       ))}
-      <StyledUserInfoWrap>
-        <div><h4>회원탈퇴</h4></div>
-          <StyledUserInfo>
-            <span>탈퇴 시 복구 할 수 없습니다.</span>
-              <StyledButton>회원탈퇴</StyledButton>
-          </StyledUserInfo>
-      </StyledUserInfoWrap>
-    <button>저장하기</button>
-    <button>취소</button>
+      <h4>보안설정<AiOutlineExclamationCircle/></h4>
+      <MyPageSecurityEdit
+        userId={id}
+      />
     </Container>
   )
 }
+
 
 export { MyPage, StyledButton, StyledUserInfo, StyledUserInfoWrap };

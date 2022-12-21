@@ -14,7 +14,6 @@ const Users = (sequelize, DataTypes) => {
 			name: {
 				type: DataTypes.STRING(64),
 				allowNull: false,
-				unique: true,
 			},
 			phoneNum: {
 				type: DataTypes.STRING(64),
@@ -70,6 +69,10 @@ const Users = (sequelize, DataTypes) => {
 	Users.deleteUser = (userId) => {
 		return Users.destroy({ where: { id: userId } });
 	};
+
+	Users.updatePassword = ({userId, update}) => {
+		return Users.update(update, {where: {id: userId}});
+	}
 
 	return Users;
 };

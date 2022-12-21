@@ -31,7 +31,11 @@ const Home = React.memo(() => {
 
   const getFarmData = useCallback( async (options) => {
     await axios.get(`http://localhost:3500/api/farms`)
-    .then(res=>res.data)
+    .then(res=>{
+      const data = res.data;
+      console.log(data);
+      return data;
+    })
     .then(data=>setContents(contents.concat(data)));
 
     // .then(res=>res.data)

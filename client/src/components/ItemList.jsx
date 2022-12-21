@@ -1,5 +1,5 @@
 import React from 'react';
-// import {Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 
 const FarmList = ({contents}) => {
@@ -13,18 +13,18 @@ const FarmList = ({contents}) => {
         <ItemList className="itemList">
           {contents.map(content=>{
             return (
-              <Item key={content.postNumber}>
-                <button type="button" id={content.postNumber}>
-                </button>
-                <img src={content.imageURL} alt={content.name}/>
-                <TextContainer>
-                  <div>주소 : {content.address}</div>
-                  <div>농장 : {content.name}</div>
-                  <div>가격 : {content.price}</div>
-                  <div>기간 : {content.period}</div>
-                  <div>인원 : {content.capacity}</div>
-                </TextContainer>
-              </Item>)
+              <Link key={content.id} to={`/detail/${content.id}`}>
+                <Item>
+                  <button type="button" id={content.id}/>
+                  <img src={content.imageURL} alt={content.name}/>
+                  <TextContainer>
+                    <div>농장 : {content.name}</div>
+                    <div>주소 : {content.address}</div>
+                    <div>가격 : {content.price}</div>
+                  </TextContainer>
+                </Item>
+              </Link>
+              )
           })}
         </ItemList>
       </Container>
