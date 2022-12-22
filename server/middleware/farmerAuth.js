@@ -4,7 +4,7 @@ import db from '../models/index.js';
 
 const AUTH_ERROR = { message: 'Authentication Error' };
 
-export const isAuth = async (req, res, next) => {
+export const isFarmer = async (req, res, next) => {
 	const authHeader = req.get('Authorization');
 	if (!(authHeader && authHeader.startsWith('Bearer '))) {
 		return res.status(401).json(AUTH_ERROR);
@@ -16,7 +16,7 @@ export const isAuth = async (req, res, next) => {
 			if (error) {
 				return res.status(401).json(AUTH_ERROR);
 			}
-			const user = await db.Users.findById(decoded.id.id);
+			const user = await db.Farmers.findById(decoded.id.id);
 			if (!user) {
 				return res.status(401).json(AUTH_ERROR);
 			}

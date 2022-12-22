@@ -30,7 +30,7 @@ router.post('/login', validateCredential, authController.login); //로그인
 // me
 router.get('/myInfo', isAuth, authController.myInfo); //개인 회원정보 조회
 
-router.patch("/myPasword/:userId", isAuth, authController.passwordUpdate); //비밀번호 수정
+router.patch('/myPassword/:userId', isAuth, authController.passwordUpdate); //비밀번호 수정
 
 router.patch('/myInfo/:userId', isAuth, authController.userUpdate); //개인 정보 수정
 
