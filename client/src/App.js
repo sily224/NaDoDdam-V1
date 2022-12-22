@@ -11,6 +11,7 @@ import Farm from './pages/Farm';
 import FarmReservation from './pages/FarmReservation';
 import FarmTimeTable from './pages/FarmTimeTable';
 import MyReservation from './pages/MyReservation';
+import Favorite from './pages/Favorite';
 import FarmInfo from './pages/FarmInfo';
 
 function App() {
