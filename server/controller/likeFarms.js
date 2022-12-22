@@ -52,3 +52,19 @@ export async function likecancel(req, res, next) {
         next(err);
     }
 }
+
+export async function getLikeData(req, res, next) {
+    const user_id = req.userId;
+
+    try{
+        const found = await db.LikeFarms.findLike(user_id);
+
+        if(!found) {
+            throw new Error("해당 유저가 찜한 체험은 없습니다.")
+        }
+
+        res.status(200).json(found)
+    }catch(err) {
+
+    }
+}
