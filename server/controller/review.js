@@ -21,9 +21,10 @@ export async function review(req, res, next) {
 }
 
 export async function reviewDrop(req, res, next) {
-	const id = req.params.id;
+	const userId = req.userId;
+
 	try {
-		const review = await db.Reviews.deleteReview(id);
+		const review = await db.Reviews.deleteReview(userId);
 
 		res.status(200).json({ id: id, message: 'delete !' });
 	} catch (err) {
@@ -32,9 +33,10 @@ export async function reviewDrop(req, res, next) {
 }
 
 export async function getReveiwData(req, res, next) {
-	const id = req.params.id;
+	const userId = req.userId;
 	try {
-		const review = await db.Reviews.findByReviewId(id);
+		const review = await db.Reviews.findByUserId(userId)
+
 		res.status(200).json(review);
 	} catch (err) {
 		next(err);

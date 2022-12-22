@@ -41,6 +41,7 @@ const TimeTables = (sequelize, DataTypes) => {
 		db.TimeTables.belongsTo(db.Farms);
 	};
 
+
 	timeTable.getAll = () => {
 		return timeTable.findAll({
 			attributes: [

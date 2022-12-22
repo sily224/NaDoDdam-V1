@@ -2,10 +2,6 @@ const Reservations = (sequelize, DataTypes) => {
 	const Reservations = sequelize.define(
 		'Reservations',
 		{
-			date: {
-				type: DataTypes.DATEONLY,
-				allowNull: false,
-			},
 			total_price: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
@@ -15,19 +11,7 @@ const Reservations = (sequelize, DataTypes) => {
 				allowNull: false,
 				defaultValue: '예약 대기',
 			},
-			start_time: {
-				type: DataTypes.TIME,
-				allowNull: false,
-			},
-			end_time: {
-				type: DataTypes.TIME,
-				allowNull: false,
-			},
 			personnel: {
-				type: DataTypes.INTEGER,
-				allowNull: false,
-			},
-			farm_id: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
@@ -46,6 +30,10 @@ const Reservations = (sequelize, DataTypes) => {
 			phoneNum: {
 				type: DataTypes.STRING,
 				allowNull: false,
+			},
+			time_id: {
+				type: DataTypes.INTEGER,
+				allowNull: false
 			}
 
 		},
