@@ -55,8 +55,8 @@ const Reservations = (sequelize, DataTypes) => {
 		return Reservations.create(reserve);
 	};
 
-	Reservations.findByReserveId = (id) => {
-		return Reservations.findOne({ where: { id } });
+	Reservations.findByUserId = (id) => {
+		return Reservations.findAll({ where: { user_id: id } });
 	};
 
 	Reservations.getReserve = () => {

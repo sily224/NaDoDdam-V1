@@ -7,12 +7,10 @@ const router = express.Router();
 
 router.post('/reserve', isAuth, reserveController.reserve); //예약 등록
 
-router.get('/reservelist', reserveController.reserveList); // 모든 예약 정보 조회
+router.get('/reserve', isAuth, reserveController.getReserveData); // user 예약 조회
 
-router.get('/reserve/:id', isAuth, reserveController.getReserveData);
+// router.delete('/reserve',isAuth, reserveController.reserveDrop); //예약 삭제
 
-router.delete('/reserve/:id', reserveController.reserveDrop); //예약 삭제
-
-router.patch('/reserve/:id', isAuth, reserveController.reserveUpdate);
+// router.patch('/reserve/:id', isAuth, reserveController.reserveUpdate);
 
 export default router;

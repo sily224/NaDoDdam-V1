@@ -22,23 +22,8 @@ export async function reserve(req, res, next) {
 	}
 }
 
-export async function reserveList(req, res, next) {
-	try {
-		const reserves = await db.Reservations.getReserve();
-		if (!reserve) {
-			throw new Error(
-				'예약을 불러오는데 문제가 발생했습니다. 다시 한 번 확인해 주세요.',
-			);
-		}
-
-		res.status(200).json(reserves);
-	} catch (err) {
-		next(err);
-	}
-}
-
 export async function reserveDrop(req, res, next) {
-	const id = req.params.id;
+	const id = req.userId
 	try {
 		const reserve = await db.Reservations.deleteReserve(id);
 
@@ -49,10 +34,10 @@ export async function reserveDrop(req, res, next) {
 }
 
 export async function getReserveData(req, res, next) {
-	const id = req.params.id;
+	const id = req.userId
 
 	try {
-		const reserve = await db.Reservations.findByReserveId(id);
+		const reserve = await db.Reservations.findByUserId(id);
 		res.status(200).json(reserve);
 	} catch (err) {
 		next(err);
