@@ -18,9 +18,7 @@ const CalenderContent = styled.div`
 `;
 const StartCalenderContent = styled.div``;
 const EndCalenderContent = styled.div``;
-const DayBtn = styled.button`
-    backgroudColor: ${props =>props.isClicked ? 'black' : 'lightgray'};
-`;
+
 
 const FarmPeriod = () =>{
     const [startDate, setStartDate] = useState('');
@@ -67,12 +65,15 @@ const FarmTime = () =>{
     const [timeList, setTimeList] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
+    const [forTime, setForTime] = useState('');
     const [maxHeadCount, setMaxHeadCount] = useState(0);
     const [maxHeadCountList, setMaxHeadCountList] = useState([]);
 
+
     const renderTime = () =>{
         return (
-        <div>{
+        <div>
+            {
             timeList.map((time,idx) => { 
                 return (
                     <div key={`${time[0]}-${time[1]}-${idx}`}>
@@ -86,6 +87,15 @@ const FarmTime = () =>{
     };
 
     const onCreateTime = () =>{
+        if(!isNaN(startTime)){alert("Please enter start time");return;}
+        if(maxHeadCount<1){alert("Please enter headCount");return;}
+        if(forTime<1){alert("Please enter forTime");return;}
+        
+        for (var i=0;i<timeList.length;i++){
+            if(timeList[i][1] > startTime){
+                alert("Please enter correct forTime");return;
+            }
+        }
         setTimeList([...timeList, [startTime,endTime]]);
         setMaxHeadCountList([...maxHeadCountList,maxHeadCount]);
     };
@@ -93,23 +103,28 @@ const FarmTime = () =>{
     const onDelTime = (e) =>{
         const idx = e.target.value;
         timeList.splice(idx,1);
-        maxHeadCountList.splice(idx,1);
         setTimeList([...timeList]);
+
+        maxHeadCountList.splice(idx,1);
         setMaxHeadCountList([... maxHeadCountList]);
     };
 
     const handleStartTime = (e) =>{
         setStartTime(e.target.value);
     };
-
-    const handleEndTime = (e) =>{
-        setEndTime(e.target.value);
-    };
     const handleMaxHeadCount = (e)=>{
         setMaxHeadCount(e.target.value);
     }
+
+    useEffect(() => {
+        const [h,m] = startTime.split(":");      
+        setEndTime([parseInt(h)+parseInt(forTime),m].join(":"));
+    },[startTime]);
+
     
     useEffect (() => {
+        const formTimeInput = document.getElementById('forTime');
+        timeList.length >0 ? formTimeInput.readOnly = true : formTimeInput .readOnly = false;
         renderTime();
     },[timeList]);
 
@@ -118,18 +133,19 @@ const FarmTime = () =>{
         { timeList &&
             <>
                 <div style={{display:"flex"}}>
-                    <div >
-                        <label>시작시간</label>
-                        <input type='time' value={startTime} onChange={handleStartTime}/>
+                    <div>
+                        <label>시간</label>
+                        <input type="text" id="forTime" placeholder="체험시간을 입력하세요" value={forTime} onChange={(e)=>setForTime(e.target.value)}/>
                     </div>
                     <div>
-                        <label>끝나는시간</label>
-                        <input type='time' value={endTime} onChange={handleEndTime}/>
+                        <label>시작시각</label>
+                        <input type='time'  value={startTime} onChange={handleStartTime}/>
                     </div>
                     <div>
-                        <label>수용인원</label>
-                        <input type='text' placeholder='수용인원' value={maxHeadCount} onChange={handleMaxHeadCount} ></input>
+                        <label>인원</label>
+                        <input style={{width:"40px"}} type='text' placeholder='인원' value={maxHeadCount} onChange={handleMaxHeadCount} ></input>
                     </div>
+
                     <div>
                         <label>추가</label>
                         <button type='button' onClick={onCreateTime}>+</button>
@@ -139,30 +155,6 @@ const FarmTime = () =>{
                     {renderTime()}
                 </div>
             </>
-        }
-        </>
-    )
-};
-const WeekDay = () =>{
-    
-    const weekDays = ['mon','tue','wed','thr','fri','sar','sun'];
-    const [isClicked,setIsClicked] = useState([false,false,false,false,false,false,false]);
-
-    const handleIsClick = (idx) =>{
-        isClicked.splice(idx, 1, !isClicked[idx]);
-        setIsClicked([...isClicked]);
-    };
-
-    useEffect (() => {
-        console.log(isClicked);
-    },[isClicked]);
-
-    return (
-        <>
-        {
-            weekDays.map((weekday,idx)=> {
-                return <button value={idx} key={idx} onClick={() => handleIsClick(idx)}>{weekday}</button>
-            })
         }
         </>
     )
@@ -226,10 +218,7 @@ const TimeTable = ()=>{
                         <h3>체험 날짜</h3>
                         <FarmPeriod />  
                     </div>
-                    <div>
-                        <h3>체험 요일</h3>
-                        <WeekDay />
-                    </div>
+
                     <div>
                         <h3>체험 시간</h3>
                         <FarmTime></FarmTime>
