@@ -6,6 +6,10 @@ import React, {useState, useEffect} from 'react';
 import Login from "../pages/login";
 import Register from "../pages/register";
 
+import {Provider} from 'react-redux';
+import store from '../store/Store';
+
+
 const Container = styled.main`
   min-height: 100vh;
   padding: 3% 5% 10% 5%;
@@ -20,10 +24,12 @@ const Layout = () => {
   },[options])
   return (
     <>
-      <Header options={options} setOptions={setOptions} />
+      <Provider store={store}>
+      <Header/>
       <Container>
-        <Outlet context={[options, setOptions]}/>
+        <Outlet/>
       </Container>
+      </Provider>
       <Footer />
       <Login />
       <Register />
