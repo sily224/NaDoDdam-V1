@@ -7,8 +7,10 @@ import Modal from '../components/Modal';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-// import ReactCalender from '../components/ReactCalender';
+import ModalContainer from './../components/Modal';
+import { showModal } from '../store/ModalSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import Calender from '../components/ReactCalender';
 // import TimeBtns from '../components/TimeBtns';
 
 const Context = styled.div``;
@@ -59,32 +61,97 @@ const PayboxName = styled.div`
 	display: flex;
 	flex-direction: column;
 `;
-
+const ModalLayout = styled.div`
+	display: felx;
+`;
+const ModalTitle = styled.div`
+	width: 30%;
+	margin-right: 5%;
+`;
+const ModalContent = styled.div`
+	width: 60%;
+	height: 450px;
+	margin-top: 5%;
+	overflow-y: auto;
+	overflow-x: hidden;
+`;
 // 예약정보
 const ReservationInfo = ({ payData }) => {
-	const [isEdit, setIsEdit] = useState(false);
+	const modalOpen = useSelector((state) => state.modal.modal);
+	const dispatch = useDispatch();
 
-	const EditHandler = () => {
-		console.log('나와라');
-		setIsEdit(!isEdit);
-		<Modal>1</Modal>;
-	};
+	useEffect(() => {
+		console.log(payData.period);
+		console.log(1);
+		// console.log(payData.period.start);
+	}, [payData]);
+
+	// console.log(payData.period);
+	// console.log(payData.period[0]);
+	// console.log(payData.period[1]);
+	// const start = payData.period[0];
+	// const end = payData.period[1];
+	// console.log(start);
+	// console.log(end);
+
+	// useEffect(() => {
+	// 	// const [start, end] = payData.period;
+	// 	console.log(payData.period[0]);
+	// 	console.log(payData.period[1]);
+	// }, [startCalenderOpen]);
+	const { times } = payData;
 
 	return (
 		<>
-			<H1>예약 및 결제</H1>
-			<H2>예약 정보</H2>
-			<H3>날짜</H3>
-			<Info>{payData.date || '날짜'}</Info>
-			<H3>시간</H3>
-			<Info>{payData.time || '시간'}</Info>
-			<H3>인원</H3>
-			<Info>{payData.headCount || '인원'}</Info>
-			<Button onClick={() => EditHandler()}>예약정보수정</Button>
-			{/* <ReactCalender></ReactCalender> */}
-			{/* <TimeBtns></TimeBtns> */}
-			{/* {isEdit ? <ReactCalender></ReactCalender> : null} */}
-			<Line />
+			{payData && (
+				<>
+					<H1>예약 및 결제</H1>
+					<H2>예약 정보</H2>
+					<H3>날짜</H3>
+					<Info>{payData.date}</Info>
+					<H3>시간</H3>
+					<Info>{payData.time}</Info>
+					<H3>인원</H3>
+					<Info>{payData.headCount}</Info>
+					<Button onClick={() => dispatch(showModal())}>예약정보수정</Button>
+
+					{modalOpen && (
+						<ModalContainer>
+							<ModalLayout>
+								<ModalTitle>
+									<H3>예약 수정</H3>
+								</ModalTitle>
+								<ModalContent>
+									<Calender
+										period={{
+											start: payData.period.start,
+											end: payData.period.end,
+										}}
+										update
+									/>
+									<Select>
+										{[...times].map((n) => (
+											<option key={n} value={n}>
+												{n}
+											</option>
+										))}
+									</Select>
+									<select>
+										{[...Array(10).keys()].map((n) => (
+											<option key={`HeadCount-${n + 1}`} value={n + 1}>
+												{n + 1}
+											</option>
+										))}
+									</select>
+								</ModalContent>
+							</ModalLayout>
+						</ModalContainer>
+					)}
+					{/* <TimeBtns></TimeBtns> */}
+					{/* {isEdit ? <ReactCalender></ReactCalender> : null} */}
+					<Line />
+				</>
+			)}
 		</>
 	);
 };
@@ -92,12 +159,6 @@ const ReservationInfo = ({ payData }) => {
 //SideBar
 const SideBar = ({ payData }) => {
 	const { farm, programName, price, headCount, totalPrice } = payData;
-	// const [totalPrice, setTotalPrice] = useState('');
-
-	// useEffect(() => {
-	// 	const { count, programPrice } = data;
-	// 	setTotalPrice(count * programPrice);
-	// }, [data]);
 
 	return (
 		<>
@@ -178,6 +239,7 @@ const SubscriberInfo = ({ data }) => {
 					수정
 				</Button>
 			)}
+			<H3>이메일</H3>
 			{emailOpen ? (
 				<input
 					type="text"
@@ -206,7 +268,8 @@ const PaymentInfo = () => {
 		<>
 			<H3>결제 수단</H3>
 			<Select name="cardOption">
-				<Option value="card">신용카드 또는 체크카드</Option>
+				<Option value="card">카드결제</Option>
+				<Option value="transfer">계좌이체</Option>
 			</Select>
 			<Accordion>
 				<Accordion.Item eventKey="0">
@@ -252,9 +315,14 @@ const Payment = () => {
 	const navigate = useNavigate();
 	const [payData, setPayData] = useState({});
 	const [data, setData] = useState({});
+
 	useEffect(() => {
 		console.log(location.state);
 		setPayData(location.state);
+	}, []);
+
+	useEffect(() => {
+		GetData();
 	}, []);
 
 	const GetData = async () => {
@@ -267,9 +335,6 @@ const Payment = () => {
 			console.log(e);
 		}
 	};
-	useEffect(() => {
-		GetData();
-	}, []);
 
 	const goDetail = () => {
 		navigate('/detail');
