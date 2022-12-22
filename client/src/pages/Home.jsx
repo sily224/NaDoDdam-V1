@@ -1,4 +1,4 @@
-import FarmList from '../components/ItemList';
+import {FarmList} from '../components/ItemList';
 import React, {useState, useEffect, useCallback} from 'react';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -12,22 +12,11 @@ const Home = React.memo(() => {
   const [contents, setContents] = useState([]);
   const [page, setPage] = useState(0);
 
-  useEffect(()=>{
-    console.log('Home에서의 옵션', option);  
-  },[option])
-
   // 최초 렌더링 시 전체 데이터 조회
   useEffect(()=>{
     // setPage(0);
     getFarmData(option);
-  },[])
-
-  // option이 바뀌면 page 0부터 시작하여 데이터 다시 불러오기
-  useEffect(()=>{
-    // setPage(0);
-    getFarmData(option);
-
-  }, [option]);
+  },[option])
 
   const getFarmData = useCallback( async ({location, fruit, date}) => {
 
