@@ -86,7 +86,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
 
 const location = [
   ["인천", '인천', 'Incheon'],
-  ["서울", '서울시', 'Seoul'],
+  ["서울", '서울', 'Seoul'],
   ["경기", '경기도', 'Gyeonggi'],
   ["강원", '강원도', 'Gangwon'],
   ["충남", '충청남도', 'Chungnam'],

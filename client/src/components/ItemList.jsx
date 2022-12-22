@@ -1,9 +1,22 @@
+import axios from 'axios';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 
-const handleButton = () => {
-  
+const handleButton = (e) => {
+  const farmId = Number(e.target.id);
+  console.log(farmId);
+  e.target.style.backgroundColor = 'red';
+  const token = localStorage.getItem('token');
+  const header = {
+    params: {farmId : farmId},
+    headers: {
+      authorization: `Bearer ${token}`,
+    }
+  }
+
+  axios.post(`http://localhost:3500/api/like/`, header);
+
 }
 
 const FarmList = ({contents}) => {
