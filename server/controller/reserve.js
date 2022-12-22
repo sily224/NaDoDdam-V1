@@ -23,8 +23,19 @@ export async function reserve(req, res, next) {
 }
 
 export async function reserveDrop(req, res, next) {
-	const id = req.userId
+	const userId = req.userId
+	const id  = req.params.id;
 	try {
+
+		const found = await db.Reservations.findByUserId(userId);
+		const reservation = await db. Reservations.findByReserveId(id, userId);
+		if(!found) {
+			throw new Error("해당 유저의 예약 내역은 없습니다.")
+		}
+		if(!reservation) {
+			throw new Error("유저의 해당 예약이 없습니다.")
+		}
+
 		const reserve = await db.Reservations.deleteReserve(id);
 
 		res.status(200).json({ id: id, message: 'delete !' });
@@ -42,6 +53,28 @@ export async function getReserveData(req, res, next) {
 	} catch (err) {
 		next(err);
 	}
+}
+
+export async function getFarmerData(req, res, next) {
+	const id = req.farmerId;
+	const timeId = req.timeId;
+	
+	try {
+	
+		const farm = await db.Farmers.findById(id); //해당 농장주의 농장 찾음
+		const time = await db.TimeTables.getById(timeId); // body로 들어온 timeId의 농장번호 
+
+		if(time.dataValues.farmId !== farm.dataValues.farmId) {
+			throw new Error("해당 농장주가 가진 농장과 조회한 농장의 정보가 다릅니다.")
+		}
+
+		const result = await db.Reservations.findByTimeId (timeId);
+		res.status(200).json(result);
+
+	} catch(err) {
+		next(err)
+	}
+
 }
 
 async function setReserve(reserveInfo, toUpdate) {

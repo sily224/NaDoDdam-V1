@@ -61,6 +61,10 @@ const Farmers = (sequelize, DataTypes) => {
 		return farmer.create(user).then((data) => data.dataValues.id);
 	};
 
+	farmer.findByFarmId = (id) => {
+		return farmer.findOne({where: {farmId: id}})
+	}
+
 	// farmer.updateFarmer = ({ farmerId, update }) => {
 	// 	return farmer.update(update, { where: { id: farmerId } });
 	// };

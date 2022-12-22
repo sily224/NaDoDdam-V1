@@ -33,9 +33,8 @@ const Reservations = (sequelize, DataTypes) => {
 			},
 			time_id: {
 				type: DataTypes.INTEGER,
-				allowNull: false
-			}
-
+				allowNull: false,
+			},
 		},
 		{
 			charset: 'utf8',
@@ -59,8 +58,12 @@ const Reservations = (sequelize, DataTypes) => {
 		return Reservations.findAll({ where: { user_id: id } });
 	};
 
-	Reservations.getReserve = () => {
-		return Reservations.findAll();
+	Reservations.findByReserveId = (id, userId) => {
+		return Reservations.findOne({ where: { id: id, user_id: userId } });
+	};
+
+	Reservations.findByTimeId = (id) => {
+		return Reservations.findAll({ where: { time_id: id } });
 	};
 
 	Reservations.deleteReserve = (id) => {
