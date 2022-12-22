@@ -14,8 +14,9 @@ export async function getFarms(req, res, next) {
 }
 
 export async function getByLocation(req, res, next) {
-	const { address } = req.query;
-	const data = await db.Farms.getByAddress(address);
+	const { location } = req.query;
+	console.log(location);
+	const data = await db.Farms.getByAddress(location);
 	if (!data) {
 		return res.status(404).json({ message: '해당지역에는 농장이 없습니다.' });
 	}
@@ -57,6 +58,7 @@ export async function updateFarm(req, res, next) {
 		if (!id) {
 			throw new Error('해당 농장을 찾지 못 했습니다.');
 		}
+
 		const foundFarmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
 		if (parseInt(id) !== foundFarmId) {
 			throw new Error('농장수정은 해당 농장주만 수정할 수 있습니다.');

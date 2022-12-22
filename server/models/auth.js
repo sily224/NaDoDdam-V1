@@ -14,7 +14,6 @@ const Users = (sequelize, DataTypes) => {
 			name: {
 				type: DataTypes.STRING(64),
 				allowNull: false,
-				unique: true,
 			},
 			phoneNum: {
 				type: DataTypes.STRING(64),

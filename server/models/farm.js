@@ -45,11 +45,11 @@ const Farms = (sequelize, DataTypes) => {
 		return farm.findAll({ where: { type } });
 	};
 
-	farm.getByAddress = (address) => {
+	farm.getByAddress = (location) => {
 		return farm.findAll({
 			where: {
 				address: {
-					[Op.like]: '%' + address + '%',
+					[Op.like]: '%' + location + '%',
 				},
 			},
 		});
