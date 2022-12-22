@@ -1,0 +1,15 @@
+import express from 'express';
+import 'express-async-errors';
+import * as likeFarmsController from '../controller/likeFarms.js';
+import { isAuth } from '../middleware/auth.js';
+
+const router = express.Router();
+
+router.post('/like/:farmId', isAuth, likeFarmsController.like); //찜 등록
+
+// router.get('/like/:id', isAuth, likeFarmsController.getReveiwData); // 본인 찜 조회
+
+// router.delete('/like/:id', isAuth, likeFarmsController.reviewDrop); //찜 삭제
+
+
+export default router;

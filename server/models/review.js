@@ -6,11 +6,7 @@ const Reviews = (sequelize, DataTypes) => {
 				type: DataTypes.TEXT('long'),
 				allowNull: false,
 			},
-			type: {
-				type: DataTypes.STRING(64),
-				allowNull: false,
-			},
-			type_id: {
+			farm_id: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
@@ -39,6 +35,10 @@ const Reviews = (sequelize, DataTypes) => {
 	};
 
 	Reviews.findByReviewId = (id) => {
+		return Reviews.findOne({ where: { id } });
+	};
+
+	Reviews.findByFarmId = (id) => {
 		return Reviews.findOne({ where: { id } });
 	};
 

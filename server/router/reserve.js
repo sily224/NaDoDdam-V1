@@ -13,6 +13,6 @@ router.get('/reserve/:id', isAuth, reserveController.getReserveData);
 
 router.delete('/reserve/:id', reserveController.reserveDrop); //예약 삭제
 
-router.put('/reserve/:id', isAuth, reserveController.reserveUpdate);
+router.patch('/reserve/:id', isAuth, reserveController.reserveUpdate);
 
 export default router;

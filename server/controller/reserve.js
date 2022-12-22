@@ -2,7 +2,7 @@ import 'express-async-errors';
 import db from '../models/index.js';
 
 export async function reserve(req, res, next) {
-	const { date, total_price, time, farm_id, personnel } = req.body;
+	const { date, total_price, start_time, end_time, personnel, payment, name, phoneNum, email } = req.body;
 	const user_id = req.userId;
 
 	try {
@@ -11,7 +11,6 @@ export async function reserve(req, res, next) {
 			total_price,
 			time,
 			user_id,
-			farm_id,
 			personnel,
 		});
 		res.status(201).json(new_reserve);
