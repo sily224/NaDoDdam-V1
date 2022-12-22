@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import db from './index.js';
 const Op = Sequelize.Op;
 
 const Farms = (sequelize, DataTypes) => {
@@ -26,6 +27,10 @@ const Farms = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
+			url: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
 		},
 		{
 			charset: 'utf8',
@@ -38,7 +43,7 @@ const Farms = (sequelize, DataTypes) => {
 	};
 
 	farm.getAll = () => {
-		return farm.findAll(); // 내림차순으로 정렬해야하나 오름차순으로 정렬해야하나
+		return farm.findAll({}); // 내림차순으로 정렬해야하나 오름차순으로 정렬해야하나
 	};
 
 	farm.getByType = (type) => {

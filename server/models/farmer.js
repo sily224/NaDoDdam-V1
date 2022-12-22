@@ -57,6 +57,12 @@ const Farmers = (sequelize, DataTypes) => {
 		});
 	};
 
+	farmer.getFarmerInfoFromFarmId = (id) => {
+		return farmer
+			.findOne({ where: { farmId: id } })
+			.then((data) => data.dataValues);
+	};
+
 	farmer.createFarmer = (user) => {
 		return farmer.create(user).then((data) => data.dataValues.id);
 	};

@@ -43,7 +43,10 @@ export async function login(req, res, next) {
 		if (!isValidPassword) {
 			throw new Error('유효하지 않은 농장주 또는 비밀번호 입니다.');
 		}
-		const token = createJwtToken({ id: farmer.id, role: farmer.role });
+		const token = createJwtToken({
+			id: farmer.dataValues.id,
+			role: farmer.role,
+		});
 		res.status(200).json({ token, email, role });
 	} catch (err) {
 		next(err);
