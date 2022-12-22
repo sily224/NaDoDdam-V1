@@ -11,6 +11,7 @@ import Farm from './pages/Farm';
 import FarmReservation from './pages/FarmReservation';
 import TimeTable from './pages/TimeTable';
 import MyReservation from './pages/MyReservation';
+import Favorite from './pages/Favorite';
 
 function App() {
 	return (
@@ -27,6 +28,7 @@ function App() {
 					<Route path="/farm/reservation" element={<FarmReservation />} />
 					<Route path="/farm/timetable" element={<TimeTable />} />
 					<Route path="/myreservation" element={<MyReservation />} />
+					<Route path="/favorite" element={<Favorite/>}/>
 					{/* 해당부분에 라우터 넣으면 됩니다. */}
 				</Route>
 			</Routes>

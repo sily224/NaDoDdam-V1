@@ -28,6 +28,19 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
     setOptions(temp);
   };
 
+  const getFruit = async () => {
+    await axios.get('http://localhost:3500/api/farms')
+    .then(res=>res.data)
+    .then(data=>{
+      const fruits = [];
+      data.map((x,i)=>{
+        if(!fruits.includes(x.type)) fruits.push(x.type);
+      });
+      console.log(fruits);
+      return fruits;
+    })
+  }
+
   const getDataByLocation = async (e) => {
     await axios.get('mock_data/farms2.json').then(res=>{
       return res.data;

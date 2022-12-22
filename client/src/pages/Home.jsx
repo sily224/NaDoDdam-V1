@@ -10,7 +10,7 @@ const Home = React.memo(() => {
   const option = useSelector(state=>state.option);
 
   const [contents, setContents] = useState([]);
-  // const [page, setPage] = useState(0);
+  const [page, setPage] = useState(0);
 
   useEffect(()=>{
     console.log('Home에서의 옵션', option);  
@@ -75,7 +75,7 @@ const Home = React.memo(() => {
 //   });
 
   return (
-    <FarmList contents={contents}/>
+    // <FarmList contents={contents}/>
       // <InfiniteScroll 
       // dataLength={contents.length}
       // next={()=>{
@@ -86,6 +86,7 @@ const Home = React.memo(() => {
       // scrollThreshold='1000px'>
       //   <FarmList contents={contents}/>
       // </InfiniteScroll>
+      <FarmList contents={contents}/>
   )
 });
 

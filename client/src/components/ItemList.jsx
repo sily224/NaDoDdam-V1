@@ -13,17 +13,17 @@ const FarmList = ({contents}) => {
         <ItemList className="itemList">
           {contents.map(content=>{
             return (
-              <Link key={content.id} to={`/detail/${content.id}`}>
-                <Item>
+                <Item key={content.id}>
                   <button type="button" id={content.id}/>
-                  <img src={content.imageURL} alt={content.name}/>
-                  <TextContainer>
-                    <div>농장 : {content.name}</div>
-                    <div>주소 : {content.address}</div>
-                    <div>가격 : {content.price}</div>
-                  </TextContainer>
+                  <Link to={`/detail/${content.id}`}>
+                    <img src={content.imageURL} alt={content.name}/>
+                    <TextContainer>
+                      <div>농장 : {content.name}</div>
+                      <div>주소 : {content.address}</div>
+                      <div>가격 : {content.price}</div>
+                    </TextContainer>
+                  </Link>
                 </Item>
-              </Link>
               )
           })}
         </ItemList>
@@ -67,6 +67,7 @@ const Item = styled.div`
     position : absolute;
     top : 5%;
     right : 5%;
+    z-index:1;
   }
 
   button:hover {

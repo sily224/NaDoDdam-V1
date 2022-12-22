@@ -216,7 +216,7 @@ const afterLoginList = [
 	{
 		id: 6,
 		name: '찜목록',
-		path: '/register',
+		path: '/favorite',
 	},
 ];
 
