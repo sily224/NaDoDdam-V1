@@ -2,6 +2,10 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 
+const handleButton = () => {
+  
+}
+
 const FarmList = ({contents}) => {
   if (contents.length === 0){
     return (
@@ -14,7 +18,7 @@ const FarmList = ({contents}) => {
           {contents.map(content=>{
             return (
                 <Item key={content.id}>
-                  <button type="button" id={content.id}/>
+                  <button type="button" id={content.id} onClick={handleButton}/>
                   <Link to={`/detail/${content.id}`}>
                     <img src={content.imageURL} alt={content.name}/>
                     <TextContainer>

@@ -43,6 +43,17 @@ const contents = [
   }
 ];
 
+const locationSearch = {
+  '서울시' : {
+    address: "서울시 용이동2",
+    description: "수박 농장입니다. 수박을 체험하세요",
+    id: 1,
+    name: "박수 농장",
+    owner: "김박수",
+    type: "watermelon"
+  }
+}
+
 export const handlers = [
   // 전체 조회
   // rest.get('/api/farms', (req, res, ctx) => {
@@ -50,23 +61,23 @@ export const handlers = [
   // }),
 
   // 지역 검색
-  rest.get('/api/farm/location?/:page', (req, res, ctx)=> {
-    const page = Number(req.url.searchParams.get('page'));
-    const location = req.url.searchParams.get('search').split('/')[0];
+  rest.get('/api/farms/location?', (req, res, ctx)=> {
+    const location = req.url.searchParams.get('location').split('/')[0];
 
-    console.log('페이지 = ', page);
     console.log('location', location);
 
-    if (page === 0){
-      console.log('page 0 일 때 실행')
-      const data = testContents.filter(x=>x.location === location).slice(0, 100);
-      console.log('필터', data);
-      return res(ctx.status(200), ctx.json(data)); 
-    }else{
-      console.log('page 0 아닐 때 실행', page);
-      const data = testContents.filter(x=>x.location === location)(100 + 10*(page-1), 100 + 10*(page));
-      return res(ctx.status(200), ctx.json(data));
-    }
+    return res(ctx.status(200), ctx.json(locationSearch[location]))
+
+    // if (page === 0){
+    //   console.log('page 0 일 때 실행')
+    //   const data = testContents.filter(x=>x.location === location).slice(0, 100);
+    //   console.log('필터', data);
+    //   return res(ctx.status(200), ctx.json(data)); 
+    // }else{
+    //   console.log('page 0 아닐 때 실행', page);
+    //   const data = testContents.filter(x=>x.location === location)(100 + 10*(page-1), 100 + 10*(page));
+    //   return res(ctx.status(200), ctx.json(data));
+    // }
   }),
 
   // 쿼리 스트링 테스트

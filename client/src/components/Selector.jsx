@@ -46,13 +46,6 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
       return res.data;
     }).then(res=>{
       const data = res.filter(x=>x.address.split(' ')[0] === e.target.id);
-
-      // setGlobalState(
-      //   {
-      //     contents : data,
-      //     currentIndex: data.length
-      //   }
-      // )
     })
   }
 
@@ -92,28 +85,29 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
 });
 
 const location = [
-  ["인천", 'Incheon'],
-  ["서울", 'Seoul'],
-  ["경기", 'Gyeonggi'],
-  ["강원", 'Gangwon'],
-  ["충남", 'Chungnam'],
-  ["충북", 'Chungbuk'],
-  ["대전", 'Daejeon'],
-  ["경북", 'Gyeongbuk'],
-  ["경남", 'Gyeongnam'],
-  ["대구", 'Daegu'],
-  ["울산", 'Ulsan'],
-  ["부산", 'Busan'],
-  ["전북", 'Jeonbuk'],
-  ["광주", 'Gwangju'],
-  ["전남", 'Jeonnam'],
-  ["제주", 'Jeju'],
+  ["인천", '인천', 'Incheon'],
+  ["서울", '서울시', 'Seoul'],
+  ["경기", '경기도', 'Gyeonggi'],
+  ["강원", '강원도', 'Gangwon'],
+  ["충남", '충청남도', 'Chungnam'],
+  ["충북", '충청북도', 'Chungbuk'],
+  ["대전", '대전', 'Daejeon'],
+  ["경북", '경상북도', 'Gyeongbuk'],
+  ["경남", '경상남도', 'Gyeongnam'],
+  ["대구", '대구', 'Daegu'],
+  ["울산", '울산', 'Ulsan'],
+  ["부산", '부산', 'Busan'],
+  ["전북", '전라북도', 'Jeonbuk'],
+  ["광주", '광주', 'Gwangju'],
+  ["전남", '전라남도', 'Jeonnam'],
+  ["제주", '제주', 'Jeju'],
 ];
 
 const produces = [
   '감자',
   '딸기',
   '복숭아',
+  'watermelon',
 ];
 
 //

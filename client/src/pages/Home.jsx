@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Home = React.memo(() => {
 
-  const option = useSelector(state=>state.option);
+  const option = useSelector(state=>state.option.search);
 
   const [contents, setContents] = useState([]);
   const [page, setPage] = useState(0);
@@ -25,23 +25,33 @@ const Home = React.memo(() => {
   // option이 바뀌면 page 0부터 시작하여 데이터 다시 불러오기
   useEffect(()=>{
     // setPage(0);
-    // getData(option);
+    getFarmData(option);
 
   }, [option]);
 
-  const getFarmData = useCallback( async (options) => {
-    await axios.get(`http://localhost:3500/api/farms`)
+  const getFarmData = useCallback( async ({location, fruit, date}) => {
+
+    const header = {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+    }
+
+    let url = "http://localhost:3500/api/farms"; // default 전체 조회
+    if(location) {
+      url = `http://localhost:3500/api/farms/location?address=${location}`; // 지역 조회
+    }else if(fruit){
+      url = `http://localhost:3500/api/farms?type=${fruit}`; // 과일 조회
+    }
+    
+    console.log(url);
+    await axios.get(url)
     .then(res=>{
       const data = res.data;
       console.log(data);
       return data;
     })
-    .then(data=>setContents(contents.concat(data)));
-
-    // .then(res=>res.data)
-    // .then(async data =>{
-    //   setContents(contents.concat(data));
-    // })
+    .then(data=>setContents(data));
   })
 
 
