@@ -3,6 +3,13 @@ import ModalContainer from '../components/Modal';
 import { showModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyledList, StyledListInner,StyledImageWrap } from "../pages/MyReservation";
+import styled, {css} from 'styled-components';
+
+const StyledTitle = styled.h3`
+    ${props => props.state && css`
+        text-decoration: underline;
+    `} 
+`
 
 const MyReservationEdit = ({filterdData}) => {
   const [dataIndex, setReservationDataIndex] = useState();
@@ -80,7 +87,7 @@ const MyReservationEdit = ({filterdData}) => {
             <StyledImageWrap>농장이미지</StyledImageWrap>
             <div>
                 <div>
-                <h3>농장명 / 체험명</h3> 
+                <h3 style={{textDecoration : item.status === '예약취소' ? 'line-through' : 'none'}}>농장명 / 체험명</h3> 
                 <div>{item.status}</div> 
                 </div>
                 <div>{item.data}</div>
@@ -93,7 +100,7 @@ const MyReservationEdit = ({filterdData}) => {
               setReservationDataIndex(e.target.name)
               dispatch(showModal())
             }}>더보기</button>
-            <button>예약취소</button>
+            {item.status === '예약완료' ? <button>예약취소</button> : item.status === '체험완료' ? <button>후기작성</button> : null}
         </div>
         </StyledList>)})}
         <DetailReservation/>
