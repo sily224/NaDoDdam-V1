@@ -34,12 +34,12 @@ const Users = (sequelize, DataTypes) => {
 		},
 	);
 
-	// Users.associate = (db) => {
-	// 	db.Users.hasMany(db.Reservations, {
-	// 		foreignKey: 'user_id',
-	// 		sourceKey: 'id',
-	// 	});
-	// };
+	Users.associate = (db) => {
+		db.Users.hasMany(db.Reservations, {
+			foreignKey: 'user_id',
+			sourceKey: 'id',
+		});
+	};
 
 	Users.findByUserId = (id) => {
 		return Users.findOne({ where: { id } });
