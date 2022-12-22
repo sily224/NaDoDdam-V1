@@ -19,7 +19,6 @@ const ReactCalender = (props) => {
 	if (props.create) {
 		start = props.period.start;
 		end = null;
-		setDate();
 	} else if (props.update) {
 		start = new Date(props.period.start);
 		end = new Date(props.period.end);
