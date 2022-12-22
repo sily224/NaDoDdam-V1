@@ -2,15 +2,18 @@ import 'express-async-errors';
 import db from '../models/index.js';
 
 export async function reserve(req, res, next) {
-	const { date, total_price, start_time, end_time, personnel, payment, name, phoneNum, email } = req.body;
+	const { time_id, total_price, personnel, payment, name, phoneNum, email } = req.body;
 	const user_id = req.userId;
 
 	try {
 		const new_reserve = await db.Reservations.createReserve({
-			date,
 			total_price,
-			time,
 			user_id,
+			time_id,
+			payment,
+			name,
+			phoneNum,
+			email,
 			personnel,
 		});
 		res.status(201).json(new_reserve);

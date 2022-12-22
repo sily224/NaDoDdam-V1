@@ -7,16 +7,17 @@ const handleButton = (e) => {
   const farmId = Number(e.target.id);
   console.log(farmId);
   e.target.style.backgroundColor = 'red';
+
   const token = localStorage.getItem('token');
   const header = {
-    params: {farmId : farmId},
     headers: {
-      authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     }
   }
 
-  axios.post(`http://localhost:3500/api/like/`, header);
-
+  axios.post(`http://localhost:3500/api/like/${farmId}`, header);
+  
 }
 
 const FarmList = ({contents}) => {

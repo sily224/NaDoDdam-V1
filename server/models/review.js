@@ -38,12 +38,15 @@ const Reviews = (sequelize, DataTypes) => {
 		return Reviews.findOne({ where: { id } });
 	};
 
+	Reviews.findByUserId = (id) => {
+		return Reviews.findAll({ where: { user_id: id } });
+	};
 	Reviews.findByFarmId = (id) => {
 		return Reviews.findOne({ where: { id } });
 	};
 
 	Reviews.deleteReview = (id) => {
-		return Reviews.destroy({ where: { id } });
+		return Reviews.destroy({ where: {user_id: id } });
 	};
 
 	Reviews.updateReview = ({ id, update }) => {

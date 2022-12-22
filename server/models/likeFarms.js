@@ -25,6 +25,14 @@ const LikeFarms = (sequelize,DataTypes ) => {
         return LikeFarms.create(like);
     }
 
+    LikeFarms.findLike = (id) => {
+        return LikeFarms.findAll({where: {user_id: id}})
+    }
+
+    LikeFarms.deleteLike = (userId, farmId) => {
+        return LikeFarms.destroy({where: {user_id: userId ,farm_id: farmId}})
+    }
+
 
 
     return LikeFarms;
