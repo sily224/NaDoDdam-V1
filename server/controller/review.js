@@ -2,14 +2,14 @@ import 'express-async-errors';
 import db from '../models/index.js';
 
 export async function review(req, res, next) {
-	const { content, type, type_id, rating } = req.body;
+	const { content, rating } = req.body;
 	const user_id = req.userId;
+	const farm_id = req.params.farmId;
 
 	try {
 		const new_review = await db.Reviews.createReview({
 			content,
-			type,
-			type_id,
+			farm_id,
 			user_id,
 			rating,
 		});
@@ -76,15 +76,14 @@ async function setReview(reviewInfo, toUpdate) {
 
 export async function reserveUpdate(req, res, next) {
 	const id = req.params.id;
-	const {content, type, type_id, rating} = req.body;
+	const {content, farm_id, rating} = req.body;
 
 	try {
 		const reviewInfo = {id};
 
 		const toUpdate = {
 			...(content && {content}),
-			...(type && {type}),
-			...(type_id && {type_id}),
+			...(farm_id && {farm_id}),
 			...(rating && {rating}),
 		};
 

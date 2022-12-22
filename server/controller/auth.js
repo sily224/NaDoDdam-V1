@@ -42,7 +42,7 @@ export async function login(req, res, next) {
 		if (!isValidPassword) {
 			throw new Error('유효하지 않은 사용자 또는 비밀번호 입니다.');
 		}
-		const token = createJwtToken(user.id);
+		const token = createJwtToken({ id: user.id, role: user.role });
 		res.status(200).json({ token, email });
 	} catch (err) {
 		next(err);
@@ -70,7 +70,7 @@ const createJwtToken = (id) => {
 };
 
 async function setUser(userInfoRequired, toUpdate) {
-	const { userId, currentPassword } = userInfoRequired;
+	const { userId } = userInfoRequired;
 
 	let user = await db.Users.findById(userId);
 
