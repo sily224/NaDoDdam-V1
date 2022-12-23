@@ -13,9 +13,21 @@ export async function getFarms(req, res, next) {
 	res.status(200).json(data);
 }
 
+export async function getFarm(req, res, next) {
+	const farmerId = req.farmerId;
+	try {
+		const farmerInfo = await db.Farmers.getFarmInfo(farmerId);
+		const farmId = farmerInfo.farmId;
+		const farmInfo = await db.Farms.findById(farmId);
+		res.status(200).json({ farmInfo, farmerInfo });
+	} catch (err) {
+		next(err);
+	}
+}
+
 export async function getByLocation(req, res, next) {
-	const { address } = req.query;
-	const data = await db.Farms.getByAddress(address);
+	const { location } = req.query;
+	const data = await db.Farms.getByAddress(location);
 	if (!data) {
 		return res.status(404).json({ message: '해당지역에는 농장이 없습니다.' });
 	}
@@ -25,26 +37,28 @@ export async function getByLocation(req, res, next) {
 export async function getByFarm(req, res, next) {
 	const id = req.params.farmId;
 	try {
-
 		const data = await db.Farms.findById(id);
 		const review = await db.Reviews.findByFarmId(id);
 
-		const datas = {data, review};
+		const datas = { data, review };
 
 		res.status(200).json(datas);
-
-	} catch(err) {
+	} catch (err) {
 		next(err);
 	}
 }
 
 export async function createFarm(req, res, next) {
-	const { type, name, address, description, owner } = req.body;
+	const { type, name, address, description, owner, url } = req.body;
 	try {
 		const farmerId = req.farmerId;
 		const foundFarmer = db.Farmers.findById(farmerId);
 		if (!foundFarmer) {
 			throw new Error('농장등록은 농장주만 등록할 수 있습니다.');
+		}
+		const checkFarmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
+		if (checkFarmId) {
+			throw new Error('농장주는 하나의 농장만 등록할 수 있습니다');
 		}
 		const farm = await db.Farms.createFarm({
 			type,
@@ -52,12 +66,8 @@ export async function createFarm(req, res, next) {
 			address,
 			description,
 			owner,
+			url,
 		});
-		//console.log(farm.dataValues.id);
-		const checkFarmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
-		if (checkFarmId) {
-			throw new Error('농장주는 하나의 농장만 등록할 수 있습니다');
-		}
 		await db.Farmers.registeFarmId(farm.dataValues.id, farmerId);
 		res.status(201).json(farm);
 	} catch (err) {
@@ -66,21 +76,25 @@ export async function createFarm(req, res, next) {
 }
 
 export async function updateFarm(req, res, next) {
-	const { name, address, description } = req.body;
+	const { type, name, address, description, owner, url } = req.body;
 	try {
 		const { id } = req.params;
 		const farmerId = req.farmerId;
 		if (!id) {
 			throw new Error('해당 농장을 찾지 못 했습니다.');
 		}
+
 		const foundFarmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
 		if (parseInt(id) !== foundFarmId) {
 			throw new Error('농장수정은 해당 농장주만 수정할 수 있습니다.');
 		}
 		const updatedFarm = await db.Farms.updateFarm(id, {
+			type,
 			name,
 			address,
 			description,
+			owner,
+			url,
 		});
 		res.status(200).json(updatedFarm);
 	} catch (err) {

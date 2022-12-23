@@ -54,12 +54,12 @@ const TimButtonContainer = styled(DisplayFlex)`
 
 
 
-const DetailHeader = ({ title, location }) => {
+const DetailHeader = ({ name, address }) => {
     return (
         <Header>
-            <Title>{title}</Title>
-            <p>{location}</p>
-            <img src='' alt={`${title}이미지`} />
+            <Title>{name}</Title>
+            <p>{address}</p>
+            <img src='' alt={`${name}이미지`} />
         </Header>
     );
 };
@@ -73,15 +73,15 @@ const DetailDescription = ({ description }) => {
 };
 
 
-const DetailCompany = ({ company }) => {
+const DetailCompany = ({company}) => {
     return (
         <DetailCompanyContainer>
-            <p>업체정보</p>
-            {
-                Object.entries(company).map((values, idx) => {
-                    return <p key={`idx${idx}-${values[0]}`}>{`${values[0]}`} : {`${values[1]}`}</p>
-                })
-            }
+            <p>농장정보</p>
+            <p>농장명 : {company.name}</p>
+            <p>농장상품 : {company.type}</p>
+            <p>농장주 : {company.owner}</p>
+            <p>E-mail :</p>
+            <p>전화번호:</p>
         </DetailCompanyContainer>
     );
 };
@@ -89,30 +89,31 @@ const DetailCompany = ({ company }) => {
 
 
 const Detail = () => {
-    const { detailData: data } = useContext(DetailContext);
-
+    const { detailData : data } = useContext(DetailContext);
+    
     return (
         <>
             {
                 data &&
-                <DetailContainer key={`${data.title}-${new Date()}`}>
-                    <DetailHeader title={data.title} location={data.location} />
-
+                <DetailContainer key={`${data.name}-${new Date()}`}>
+                    <DetailHeader name={data.name} address={data.address} />
+                    
                     <DetailContent>
                         <DetailInform>
-                            <DetailGrade grade={data.grade} />
+                            {/* <DetailGrade grade={data.grade} /> */}
                             <DetailDescription description={data.description} />
-                            <DetailPeriod>
+                            {/* <DetailPeriod>
                                 <Calender />
                                 <TimButtonContainer>
                                     <TimeBtns />
                                 </TimButtonContainer>
-                            </DetailPeriod>
+                            </DetailPeriod> */}
                             <Review />
                             <Location />
-                            <DetailCompany company={data.company} />
+                            <DetailCompany company={data}/>
                         </DetailInform>
-                        <FloatingFormDiv><FloatingForm /></FloatingFormDiv>
+                        {/* <FloatingFormDiv><FloatingForm /></FloatingFormDiv> */}
+                    
                     </DetailContent>
 
                 </DetailContainer>
