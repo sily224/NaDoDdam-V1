@@ -65,7 +65,6 @@ const FarmTime = (props) =>{
         //인원리스트의 idx에 해당하는 원소를 하나 삭제
         maxHeadCountList.splice(idx,1);
         setMaxHeadCountList([...maxHeadCountList]);
-        props.onStateLiftining({maxHeadCountList:maxHeadCountList});
     };
 
     const handleStartTime = (e) =>{
@@ -83,6 +82,10 @@ const FarmTime = (props) =>{
         // 문자열이므로 split하여 시간에만 forTime 더해 endTime를 set한다.
         setEndTime([ hour < 10 ? `0${hour}`: hour , min].join(':'));
     },[startTime]);
+    
+    useEffect(() =>{
+        props.getHeadCount(maxHeadCountList);
+    },[maxHeadCountList])
 
     // timeList변경시 사이드이펙트
     useEffect (() => {
