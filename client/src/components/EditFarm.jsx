@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import FarmForm from './FarmForm';
 
 function EditFarm({ farmData }) {
-	console.log(farmData);
+	// console.log(farmData);
 	return (
 		<>
-			<FarmForm></FarmForm>
+			<FarmForm farmData={farmData}></FarmForm>
 		</>
 	);
 }

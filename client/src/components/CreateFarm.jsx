@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import FarmInputForm from './FarmInputForm';
 import FarmForm from './FarmForm';
 import styled from 'styled-components';
-import ModalContainer from './../components/Modal';
-import { showModal } from '../store/ModalSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { closeModal } from '../store/ModalSlice';
-import EditFarm from '../components/EditFarm';
 
 const Button = styled.button``;
 
-const ModalLayout = styled.div`
-	display: felx;
-`;
-
-function CreateFarm() {
+function CreateFarm({ farmData }) {
 	const [farmInfo, setFarmInfo] = useState(false);
-	const modalOpen = useSelector((state) => state.modal.modal);
-	const dispatch = useDispatch();
 	const [onInput, setOnInput] = useState();
+	const [saveInfo, setSaveInfo] = useState(false);
 
 	const onEdit = () => {
 		setFarmInfo(true);
@@ -36,28 +27,24 @@ function CreateFarm() {
 		);
 	};
 	const onSave = () => {
-		setFarmInfo(false);
-		setFarmInfo(true);
-		setOnInput(false);
-		console.log(1);
-		console.log(onInput);
+		setSaveInfo(true);
 	};
 
 	return (
 		<>
 			{farmInfo ? (
 				<div>
-					<FarmForm onInput={true}></FarmForm>
-					<Button onClick={() => onSave()}>완료</Button>
-					{/* 구현미완료 */}
-					{/* {modalOpen && (
-						<ModalContainer>
-							<ModalLayout>
-								<h1>농장 등록 완료!</h1>
-								<button onClick={() => onSave()}>확인</button>
-							</ModalLayout>
-						</ModalContainer>
-					)} */}
+					{saveInfo ? (
+						<div>
+							<FarmForm farmData={farmData}></FarmForm>
+							<Button>수정</Button>
+						</div>
+					) : (
+						<div>
+							<FarmInputForm></FarmInputForm>
+							<Button onClick={() => onSave()}>완료</Button>
+						</div>
+					)}
 				</div>
 			) : (
 				<NullFarm></NullFarm>

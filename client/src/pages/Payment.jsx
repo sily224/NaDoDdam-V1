@@ -320,28 +320,24 @@ const Payment = () => {
 		}
 	};
 
-	const goDetail = () => {
-		navigate('/detail');
-	};
+	// const goDetail = () => {
+	// 	navigate('/detail');
+	// };
 
 	return (
 		<>
-			{payData && data ? (
-				<div style={{ display: 'flex', alignItems: 'flex-start' }}>
-					<Context>
-						<ReservationInfo payData={payData}></ReservationInfo>
-						<SubscriberInfo data={data}></SubscriberInfo>
-						<PaymentInfo></PaymentInfo>
-					</Context>
-					<StickyBox offsetTop={20} offsetBottom={20}>
-						<SideBarDiv>
-							<SideBar payData={payData}></SideBar>
-						</SideBarDiv>
-					</StickyBox>
-				</div>
-			) : (
-				<div>{goDetail()}</div>
-			)}
+			<div style={{ display: 'flex', alignItems: 'flex-start' }}>
+				<Context>
+					<ReservationInfo payData={payData}></ReservationInfo>
+					<SubscriberInfo data={data}></SubscriberInfo>
+					<PaymentInfo></PaymentInfo>
+				</Context>
+				<StickyBox offsetTop={20} offsetBottom={20}>
+					<SideBarDiv>
+						<SideBar payData={payData}></SideBar>
+					</SideBarDiv>
+				</StickyBox>
+			</div>
 		</>
 	);
 };

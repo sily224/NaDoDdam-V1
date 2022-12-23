@@ -27,19 +27,19 @@ function FarmForm({ farmData }) {
 						<Tittle></Tittle>
 						<Form>
 							<Label>과일종류</Label>
-							<Context></Context>
+							<Context>{farmData.type}</Context>
 							<Label>농장명</Label>
-							<Context></Context>
+							<Context>{farmData.name}</Context>
 							<Label>농장주소</Label>
-							<Context></Context>
+							<Context>{farmData.address}</Context>
 							<Label>이미지</Label>
-							<Context></Context>
-							<Context></Context>
-							<Context></Context>
+							<Context>{farmData.url[0]}</Context>
+							<Context>{farmData.url[1]}</Context>
+							<Context>{farmData.url[2]}</Context>
 							<Label>체험설명</Label>
-							<Context></Context>
+							<Context>{farmData.description}</Context>
 							<Label>농장주명</Label>
-							<Context></Context>
+							<Context>{farmData.owner}</Context>
 						</Form>
 					</Form>
 				</div>
