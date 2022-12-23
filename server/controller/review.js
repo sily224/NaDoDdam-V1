@@ -2,14 +2,14 @@ import 'express-async-errors';
 import db from '../models/index.js';
 
 export async function review(req, res, next) {
-	const { content, type, type_id, rating } = req.body;
+	const { content, rating } = req.body;
 	const user_id = req.userId;
+	const farm_id = req.params.farmId;
 
 	try {
 		const new_review = await db.Reviews.createReview({
 			content,
-			type,
-			type_id,
+			farm_id,
 			user_id,
 			rating,
 		});
@@ -21,9 +21,10 @@ export async function review(req, res, next) {
 }
 
 export async function reviewDrop(req, res, next) {
-	const id = req.params.id;
+	const userId = req.userId;
+
 	try {
-		const review = await db.Reviews.deleteReview(id);
+		const review = await db.Reviews.deleteReview(userId);
 
 		res.status(200).json({ id: id, message: 'delete !' });
 	} catch (err) {
@@ -32,9 +33,10 @@ export async function reviewDrop(req, res, next) {
 }
 
 export async function getReveiwData(req, res, next) {
-	const id = req.params.id;
+	const userId = req.userId;
 	try {
-		const review = await db.Reviews.findByReviewId(id);
+		const review = await db.Reviews.findByUserId(userId)
+
 		res.status(200).json(review);
 	} catch (err) {
 		next(err);
@@ -76,15 +78,14 @@ async function setReview(reviewInfo, toUpdate) {
 
 export async function reserveUpdate(req, res, next) {
 	const id = req.params.id;
-	const {content, type, type_id, rating} = req.body;
+	const {content, farm_id, rating} = req.body;
 
 	try {
 		const reviewInfo = {id};
 
 		const toUpdate = {
 			...(content && {content}),
-			...(type && {type}),
-			...(type_id && {type_id}),
+			...(farm_id && {farm_id}),
 			...(rating && {rating}),
 		};
 
