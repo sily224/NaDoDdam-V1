@@ -15,10 +15,10 @@ router.get('/reserve/farmer', isFarmer, reserveController.getFarmerData); // 농
 
 router.delete('/reserve/:id',isAuth, reserveController.reserveDrop); // 유저의 예약 삭제
 
-// router.delete('/reserve/farmer/:id', isFarmer, reserveController.reserveFarmerDrop) //농장주가 예약 삭제
+router.delete('/reserve/farmer/:id', isFarmer, reserveController.reserveFarmerDrop) //농장주가 예약 삭제
 
 router.patch('/reserve/:id', isAuth, reserveController.reserveUpdate); // 유저가 예약 수정
 
-// router.patch('/reserve/farmer/:id', isFarmer, reserveController.reserveFarmerUpdate) //농장우 예약 수정
+router.patch('/reserve/farmer/:id', isFarmer, reserveController.reserveFarmerUpdate) //농장주 예약 수정
 
 export default router;

@@ -39,8 +39,9 @@ export async function getByFarm(req, res, next) {
 	try {
 		const data = await db.Farms.findById(id);
 		const review = await db.Reviews.findByFarmId(id);
+		const farmer = await db.Farmers.getFarmerInfoFromFarmId(id);
 
-		const datas = { data, review };
+		const datas = { data, review, farmer };
 
 		res.status(200).json(datas);
 	} catch (err) {
