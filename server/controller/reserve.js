@@ -79,7 +79,9 @@ export async function getFarmerData(req, res, next) {
 			reserve.forEach((res) => datas.push(res));
 		}
 
-		res.status(200).json(datas);
+		const farmNum = await db.Farmers.getFarmInfo(id);
+		const farmInfo = await db.Farms.findById(farmNum.farmId)
+		res.status(200).json({farmInfo, datas});
 	} catch (err) {
 		next(err);
 	}
