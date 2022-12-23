@@ -65,7 +65,7 @@ function Login() {
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);
-			localStorage.setItem('loggedIn', 'true');
+			localStorage.setItem('userType', 'member');
 
 			alert(`회원님 환영합니다!`);
 			dispatch(closeModal());
@@ -83,7 +83,7 @@ function Login() {
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);
-			localStorage.setItem('loggedIn', 'true');
+			localStorage.setItem('userType', 'farmer');
 
 			alert(`농장주님 환영합니다!`);
 			dispatch(closeModal());
@@ -124,7 +124,7 @@ function Login() {
 							disabled={isSubmitting}
 							onClick={handleSubmit((data) => loginUser(data))}
 						>
-							로그인
+							일반 회원 로그인
 						</Button>
 						<Button
 							type="submit"
