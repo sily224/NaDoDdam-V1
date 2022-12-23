@@ -11,18 +11,23 @@ export async function getTimeTables(req, res, next) {
 
 export async function createTimeTable(req, res, next) {
 	const { date, personnel, price, start_time, end_time } = req.body;
-	const { id } = req.params;
-	const farmId = await db.Farms.findById(id);
-	const tableInfo = {
-		date,
-		personnel,
-		price,
-		start_time,
-		end_time,
-		farmId,
-	};
-	const timeTable = await db.TimeTables.createTable(tableInfo, farmId);
-	res.status(201).json(timeTable);
+	try {
+		const farmId = await db.Farmers.findById(id).then((data) => {
+			return data.dataValues.farmId;
+		});
+		const tableInfo = {
+			date,
+			personnel,
+			price,
+			start_time,
+			end_time,
+			farmId,
+		};
+		const timeTable = await db.TimeTables.createTable(tableInfo);
+		res.status(201).json(timeTable);
+	} catch (err) {
+		next(err);
+	}
 }
 
 export async function updateTimeTable(req, res, next) {

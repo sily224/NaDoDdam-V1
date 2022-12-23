@@ -2,6 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import { body } from 'express-validator';
 import { validate } from '../middleware/validate.js';
+import { isFarmer } from '../middleware/farmerAuth.js';
 import * as timetableController from '../controller/timetable.js';
 
 const router = express.Router();
@@ -11,7 +12,7 @@ const router = express.Router();
 router.get('/', timetableController.getTimeTables);
 
 // POST /timetables
-router.post('/:id', timetableController.createTimeTable);
+router.post('/', isFarmer, timetableController.createTimeTable);
 
 // PUT /timetable/:id
 router.put('/:id', timetableController.updateTimeTable);
