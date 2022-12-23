@@ -12,7 +12,7 @@ const router = express.Router();
 router.get('/', farmController.getFarms);
 
 //GET /api/farms/ => 특정 농장의 데이터 조회 로그인한 농장주의 농장정보
-router.get('/farminformation', isFarmer, farmController.getFarm); //수정
+router.get('/farminformation', isFarmer, farmController.getFarm);
 
 // GET /api/farm/location? => 지역에 따른 농장조회 ex) 경기도, 충청남도, 부산, 서울
 router.get('/location', farmController.getByLocation);
@@ -27,5 +27,5 @@ router.post('/', isFarmer, farmController.createFarm);
 router.put('/:id', isFarmer, farmController.updateFarm); // 수정
 
 // 농장 정보 삭제하기 delete
-router.delete('/:id', isFarmer, farmController.removeFarm);
+router.delete('/:id', isFarmer, farmController.removeFarm); // 수정
 export default router;
