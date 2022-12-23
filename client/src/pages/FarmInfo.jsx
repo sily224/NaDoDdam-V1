@@ -6,12 +6,12 @@ import EditFarm from '../components/EditFarm';
 
 function FarmInfo() {
 	// todo 혜실: 로그인에서 farmid 받아오기 구현 예정
-	const farmid = null;
+	const farmid = 1;
 	const [farmData, setFarmData] = useState({});
 
 	const GetFarmData = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3500/api/farms/${farmid}`);
+			const res = await axios.get('/addFarm.json');
 			const data = await res.data;
 			console.log(data);
 			setFarmData(data);
@@ -28,7 +28,7 @@ function FarmInfo() {
 		<>
 			<FarmFormat>
 				{farmid ? (
-					<EditFarm data={farmData}></EditFarm>
+					<EditFarm farmData={farmData}></EditFarm>
 				) : (
 					<CreateFarm></CreateFarm>
 				)}

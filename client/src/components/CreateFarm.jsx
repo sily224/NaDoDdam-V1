@@ -5,6 +5,7 @@ import ModalContainer from './../components/Modal';
 import { showModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal } from '../store/ModalSlice';
+import EditFarm from '../components/EditFarm';
 
 const Button = styled.button``;
 
@@ -35,7 +36,8 @@ function CreateFarm() {
 		);
 	};
 	const onSave = () => {
-		dispatch(closeModal());
+		setFarmInfo(false);
+		setFarmInfo(true);
 		setOnInput(false);
 		console.log(1);
 		console.log(onInput);
@@ -46,15 +48,16 @@ function CreateFarm() {
 			{farmInfo ? (
 				<div>
 					<FarmForm onInput={true}></FarmForm>
-					<Button onClick={() => dispatch(showModal())}>완료</Button>
-					{modalOpen && (
+					<Button onClick={() => onSave()}>완료</Button>
+					{/* 구현미완료 */}
+					{/* {modalOpen && (
 						<ModalContainer>
 							<ModalLayout>
 								<h1>농장 등록 완료!</h1>
 								<button onClick={() => onSave()}>확인</button>
 							</ModalLayout>
 						</ModalContainer>
-					)}
+					)} */}
 				</div>
 			) : (
 				<NullFarm></NullFarm>
