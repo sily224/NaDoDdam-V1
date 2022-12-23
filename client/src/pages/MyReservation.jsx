@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useEffect } from 'react';
 import MyReservationEdit from "../components/MyReservationEdit";
+import Select from 'react-select';
 
 const StyledNavWrapper = styled.div`
   display: flex;
@@ -34,15 +35,23 @@ const StyledImageWrap = styled.div`
   margin-right: 20px;
 `
 
+const optionList = [
+  { value: 'threeMonth', label: '지난 3개월' },
+  { value: 'sixMonth', label: '지난 6개월' },
+  { value: 'oneYear', label: '지난 1년' }
+]
+
 
 const MyReservation = () => {
   const [reservationData, setReservationData] = useState([]);
-  const [filterdData, setFilter] =useState([]);
-
+  const [filterdData, setfilterdData] =useState([]);
+  const [dateFiltered, setDateFiltered] = useState(new Date());
+  const [timeValue, setTimeValue] = useState('');
+ 
   const getReservationData = async() => {
     await axios.get("/reservationData.json").then((res) => {
       setReservationData(res.data.reservation);
-      setFilter(res.data.reservation);
+      setfilterdData(res.data.reservation);
     });
   };
 
@@ -50,14 +59,29 @@ const MyReservation = () => {
     getReservationData();
   },[]);
 
-  const list = ["전체", "예약완료", "예약취소", "체험완료"];
+  const tabList = ["전체", "예약완료", "예약취소", "체험완료"];
 
-  const setdList = (e) => {
-    let type = e.target.name;
+  const  filterData= (e) => {
+    const type = e.target.name;
     const filterdData = reservationData.filter(item => item.status === type);
-    type !== "전체" ?
-    setFilter(filterdData)
-    : setFilter(reservationData);
+
+    type !== "전체" 
+    ? setfilterdData(filterdData)
+    : setfilterdData(reservationData);
+  }
+
+  const dateFilterData = () => {
+    const setValue = timeValue.value;
+   
+    if(setValue === 'threeMonth'){
+      const today = new Date();
+      const newDay = new Date();
+
+      console.log(today.getDate() - 90)
+      // return setStartDate(newDay.setDate(today.getDate() - 90 ))
+      // setDateFiltered(reservationData.filter(item => item.data)
+    }
+
   }
 
   return (
@@ -65,17 +89,17 @@ const MyReservation = () => {
       <h1>예약조회</h1>
       <StyledNavWrapper>
       <div>
-        {list.map((item) => (
-          <button key={item} name={item} onClick={setdList}>{item}</button>
+        {tabList.map((item) => (
+          <button key={item} name={item} onClick={filterData}>{item}</button>
         ))}
       </div>
-      <select>
-        <option>지난 3개월</option>
-        <option>지난 6개월</option>
-        <option>지난 1년</option>
-      </select>
+      <Select 
+      defaultValue={optionList[0]}
+      onChange ={setTimeValue}
+      options={optionList}/>
       </StyledNavWrapper>
       <MyReservationEdit filterdData={filterdData}/>
+      
     </>
     )
 }
