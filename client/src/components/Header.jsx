@@ -8,7 +8,7 @@ import { showLogin, showRegister } from '../store/ModalSlice';
 import { getToken, logout } from '../utils/utils';
 import Selector from './Selector';
 import TableDatePicker from './DatePicker';
-
+import Logo from '../assets/logo.png';
 import { reset } from '../store/OptionSlice';
 
 const StyledHeader = styled.header`
@@ -179,7 +179,16 @@ const StyledLogout = styled.div`
 		margin: 5px 0px;
 	}
 `;
-
+const LogoContainer = styled.div`
+	cursor: pointer;
+`;
+const LogoName = styled.span`
+	vertical-align: middle;
+`;
+const LogoImg = styled.img`
+	width: 4rem;
+	height: 3rem;
+`;
 const beforeLoginList = [
 	{
 		id: 1,
@@ -278,7 +287,10 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 
 	return (
 		<StyledHeader>
-			<img src="" alt="logo" />
+			<LogoContainer onClick={()=>navigate('/')}>
+				<LogoImg src={Logo} alt="logo"/>
+				<LogoName>나도 땀</LogoName>
+			</LogoContainer>
 			{isOpenSearchBar && (
 				<ActiveSearchBar toggle={isOpenSearchBar} ref={searchRef}>
 					<div>
