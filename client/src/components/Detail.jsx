@@ -73,15 +73,15 @@ const DetailDescription = ({ description }) => {
 };
 
 
-const DetailCompany = ({ company }) => {
+const DetailCompany = ({company}) => {
     return (
         <DetailCompanyContainer>
-            <p>업체정보</p>
-            {
-                Object.entries(company).map((values, idx) => {
-                    return <p key={`idx${idx}-${values[0]}`}>{`${values[0]}`} : {`${values[1]}`}</p>
-                })
-            }
+            <p>농장정보</p>
+            <p>농장명 : {company.name}</p>
+            <p>농장상품 : {company.type}</p>
+            <p>농장주 : {company.owner}</p>
+            <p>E-mail :</p>
+            <p>전화번호:</p>
         </DetailCompanyContainer>
     );
 };
@@ -108,9 +108,9 @@ const Detail = () => {
                                     <TimeBtns />
                                 </TimButtonContainer>
                             </DetailPeriod> */}
-                            {/* <Review /> */}
+                            <Review />
                             <Location />
-                            {/* <DetailCompany company={data.address} /> */}
+                            <DetailCompany company={data}/>
                         </DetailInform>
                         {/* <FloatingFormDiv><FloatingForm /></FloatingFormDiv> */}
                     
