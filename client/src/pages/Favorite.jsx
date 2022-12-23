@@ -50,6 +50,7 @@ const Favorite = () => {
   });
 
   const numbers = getFarmNumbers(); // 농장 찜 목록 농장번호
+  console.log('찜 목록 농장번호들', numbers);
 
   // 농장 번호로 농장 정보 가져오기
   for (let i=0;i<numbers.length;i++){
@@ -72,7 +73,9 @@ const Favorite = () => {
   // });
 
   useEffect(()=>{
+    for(let i=0;i<favorite.length;i++){
 
+    }
   },[favorite]);
 
   return (

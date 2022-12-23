@@ -18,10 +18,6 @@ const Container = styled.main`
 `;
 
 const Layout = () => {
-  const [options, setOptions] = useState({}); // 옵션 저장해서 Home 컴포넌트에 전달
-  useEffect(()=>{
-    console.log('layout에서의 옵션', options);  
-  },[options])
   return (
     <>
       <Provider store={store}>

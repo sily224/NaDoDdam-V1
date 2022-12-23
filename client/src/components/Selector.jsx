@@ -107,7 +107,7 @@ const produces = [
   '감자',
   '딸기',
   '복숭아',
-  'watermelon',
+  '감',
 ];
 
 //

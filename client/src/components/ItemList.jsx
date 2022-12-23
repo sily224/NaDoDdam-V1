@@ -149,7 +149,6 @@ const Item = styled.div`
     position : absolute;
     top : 5%;
     right : 5%;
-    z-index:1;
   }
 
   button:hover {
