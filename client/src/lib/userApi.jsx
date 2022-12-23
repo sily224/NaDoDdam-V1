@@ -35,8 +35,6 @@ async function get(endpoint) {
 async function patch(endpoint, data) {
 	const apiUrl = endpoint;
 	const bodyData = JSON.stringify(data);
-	console.log(`%cPATCH 요청: ${apiUrl}`, "color: #296aba;");
-	console.log(`%cPATCH 요청 데이터: ${bodyData}`, "color: #296aba;");
   
 	const res = await axios(apiUrl, {
 	  method: "PATCH",
@@ -58,8 +56,6 @@ async function patch(endpoint, data) {
 async function passwordPatch(endpoint, data) {
 	const apiUrl = endpoint;
 	const bodyData = JSON.stringify(data);
-	console.log(`%cPATCH 요청: ${apiUrl}`, "color: #296aba;");
-	console.log(`%cPATCH 요청 데이터: ${bodyData}`, "color: #296aba;");
   
 	const res = await axios(apiUrl, {
 	  method: "PATCH",
@@ -80,8 +76,6 @@ async function passwordPatch(endpoint, data) {
 async function del(endpoint) {
 	const apiUrl = endpoint;
   
-	console.log(`DELETE 요청 ${apiUrl}`);
-  
 	const res = await fetch(apiUrl, {
 	  method: "DELETE",
 	  headers: {
@@ -99,6 +93,6 @@ async function del(endpoint) {
 	}
   
 	return res;
-  }
+}
   
 export { post, get, patch, passwordPatch, del as delete};
