@@ -14,12 +14,12 @@ export async function getFarms(req, res, next) {
 }
 
 export async function getFarm(req, res, next) {
-	const { id } = req.params;
+	const farmerId = req.farmerId;
 	try {
-		const farmerInfo = await db.Farmers.findById(id).dataValues;
-		const farmInfo = await db.Farmers.getFarmerInfoFromFarmId(id);
-		const data = { ...farmerInfo, ...farmInfo };
-		res.status(200).json(data);
+		const farmerInfo = await db.Farmers.getFarmInfo(farmerId);
+		const farmId = farmerInfo.farmId;
+		const farmInfo = await db.Farms.findById(farmId);
+		res.status(200).json({ farmInfo, farmerInfo });
 	} catch (err) {
 		next(err);
 	}
@@ -37,15 +37,13 @@ export async function getByLocation(req, res, next) {
 export async function getByFarm(req, res, next) {
 	const id = req.params.farmId;
 	try {
-
 		const data = await db.Farms.findById(id);
 		const review = await db.Reviews.findByFarmId(id);
 
-		const datas = {data, review};
+		const datas = { data, review };
 
 		res.status(200).json(datas);
-
-	} catch(err) {
+	} catch (err) {
 		next(err);
 	}
 }
