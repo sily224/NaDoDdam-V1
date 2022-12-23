@@ -1,3 +1,5 @@
+import db from './index.js';
+
 const Farmers = (sequelize, DataTypes) => {
 	const farmer = sequelize.define(
 		'farmer',
@@ -43,9 +45,11 @@ const Farmers = (sequelize, DataTypes) => {
 		return farmer.findOne({ where: { email } });
 	};
 
-	// farmer.getFarmers = () => {
-	// 	return farmer.findAll();
-	// };
+	farmer.getFarmInfo = (farmerId) => {
+		return farmer.findOne({
+			where: { id: farmerId },
+		});
+	};
 
 	farmer.findById = (id) => {
 		return farmer.findByPk(id);
@@ -57,17 +61,23 @@ const Farmers = (sequelize, DataTypes) => {
 		});
 	};
 
+	farmer.getFarmerInfoFromFarmId = (id) => {
+		return farmer
+			.findOne({ where: { farmId: id } })
+			.then((data) => data.dataValues);
+	};
+
 	farmer.createFarmer = (user) => {
 		return farmer.create(user).then((data) => data.dataValues.id);
 	};
 
 	farmer.findByFarmId = (id) => {
-		return farmer.findOne({where: {farmId: id}})
-	}
+		return farmer.findOne({ where: { farmId: id } });
+	};
 
-	// farmer.updateFarmer = ({ farmerId, update }) => {
-	// 	return farmer.update(update, { where: { id: farmerId } });
-	// };
+	farmer.updateFarmer = (farmerId, update) => {
+		return farmer.update(update, { where: { id: farmerId } });
+	};
 
 	farmer.registeFarmId = (id, farmerId) => {
 		return farmer.update({ farmId: id }, { where: { id: farmerId } }); // id가 어디인데서

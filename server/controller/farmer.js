@@ -43,7 +43,10 @@ export async function login(req, res, next) {
 		if (!isValidPassword) {
 			throw new Error('유효하지 않은 농장주 또는 비밀번호 입니다.');
 		}
-		const token = createJwtToken({ id: farmer.id, role: farmer.role });
+		const token = createJwtToken({
+			id: farmer.dataValues.id,
+			role: farmer.role,
+		});
 		res.status(200).json({ token, email, role });
 	} catch (err) {
 		next(err);
@@ -61,6 +64,22 @@ export async function information(req, res, next) {
 			name: farmer.name,
 			phoneNum: farmer.phoneNum,
 		});
+	} catch (err) {
+		next(err);
+	}
+}
+
+export async function updateInfo(req, res, next) {
+	const { email, password, name, phoneNum } = req.body;
+	try {
+		const farmerId = req.farmerId;
+		const found = await db.Farmers.findByFarmerEmail(email);
+		if (found) {
+			throw new Error(`${email}은 이미 존재합니다`);
+		}
+		const update = { email, password, name, phoneNum };
+		const updated = await db.Farmers.updateFarmer(farmerId, update);
+		res.status(200).json(updated);
 	} catch (err) {
 		next(err);
 	}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import Pagination from './Pagination';
 
 const FilterWrapper = styled.div`
 	display: flex;
@@ -19,7 +20,6 @@ const FilterSelect = styled.select`
 
 const Table = styled.table`
 	width: 100%;
-	height: 100%;
 	border: 1px solid black;
 	border-collapse: collapse;
 `;
@@ -46,11 +46,16 @@ const BtnTd = styled.td`
 const Button = styled.button``;
 
 const FarmReservationTable = ({}) => {
-	const statusList = ['전체', '예약대기', '예약완료', '예약취소', '체험완료'];
+	// memo 지우: 데이터 보관
 	const [originalData, setOriginalData] = useState(null);
 	const [printData, setPrintData] = useState(null);
+	// memo 지우: 예약상태 관리
+	const statusList = ['전체', '예약대기', '예약완료', '예약취소', '체험완료'];
 	const [statusOption, setStatusOption] = useState('전체');
 	const [dateOption, setDateOption] = useState('최근순');
+	// memo 지우: 페이지네이션 (offset: 데이터 시작 번호)
+	const [page, setPage] = useState(1);
+	const offset = (page - 1) * 10;
 
 	// memo 지우: 초기에 모든 예약목록 받아오기
 	const fetchData = async () => {
@@ -65,32 +70,29 @@ const FarmReservationTable = ({}) => {
 	};
 
 	const filterData = () => {
-		// memo 지우: 예약 상태로 거르기
-		if (originalData) {
-			let filteredData = [...originalData];
-			// memo 지우: 예약 상태에 따라 거르기
-			if (statusOption !== '전체') {
-				filteredData = filteredData.filter(
-					(obj) => obj.status === statusOption,
-				);
-			}
+		let filteredData = [...originalData];
 
-			// memo 지우: 최근순 or 오래된순으로 정렬
-			if (dateOption === '최근순') {
-				filteredData.sort((a, b) => {
-					if (a.reservedTime > b.reservedTime) return -1;
-					if (a.reservedTime == b.reservedTime) return 0;
-					if (a.reservedTime < b.reservedTime) return 1;
-				});
-			} else {
-				filteredData.sort((a, b) => {
-					if (a.reservedTime > b.reservedTime) return 1;
-					if (a.reservedTime == b.reservedTime) return 0;
-					if (a.reservedTime < b.reservedTime) return -1;
-				});
-			}
-			setPrintData(filteredData);
+		// memo 지우: 예약 상태에 따라 거르기
+		if (statusOption !== '전체') {
+			filteredData = filteredData.filter((obj) => obj.status === statusOption);
 		}
+
+		// memo 지우: 최근순 or 오래된순으로 정렬
+		if (dateOption === '최근순') {
+			filteredData.sort((a, b) => {
+				if (a.reservedTime > b.reservedTime) return -1;
+				if (a.reservedTime == b.reservedTime) return 0;
+				if (a.reservedTime < b.reservedTime) return 1;
+			});
+		} else {
+			filteredData.sort((a, b) => {
+				if (a.reservedTime > b.reservedTime) return 1;
+				if (a.reservedTime == b.reservedTime) return 0;
+				if (a.reservedTime < b.reservedTime) return -1;
+			});
+		}
+		setPrintData(filteredData);
+		setPage(1);
 	};
 
 	useEffect(() => {
@@ -98,7 +100,9 @@ const FarmReservationTable = ({}) => {
 	}, []);
 
 	useEffect(() => {
-		filterData();
+		if (originalData) {
+			filterData();
+		}
 	}, [statusOption, dateOption]);
 
 	if (printData) {
@@ -127,7 +131,7 @@ const FarmReservationTable = ({}) => {
 						</Tr>
 					</Thead>
 					<tbody>
-						{printData.map((oneReservation) => {
+						{printData.slice(offset, offset + 10).map((oneReservation) => {
 							const { reservedTime, id, user, content, pay, status } =
 								oneReservation;
 							return (
@@ -164,6 +168,12 @@ const FarmReservationTable = ({}) => {
 						})}
 					</tbody>
 				</Table>
+				<Pagination
+					total={printData.length}
+					limit={10}
+					page={page}
+					setPage={setPage}
+				/>
 			</>
 		);
 	}

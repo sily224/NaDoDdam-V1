@@ -70,9 +70,9 @@ const Users = (sequelize, DataTypes) => {
 		return Users.destroy({ where: { id: userId } });
 	};
 
-	Users.updatePassword = ({userId, update}) => {
-		return Users.update(update, {where: {id: userId}});
-	}
+	Users.updatePassword = ({ userId, update }) => {
+		return Users.update(update, { where: { id: userId } });
+	};
 
 	return Users;
 };

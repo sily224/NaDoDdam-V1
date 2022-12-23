@@ -65,21 +65,36 @@ export async function getFarmerData(req, res, next) {
 		}
 
 		const data = []; // 해당 농장이 저장해둔 타임테이블 id
-		const datas = []; // 해당 농장 주인의 타임테이블에 있는 값 중 예약 건 수가 있는 id
+		const timeNum = []; // 해당 농장 주인의 타임테이블에 있는 값 중 예약 건 수의 타임 아이디
+		const datas = [];
+		const timeInfo=[];
 
+		let resultInfo = [];
 		const result = await db.TimeTables.findFarmId(farm);
 		if (!result) {
-			throw new Error('해당 농장아이디의 시간표가 없습습니다.');
+			throw new Error('해당 농장아이디의 시간표가 없습니다.');
 		}
 
 		result.forEach((time) => data.push(time.id));
 
 		for (let i = 0; i < data.length; i++) {
 			const reserve = await db.Reservations.findByTimeId(data[i]);
-			reserve.forEach((res) => datas.push(res));
+			reserve.forEach((res) => {
+				datas.push(res);
+				timeNum.push(res.dataValues.time_id)
+			} );
 		}
 
-		res.status(200).json(datas);
+		for(let i = 0; i< timeNum.length; i++) {
+			const time = await db.TimeTables.getById(timeNum[i]);
+			timeInfo.push({date: time.dataValues.date, start_time: time.dataValues.start_time, end_time:  time.dataValues.end_time, people:  time.dataValues.personnel })
+		}
+
+		for(let i = 0 ; i< datas.length; i++) {
+			resultInfo.push({time: timeInfo[i], reserve: datas[i]})
+		}
+
+		res.status(200).json(resultInfo);
 	} catch (err) {
 		next(err);
 	}

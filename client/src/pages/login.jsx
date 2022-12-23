@@ -65,12 +65,31 @@ function Login() {
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);
-			localStorage.setItem('loggedIn', 'true');
+			localStorage.setItem('userType', 'member');
 
-			alert(`로그인 되었습니다.`);
+			alert(`회원님 환영합니다!`);
 			dispatch(closeModal());
 		} catch (err) {
 			alert(err.response.data.message);
+		}
+	};
+
+	const loginFarmer = async (data) => {
+		try {
+			const res = await userApi.post(
+				'//localhost:3500/api/farmers/login',
+				data,
+			);
+			const token = res.data.token;
+
+			localStorage.setItem('token', token);
+			localStorage.setItem('userType', 'farmer');
+
+			alert(`농장주님 환영합니다!`);
+			dispatch(closeModal());
+		} catch (err) {
+			alert(err.response.data.message);
+			console.log(err);
 		}
 	};
 
@@ -85,7 +104,7 @@ function Login() {
 			<>
 				<ModalContainer>
 					<ModalTitle>로그인</ModalTitle>
-					<InputForm onSubmit={handleSubmit((data) => loginUser(data))}>
+					<InputForm>
 						<Label htmlFor="email">이메일</Label>
 						<Input id="email" type="email" {...register('email')} />
 						{errors.email && <small role="alert">{errors.email.message}</small>}
@@ -100,8 +119,19 @@ function Login() {
 						{errors.password && (
 							<small role="alert">{errors.password.message}</small>
 						)}
-						<Button type="submit" disabled={isSubmitting}>
-							로그인
+						<Button
+							type="submit"
+							disabled={isSubmitting}
+							onClick={handleSubmit((data) => loginUser(data))}
+						>
+							일반 회원 로그인
+						</Button>
+						<Button
+							type="submit"
+							disabled={isSubmitting}
+							onClick={handleSubmit((data) => loginFarmer(data))}
+						>
+							농장주 로그인
 						</Button>
 					</InputForm>
 					<Button onClick={() => dispatch(showRegister())}>회원가입</Button>
