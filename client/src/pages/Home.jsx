@@ -5,33 +5,19 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
-const getFavoriteFarmId = async () => {
-  const token = localStorage.getItem('token');
-  const header = {
-    headers: {
-      authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
-  }
-  // 찜 목록 조회
-  await axios.get('http://localhost:3500/api/like', header)
-  .then(res=>res.data)
-  .then(data=> {
-    console.log(data);
-  });
-}
-
 const Home = React.memo(() => {
 
   const option = useSelector(state=>state.option.search);
 
+  const favorite = useSelector(state=>state.favorite.favorites);
+  console.log(favorite);
+
   const [contents, setContents] = useState([]);
-  const [page, setPage] = useState(0);
+  // const [page, setPage] = useState(0);
 
   // 최초 렌더링 시 전체 데이터 조회
   useEffect(()=>{
     // setPage(0);
-    getFavoriteFarmId();
     getFarmData(option);
   },[option])
 
@@ -102,7 +88,7 @@ const Home = React.memo(() => {
       // scrollThreshold='1000px'>
       //   <FarmList contents={contents}/>
       // </InfiniteScroll>
-      <FarmList contents={contents}/>
+      <FarmList contents={contents} favorite={favorite}/>
   )
 });
 
