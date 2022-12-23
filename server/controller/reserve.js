@@ -48,8 +48,37 @@ export async function getReserveData(req, res, next) {
 	const id = req.userId;
 
 	try {
+
+		const timeId = []; // 예약한 것들의 타임 id
+		const timeInfo = [];
+		const farmInfo = [];
+
+		let results = [];
 		const reserve = await db.Reservations.findByUserId(id);
-		res.status(200).json(reserve);
+		reserve.forEach((res)=> timeId.push(res.time_id));
+
+		for (let i = 0; i < timeId.length; i++) {
+			const time = await db.TimeTables.getById(timeId[i]);
+			timeInfo.push({
+				id: time.dataValues.id,
+				date: time.dataValues.date,
+				start_time: time.dataValues.start_time,
+				end_time: time.dataValues.end_time,
+				people: time.dataValues.personnel,
+				farmId: time.dataValues.farmId,
+			});
+		}
+
+		for(let i = 0; i < timeInfo.length; i++) {
+			const data = await db.Farms.findById(timeInfo[i].farmId)
+			farmInfo.push(data);
+		}
+		console.log(farmInfo);
+
+		for(let i = 0; i< reserve.length; i++) {
+			results.push({time: timeInfo[i], reserve: reserve[i], farm: farmInfo[i]})
+		}
+		res.status(200).json(results);
 	} catch (err) {
 		next(err);
 	}
