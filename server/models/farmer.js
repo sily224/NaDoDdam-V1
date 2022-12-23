@@ -1,3 +1,5 @@
+import db from './index.js';
+
 const Farmers = (sequelize, DataTypes) => {
 	const farmer = sequelize.define(
 		'farmer',
@@ -43,9 +45,11 @@ const Farmers = (sequelize, DataTypes) => {
 		return farmer.findOne({ where: { email } });
 	};
 
-	// farmer.getFarmers = () => {
-	// 	return farmer.findAll();
-	// };
+	farmer.getFarmInfo = (farmerId) => {
+		return farmer.findOne({
+			where: { id: farmerId },
+		});
+	};
 
 	farmer.findById = (id) => {
 		return farmer.findByPk(id);
@@ -68,8 +72,8 @@ const Farmers = (sequelize, DataTypes) => {
 	};
 
 	farmer.findByFarmId = (id) => {
-		return farmer.findOne({where: {farmId: id}})
-	}
+		return farmer.findOne({ where: { farmId: id } });
+	};
 
 	// farmer.updateFarmer = ({ farmerId, update }) => {
 	// 	return farmer.update(update, { where: { id: farmerId } });
