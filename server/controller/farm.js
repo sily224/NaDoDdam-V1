@@ -76,7 +76,7 @@ export async function createFarm(req, res, next) {
 }
 
 export async function updateFarm(req, res, next) {
-	const { name, address, description } = req.body;
+	const { type, name, address, description, owner, url } = req.body;
 	try {
 		const { id } = req.params;
 		const farmerId = req.farmerId;
@@ -89,9 +89,12 @@ export async function updateFarm(req, res, next) {
 			throw new Error('농장수정은 해당 농장주만 수정할 수 있습니다.');
 		}
 		const updatedFarm = await db.Farms.updateFarm(id, {
+			type,
 			name,
 			address,
 			description,
+			owner,
+			url,
 		});
 		res.status(200).json(updatedFarm);
 	} catch (err) {
