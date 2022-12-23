@@ -17,7 +17,6 @@ export const isFarmer = async (req, res, next) => {
 				return res.status(401).json(AUTH_ERROR);
 			}
 			const user = await db.Farmers.findById(decoded.id.id);
-
 			if (!user) {
 				return res.status(401).json(AUTH_ERROR);
 			}
