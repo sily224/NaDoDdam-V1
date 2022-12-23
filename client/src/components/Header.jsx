@@ -5,7 +5,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { HiUserCircle, HiMenu } from 'react-icons/hi';
 import { useSelector, useDispatch } from 'react-redux';
 import { showLogin, showRegister } from '../store/ModalSlice';
-import { getToken, logout } from '../utils/utils';
+import { getToken, getUserType,logout } from '../utils/utils';
 import Selector from './Selector';
 import TableDatePicker from './DatePicker';
 import Logo from '../assets/logo.png';
@@ -225,6 +225,29 @@ const afterLoginList = [
 	},
 ];
 
+const farmerLoginList = [
+	{
+		id: 7,
+		name: '농장정보관리',
+		path: '/farm',
+	},
+	{
+		id: 8,
+		name: '체험시간표관리',
+		path: '/farm/timetable',
+	},
+	{
+		id: 9,
+		name: '예약관리',
+		path: '/farm/reservation',
+	},
+	{
+		id: 10,
+		name: '후기 관리',
+		path: '/farm',
+	},
+];
+
 const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 	const loginModalState = useSelector((state) => state.modal.loginModal);
 	const optionState = useSelector((state) => state.option);
@@ -236,6 +259,7 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 
 	const [toggleMenu, setToggleMenu] = useState(false);
 	const token = getToken();
+	const userType = getUserType();
 	const navigate = useNavigate();
 	const params = useParams();
 	const ref = useRef();
@@ -357,7 +381,26 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 								회원가입
 							</StyledBtn>
 						</StyledBtnWrapper>
-					) : (
+					) : (userType==="farmer" ? (
+						<div>
+							{farmerLoginList.map((item) => (
+								<StyledLink to={item.path} key={item.id}>
+									{item.name}
+								</StyledLink>
+							))}
+							<StyledLogout>
+								<StyledBtn
+									onClick={() => {
+										setToggleMenu(false);
+										logout();
+									}}
+								>
+									로그아웃
+								</StyledBtn>
+							</StyledLogout>
+						</div>
+						
+						):(
 						<div>
 							{afterLoginList.map((item) => (
 								<StyledLink to={item.path} key={item.id}>
@@ -375,7 +418,7 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 								</StyledBtn>
 							</StyledLogout>
 						</div>
-					)}
+					))}
 				</StyledMenu>
 			</div>
 		</StyledHeader>
