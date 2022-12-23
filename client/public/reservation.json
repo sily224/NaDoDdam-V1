@@ -1,87 +1,97 @@
 [
-    {
-        "id" : "qweasdzxc221219123",
-        "user" : {
-            "name" : "팥쥐",
-            "userId" : "qq@gmail.com",
-            "phone": "010-1111-2222"
-        },
-        "content" : {
-            "date": "2023-12-19",
-            "headCount" : 3
-        },
-        "pay" : {
-            "cost": 40000,
-            "method": "카드결제"
-        },
-        "status" : "예약완료"
-    },
-    {
-        "id" : "qweasdzxc221220128",
-        "user" : {
-            "name" : "홍길동",
-            "userId" : "dd@gmail.com",
-            "phone": "010-2222-3333"
-        },
-        "content" : {
-            "date": "2023-12-20",
-            "headCount" : 2
-        },
-        "pay" : {
-            "cost": 28000,
-            "method": "카드결제"
-        },
-        "status" : "예약완료"
-    },
-    {
-        "id" : "qweasdzxc221201753",
-        "user" : {
-            "name" : "콩쥐",
-            "userId" : "ww@gmail.com",
-            "phone": "010-7777-9999"
-        },
-        "content" : {
-            "date": "2023-12-01",
-            "headCount" : 4
-        },
-        "pay" : {
-            "cost": 31000,
-            "method": "계좌이체"
-        },
-        "status" : "체험완료"
-    },
-    {
-        "id" : "zxcsdzxc221201753",
-        "user" : {
-            "name" : "콩쥐",
-            "userId" : "ww@gmail.com",
-            "phone": "010-7777-9999"
-        },
-        "content" : {
-            "date": "2023-12-01",
-            "headCount" : 5
-        },
-        "pay" : {
-            "cost": 31000,
-            "method": "계좌이체"
-        },
-        "status" : "체험완료"
-    },
-        {
-        "id" : "qweasdzxc221201754",
-        "user" : {
-            "name" : "콩쥐",
-            "userId" : "ww@gmail.com",
-            "phone": "010-7777-9999"
-        },
-        "content" : {
-            "date": "2023-12-01",
-            "headCount" : 1
-        },
-        "pay" : {
-            "cost": 10000,
-            "method": "계좌이체"
-        },
-        "status" : "체험완료"
-    }
+	{
+		"id": "qweasdzxc221219123",
+		"user": {
+			"name": "팥쥐",
+			"userId": "qq@gmail.com",
+			"phone": "010-1111-2222"
+		},
+		"content": {
+			"date": "2023-12-19",
+			"time": "14:00 - 16:00",
+			"headCount": 3
+		},
+		"pay": {
+			"cost": 40000,
+			"method": "카드결제"
+		},
+		"status": "예약대기",
+		"reservedTime": "2021-04-19T14:02:18.809Z"
+	},
+	{
+		"id": "qweasdzxc221220128",
+		"user": {
+			"name": "홍길동",
+			"userId": "dd@gmail.com",
+			"phone": "010-2222-3333"
+		},
+		"content": {
+			"date": "2023-12-20",
+			"time": "14:00 - 16:00",
+			"headCount": 2
+		},
+		"pay": {
+			"cost": 28000,
+			"method": "카드결제"
+		},
+		"status": "예약대기",
+		"reservedTime": "2021-04-18T14:02:18.809Z"
+	},
+	{
+		"id": "qweasdzxc221201753",
+		"user": {
+			"name": "콩쥐",
+			"userId": "ww@gmail.com",
+			"phone": "010-7777-9999"
+		},
+		"content": {
+			"date": "2023-12-01",
+			"time": "14:00 - 16:00",
+			"headCount": 4
+		},
+		"pay": {
+			"cost": 31000,
+			"method": "계좌이체"
+		},
+		"status": "예약완료",
+		"reservedTime": "2021-04-16T12:02:18.809Z"
+	},
+	{
+		"id": "zxcsdzxc221201753",
+		"user": {
+			"name": "콩쥐",
+			"userId": "ww@gmail.com",
+			"phone": "010-7777-9999"
+		},
+		"content": {
+			"date": "2023-12-01",
+			"time": "14:00 - 16:00",
+			"headCount": 5
+		},
+		"pay": {
+			"cost": 31000,
+			"method": "계좌이체"
+		},
+		"status": "예약완료",
+		"reservedTime": "2021-04-13T14:02:18.809Z"
+	},
+	{
+		"id": "qweasdzxc221201754",
+		"user": {
+			"name": "콩쥐",
+			"userId": "ww@gmail.com",
+			"phone": "010-7777-9999"
+		},
+		"content": {
+			"date": "2023-12-01",
+			"time": "14:00 - 16:00",
+			"headCount": 1
+		},
+		"pay": {
+			"cost": 10000,
+			"method": "계좌이체"
+		},
+		"status": "체험완료",
+		"reservedTime": "2021-04-10T14:02:18.809Z"
+	}
 ]

@@ -7,6 +7,11 @@ import GlobalStyle from "./styles/GlobalStyle";
 import { Provider } from "react-redux";
 import store from "./store/Store";
 
+import { worker } from "./mocks/worker";
+// if (process.env.NODE_ENV === 'development') {
+//   worker.start();
+// }
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>

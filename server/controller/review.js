@@ -2,14 +2,14 @@ import 'express-async-errors';
 import db from '../models/index.js';
 
 export async function review(req, res, next) {
-	const { content, type, type_id, rating } = req.body;
+	const { content, rating } = req.body;
 	const user_id = req.userId;
+	const farm_id = req.params.farmId;
 
 	try {
 		const new_review = await db.Reviews.createReview({
 			content,
-			type,
-			type_id,
+			farm_id,
 			user_id,
 			rating,
 		});
@@ -21,9 +21,10 @@ export async function review(req, res, next) {
 }
 
 export async function reviewDrop(req, res, next) {
-	const id = req.params.id;
+	const userId = req.userId;
+
 	try {
-		const review = await db.Reviews.deleteReview(id);
+		const review = await db.Reviews.deleteReview(userId);
 
 		res.status(200).json({ id: id, message: 'delete !' });
 	} catch (err) {
@@ -32,9 +33,10 @@ export async function reviewDrop(req, res, next) {
 }
 
 export async function getReveiwData(req, res, next) {
-	const id = req.params.id;
+	const userId = req.userId;
 	try {
-		const review = await db.Reviews.findByReviewId(id);
+		const review = await db.Reviews.findByUserId(userId)
+
 		res.status(200).json(review);
 	} catch (err) {
 		next(err);
@@ -52,6 +54,44 @@ export async function reviewList(req, res, next) {
 
 		res.status(200).json(review);
 	} catch (err) {
+		next(err);
+	}
+}
+
+async function setReview(reviewInfo, toUpdate) {
+	const {id} = reviewInfo;
+
+	let review = await db.Reviews.findByReviewId(id);
+
+	if(!review) {
+		throw new Error("해당 리뷰가 없습니다. 다시 한 번 확인해 주세요.");
+	}
+
+	review = await db.Reviews.updateReview({
+		id,
+		update: toUpdate,
+	});
+
+	return review;
+}
+
+
+export async function reserveUpdate(req, res, next) {
+	const id = req.params.id;
+	const {content, farm_id, rating} = req.body;
+
+	try {
+		const reviewInfo = {id};
+
+		const toUpdate = {
+			...(content && {content}),
+			...(farm_id && {farm_id}),
+			...(rating && {rating}),
+		};
+
+		const updateReview = await setReview(reviewInfo, toUpdate);
+		res.status(200).json(updateReview);
+	}catch(err) {
 		next(err);
 	}
 }

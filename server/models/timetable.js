@@ -41,6 +41,7 @@ const TimeTables = (sequelize, DataTypes) => {
 		db.TimeTables.belongsTo(db.Farms);
 	};
 
+
 	timeTable.getAll = () => {
 		return timeTable.findAll({
 			attributes: [
@@ -66,10 +67,15 @@ const TimeTables = (sequelize, DataTypes) => {
 	};
 
 	timeTable.createTable = (tableInfo) => {
+		console.log(tableInfo)
 		return timeTable.create(tableInfo).then((data) => {
 			return data;
 		});
 	};
+
+	timeTable.findFarmId = (id) => {
+		return timeTable.findAll({where: {farmId: id}});
+	}
 
 	timeTable.updateTable = (updateInfo, id) => {
 		return timeTable.update(updateInfo, {

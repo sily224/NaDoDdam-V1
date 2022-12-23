@@ -34,6 +34,22 @@ export async function getByLocation(req, res, next) {
 	res.status(200).json(data);
 }
 
+export async function getByFarm(req, res, next) {
+	const id = req.params.farmId;
+	try {
+
+		const data = await db.Farms.findById(id);
+		const review = await db.Reviews.findByFarmId(id);
+
+		const datas = {data, review};
+
+		res.status(200).json(datas);
+
+	} catch(err) {
+		next(err);
+	}
+}
+
 export async function createFarm(req, res, next) {
 	const { type, name, address, description, owner, url } = req.body;
 	try {

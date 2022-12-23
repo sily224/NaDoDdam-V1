@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import './App.css';
 import Layout from './pages/Layout';
 import Home from './pages/Home';
@@ -8,7 +8,10 @@ import DetailPage from './pages/DetailPage';
 import Payment from './pages/Payment';
 import { MyPage } from './pages/MyPage';
 import Farm from './pages/Farm';
-import TimeTable from './pages/TimeTable';
+import FarmReservation from './pages/FarmReservation';
+import FarmTimeTable from './pages/FarmTimeTable';
+import MyReservation from './pages/MyReservation';
+import Favorite from './pages/Favorite';
 
 function App() {
 	return (
@@ -18,11 +21,14 @@ function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
-					<Route path="/detail" element={<DetailPage />} />
+					<Route path="/detail/:id" element={<DetailPage />} />
 					<Route path="/pay" element={<Payment />} />
 					<Route path="/mypage" element={<MyPage />} />
 					<Route path="/farm" element={<Farm />} />
-					<Route path="/farm/timetable" element={<TimeTable />} />
+					<Route path="/farm/reservation" element={<FarmReservation />} />
+					<Route path="/farm/timetable" element={<FarmTimeTable />} />
+					<Route path="/myreservation" element={<MyReservation />} />
+					<Route path="/favorite" element={<Favorite/>}/>
 					{/* 해당부분에 라우터 넣으면 됩니다. */}
 				</Route>
 			</Routes>

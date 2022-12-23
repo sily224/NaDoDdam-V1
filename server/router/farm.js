@@ -17,6 +17,9 @@ router.get('/:id', farmController.getFarm);
 // GET /api/farm/location? => 지역에 따른 농장조회 ex) 경기도, 충청남도, 부산, 서울
 router.get('/location', farmController.getByLocation);
 
+// 각 농장 조회하기
+router.get('/:farmId', farmController.getByFarm);
+
 // 농장 등록하기 post
 router.post('/', isFarmer, farmController.createFarm);
 
