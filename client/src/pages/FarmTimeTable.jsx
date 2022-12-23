@@ -95,9 +95,11 @@ const TimeTable = ()=>{
         for (let i = 0; i < diffDate + 1 ; i++ ){
             const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
             
-            for (let j = 0; j< timeList[0].length;j++){
-                
+            for (let j = 0; j< timeList[0].length -1;j++){
+                console.log(timeList[0].length);
+                console.log(timeList[0][0]);
                 const start_time = timeList[j][0];
+                console.log(start_time);
                 const end_time = timeList[j][1];
                 const personnel = maxHeadCount[j];
 
@@ -119,6 +121,7 @@ const TimeTable = ()=>{
         alert('체험시간표 등록완료');
         dispatch(closeModal());
         setCost(0);
+        window.location.reload();
     };
 
     const onTimeTableDelete = (idx) => {
