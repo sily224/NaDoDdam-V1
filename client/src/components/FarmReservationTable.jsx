@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import Pagination from './Pagination';
 
 const FilterWrapper = styled.div`
 	display: flex;
@@ -45,18 +46,17 @@ const BtnTd = styled.td`
 
 const Button = styled.button``;
 
-const Pages = styled.div``;
-
-const PageBtn = styled.button``;
-
 const FarmReservationTable = ({}) => {
-	const statusList = ['전체', '예약대기', '예약완료', '예약취소', '체험완료'];
+	// memo 지우: 데이터 보관
 	const [originalData, setOriginalData] = useState(null);
 	const [printData, setPrintData] = useState(null);
+	// memo 지우: 예약상태 관리
+	const statusList = ['전체', '예약대기', '예약완료', '예약취소', '체험완료'];
 	const [statusOption, setStatusOption] = useState('전체');
 	const [dateOption, setDateOption] = useState('최근순');
+	// memo 지우: 페이지네이션 (offset: 데이터 시작 번호)
 	const [page, setPage] = useState(1);
-	let pages = [];
+	const offset = (page - 1) * 10;
 
 	// memo 지우: 초기에 모든 예약목록 받아오기
 	const fetchData = async () => {
@@ -93,17 +93,7 @@ const FarmReservationTable = ({}) => {
 			});
 		}
 		setPrintData(filteredData);
-	};
-
-	const showPages = () => {
-		for (let i = 1; i <= printData.length / 10; i++) {
-			pages.push(
-				<PageBtn key={i} onClick={() => setPage(i)}>
-					i
-				</PageBtn>,
-			);
-		}
-		console.log(pages);
+		setPage(1);
 	};
 
 	useEffect(() => {
@@ -113,17 +103,8 @@ const FarmReservationTable = ({}) => {
 	useEffect(() => {
 		if (originalData) {
 			filterData();
-			showPages();
-			setPrintData(printData.slice(10 * (page - 1), 10 * page));
 		}
 	}, [statusOption, dateOption]);
-
-	useEffect(() => {
-		console.log('들어오니', printData);
-		if (printData) {
-			console.log(printData.slice(10 * (page - 1), 10 * page));
-		}
-	}, [page]);
 
 	if (printData) {
 		return (
@@ -151,7 +132,7 @@ const FarmReservationTable = ({}) => {
 						</Tr>
 					</Thead>
 					<tbody>
-						{printData.map((oneReservation) => {
+						{printData.slice(offset, offset + 10).map((oneReservation) => {
 							const { reservedTime, id, user, content, pay, status } =
 								oneReservation;
 							return (
@@ -187,8 +168,13 @@ const FarmReservationTable = ({}) => {
 							);
 						})}
 					</tbody>
-					<Pages>{pages}</Pages>
 				</Table>
+				<Pagination
+					total={printData.length}
+					limit={10}
+					page={page}
+					setPage={setPage}
+				/>
 			</>
 		);
 	}
