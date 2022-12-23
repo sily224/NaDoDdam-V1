@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
 import ModalContainer from '../components/Modal'
-import FarmPeriod from "../components/FarmPeriod";
+import FarmPeriod from '../components/FarmPeriod';
 import FarmFormat from '../components/FarmFormat';
 import styled from 'styled-components';
 import axios from 'axios';
-import FarmTime from "../components/FarmTime";
+import FarmTime from '../components/FarmTime';
 
 const Subject = styled.h2`
 	text-align: center;
@@ -51,6 +51,7 @@ const TimeTable = ()=>{
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
     const [cost, setCost] = useState(0);
+    const [maxHeadCount, setMaxHeadCount] = useState([]);
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
 
@@ -65,21 +66,47 @@ const TimeTable = ()=>{
             console.log(e);
         }
     };
+    
+    const getHeadCount = state =>{
+        setMaxHeadCount([...maxHeadCount,...state]);
+    }
 
     const stateLiftining = state => {
-        console.log("state",state);
-        console.log("before",postData);
-        console.log("set",{...postData,...state});
         setPostData({...postData,...state});
     }
-    
-    useEffect(()=>{
-        console.log("after",postData);
-    },[postData])
 
-    const handleSubmit = (e) =>{   
+    const handleSubmit = async(e) =>{   
         e.preventDefault();
-        console.log({...postData,cost});
+        const d1 = new Date(postData.startDate);
+        const d2 = new Date(postData.endDate);
+        const {timeList} = postData;
+        let diffDate = d1.getTime() - d2.getTime();
+        diffDate = Math.abs(diffDate /(1000*60*60*24));
+        console.log("diffDate: " + diffDate);
+
+        for (let i = 0; i < diffDate + 1 ; i++ ){
+            const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
+            console.log("date : "+date);
+            for (let j = 0; j< timeList[0].length;j++){
+                console.log(timeList);
+                const start_time = timeList[j][0];
+                const end_time = timeList[j][1];
+                const personnel = maxHeadCount[j];
+                try {
+                    await axios.post('http://localhost:3500/api/timetables/1',{
+                        'date': date,
+                        'personnel':personnel,
+                        'price':cost,
+                        'start_time':start_time,
+                        'end_time':end_time
+                    });
+                }
+                catch(e){
+                    console.log(e);
+                }
+            }
+        }
+        alert('체험시간표 등록완료')
     };
 
     const onTimeTableDelete = (idx) => {
@@ -102,7 +129,7 @@ const TimeTable = ()=>{
         <FarmFormat>
             
             <Subject>체험시간표</Subject>
-            <AddTimTable onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
+            <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
             { timeTable && 
                     timeTable.map((table,idx) =>{
 
@@ -157,7 +184,7 @@ const TimeTable = ()=>{
 
                     <div>
                         <h3>체험 시간</h3>
-                        <FarmTime onStateLiftining={stateLiftining}></FarmTime>
+                        <FarmTime onStateLiftining={stateLiftining} getHeadCount={getHeadCount}></FarmTime>
                         
                     </div>
                     <div>
