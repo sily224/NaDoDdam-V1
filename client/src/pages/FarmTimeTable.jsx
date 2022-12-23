@@ -121,7 +121,8 @@ const TimeTable = ()=>{
         alert('체험시간표 등록완료');
         dispatch(closeModal());
         setCost(0);
-        window.location.reload();
+        // location.reload();
+        // fetchData();
     };
 
     const onTimeTableDelete = (idx) => {
@@ -151,9 +152,8 @@ const TimeTable = ()=>{
             <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
             <Pagination total={timeTable.length} limit={5} page={page} setPage={setPage}/>
 
-            { timeTable && 
+            { timeTable.length < 1 ? <p>체험시간표를 추가하세요</p> : 
                     timeTable.map((table,idx) =>{
-
                         return(
                             <TimeTableList key={idx}>
                                 <h4>체험테이블{idx+1}</h4>
