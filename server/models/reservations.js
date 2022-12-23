@@ -62,6 +62,10 @@ const Reservations = (sequelize, DataTypes) => {
 		return Reservations.findOne({ where: { id: id, user_id: userId } });
 	};
 
+	Reservations.findByReserveNumId = (id) => {
+		return Reservations.findOne({ where: { id } });
+	};
+
 	Reservations.findByTimeId = (id) => {
 		return Reservations.findAll({ where: { time_id: id } });
 	};

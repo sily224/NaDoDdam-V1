@@ -10,15 +10,22 @@ const MapDiv = styled.div`
     z-index: -1;
 `;
 
+const IsDetail = () =>{
+    const {farmData : data} = useContext(DetailContext);
+    return data.address;
+}
+
 const Location = ({location}) =>{
-    const {detailData:data} = useContext(DetailContext);
-    let address = data.address;
+    let address = "";
 
     if (location){
         address = location;
+    }else{
+        address = IsDetail();
     }
 
     useEffect(() => {
+
         const mapContainer = document.getElementById('map'), // 지도를 표시할 div   
         mapOption = {
             center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표

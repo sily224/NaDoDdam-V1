@@ -80,7 +80,7 @@ const FarmTime = (props) =>{
         hour = parseInt(hour)+parseInt(forTime);  
         // endTime = startTime + forTime시간
         // 문자열이므로 split하여 시간에만 forTime 더해 endTime를 set한다.
-        setEndTime([ hour < 10 ? `0${hour}`: hour , min].join(':'));
+        setEndTime([ hour , min].join(':'));
     },[startTime]);
     
     useEffect(() =>{
