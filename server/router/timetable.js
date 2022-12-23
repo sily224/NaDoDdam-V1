@@ -15,7 +15,7 @@ router.get('/', timetableController.getTimeTables);
 router.post('/', isFarmer, timetableController.createTimeTable);
 
 // PUT /timetable/:id
-router.put('/:id', timetableController.updateTimeTable);
+router.put('/:id', isFarmer, timetableController.updateTimeTable); // 수정
 
 // DELETE /timetable/:id
 // router.delete('./:id', farmController.removeFarm);
