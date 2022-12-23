@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.post('/like/:farmId', isAuth, likeFarmsController.like); //찜 등록
 
-// router.get('/like/:id', isAuth, likeFarmsController.getReveiwData); // 본인 찜 조회
+router.get('/like', isAuth, likeFarmsController.getLikeData); // 본인 찜 조회
 
-// router.delete('/like/:id', isAuth, likeFarmsController.reviewDrop); //찜 삭제
+router.delete('/like/:farmId', isAuth, likeFarmsController.likecancel); //찜 삭제
 
 
 export default router;

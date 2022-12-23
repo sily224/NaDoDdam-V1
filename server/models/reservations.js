@@ -2,10 +2,6 @@ const Reservations = (sequelize, DataTypes) => {
 	const Reservations = sequelize.define(
 		'Reservations',
 		{
-			date: {
-				type: DataTypes.DATEONLY,
-				allowNull: false,
-			},
 			total_price: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
@@ -15,19 +11,7 @@ const Reservations = (sequelize, DataTypes) => {
 				allowNull: false,
 				defaultValue: '예약 대기',
 			},
-			start_time: {
-				type: DataTypes.TIME,
-				allowNull: false,
-			},
-			end_time: {
-				type: DataTypes.TIME,
-				allowNull: false,
-			},
 			personnel: {
-				type: DataTypes.INTEGER,
-				allowNull: false,
-			},
-			farm_id: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
@@ -46,8 +30,11 @@ const Reservations = (sequelize, DataTypes) => {
 			phoneNum: {
 				type: DataTypes.STRING,
 				allowNull: false,
-			}
-
+			},
+			time_id: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
+			},
 		},
 		{
 			charset: 'utf8',
@@ -67,12 +54,16 @@ const Reservations = (sequelize, DataTypes) => {
 		return Reservations.create(reserve);
 	};
 
-	Reservations.findByReserveId = (id) => {
-		return Reservations.findOne({ where: { id } });
+	Reservations.findByUserId = (id) => {
+		return Reservations.findAll({ where: { user_id: id } });
 	};
 
-	Reservations.getReserve = () => {
-		return Reservations.findAll();
+	Reservations.findByReserveId = (id, userId) => {
+		return Reservations.findOne({ where: { id: id, user_id: userId } });
+	};
+
+	Reservations.findByTimeId = (id) => {
+		return Reservations.findAll({ where: { time_id: id } });
 	};
 
 	Reservations.deleteReserve = (id) => {

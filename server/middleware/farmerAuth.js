@@ -26,6 +26,7 @@ export const isFarmer = async (req, res, next) => {
 			}
 			req.farmerId = user.id;
 			req.token = token;
+
 			next();
 		} catch (err) {
 			next(err);
