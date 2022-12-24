@@ -88,11 +88,11 @@ const TimeTables = (sequelize, DataTypes) => {
 	};
 
 	timeTable.getTimeTables = (farmId, lastId, limit) => {
-		const cursor = lastId || 0;
+		let cursor = lastId || 0;
 		return timeTable.findAll({
-			limit: limit,
+			limit: parseInt(limit),
 			where: {
-				farmId: farmId,
+				farmId,
 				id: {
 					[DataTypes.Op.gt]: cursor,
 				},
@@ -104,18 +104,3 @@ const TimeTables = (sequelize, DataTypes) => {
 };
 
 export default TimeTables;
-
-// const Sequelize = require('sequelize');
-// const Op = Sequelize.Op;
-
-// const getTimeTables = async (lastId, limit) => {
-//     const cursor = lastId || 0;
-//     return await User.findAll({
-//         limit: limit
-//         where: {
-//             id: {
-//                 [Op.gt]: cursor
-//             }
-//         }
-//     });
-// }

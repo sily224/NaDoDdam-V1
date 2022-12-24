@@ -10,11 +10,8 @@ export async function getTimeTables(req, res, next) {
 		if (!farmId) {
 			throw new Error('해당 농장주는 농장등록을 하지 않았습니다.');
 		}
-		// const data = await db.TimeTables.findtimetableFromFarmId(farmId);
-		// if (!data) {
-		// 	throw new Error('해당 농장의 체험시간표가 등록되지 않았습니다.');
-		// }
 		const data = await db.TimeTables.getTimeTables(farmId, lastId, limit);
+		// 페이지네이션 cursor 기반 구현 코치님 이 방법이 올바른 방법인지 궁금합니다.
 		res.status(200).json(data);
 	} catch (err) {
 		next(err);
