@@ -36,7 +36,7 @@ function FarmInputForm({ farmData }) {
 		<>
 			{farmData ? (
 				<div>
-					<Tittle>농장 정보 조회</Tittle>
+					<Tittle>농장 정보</Tittle>
 					<Form>
 						<Label>과일종류</Label>
 						<Input
