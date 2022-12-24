@@ -1,38 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import FarmFormat from '../components/FarmFormat';
 import CreateFarm from '../components/CreateFarm';
 import EditFarm from '../components/EditFarm';
+import * as userApi from '../lib/userApi';
+// import { createSlice, configureStore } from '@reduxjs/toolkit';
+// import { configureStore } from '@reduxjs/toolkit';
+
+// const initialState = {
+// 	farmData: {},
+// };
+// const farmSlice = createSlice({
+// 	name: 'farmSlice',
+// 	initialState,
+// 	reducers: {
+// 		get(state) {
+// 			state;
+// 		},
+// 		push(state) {},
+// 	},
+// });
 
 function FarmInfo() {
-	// todo 혜실: 로그인에서 farmid 받아오기 구현 예정
-	const farmid = null;
+	const [farmid, setFarmid] = useState(null);
 	const [farmData, setFarmData] = useState({});
+
+	useEffect(() => {
+		GetFarmData();
+	}, []);
 
 	const GetFarmData = async () => {
 		try {
-			const res = await axios.get(
+			const res = await userApi.get(
 				'http://localhost:3500/api/farms/farminformation',
 			);
 			const data = await res.data;
 			console.log(data);
+			console.log(data.farmInfo.id);
+			setFarmid(data.farmInfo.id);
 			setFarmData(data);
 		} catch (e) {
 			console.log(e);
 		}
 	};
 
-	useEffect(() => {
-		GetFarmData();
-	}, []);
-
 	return (
 		<>
 			<FarmFormat>
-				{farmid ? (
-					<EditFarm farmData={farmData}></EditFarm>
+				{farmid === null ? (
+					<CreateFarm></CreateFarm>
 				) : (
-					<CreateFarm farmData={farmData}></CreateFarm>
+					<EditFarm farmData={farmData}></EditFarm>
 				)}
 			</FarmFormat>
 		</>

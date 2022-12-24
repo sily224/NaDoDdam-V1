@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Postcode from './AddressApi';
 
 const Tittle = styled.h1``;
 
@@ -17,44 +18,158 @@ const Textarea = styled.textarea``;
 const Button = styled.button``;
 
 function FarmInputForm({ farmData }) {
-	const [data, setdata] = useState();
 	console.log(farmData);
+	const [type, setType] = useState(farmData.farmInfo.type);
+	const [name, setName] = useState(farmData.farmInfo.name);
+	const [address, setAddress] = useState(farmData.farmInfo.address);
+	const [tyurlpe, setUrl] = useState(farmData.farmInfo.url);
+	const [description, setDescription] = useState(farmData.farmInfo.description);
+	const [owner, setOwner] = useState(farmData.farmInfo.owner);
 
-	useEffect(() => {
-		setdata(farmData);
-	}, []);
+	// useEffect(() => {
+	// 	setdata(farmData);
+	// }, []);
+	// const farmData = null;
 	return (
 		<>
-			{farmData && (
+			{farmData ? (
 				<div>
 					<Tittle>농장 정보 조회</Tittle>
 					<Form>
 						<Label>과일종류</Label>
-						<Input>{farmData.type || null}</Input>
+						<Input
+							type="text"
+							value={type}
+							onChange={(e) => setType(e.target.value)}
+						></Input>
 						<Label>농장명</Label>
-						<Input>{farmData.name || null}</Input>
+						<Input
+							type="text"
+							value={type}
+							onChange={(e) => setName(e.target.value)}
+						></Input>
 						<Label>농장주소</Label>
 						<div>
-							<Input>{farmData.address || null}</Input>
-							<Button>검색</Button>
+							<Input
+								type="text"
+								value={type}
+								onChange={(e) => setAddress(e.target.value)}
+							></Input>
+							<Postcode />
 						</div>
+						{/* <Input
+							type="text"
+							value={type}
+							onChange={(e) => setType(e.target.value)}
+						></Input> */}
 						<Label>이미지</Label>
 						<div>
-							<Input>{farmData.url[0] || null}</Input>
+							<Input
+								type="text"
+								value={type}
+								onChange={(e) => setUrl(e.target.value)}
+							></Input>
 							<Button>대표 업로드</Button>
 						</div>
 						<div>
-							<Input>{farmData.url[1] || null}</Input>
+							{/* <Input
+								type="text"
+								value={type}
+								onChange={(e) => setType(e.target.value)}
+							></Input>
 							<Button>업로드</Button>
 						</div>
 						<div>
-							<Input>{farmData.url[2] || null}</Input>
-							<Button>업로드</Button>
+							<Input
+								type="text"
+								value={type}
+								onChange={(e) => setType(e.target.value)}
+							></Input>
+							<Button>업로드</Button> */}
 						</div>
 						<Label>체험설명</Label>
-						<Textarea>{farmData.description || null}</Textarea>
+						<Textarea
+							type="text"
+							value={type}
+							onChange={(e) => setDescription(e.target.value)}
+						></Textarea>
 						<Label>농장주명</Label>
-						<Input>{farmData.owner || null}</Input>
+						<Input
+							type="text"
+							value={type}
+							onChange={(e) => setOwner(e.target.value)}
+						></Input>
+						<Button>완료</Button>
+					</Form>
+				</div>
+			) : (
+				<div>
+					<Tittle>농장 정보 조회</Tittle>
+					<Form>
+						<Label>과일종류</Label>
+						<Input
+							type="text"
+							value={null}
+							onChange={(e) => setType(e.target.value)}
+						></Input>
+						<Label>농장명</Label>
+						<Input
+							type="text"
+							value={null}
+							onChange={(e) => setName(e.target.value)}
+						></Input>
+						<Label>농장주소</Label>
+						<div>
+							<Input
+								type="text"
+								value={null}
+								onChange={(e) => setAddress(e.target.value)}
+							></Input>
+							<Button>검색</Button>
+						</div>
+						{/* <Input
+							type="text"
+							value={type}
+							onChange={(e) => setType(e.target.value)}
+						></Input> */}
+						<Label>이미지</Label>
+						<div>
+							<Input
+								type="text"
+								value={null}
+								onChange={(e) => setUrl(e.target.value)}
+							></Input>
+							<Button>대표 업로드</Button>
+						</div>
+						<div>
+							{/* <Input
+								type="text"
+								value={type}
+								onChange={(e) => setType(e.target.value)}
+							></Input>
+							<Button>업로드</Button>
+						</div>
+						<div>
+							<Input
+								type="text"
+								value={type}
+								onChange={(e) => setType(e.target.value)}
+							></Input>
+							<Button>업로드</Button> */}
+						</div>
+						<Label>체험설명</Label>
+						<Textarea
+							type="text"
+							value={null}
+							onChange={(e) => setDescription(e.target.value)}
+						></Textarea>
+						<Label>농장주명</Label>
+						<Input
+							type="text"
+							value={null}
+							onChange={(e) => setOwner(e.target.value)}
+						></Input>
+						<Button>완료</Button>
 					</Form>
 				</div>
 			)}
