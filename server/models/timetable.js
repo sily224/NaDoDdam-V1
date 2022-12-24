@@ -65,7 +65,6 @@ const TimeTables = (sequelize, DataTypes) => {
 		return timeTable.findOne({ where: { id } });
 	};
 
-
 	timeTable.createTable = (tableInfo) => {
 		console.log(tableInfo);
 		return timeTable.create(tableInfo).then((data) => {

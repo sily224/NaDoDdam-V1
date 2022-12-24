@@ -11,5 +11,4 @@ router.get('/like', isAuth, likeFarmsController.getLikeData); // 본인 찜 조�
 
 router.delete('/like/:farmId', isAuth, likeFarmsController.likecancel); //찜 삭제
 
-
 export default router;
