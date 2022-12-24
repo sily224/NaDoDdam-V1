@@ -6,7 +6,7 @@ import Review from './Review';
 import TimeBtns from './TimeBtns';
 import { DetailContext } from '../pages/DetailPage';
 import FloatingForm from './FloatingForm';
-
+import Carousel from 'react-bootstrap/Carousel'
 
 const DisplayFlex = styled.div`
     display:flex;
@@ -51,15 +51,43 @@ const TimButtonContainer = styled(DisplayFlex)`
     justify-content:center;
     margin-left : 3%;
 `;
+const CarouselImg = styled.img`
+    height: 400px;
+`;
 
 
 
-const DetailHeader = ({ name, address }) => {
+const DetailHeader = ({ name, address, url }) => {
     return (
         <Header>
             <Title>{name}</Title>
             <p>{address}</p>
-            <img src='' alt={`${name}이미지`} />
+            
+                <Carousel slide={false}>
+        `           <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="First slide"
+                        />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="Second slide"
+                        />
+
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="Third slide"
+                        />
+                    </Carousel.Item>`
+                </Carousel>
+            
         </Header>
     );
 };
@@ -96,7 +124,7 @@ const Detail = () => {
             {
                 farm &&
                 <DetailContainer key={`${farm.name}-${new Date()}`}>
-                    <DetailHeader name={farm.name} address={farm.address} />
+                    <DetailHeader name={farm.name} address={farm.address} url={farm.url} />
                     
                     <DetailContent>
                         <DetailInform>

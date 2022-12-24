@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import Pagination from './Pagination';
+import * as API from '../lib/userApi';
 
 const FilterWrapper = styled.div`
 	display: flex;
@@ -12,6 +12,7 @@ const FilterWrapper = styled.div`
 const FilterBtn = styled.button`
 	width: 5rem;
 	margin-right: 0.5rem;
+	font-size: 0.8rem;
 `;
 
 const FilterSelect = styled.select`
@@ -45,6 +46,11 @@ const BtnTd = styled.td`
 
 const Button = styled.button``;
 
+const FailAnnouncement = styled.p`
+	text-align: center;
+	margin-top: 5rem;
+`;
+
 const FarmReservationTable = ({}) => {
 	// memo 지우: 데이터 보관
 	const [originalData, setOriginalData] = useState(null);
@@ -60,39 +66,86 @@ const FarmReservationTable = ({}) => {
 	// memo 지우: 초기에 모든 예약목록 받아오기
 	const fetchData = async () => {
 		try {
-			await axios.get('/reservation.json').then((res) => {
+			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
+				console.log('예약목록', res.data);
 				setPrintData(res.data);
 				setOriginalData(res.data);
 			});
 		} catch (e) {
-			console.log(e);
+			console.log(e.response.data.message);
 		}
 	};
 
+	const updateData = async () => {
+		try {
+			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
+				setOriginalData(res.data);
+			});
+		} catch (e) {
+			console.log(e.response.data.message);
+		}
+		filterData();
+	};
+
+	// memo 지우: 예약상태, 시간순 정렬로 데이터 거르기
 	const filterData = () => {
 		let filteredData = [...originalData];
 
 		// memo 지우: 예약 상태에 따라 거르기
 		if (statusOption !== '전체') {
-			filteredData = filteredData.filter((obj) => obj.status === statusOption);
+			filteredData = filteredData.filter(
+				(obj) => obj.reserve.status === statusOption,
+			);
 		}
 
 		// memo 지우: 최근순 or 오래된순으로 정렬
 		if (dateOption === '최근순') {
 			filteredData.sort((a, b) => {
-				if (a.reservedTime > b.reservedTime) return -1;
-				if (a.reservedTime == b.reservedTime) return 0;
-				if (a.reservedTime < b.reservedTime) return 1;
+				let aTime = a.reserve.createdAt;
+				let bTime = b.reserve.createdAt;
+				if (aTime > bTime) return -1;
+				if (aTime == bTime) return 0;
+				if (aTime < bTime) return 1;
 			});
 		} else {
 			filteredData.sort((a, b) => {
-				if (a.reservedTime > b.reservedTime) return 1;
-				if (a.reservedTime == b.reservedTime) return 0;
-				if (a.reservedTime < b.reservedTime) return -1;
+				let aTime = a.reserve.createdAt;
+				let bTime = b.reserve.createdAt;
+				if (aTime > bTime) return 1;
+				if (aTime == bTime) return 0;
+				if (aTime < bTime) return -1;
 			});
 		}
 		setPrintData(filteredData);
 		setPage(1);
+	};
+
+	const onClickRezConfirm = async (e) => {
+		const id = e.target.name;
+
+		try {
+			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+				status: '예약완료',
+			});
+			alert('예약이 확정되었습니다.');
+			updateData();
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const onClickRezCancel = async (e) => {
+		const id = e.target.name;
+
+		try {
+			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+				status: '예약취소',
+			});
+			alert('예약이 취소되었습니다.');
+			updateData();
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	useEffect(() => {
@@ -132,35 +185,47 @@ const FarmReservationTable = ({}) => {
 					</Thead>
 					<tbody>
 						{printData.slice(offset, offset + 10).map((oneReservation) => {
-							const { reservedTime, id, user, content, pay, status } =
-								oneReservation;
+							const { time, reserve } = oneReservation;
 							return (
-								<Tr key={id}>
-									<Td>{reservedTime.slice(0, 10)}</Td>
-									<Td>{id}</Td>
+								<Tr key={reserve.id}>
+									<Td>{reserve.createdAt.slice(0, 10)}</Td>
+									<Td>{reserve.id}</Td>
 									<Td>
-										{user.name}
+										{reserve.name}
 										<br />
-										{user.userId}
+										{reserve.email}
 										<br />
-										{user.phone}
+										{reserve.phoneNum}
 									</Td>
 									<Td>
-										{content.date}
+										{time.date}
 										<br />
-										{content.time}
+										{`${time.start_time} - ${time.end_time}`}
 										<br />
-										인원: {content.headCount}명
+										인원: {time.people}명
 									</Td>
 									<Td>
-										{pay.cost.toLocaleString('ko-KR')}원<br />
-										{pay.method}
+										{reserve.total_price.toLocaleString('ko-KR')}원<br />
+										{reserve.payment === 'card' && '카드결제'}
 									</Td>
 									<BtnTd>
-										{status}
-										{status === '예약대기' && <Button>예약 확정</Button>}
-										{(status === '예약대기' || status === '예약완료') && (
-											<Button>예약 취소</Button>
+										{reserve.status}
+										{reserve.status === '예약대기' && (
+											<Button
+												name={reserve.id}
+												onClick={(e) => onClickRezConfirm(e)}
+											>
+												예약확정
+											</Button>
+										)}
+										{(reserve.status === '예약대기' ||
+											reserve.status === '예약완료') && (
+											<Button
+												name={reserve.id}
+												onClick={(e) => onClickRezCancel(e)}
+											>
+												예약취소
+											</Button>
 										)}
 									</BtnTd>
 								</Tr>
@@ -176,6 +241,8 @@ const FarmReservationTable = ({}) => {
 				/>
 			</>
 		);
+	} else {
+		return <FailAnnouncement>예약 정보가 없습니다.</FailAnnouncement>;
 	}
 };
 

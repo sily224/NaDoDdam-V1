@@ -6,11 +6,17 @@ import { Link } from 'react-router-dom';
 import styled, {css} from 'styled-components';
 
 const handleButton = async (e) => {
+	// 로그인 유무 확인
+	if (!localStorage.getItem('token')){
+		alert('찜 기능은 로그인이 필요합니다.');
+		return;
+	}
+
 	const farmId = Number(e.target.id);
 	console.log('입력된 농장 아이디', farmId);
 	if (e.target.style.backgroundColor !== 'red')
 		e.target.style.backgroundColor = 'red';
-	else e.target.style.backgroundColor = '';
+	else e.target.style.backgroundColor = 'white';
 
 	const token = localStorage.getItem('token');
 	const header = {
@@ -139,8 +145,9 @@ const Container = styled.div`
 
 const ItemList = styled.div`
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(400px, auto));
+	grid-template-columns: repeat(auto-fill, minmax(400px, auto));
 	grid-gap: 25px;
+	width: auto;
 	max-width: 2100px;
 	width: 100%;
 	height: 100%;
@@ -157,7 +164,7 @@ const Item = styled.div`
 
 	img {
 		width: 100%;
-		height: 60%;
+		height: 240px;
 	}
 `;
 
@@ -176,7 +183,7 @@ const Button = styled.button`
 
 const TextContainer = styled.div`
 	display: grid;
-	height: 40%;
+	height: auto;
 	object-fit: cover;
 	grid-template-rows: 1fr 1fr 1fr;
 `;
