@@ -46,13 +46,13 @@ const Layout = () => {
 
   const getFavoriteFarmIds = (async () => {
      const farmIds = await getFavoriteFarmId();
-     await dispatch(setFavorite(farmIds));
+     dispatch(setFavorite(farmIds));
   });
 
   console.log(favorite);
 
   useEffect(()=>{
-    getFavoriteFarmIds();
+    if(localStorage.getItem('token')) getFavoriteFarmIds();
   },[]);
 
   return (

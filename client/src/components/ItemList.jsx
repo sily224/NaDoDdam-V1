@@ -6,11 +6,17 @@ import { Link } from 'react-router-dom';
 import styled, {css} from 'styled-components';
 
 const handleButton = async (e) => {
+	// 로그인 유무 확인
+	if (!localStorage.getItem('token')){
+		alert('찜 기능은 로그인이 필요합니다.');
+		return;
+	}
+
 	const farmId = Number(e.target.id);
 	console.log('입력된 농장 아이디', farmId);
 	if (e.target.style.backgroundColor !== 'red')
 		e.target.style.backgroundColor = 'red';
-	else e.target.style.backgroundColor = '';
+	else e.target.style.backgroundColor = 'white';
 
 	const token = localStorage.getItem('token');
 	const header = {
