@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { showModal, closeModal } from "../store/ModalSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { showModal, closeModal } from '../store/ModalSlice';
+import { initDate } from '../store/FormSlice';
 import ModalContainer from '../components/Modal'
 import FarmPeriod from '../components/FarmPeriod';
 import FarmFormat from '../components/FarmFormat';
-import styled from 'styled-components';
 import FarmTime from '../components/FarmTime';
 import Pagination from '../components/Pagination';
+import styled from 'styled-components';
+
 import * as userApi from '../lib/userApi';
 
 const Subject = styled.h2`
@@ -20,8 +22,9 @@ const TimeTableList = styled.div`
     margin-bottom: 20px;
     margin-left: 3%;
 `;
-const Img = styled.img`
+const FarmImg = styled.img`
     margin-right: 20px;
+    width: 20%;
 `;
 const TimTableContent = styled.div`
     display:block
@@ -45,23 +48,36 @@ const TimeTableButton =styled.button`
         margin-bottom:10px;
     }
 `;
+const H3 = styled.h3`
+    margin : 30px 0 10px;
+    font-size : 1.3rem;
+`;
+const SubmitBtn = styled.button`
+    margin-top : 20px;
+`;
+const FailAnnouncement = styled.p`
+	text-align: center;
+	margin-top: 5rem;
+`;
 
 
-//TimeTable
+
+//memo 지혜 : TimeTable
 const TimeTable = ()=>{
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
-    const [cost, setCost] = useState(0);
     const [maxHeadCount, setMaxHeadCount] = useState([]);
+    const [cost, setCost] = useState('');
     const [page, setPage] = useState(1);
+    
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
 
     const fetchData = async () => {
         try {
-            await userApi.get('http://localhost:3500/api/timetables').then((res) => {
+            await userApi.get('http://localhost:3500/api/timetables/owner').then((res) => {
                 console.log(res.data);
-                setTimeTable(res.data);
+                setTimeTable([...res.data]);
             });
         }
         catch(e){
@@ -81,7 +97,7 @@ const TimeTable = ()=>{
         e.preventDefault();
         console.log(postData.timeList);
         if(postData.timeList.length < 1 || cost < 1 ||!postData.startDate || !postData.endDate) {
-            alert("모든 값을 올바르게 기입해주세요");
+            alert('모든 값을 올바르게 기입해주세요');
             return;
         };
         
@@ -96,15 +112,12 @@ const TimeTable = ()=>{
             const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
             
             for (let j = 0; j< timeList[0].length -1;j++){
-                console.log(timeList[0].length);
-                console.log(timeList[0][0]);
                 const start_time = timeList[j][0];
-                console.log(start_time);
                 const end_time = timeList[j][1];
                 const personnel = maxHeadCount[j];
 
                 try {
-                    const res = await userApi.post('http://localhost:3500/api/timetables/',{
+                    const res = await userApi.post('http://localhost:3500/api/timetables',{
                         'date': date,
                         'personnel':personnel,
                         'price':cost,
@@ -120,19 +133,20 @@ const TimeTable = ()=>{
         }
         alert('체험시간표 등록완료');
         dispatch(closeModal());
+        dispatch(initDate());
         setCost(0);
-        // location.reload();
-        // fetchData();
+        fetchData();
     };
 
-    const onTimeTableDelete = (idx) => {
-        // axios.delete(`http://localhost:3500/api/timetables/${idx}`);
-        // 삭제 요청api
+    const onTimeTableDelete = async(id) => {
+        await userApi.delete(`http://localhost:3500/api/timetables/${id}`);
+        fetchData();
     };
 
-    const onTimeTableUpdate = (idx)=>{
-        // 수정 요청api
+    const onTimeTableUpdate = (id)=>{
         dispatch(showModal());
+
+
         // axios.put(`http://localhost:3500/api/timetables/${idx}`,{
 
 
@@ -152,13 +166,13 @@ const TimeTable = ()=>{
             <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
             <Pagination total={timeTable.length} limit={5} page={page} setPage={setPage}/>
 
-            { timeTable.length < 1 ? <p>체험시간표를 추가하세요</p> : 
+            { timeTable.length < 1 ? <FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement> : 
                     timeTable.map((table,idx) =>{
                         return(
                             <TimeTableList key={idx}>
                                 <h4>체험테이블{idx+1}</h4>
                                 <TimTableItem>
-                                    <Img alt='농장이미지'></Img>
+                                    <FarmImg src={table.farm? table.farm.url:''} alt='농장이미지'></FarmImg>
                                     <TimTableContent>
                                         <div>
                                             <span>날짜 : </span>
@@ -183,11 +197,11 @@ const TimeTable = ()=>{
                                             <span>인원수 : </span>
                                             <span>{table.personnel}</span>
                                         </div>
-                                </TimTableContent>
-                                <TimeTableButtons>
-                                    <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx)}>수정</TimeTableButton>
-                                    <TimeTableButton type='button' onClick={()=>onTimeTableDelete(idx)}>삭제</TimeTableButton>
-                                </TimeTableButtons>
+                                    </TimTableContent>
+                                    <TimeTableButtons>
+                                        <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(table.id)}>수정</TimeTableButton>
+                                        <TimeTableButton type='button' onClick={()=>onTimeTableDelete(table.id)}>삭제</TimeTableButton>
+                                    </TimeTableButtons>
                                 </TimTableItem>
                             </TimeTableList>
                         )
@@ -199,20 +213,20 @@ const TimeTable = ()=>{
                 <form onSubmit={handleSubmit}>
                     <h1>체험시간표</h1>
                     <div>
-                        <h3>체험 날짜</h3>
+                        <H3>체험 날짜</H3>
                         <FarmPeriod onStateLiftining ={stateLiftining}/>  
                     </div>
 
                     <div>
-                        <h3>체험 시간</h3>
+                        <H3>체험 시간</H3>
                         <FarmTime onStateLiftining={stateLiftining} getHeadCount={getHeadCount}></FarmTime>
                         
                     </div>
                     <div>
-                        <h3>체험 비용</h3>
-                        <input type='text' placeholder='입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
+                        <H3>체험 비용</H3>
+                        <input type='text' placeholder='체험비용을 입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
                     </div>
-                    <button type='submit'>추가하기</button>
+                    <SubmitBtn type='submit'>추가하기</SubmitBtn>
                 </form>
             </ModalContainer>
         }
