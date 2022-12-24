@@ -64,8 +64,6 @@ const Layout = () => {
 				</Container>
 			</Provider>
 			<Footer />
-			<Login />
-			<Register />
 		</>
 	);
 };
