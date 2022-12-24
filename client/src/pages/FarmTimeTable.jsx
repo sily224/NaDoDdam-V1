@@ -20,8 +20,9 @@ const TimeTableList = styled.div`
     margin-bottom: 20px;
     margin-left: 3%;
 `;
-const Img = styled.img`
+const FarmImg = styled.img`
     margin-right: 20px;
+    width: 20%;
 `;
 const TimTableContent = styled.div`
     display:block
@@ -61,7 +62,7 @@ const TimeTable = ()=>{
         try {
             await userApi.get('http://localhost:3500/api/timetables').then((res) => {
                 console.log(res.data);
-                setTimeTable(res.data);
+                setTimeTable([...res.data]);
             });
         }
         catch(e){
@@ -158,7 +159,7 @@ const TimeTable = ()=>{
                             <TimeTableList key={idx}>
                                 <h4>체험테이블{idx+1}</h4>
                                 <TimTableItem>
-                                    <Img alt='농장이미지'></Img>
+                                    <FarmImg src={table.farm? table.farm.url:""} alt='농장이미지'></FarmImg>
                                     <TimTableContent>
                                         <div>
                                             <span>날짜 : </span>
