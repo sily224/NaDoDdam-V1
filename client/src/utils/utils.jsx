@@ -18,3 +18,8 @@ export const logout = () => {
 		window.location.href = '/';
 	}
 };
+
+export const isLogin = () => {
+	const token = getToken();
+	return token ? true : false;
+};
