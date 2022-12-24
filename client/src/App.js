@@ -12,9 +12,7 @@ import FarmReservation from './pages/FarmReservation';
 import FarmTimeTable from './pages/FarmTimeTable';
 import MyReservation from './pages/MyReservation';
 import Favorite from './pages/Favorite';
-<<<<<<< HEAD
 import FarmInfo from './pages/FarmInfo';
-=======
 import NotFound from './pages/NotFound';
 
 // memo 지우: NonMemberRoute -> 비회원일 때만 페이지 전환
@@ -25,7 +23,6 @@ import {
 	MemberRoute,
 	FarmerRoute,
 } from './components/RestrictionRoute';
->>>>>>> 4640a8a3e64c1b9b1b52b94fae621a22dc33d850
 
 function App() {
 	return (
@@ -50,16 +47,6 @@ function App() {
 						}
 					/>
 					<Route path="/detail/:id" element={<DetailPage />} />
-<<<<<<< HEAD
-					<Route path="/pay" element={<Payment />} />
-					<Route path="/mypage" element={<MyPage />} />
-					<Route path="/farm" element={<Farm />} />
-					<Route path="/farm/reservation" element={<FarmReservation />} />
-					<Route path="/farm/timetable" element={<FarmTimeTable />} />
-					<Route path="/myreservation" element={<MyReservation />} />
-					<Route path="/farm/farminfo" element={<FarmInfo />} />
-					{/* 해당부분에 라우터 넣으면 됩니다. */}
-=======
 					<Route
 						path="/pay"
 						element={
@@ -117,7 +104,7 @@ function App() {
 						}
 					/>
 					<Route path="/notfound" element={<NotFound />} />
->>>>>>> 4640a8a3e64c1b9b1b52b94fae621a22dc33d850
+					<Route path="/farm/farminfo" element={<FarmInfo />} />
 				</Route>
 			</Routes>
 		</div>

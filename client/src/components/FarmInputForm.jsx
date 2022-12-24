@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Postcode from './AddressApi';
+// import Img from './ImgUpload';
 
+// todo 혜실 : 수정중으로 주석이 많으나 추후 삭제 예정
 const Tittle = styled.h1``;
 
 const Form = styled.div`
@@ -22,7 +24,7 @@ function FarmInputForm({ farmData }) {
 	const [type, setType] = useState(farmData.farmInfo.type);
 	const [name, setName] = useState(farmData.farmInfo.name);
 	const [address, setAddress] = useState(farmData.farmInfo.address);
-	const [tyurlpe, setUrl] = useState(farmData.farmInfo.url);
+	const [url, setUrl] = useState(farmData.farmInfo.url);
 	const [description, setDescription] = useState(farmData.farmInfo.description);
 	const [owner, setOwner] = useState(farmData.farmInfo.owner);
 
@@ -45,14 +47,14 @@ function FarmInputForm({ farmData }) {
 						<Label>농장명</Label>
 						<Input
 							type="text"
-							value={type}
+							value={name}
 							onChange={(e) => setName(e.target.value)}
 						></Input>
 						<Label>농장주소</Label>
 						<div>
 							<Input
 								type="text"
-								value={type}
+								value={address}
 								onChange={(e) => setAddress(e.target.value)}
 							></Input>
 							<Postcode />
@@ -63,14 +65,15 @@ function FarmInputForm({ farmData }) {
 							onChange={(e) => setType(e.target.value)}
 						></Input> */}
 						<Label>이미지</Label>
-						<div>
+						{/* <Img></Img> */}
+						{/* <div>
 							<Input
 								type="text"
 								value={type}
 								onChange={(e) => setUrl(e.target.value)}
 							></Input>
 							<Button>대표 업로드</Button>
-						</div>
+						</div> */}
 						<div>
 							{/* <Input
 								type="text"
@@ -90,13 +93,13 @@ function FarmInputForm({ farmData }) {
 						<Label>체험설명</Label>
 						<Textarea
 							type="text"
-							value={type}
+							value={description}
 							onChange={(e) => setDescription(e.target.value)}
 						></Textarea>
 						<Label>농장주명</Label>
 						<Input
 							type="text"
-							value={type}
+							value={owner}
 							onChange={(e) => setOwner(e.target.value)}
 						></Input>
 						<Button>완료</Button>
@@ -133,14 +136,15 @@ function FarmInputForm({ farmData }) {
 							onChange={(e) => setType(e.target.value)}
 						></Input> */}
 						<Label>이미지</Label>
-						<div>
+						{/* <Img></Img> */}
+						{/* <div>
 							<Input
 								type="text"
 								value={null}
 								onChange={(e) => setUrl(e.target.value)}
 							></Input>
 							<Button>대표 업로드</Button>
-						</div>
+						</div> */}
 						<div>
 							{/* <Input
 								type="text"

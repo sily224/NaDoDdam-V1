@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import FarmFormat from '../components/FarmFormat';
 import CreateFarm from '../components/CreateFarm';
 import EditFarm from '../components/EditFarm';
 import * as userApi from '../lib/userApi';
@@ -45,13 +44,11 @@ function FarmInfo() {
 
 	return (
 		<>
-			<FarmFormat>
-				{farmid === null ? (
-					<CreateFarm></CreateFarm>
-				) : (
-					<EditFarm farmData={farmData}></EditFarm>
-				)}
-			</FarmFormat>
+			{farmid === null ? (
+				<CreateFarm></CreateFarm>
+			) : (
+				<EditFarm farmData={farmData}></EditFarm>
+			)}
 		</>
 	);
 }
