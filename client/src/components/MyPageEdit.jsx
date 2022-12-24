@@ -24,6 +24,11 @@ const StyledForm = styled.form`
  display: flex;
 `
 
+const StyledModal = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
 const MyPageProfileEdit = ({id, name, title, userId}) => {
   const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
@@ -110,8 +115,7 @@ const MyPageSecurityEdit = ({userId}) => {
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { isValid, errors }, // 제출중이라면 가입하기 버튼 disabled됨
+    formState: { isSubmitting, errors }, // 제출중이라면 가입하기 버튼 disabled됨
 	} = useForm({ mode: 'onChange', resolver: yupResolver(formSchema) });
 
   const upDatePassword = async({oldpassword, password}) => {
@@ -141,19 +145,31 @@ const MyPageSecurityEdit = ({userId}) => {
             <div><h4><AiOutlineLock />비밀번호</h4></div>
             <StyledForm onSubmit={handleSubmit((data) => upDatePassword(data))}>
               {modalOpen && 
-                <ModalContainer>
+                <ModalContainer w="25%" h="60%">
+                  <StyledModal>
                   <label>현재비밀번호</label>
-                  <Input type="password" name="currentPassword" {...register('oldpassword')}/>
+                  <Input 
+                    type="password" 
+                    name="currentPassword" 
+                    {...register('oldpassword')}/>
                   <label>새비밀번호</label>
-                  <Input type="password"  name="newPassword" {...register('password')} />
+                  <Input 
+                    type="password" 
+                    name="newPassword" 
+                    {...register('password')} />
                   {errors.password && (
                     <small role="alert">{errors.password.message}</small>
                   )}
-                  <Input type="password" placeholder='비밀번호 확인' {...register('passwordConfirm')}/>
+                  <Input 
+                    type="password" 
+                    name="newPasswordConfirm" 
+                    placeholder='비밀번호 확인' 
+                    {...register('passwordConfirm')}/>
                   {errors.passwordConfirm && (
                   <small role="alert">{errors.passwordConfirm.message}</small>
                   )}
-                  <button type="submit" disabled={!isValid}>저장</button>
+                  <button type="submit" disabled={isSubmitting}>저장</button>
+                  </StyledModal>
                 </ModalContainer>
               }
             </StyledForm>
