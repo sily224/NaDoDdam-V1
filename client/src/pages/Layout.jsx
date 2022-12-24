@@ -58,7 +58,7 @@ const Layout = () => {
   return (
     <>
       <Provider store={store}>
-      <Header favorite={favorite}/>
+      <Header/>
       <Container>
         <Outlet/>
       </Container>

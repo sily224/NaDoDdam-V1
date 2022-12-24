@@ -139,8 +139,9 @@ const Container = styled.div`
 
 const ItemList = styled.div`
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(400px, auto));
+	grid-template-columns: repeat(auto-fill, minmax(400px, auto));
 	grid-gap: 25px;
+	width: auto;
 	max-width: 2100px;
 	width: 100%;
 	height: 100%;
@@ -157,7 +158,7 @@ const Item = styled.div`
 
 	img {
 		width: 100%;
-		height: 60%;
+		height: 240px;
 	}
 `;
 
@@ -176,7 +177,7 @@ const Button = styled.button`
 
 const TextContainer = styled.div`
 	display: grid;
-	height: 40%;
+	height: auto;
 	object-fit: cover;
 	grid-template-rows: 1fr 1fr 1fr;
 `;

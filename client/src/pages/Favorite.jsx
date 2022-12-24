@@ -36,7 +36,7 @@ const Favorite = () => {
 	return (
 		<div>
 			<h2>찜 목록</h2>
-			<FavoriteList contents={contents} favorite={favorite} />
+			<FavoriteList contents={contents} />
 		</div>
 	);
 };
