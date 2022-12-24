@@ -7,6 +7,7 @@ export async function like(req, res, next) {
 
 	try {
 		const user = await db.LikeFarms.findLike(user_id);
+
 		const data = [];
 
 		user.forEach((user) => data.push(user.farm_id));
@@ -75,9 +76,9 @@ export async function getLikeData(req, res, next) {
 		}
 
 		for (let i = 0; i < datas.length; i++) {
-            // result.push({like :found[i].dataValues, farm: datas[i]})
-            result.push(datas[i])
-        }
+			// result.push({like :found[i].dataValues, farm: datas[i]})
+			result.push(datas[i]);
+		}
 
 		res.status(200).json(result);
 	} catch (err) {}

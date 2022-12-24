@@ -6,9 +6,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFavorite } from '../store/FavoriteSlice';
-import Login from '../pages/login';
-import Register from '../pages/register';
-
 import { Provider } from 'react-redux';
 import store from '../store/Store';
 

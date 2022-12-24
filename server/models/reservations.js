@@ -9,7 +9,7 @@ const Reservations = (sequelize, DataTypes) => {
 			status: {
 				type: DataTypes.STRING(64),
 				allowNull: false,
-				defaultValue: '예약 대기',
+				defaultValue: '예약대기',
 			},
 			personnel: {
 				type: DataTypes.INTEGER,

@@ -48,14 +48,13 @@ export async function getReserveData(req, res, next) {
 	const id = req.userId;
 
 	try {
-
 		const timeId = []; // 예약한 것들의 타임 id
 		const timeInfo = [];
 		const farmInfo = [];
 
 		let results = [];
 		const reserve = await db.Reservations.findByUserId(id);
-		reserve.forEach((res)=> timeId.push(res.time_id));
+		reserve.forEach((res) => timeId.push(res.time_id));
 
 		for (let i = 0; i < timeId.length; i++) {
 			const time = await db.TimeTables.getById(timeId[i]);
@@ -69,14 +68,18 @@ export async function getReserveData(req, res, next) {
 			});
 		}
 
-		for(let i = 0; i < timeInfo.length; i++) {
-			const data = await db.Farms.findById(timeInfo[i].farmId)
+		for (let i = 0; i < timeInfo.length; i++) {
+			const data = await db.Farms.findById(timeInfo[i].farmId);
 			farmInfo.push(data);
 		}
 		console.log(farmInfo);
 
-		for(let i = 0; i< reserve.length; i++) {
-			results.push({time: timeInfo[i], reserve: reserve[i], farm: farmInfo[i]})
+		for (let i = 0; i < reserve.length; i++) {
+			results.push({
+				time: timeInfo[i],
+				reserve: reserve[i],
+				farm: farmInfo[i],
+			});
 		}
 		res.status(200).json(results);
 	} catch (err) {
@@ -163,8 +166,16 @@ export async function reserveUpdate(req, res, next) {
 		throw new Error('유저의 해당 예약이 없습니다.');
 	}
 
-	const { time_id, total_price, personnel, payment, name, phoneNum, email } =
-		req.body;
+	const {
+		time_id,
+		total_price,
+		personnel,
+		payment,
+		name,
+		phoneNum,
+		email,
+		status,
+	} = req.body;
 
 	try {
 		const reserveInfo = { id, userId };
@@ -173,11 +184,18 @@ export async function reserveUpdate(req, res, next) {
 			...(time_id && { time_id }),
 			...(total_price && { total_price }),
 			...(personnel && { personnel }),
+			...(status && { status }),
 			...(payment && { payment }),
 			...(name && { name }),
 			...(email && { email }),
 			...(phoneNum && { phoneNum }),
 		};
+
+		const reserve = await db.Reservations.findByReserveId(id, userId);
+		if (reserve.status === '체험완료') {
+			throw new Error('유저는 체험이 완료되어 변경할 수 없습니다.');
+		}
+
 		const updateReserveInfo = await setReserve(reserveInfo, toUpdate);
 		res.status(200).json({ message: 'update!' });
 	} catch (err) {
