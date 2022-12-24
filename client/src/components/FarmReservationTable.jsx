@@ -63,28 +63,15 @@ const FarmReservationTable = ({}) => {
 	const [page, setPage] = useState(1);
 	const offset = (page - 1) * 10;
 
-	// memo 지우: 초기에 모든 예약목록 받아오기
+	// memo 지우: 모든 예약목록 받아오기
 	const fetchData = async () => {
 		try {
 			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
-				console.log('예약목록', res.data);
-				setPrintData(res.data);
 				setOriginalData(res.data);
 			});
 		} catch (e) {
 			console.log(e.response.data.message);
 		}
-	};
-
-	const updateData = async () => {
-		try {
-			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
-				setOriginalData(res.data);
-			});
-		} catch (e) {
-			console.log(e.response.data.message);
-		}
-		filterData();
 	};
 
 	// memo 지우: 예약상태, 시간순 정렬로 데이터 거르기
@@ -120,6 +107,7 @@ const FarmReservationTable = ({}) => {
 		setPage(1);
 	};
 
+	// memo 지우: 예약 완료 버튼 클릭
 	const onClickRezConfirm = async (e) => {
 		const id = e.target.name;
 
@@ -128,12 +116,13 @@ const FarmReservationTable = ({}) => {
 				status: '예약완료',
 			});
 			alert('예약이 확정되었습니다.');
-			updateData();
+			fetchData();
 		} catch (err) {
-			console.log(err);
+			console.log(e.res.data.message);
 		}
 	};
 
+	// memo 지우: 예약 취소 버튼 클릭
 	const onClickRezCancel = async (e) => {
 		const id = e.target.name;
 
@@ -142,21 +131,21 @@ const FarmReservationTable = ({}) => {
 				status: '예약취소',
 			});
 			alert('예약이 취소되었습니다.');
-			updateData();
+			fetchData();
 		} catch (err) {
-			console.log(err);
+			console.log(e.res.data.message);
 		}
 	};
 
+	// memo 지우: originalData에 데이터 받기
 	useEffect(() => {
 		fetchData();
 	}, []);
 
+	// memo 지우: 원본 데이터 or 필터 업그레이드 -> filterData 통해 필터링, printData에 결과 저장 -> 화면 재렌더링
 	useEffect(() => {
-		if (originalData) {
-			filterData();
-		}
-	}, [statusOption, dateOption]);
+		if (originalData) filterData();
+	}, [originalData, statusOption, dateOption]);
 
 	if (printData) {
 		return (
