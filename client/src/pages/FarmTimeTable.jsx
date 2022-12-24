@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { showModal, closeModal } from "../store/ModalSlice";
-import { initDate } from "../store/FormSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { showModal, closeModal } from '../store/ModalSlice';
+import { initDate } from '../store/FormSlice';
 import ModalContainer from '../components/Modal'
 import FarmPeriod from '../components/FarmPeriod';
 import FarmFormat from '../components/FarmFormat';
-import styled from 'styled-components';
 import FarmTime from '../components/FarmTime';
 import Pagination from '../components/Pagination';
+import styled from 'styled-components';
+
 import * as userApi from '../lib/userApi';
 
 const Subject = styled.h2`
@@ -47,22 +48,35 @@ const TimeTableButton =styled.button`
         margin-bottom:10px;
     }
 `;
+const H3 = styled.h3`
+    margin : 30px 0 10px;
+    font-size : 1.3rem;
+`;
+const SubmitBtn = styled.button`
+    margin-top : 20px;
+`;
+const FailAnnouncement = styled.p`
+	text-align: center;
+	margin-top: 5rem;
+`;
 
 
-//TimeTable
+
+//memo 지혜 : TimeTable
 const TimeTable = ()=>{
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
-    const [cost, setCost] = useState(0);
     const [maxHeadCount, setMaxHeadCount] = useState([]);
+    const [cost, setCost] = useState(null);
     const [page, setPage] = useState(1);
+    
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
 
     const fetchData = async () => {
         try {
             await userApi.get('http://localhost:3500/api/timetables').then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setTimeTable([...res.data]);
             });
         }
@@ -83,7 +97,7 @@ const TimeTable = ()=>{
         e.preventDefault();
         console.log(postData.timeList);
         if(postData.timeList.length < 1 || cost < 1 ||!postData.startDate || !postData.endDate) {
-            alert("모든 값을 올바르게 기입해주세요");
+            alert('모든 값을 올바르게 기입해주세요');
             return;
         };
         
@@ -151,13 +165,13 @@ const TimeTable = ()=>{
             <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
             <Pagination total={timeTable.length} limit={5} page={page} setPage={setPage}/>
 
-            { timeTable.length < 1 ? <p>체험시간표를 추가하세요</p> : 
+            { timeTable.length < 1 ? <FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement> : 
                     timeTable.map((table,idx) =>{
                         return(
                             <TimeTableList key={idx}>
                                 <h4>체험테이블{idx+1}</h4>
                                 <TimTableItem>
-                                    <FarmImg src={table.farm? table.farm.url:""} alt='농장이미지'></FarmImg>
+                                    <FarmImg src={table.farm? table.farm.url:''} alt='농장이미지'></FarmImg>
                                     <TimTableContent>
                                         <div>
                                             <span>날짜 : </span>
@@ -182,11 +196,11 @@ const TimeTable = ()=>{
                                             <span>인원수 : </span>
                                             <span>{table.personnel}</span>
                                         </div>
-                                </TimTableContent>
-                                <TimeTableButtons>
-                                    <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx)}>수정</TimeTableButton>
-                                    <TimeTableButton type='button' onClick={()=>onTimeTableDelete(idx)}>삭제</TimeTableButton>
-                                </TimeTableButtons>
+                                    </TimTableContent>
+                                    <TimeTableButtons>
+                                        <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx)}>수정</TimeTableButton>
+                                        <TimeTableButton type='button' onClick={()=>onTimeTableDelete(idx)}>삭제</TimeTableButton>
+                                    </TimeTableButtons>
                                 </TimTableItem>
                             </TimeTableList>
                         )
@@ -198,20 +212,20 @@ const TimeTable = ()=>{
                 <form onSubmit={handleSubmit}>
                     <h1>체험시간표</h1>
                     <div>
-                        <h3>체험 날짜</h3>
+                        <H3>체험 날짜</H3>
                         <FarmPeriod onStateLiftining ={stateLiftining}/>  
                     </div>
 
                     <div>
-                        <h3>체험 시간</h3>
+                        <H3>체험 시간</H3>
                         <FarmTime onStateLiftining={stateLiftining} getHeadCount={getHeadCount}></FarmTime>
                         
                     </div>
                     <div>
-                        <h3>체험 비용</h3>
-                        <input type='text' placeholder='입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
+                        <H3>체험 비용</H3>
+                        <input type='text' placeholder='체험비용을 입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
                     </div>
-                    <button type='submit'>추가하기</button>
+                    <SubmitBtn type='submit'>추가하기</SubmitBtn>
                 </form>
             </ModalContainer>
         }
