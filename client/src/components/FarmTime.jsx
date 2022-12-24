@@ -32,7 +32,7 @@ const FarmTime = (props) =>{
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [forTime, setForTime] = useState('');
-    const [maxHeadCount, setMaxHeadCount] = useState(null);
+    const [maxHeadCount, setMaxHeadCount] = useState('');
     const [maxHeadCountList, setMaxHeadCountList] = useState([]);
 
     const renderTime = () =>{

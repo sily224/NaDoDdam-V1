@@ -67,7 +67,7 @@ const TimeTable = ()=>{
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
     const [maxHeadCount, setMaxHeadCount] = useState([]);
-    const [cost, setCost] = useState(null);
+    const [cost, setCost] = useState('');
     const [page, setPage] = useState(1);
     
     const dispatch = useDispatch();
@@ -75,8 +75,8 @@ const TimeTable = ()=>{
 
     const fetchData = async () => {
         try {
-            await userApi.get('http://localhost:3500/api/timetables').then((res) => {
-                // console.log(res.data);
+            await userApi.get('http://localhost:3500/api/timetables/owner').then((res) => {
+                console.log(res.data);
                 setTimeTable([...res.data]);
             });
         }
@@ -117,7 +117,7 @@ const TimeTable = ()=>{
                 const personnel = maxHeadCount[j];
 
                 try {
-                    const res = await userApi.post('http://localhost:3500/api/timetables/',{
+                    const res = await userApi.post('http://localhost:3500/api/timetables',{
                         'date': date,
                         'personnel':personnel,
                         'price':cost,
@@ -138,14 +138,15 @@ const TimeTable = ()=>{
         fetchData();
     };
 
-    const onTimeTableDelete = (idx) => {
-        // axios.delete(`http://localhost:3500/api/timetables/${idx}`);
-        // 삭제 요청api
+    const onTimeTableDelete = async(id) => {
+        await userApi.delete(`http://localhost:3500/api/timetables/${id}`);
+        fetchData();
     };
 
-    const onTimeTableUpdate = (idx)=>{
-        // 수정 요청api
+    const onTimeTableUpdate = (id)=>{
         dispatch(showModal());
+
+
         // axios.put(`http://localhost:3500/api/timetables/${idx}`,{
 
 
@@ -198,8 +199,8 @@ const TimeTable = ()=>{
                                         </div>
                                     </TimTableContent>
                                     <TimeTableButtons>
-                                        <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx)}>수정</TimeTableButton>
-                                        <TimeTableButton type='button' onClick={()=>onTimeTableDelete(idx)}>삭제</TimeTableButton>
+                                        <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(table.id)}>수정</TimeTableButton>
+                                        <TimeTableButton type='button' onClick={()=>onTimeTableDelete(table.id)}>삭제</TimeTableButton>
                                     </TimeTableButtons>
                                 </TimTableItem>
                             </TimeTableList>
