@@ -206,7 +206,7 @@ const afterLoginList = [
 	{
 		id: 4,
 		name: '예약조회',
-		path: '/register',
+		path: '/myreservation',
 	},
 	{
 		id: 5,
@@ -239,7 +239,7 @@ const farmerLoginList = [
 	{
 		id: 10,
 		name: '후기 관리',
-		path: '/farm',
+		path: '/farm/review',
 	},
 ];
 

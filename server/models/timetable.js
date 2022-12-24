@@ -59,6 +59,9 @@ const TimeTables = (sequelize, DataTypes) => {
 	// 		},
 	// 	});
 	// };
+	timeTable.findFarmId = (id) => {
+		return timeTable.findAll({ where: { farmId: id } });
+	};
 
 	timeTable.getById = (id) => {
 		return timeTable.findOne({ where: { id } });
@@ -83,6 +86,20 @@ const TimeTables = (sequelize, DataTypes) => {
 	timeTable.remove = (id) => {
 		return timeTable.destroy({ where: { id } });
 	};
+
+	timeTable.getTimeTables = (farmId, lastId, limit) => {
+		let cursor = lastId || 0;
+		return timeTable.findAll({
+			limit: parseInt(limit),
+			where: {
+				farmId,
+				id: {
+					[DataTypes.Op.gt]: cursor,
+				},
+			},
+		});
+	};
+
 	return timeTable;
 };
 

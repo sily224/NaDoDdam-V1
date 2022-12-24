@@ -35,8 +35,6 @@ async function get(endpoint) {
 async function patch(endpoint, data) {
 	const apiUrl = endpoint;
 	const bodyData = JSON.stringify(data);
-	console.log(`%cPATCH 요청: ${apiUrl}`, "color: #296aba;");
-	console.log(`%cPATCH 요청 데이터: ${bodyData}`, "color: #296aba;");
   
 	const res = await axios(apiUrl, {
 	  method: "PATCH",
@@ -55,32 +53,8 @@ async function patch(endpoint, data) {
 	return res;
 }
 
-async function passwordPatch(endpoint, data) {
-	const apiUrl = endpoint;
-	const bodyData = JSON.stringify(data);
-	console.log(`%cPATCH 요청: ${apiUrl}`, "color: #296aba;");
-	console.log(`%cPATCH 요청 데이터: ${bodyData}`, "color: #296aba;");
-  
-	const res = await axios(apiUrl, {
-	  method: "PATCH",
-	  headers: {
-		"Content-Type": "application/json",
-		Authorization: `Bearer ${localStorage.getItem("token")}`,
-	  },
-	  data :bodyData,
-	});
-	//   응답 코드가 4XX 계열일 때 (400, 403 등)
-	if (res.status !== 200) {
-		console.log("에러 답변", res);
-		throw new Error(res);
-	}
-	return res;
-}
-
 async function del(endpoint) {
 	const apiUrl = endpoint;
-  
-	console.log(`DELETE 요청 ${apiUrl}`);
   
 	const res = await fetch(apiUrl, {
 	  method: "DELETE",
@@ -99,6 +73,6 @@ async function del(endpoint) {
 	}
   
 	return res;
-  }
+}
   
-export { post, get, patch, passwordPatch, del as delete};
+export { post, get, patch, del as delete};

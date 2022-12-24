@@ -90,3 +90,19 @@ const createJwtToken = (id) => {
 		expiresIn: '2d',
 	});
 };
+
+export async function getfarmInfo(req, res, next) {
+	const farmerId = req.farmerId;
+
+	try {
+		const farm = await db.Farmers.getFarmIdFromFarmer(farmerId);
+		if (!farm) {
+			throw new Error('농장주에게 등록된 농장이 없습니다.');
+		}
+
+		const farmInfo = await db.Farms.findById(farm);
+		res.status(200).json(farmInfo);
+	} catch (err) {
+		next(err);
+	}
+}

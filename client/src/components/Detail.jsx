@@ -137,6 +137,7 @@ const Detail = () => {
                                 </TimButtonContainer>
                             </DetailPeriod> */}
                             <Review />
+                            <p>찾아오는길</p>
                             <Location />
                             <DetailCompany farm={farm} farmer={farmer}/>
                         </DetailInform>

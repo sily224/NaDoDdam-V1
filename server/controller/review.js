@@ -59,24 +59,37 @@ export async function getReviewData(req, res, next) {
 		const timeInfo = [];
 		const review = await db.Reviews.findByUserId(userId);
 
-		if(!review) {
-			throw new Error('유저에 대한 리뷰 내역이 없습니다.')
+		if (!review) {
+			throw new Error('유저에 대한 리뷰 내역이 없습니다.');
 		}
 
 		for (let i = 0; i < review.length; i++) {
 			const data = await db.Farms.findById(review[i].farm_id);
-			const timeId = await db.Reservations.findByReserveNumId(review[i].reserve_id);
-			farm.push({id: data.id, name: data.name, type:data.type});
+			const timeId = await db.Reservations.findByReserveNumId(
+				review[i].reserve_id,
+			);
+			farm.push({ id: data.id, name: data.name, type: data.type });
 			time.push(timeId);
 		}
 
-		for (let i = 0 ; i< time.length; i++) {
+		for (let i = 0; i < time.length; i++) {
 			const info = await db.TimeTables.getById(time[i].time_id);
-			timeInfo.push({id: info.id, date: info.date, start_time: info.start_time, end_time: info.end_time, farmId:info.farmId});
+			timeInfo.push({
+				id: info.id,
+				date: info.date,
+				start_time: info.start_time,
+				end_time: info.end_time,
+				farmId: info.farmId,
+			});
 		}
 
 		for (let i = 0; i < review.length; i++) {
-			result.push({ farm: farm[i], review: review[i], time: timeInfo[i] , reserveInfo: time[i]});
+			result.push({
+				farm: farm[i],
+				review: review[i],
+				time: timeInfo[i],
+				reserveInfo: time[i],
+			});
 		}
 
 		res.status(200).json(result);
@@ -127,12 +140,53 @@ export async function getReviewDataFarmer(req, res, next) {
 
 	try {
 		const farm = await db.Farmers.getFarmIdFromFarmer(farmerId);
+
+		const reserveInfo = [];
 		if (!farm) {
 			throw new Error('해당 농장주는 등록된 농장이 없습니다.');
 		}
-		const farmInfo = await db.Farms.findById(farm);
 		const reviews = await db.Reviews.findByFarmId(farm);
-		res.status(200).json({farmInfo, reviews});
+		let totalreviews = [];
+		for (let i = 0; i < reviews.length; i++) {
+			const data = await db.Reservations.findByReserveNumId(
+				reviews[i].reserve_id,
+			);
+			const timeInfo = await db.TimeTables.getById(data.time_id);
+			reserveInfo.push({
+				date: timeInfo.date,
+				start_time: timeInfo.start_time,
+				end_time: timeInfo.end_time,
+				farmId: timeInfo.farmId,
+			});
+		}
+
+		for (let i = 0; i < reviews.length; i++) {
+			totalreviews.push({ review: reviews[i], reserve: reserveInfo[i] });
+		}
+
+		res.status(200).json(totalreviews );
+	} catch (err) {
+		next(err);
+	}
+}
+
+export async function reviewDropFarmer(req, res, next) {
+	const id = req.params.reviewId;
+	const farmerId = req.farmerId;
+
+	try {
+		const farmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
+		if (!farmId) {
+			throw new Error('등록된 농장이 없습니다.');
+		}
+		const review = await db.Reviews.findByFarmerPkId(id, farmId);
+		if (!review) {
+			throw new Error('해당리뷰에 대한 권한이 없습니다.');
+		}
+
+		const found = await db.Reviews.deleteReview(id);
+
+		res.status(200).json({ id: id, message: 'delete !' });
 	} catch (err) {
 		next(err);
 	}

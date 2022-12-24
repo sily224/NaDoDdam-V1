@@ -14,6 +14,7 @@ import MyReservation from './pages/MyReservation';
 import Favorite from './pages/Favorite';
 import FarmInfo from './pages/FarmInfo';
 import NotFound from './pages/NotFound';
+import FarmReview from './pages/FarmReview';
 
 // memo 지우: NonMemberRoute -> 비회원일 때만 페이지 전환
 // MemberRoute -> 일반 회원일 때만 페이지 전화
@@ -100,6 +101,14 @@ function App() {
 						element={
 							<FarmerRoute>
 								<FarmTimeTable />
+							</FarmerRoute>
+						}
+					/>
+					<Route
+						path="/farm/review"
+						element={
+							<FarmerRoute>
+								<FarmReview />
 							</FarmerRoute>
 						}
 					/>
