@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { showModal, closeModal } from "../store/ModalSlice";
+import { initDate } from "../store/FormSlice";
 import ModalContainer from '../components/Modal'
 import FarmPeriod from '../components/FarmPeriod';
 import FarmFormat from '../components/FarmFormat';
@@ -97,10 +98,7 @@ const TimeTable = ()=>{
             const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
             
             for (let j = 0; j< timeList[0].length -1;j++){
-                console.log(timeList[0].length);
-                console.log(timeList[0][0]);
                 const start_time = timeList[j][0];
-                console.log(start_time);
                 const end_time = timeList[j][1];
                 const personnel = maxHeadCount[j];
 
@@ -121,6 +119,7 @@ const TimeTable = ()=>{
         }
         alert('체험시간표 등록완료');
         dispatch(closeModal());
+        dispatch(initDate());
         setCost(0);
         fetchData();
     };
@@ -185,7 +184,7 @@ const TimeTable = ()=>{
                                         </div>
                                 </TimTableContent>
                                 <TimeTableButtons>
-                                    <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx,'update')}>수정</TimeTableButton>
+                                    <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx)}>수정</TimeTableButton>
                                     <TimeTableButton type='button' onClick={()=>onTimeTableDelete(idx)}>삭제</TimeTableButton>
                                 </TimeTableButtons>
                                 </TimTableItem>
@@ -200,7 +199,7 @@ const TimeTable = ()=>{
                     <h1>체험시간표</h1>
                     <div>
                         <h3>체험 날짜</h3>
-                        <FarmPeriod onStateLiftining ={stateLiftining} />  
+                        <FarmPeriod onStateLiftining ={stateLiftining}/>  
                     </div>
 
                     <div>
