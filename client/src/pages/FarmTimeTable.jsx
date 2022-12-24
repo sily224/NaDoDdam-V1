@@ -122,8 +122,7 @@ const TimeTable = ()=>{
         alert('체험시간표 등록완료');
         dispatch(closeModal());
         setCost(0);
-        // location.reload();
-        // fetchData();
+        fetchData();
     };
 
     const onTimeTableDelete = (idx) => {
@@ -186,7 +185,7 @@ const TimeTable = ()=>{
                                         </div>
                                 </TimTableContent>
                                 <TimeTableButtons>
-                                    <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx)}>수정</TimeTableButton>
+                                    <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx,'update')}>수정</TimeTableButton>
                                     <TimeTableButton type='button' onClick={()=>onTimeTableDelete(idx)}>삭제</TimeTableButton>
                                 </TimeTableButtons>
                                 </TimTableItem>
@@ -201,7 +200,7 @@ const TimeTable = ()=>{
                     <h1>체험시간표</h1>
                     <div>
                         <h3>체험 날짜</h3>
-                        <FarmPeriod onStateLiftining ={stateLiftining}/>  
+                        <FarmPeriod onStateLiftining ={stateLiftining} />  
                     </div>
 
                     <div>
