@@ -11,7 +11,7 @@ const MapDiv = styled.div`
 `;
 
 const IsDetail = () =>{
-    const {detailData : data} = useContext(DetailContext);
+    const {farmData : data} = useContext(DetailContext);
     return data.address;
 }
 

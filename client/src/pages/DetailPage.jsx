@@ -6,15 +6,17 @@ import { useParams } from 'react-router-dom';
 export const DetailContext = createContext();
 
 const DetailPage =  () => {
-    const [detailData, setDetailData] = useState(null);
+    const [farmData, setFarmData] = useState(null);
     const [reviewData, setreviewData] = useState(null);
+    const [farmerData, setFarmerData] = useState(null);
     const {id} = useParams();
     const fetchData = async () => {
         try {
             await axios.get(`http://localhost:3500/api/farms/${id}`).then((res) => {
                 console.log(res.data);
-                setDetailData(res.data.data);
+                setFarmData(res.data.data);
                 setreviewData(res.data.review);
+                setFarmerData(res.data.farmer);
             });
         }
         catch(e){
@@ -28,7 +30,7 @@ const DetailPage =  () => {
     
     return (
         <div>
-            <DetailContext.Provider value={ {detailData,reviewData}}>
+            <DetailContext.Provider value={ {farmData,reviewData,farmerData}}>
                 <Detail />
             </DetailContext.Provider>
         </div>

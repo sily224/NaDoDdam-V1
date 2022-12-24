@@ -5,7 +5,6 @@ import ModalContainer from '../components/Modal'
 import FarmPeriod from '../components/FarmPeriod';
 import FarmFormat from '../components/FarmFormat';
 import styled from 'styled-components';
-import axios from 'axios';
 import FarmTime from '../components/FarmTime';
 import Pagination from '../components/Pagination';
 import * as userApi from '../lib/userApi';
@@ -80,24 +79,30 @@ const TimeTable = ()=>{
 
     const handleSubmit = async(e) =>{   
         e.preventDefault();
+        console.log(postData.timeList);
+        if(postData.timeList.length < 1 || cost < 1 ||!postData.startDate || !postData.endDate) {
+            alert("모든 값을 올바르게 기입해주세요");
+            return;
+        };
+        
         const d1 = new Date(postData.startDate);
         const d2 = new Date(postData.endDate);
         const {timeList} = postData;
+
         let diffDate = d1.getTime() - d2.getTime();
         diffDate = Math.abs(diffDate /(1000*60*60*24));
-        console.log('diffDate: ' + diffDate);
 
         for (let i = 0; i < diffDate + 1 ; i++ ){
             const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
-            console.log('date : '+date);
-            for (let j = 0; j< timeList[0].length;j++){
-                console.log(timeList);
-                console.log("start: ",timeList[j][0]);
-                console.log("end: ",timeList[j][1]);
-
+            
+            for (let j = 0; j< timeList[0].length -1;j++){
+                console.log(timeList[0].length);
+                console.log(timeList[0][0]);
                 const start_time = timeList[j][0];
+                console.log(start_time);
                 const end_time = timeList[j][1];
                 const personnel = maxHeadCount[j];
+
                 try {
                     const res = await userApi.post('http://localhost:3500/api/timetables/',{
                         'date': date,
@@ -116,6 +121,8 @@ const TimeTable = ()=>{
         alert('체험시간표 등록완료');
         dispatch(closeModal());
         setCost(0);
+        // location.reload();
+        // fetchData();
     };
 
     const onTimeTableDelete = (idx) => {
@@ -145,9 +152,8 @@ const TimeTable = ()=>{
             <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
             <Pagination total={timeTable.length} limit={5} page={page} setPage={setPage}/>
 
-            { timeTable && 
+            { timeTable.length < 1 ? <p>체험시간표를 추가하세요</p> : 
                     timeTable.map((table,idx) =>{
-
                         return(
                             <TimeTableList key={idx}>
                                 <h4>체험테이블{idx+1}</h4>
