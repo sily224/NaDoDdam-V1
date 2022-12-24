@@ -54,8 +54,11 @@ export async function getReserveData(req, res, next) {
 
 		let results = [];
 		const reserve = await db.Reservations.findByUserId(id);
-		reserve.forEach((res) => timeId.push(res.time_id));
+		if(!reserve) {
+			throw new Error('유저의 예약 내역이 없습니다.')
+		}
 
+		reserve.forEach((res) => timeId.push(res.time_id));
 		for (let i = 0; i < timeId.length; i++) {
 			const time = await db.TimeTables.getById(timeId[i]);
 			timeInfo.push({
@@ -72,7 +75,6 @@ export async function getReserveData(req, res, next) {
 			const data = await db.Farms.findById(timeInfo[i].farmId);
 			farmInfo.push(data);
 		}
-		console.log(farmInfo);
 
 		for (let i = 0; i < reserve.length; i++) {
 			results.push({
