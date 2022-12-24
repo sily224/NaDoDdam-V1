@@ -7,7 +7,7 @@ import * as timetableController from '../controller/timetable.js';
 
 const router = express.Router();
 
-// GET /timetables/owner
+// GET /timetables/owner?lastId=:lastId&limit=:limit
 router.get('/owner', isFarmer, timetableController.getTimeTables);
 
 // GET /timetables  => 일반사용자 조회

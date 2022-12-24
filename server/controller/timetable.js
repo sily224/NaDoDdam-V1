@@ -1,23 +1,27 @@
 import 'express-async-errors';
 import db from '../models/index.js';
 
+// 농장주가 해당 농장의 체험시같표 조회 => pagination구현
 export async function getTimeTables(req, res, next) {
+	const { lastId, limit } = req.query;
 	try {
 		const farmerId = req.farmerId;
 		const farmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
 		if (!farmId) {
 			throw new Error('해당 농장주는 농장등록을 하지 않았습니다.');
 		}
-		const data = await db.TimeTables.findtimetableFromFarmId(farmId);
-		if (!data) {
-			throw new Error('해당 농장의 체험시간표가 등록되지 않았습니다.');
-		}
+		// const data = await db.TimeTables.findtimetableFromFarmId(farmId);
+		// if (!data) {
+		// 	throw new Error('해당 농장의 체험시간표가 등록되지 않았습니다.');
+		// }
+		const data = await db.TimeTables.getTimeTables(farmId, lastId, limit);
 		res.status(200).json(data);
 	} catch (err) {
 		next(err);
 	}
 }
 
+//	일반 사용자가 해당 농장의 체험시간표 조회 => pagination x (함수이름 헷갈림 주의)
 export async function getTimeTable(req, res, next) {
 	try {
 		const { id } = req.params; // 농장아이디
