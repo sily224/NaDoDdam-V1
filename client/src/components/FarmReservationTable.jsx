@@ -67,13 +67,24 @@ const FarmReservationTable = ({}) => {
 	const fetchData = async () => {
 		try {
 			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
-				console.log(res);
+				console.log('예약목록', res.data);
 				setPrintData(res.data);
 				setOriginalData(res.data);
 			});
 		} catch (e) {
 			console.log(e.response.data.message);
 		}
+	};
+
+	const updateData = async () => {
+		try {
+			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
+				setOriginalData(res.data);
+			});
+		} catch (e) {
+			console.log(e.response.data.message);
+		}
+		filterData();
 	};
 
 	// memo 지우: 예약상태, 시간순 정렬로 데이터 거르기
@@ -107,6 +118,34 @@ const FarmReservationTable = ({}) => {
 		}
 		setPrintData(filteredData);
 		setPage(1);
+	};
+
+	const onClickRezConfirm = async (e) => {
+		const id = e.target.name;
+
+		try {
+			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+				status: '예약완료',
+			});
+			alert('예약이 확정되었습니다.');
+			updateData();
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const onClickRezCancel = async (e) => {
+		const id = e.target.name;
+
+		try {
+			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+				status: '예약취소',
+			});
+			alert('예약이 취소되었습니다.');
+			updateData();
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	useEffect(() => {
@@ -171,10 +210,22 @@ const FarmReservationTable = ({}) => {
 									</Td>
 									<BtnTd>
 										{reserve.status}
-										{reserve.status === '예약대기' && <Button>예약확정</Button>}
+										{reserve.status === '예약대기' && (
+											<Button
+												name={reserve.id}
+												onClick={(e) => onClickRezConfirm(e)}
+											>
+												예약확정
+											</Button>
+										)}
 										{(reserve.status === '예약대기' ||
 											reserve.status === '예약완료') && (
-											<Button>예약취소</Button>
+											<Button
+												name={reserve.id}
+												onClick={(e) => onClickRezCancel(e)}
+											>
+												예약취소
+											</Button>
 										)}
 									</BtnTd>
 								</Tr>

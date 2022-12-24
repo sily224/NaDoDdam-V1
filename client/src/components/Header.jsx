@@ -239,7 +239,7 @@ const farmerLoginList = [
 	{
 		id: 10,
 		name: '후기 관리',
-		path: '/farm',
+		path: '/farm/review',
 	},
 ];
 

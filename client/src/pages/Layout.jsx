@@ -2,8 +2,6 @@ import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Login from '../pages/login';
-import Register from '../pages/register';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
@@ -43,30 +41,28 @@ const Layout = () => {
 	const favorite = useSelector((state) => state.favorite);
 	const dispatch = useDispatch();
 
-  const getFavoriteFarmIds = (async () => {
-     const farmIds = await getFavoriteFarmId();
-     dispatch(setFavorite(farmIds));
-  });
+	const getFavoriteFarmIds = async () => {
+		const farmIds = await getFavoriteFarmId();
+		dispatch(setFavorite(farmIds));
+	};
 
 	console.log(favorite);
 
-  useEffect(()=>{
-    if(localStorage.getItem('token')) getFavoriteFarmIds();
-  },[]);
+	useEffect(() => {
+		if (localStorage.getItem('token')) getFavoriteFarmIds();
+	}, []);
 
-  return (
-    <>
-      <Provider store={store}>
-      <Header/>
-      <Container>
-        <Outlet/>
-      </Container>
-      </Provider>
-      <Footer />
-      <Login />
-      <Register />
-    </>
-  );
+	return (
+		<>
+			<Provider store={store}>
+				<Header />
+				<Container>
+					<Outlet />
+				</Container>
+			</Provider>
+			<Footer />
+		</>
+	);
 };
 
 export default Layout;
