@@ -97,6 +97,7 @@ const TimeTables = (sequelize, DataTypes) => {
 					[DataTypes.Op.gt]: cursor,
 				},
 			},
+			order: [['date', 'DESC']],
 		});
 	};
 

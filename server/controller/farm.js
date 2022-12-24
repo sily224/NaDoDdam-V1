@@ -4,9 +4,10 @@ import db from '../models/index.js';
 // 서비스가 확장되어 타입이 늘어나면 ex (딸기, 수박, 파인애플 등등) 특정타입을 받아 특정타입의 농장을 조회
 export async function getFarms(req, res, next) {
 	const { type } = req.query;
+	const { lastId, limit } = req.query;
 	const data = await (type
 		? db.Farms.getByType(type) //
-		: db.Farms.getAll());
+		: db.Farms.getAll(lastId, limit));
 	if (!data) {
 		return res.status(404).json({ message: '해당 농장을 찾을 수 없습니다.' });
 	}
