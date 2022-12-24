@@ -1,4 +1,4 @@
-import FarmList from '../components/ItemList';
+import {FarmList} from '../components/ItemList';
 import React, {useState, useEffect, useCallback} from 'react';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -9,25 +9,17 @@ const Home = React.memo(() => {
 
   const option = useSelector(state=>state.option.search);
 
-  const [contents, setContents] = useState([]);
-  const [page, setPage] = useState(0);
+  const favorite = useSelector(state=>state.favorite.favorites);
+  console.log(favorite);
 
-  useEffect(()=>{
-    console.log('Home에서의 옵션', option);  
-  },[option])
+  const [contents, setContents] = useState([]);
+  // const [page, setPage] = useState(0);
 
   // 최초 렌더링 시 전체 데이터 조회
   useEffect(()=>{
     // setPage(0);
     getFarmData(option);
-  },[])
-
-  // option이 바뀌면 page 0부터 시작하여 데이터 다시 불러오기
-  useEffect(()=>{
-    // setPage(0);
-    getFarmData(option);
-
-  }, [option]);
+  },[option])
 
   const getFarmData = useCallback( async ({location, fruit, date}) => {
 
@@ -39,7 +31,7 @@ const Home = React.memo(() => {
 
     let url = "http://localhost:3500/api/farms"; // default 전체 조회
     if(location) {
-      url = `http://localhost:3500/api/farms/location?address=${location}`; // 지역 조회
+      url = `http://localhost:3500/api/farms?location=${location}`; // 지역 조회
     }else if(fruit){
       url = `http://localhost:3500/api/farms?type=${fruit}`; // 과일 조회
     }
@@ -96,7 +88,7 @@ const Home = React.memo(() => {
       // scrollThreshold='1000px'>
       //   <FarmList contents={contents}/>
       // </InfiniteScroll>
-      <FarmList contents={contents}/>
+      <FarmList contents={contents} favorite={favorite}/>
   )
 });
 

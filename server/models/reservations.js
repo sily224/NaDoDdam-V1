@@ -9,7 +9,7 @@ const Reservations = (sequelize, DataTypes) => {
 			status: {
 				type: DataTypes.STRING(64),
 				allowNull: false,
-				defaultValue: '예약 대기',
+				defaultValue: '예약대기',
 			},
 			personnel: {
 				type: DataTypes.INTEGER,
@@ -60,6 +60,10 @@ const Reservations = (sequelize, DataTypes) => {
 
 	Reservations.findByReserveId = (id, userId) => {
 		return Reservations.findOne({ where: { id: id, user_id: userId } });
+	};
+
+	Reservations.findByReserveNumId = (id) => {
+		return Reservations.findOne({ where: { id } });
 	};
 
 	Reservations.findByTimeId = (id) => {

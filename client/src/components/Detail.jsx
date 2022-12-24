@@ -6,7 +6,7 @@ import Review from './Review';
 import TimeBtns from './TimeBtns';
 import { DetailContext } from '../pages/DetailPage';
 import FloatingForm from './FloatingForm';
-
+import Carousel from 'react-bootstrap/Carousel'
 
 const DisplayFlex = styled.div`
     display:flex;
@@ -51,15 +51,43 @@ const TimButtonContainer = styled(DisplayFlex)`
     justify-content:center;
     margin-left : 3%;
 `;
+const CarouselImg = styled.img`
+    height: 400px;
+`;
 
 
 
-const DetailHeader = ({ name, address }) => {
+const DetailHeader = ({ name, address, url }) => {
     return (
         <Header>
             <Title>{name}</Title>
             <p>{address}</p>
-            <img src='' alt={`${name}이미지`} />
+            
+                <Carousel slide={false}>
+        `           <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="First slide"
+                        />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="Second slide"
+                        />
+
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="Third slide"
+                        />
+                    </Carousel.Item>`
+                </Carousel>
+            
         </Header>
     );
 };
@@ -73,15 +101,15 @@ const DetailDescription = ({ description }) => {
 };
 
 
-const DetailCompany = ({company}) => {
+const DetailCompany = ({farm,farmer}) => {
     return (
         <DetailCompanyContainer>
             <p>농장정보</p>
-            <p>농장명 : {company.name}</p>
-            <p>농장상품 : {company.type}</p>
-            <p>농장주 : {company.owner}</p>
-            <p>E-mail :</p>
-            <p>전화번호:</p>
+            <p>농장명 : {farm.name}</p>
+            <p>농장상품 : {farm.type}</p>
+            <p>농장주 : {farm.owner}</p>
+            <p>E-mail : {farmer.email}</p>
+            <p>전화번호: {farmer.phoneNum}</p>
         </DetailCompanyContainer>
     );
 };
@@ -89,19 +117,19 @@ const DetailCompany = ({company}) => {
 
 
 const Detail = () => {
-    const { detailData : data } = useContext(DetailContext);
+    const { farmData : farm, farmerData : farmer } = useContext(DetailContext);
     
     return (
         <>
             {
-                data &&
-                <DetailContainer key={`${data.name}-${new Date()}`}>
-                    <DetailHeader name={data.name} address={data.address} />
+                farm &&
+                <DetailContainer key={`${farm.name}-${new Date()}`}>
+                    <DetailHeader name={farm.name} address={farm.address} url={farm.url} />
                     
                     <DetailContent>
                         <DetailInform>
                             {/* <DetailGrade grade={data.grade} /> */}
-                            <DetailDescription description={data.description} />
+                            <DetailDescription description={farm.description} />
                             {/* <DetailPeriod>
                                 <Calender />
                                 <TimButtonContainer>
@@ -110,7 +138,7 @@ const Detail = () => {
                             </DetailPeriod> */}
                             <Review />
                             <Location />
-                            <DetailCompany company={data}/>
+                            <DetailCompany farm={farm} farmer={farmer}/>
                         </DetailInform>
                         {/* <FloatingFormDiv><FloatingForm /></FloatingFormDiv> */}
                     

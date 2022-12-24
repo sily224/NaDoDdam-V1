@@ -1,24 +1,32 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ModalContainer from '../components/Modal';
 import * as userApi from '../lib/userApi';
-import { useSelector, useDispatch } from 'react-redux';
-import { closeModal, showRegister } from '../store/ModalSlice';
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginformSchema } from '../hooks/useForm';
 
-const ModalTitle = styled.h1`
-	color: blue;
+const LoginWrapper = styled.div`
+	padding: 10%;
+`;
+
+const Title = styled.h1`
 	text-align: center;
-	font-size: 1.5rem;
+	font-size: 2rem;
+	font-weight: bold;
 `;
 
 const InputForm = styled.form`
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	margin: 10% 0;
+`;
+
+const InputFormLine = styled.div`
+	margin-bottom: 10px;
 `;
 
 const Label = styled.label``;
@@ -26,7 +34,7 @@ const Label = styled.label``;
 const Input = styled.input``;
 
 const Button = styled.button`
-	width: 100%;
+	width: 10rem;
 `;
 
 const Line = styled.div`
@@ -49,13 +57,11 @@ const SocialButton = styled.button`
 `;
 
 function Login() {
-	const loginModalState = useSelector((state) => state.modal.loginModal);
-	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const {
 		register,
 		handleSubmit,
-		reset,
 		formState: { isSubmitting, errors }, // isSubmitting: 제출중인지 여부
 	} = useForm({ mode: 'onChange', resolver: yupResolver(loginformSchema) });
 
@@ -68,7 +74,7 @@ function Login() {
 			localStorage.setItem('userType', 'member');
 
 			alert(`회원님 환영합니다!`);
-			dispatch(closeModal());
+			navigate('/');
 		} catch (err) {
 			alert(err.response.data.message);
 		}
@@ -86,64 +92,57 @@ function Login() {
 			localStorage.setItem('userType', 'farmer');
 
 			alert(`농장주님 환영합니다!`);
-			dispatch(closeModal());
+			navigate('/');
 		} catch (err) {
 			alert(err.response.data.message);
 			console.log(err);
 		}
 	};
 
-	useEffect(() => {
-		reset({
-			data: {},
-		});
-	}, [loginModalState]);
-
-	if (loginModalState) {
-		return (
-			<>
-				<ModalContainer>
-					<ModalTitle>로그인</ModalTitle>
-					<InputForm>
-						<Label htmlFor="email">이메일</Label>
-						<Input id="email" type="email" {...register('email')} />
-						{errors.email && <small role="alert">{errors.email.message}</small>}
-
-						<Label htmlFor="password">비밀번호</Label>
-						<Input
-							id="password"
-							type="password"
-							placeholder="영문, 숫자, 특수문자 조합 최소 8자"
-							{...register('password')}
-						/>
-						{errors.password && (
-							<small role="alert">{errors.password.message}</small>
-						)}
-						<Button
-							type="submit"
-							disabled={isSubmitting}
-							onClick={handleSubmit((data) => loginUser(data))}
-						>
-							일반 회원 로그인
-						</Button>
-						<Button
-							type="submit"
-							disabled={isSubmitting}
-							onClick={handleSubmit((data) => loginFarmer(data))}
-						>
-							농장주 로그인
-						</Button>
-					</InputForm>
-					<Button onClick={() => dispatch(showRegister())}>회원가입</Button>
-					<Line />
-					<SocialLogin>
-						<SocialButton>카카오</SocialButton>
-						<SocialButton>구글</SocialButton>
-					</SocialLogin>
-				</ModalContainer>
-			</>
-		);
-	}
+	return (
+		<LoginWrapper>
+			<Title>로그인</Title>
+			<InputForm>
+				<InputFormLine>
+					<Label htmlFor="email">이메일</Label>
+					<Input id="email" type="email" {...register('email')} />
+				</InputFormLine>
+				{errors.email && <small role="alert">{errors.email.message}</small>}
+				<InputFormLine>
+					<Label htmlFor="password">비밀번호</Label>
+					<Input
+						id="password"
+						type="password"
+						placeholder="영문, 숫자, 특수문자 조합 최소 8자"
+						{...register('password')}
+					/>
+				</InputFormLine>
+				{errors.password && (
+					<small role="alert">{errors.password.message}</small>
+				)}
+				<Button
+					type="submit"
+					disabled={isSubmitting}
+					onClick={handleSubmit((data) => loginUser(data))}
+				>
+					일반 회원 로그인
+				</Button>
+				<Button
+					type="submit"
+					disabled={isSubmitting}
+					onClick={handleSubmit((data) => loginFarmer(data))}
+				>
+					농장주 로그인
+				</Button>
+			</InputForm>
+			<Link to="/register">회원가입하기</Link>
+			<Line />
+			<SocialLogin>
+				<SocialButton>카카오</SocialButton>
+				<SocialButton>구글</SocialButton>
+			</SocialLogin>
+		</LoginWrapper>
+	);
 }
 
 export default Login;

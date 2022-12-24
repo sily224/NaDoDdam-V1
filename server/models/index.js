@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import Users from './auth.js';
-import Reservations from './Reservations.js';
+import Reservations from './reservations.js';
 import Farms from './farm.js';
 import Reviews from './review.js';
 import TimeTables from './timetable.js';

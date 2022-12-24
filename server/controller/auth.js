@@ -55,9 +55,7 @@ export async function myInfo(req, res, next) {
 		if (!user) {
 			throw new Error('사용자를 찾을 수 없습니다.');
 		}
-		res
-			.status(200)
-			.json(user);
+		res.status(200).json(user);
 	} catch (err) {
 		next(err);
 	}
@@ -91,7 +89,6 @@ export async function userUpdate(req, res, next) {
 	const { name, email, phoneNum } = req.body;
 
 	try {
-
 		const userInfoRequired = { userId };
 
 		const toUpdate = {
@@ -100,15 +97,13 @@ export async function userUpdate(req, res, next) {
 			...(phoneNum && { phoneNum }),
 		};
 
-		if(toUpdate.email) {
+		if (toUpdate.email) {
 			const isEmail = await db.Users.findByUserEmail(toUpdate.email);
-			if(isEmail) {
-				throw new Error(
-					'해당 이메일이 존재합니다. 다시 한 번 확인해 주세요.',
-				);
+			if (isEmail) {
+				throw new Error('해당 이메일이 존재합니다. 다시 한 번 확인해 주세요.');
 			}
 		}
-		
+
 		const updatedUserInfo = await setUser(userInfoRequired, toUpdate);
 		res.status(200).json(updatedUserInfo);
 	} catch (err) {
@@ -129,13 +124,13 @@ export async function userDrop(req, res, next) {
 }
 
 async function setPassword(userPasswordRequired, toUpdate) {
-	const {userId, currentPassword} = userPasswordRequired;
+	const { userId, currentPassword } = userPasswordRequired;
 
 	console.log(currentPassword);
 
 	let user = await db.Users.findById(userId);
 
-	if(!user) {
+	if (!user) {
 		throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
 	}
 
@@ -170,28 +165,25 @@ async function setPassword(userPasswordRequired, toUpdate) {
 	});
 
 	return user;
-
 }
 
 export async function passwordUpdate(req, res, next) {
-
 	const userId = req.params.userId;
-	const {password} = req.body;
+	const { password } = req.body;
 
 	try {
-
 		const currentPassword = req.body.currentPassword;
-		const userPasswordRequired = {userId, currentPassword};
+		const userPasswordRequired = { userId, currentPassword };
 
 		const toUpdate = {
-			...(password && {password}),
+			...(password && { password }),
 		};
 
-		console.log(toUpdate)
+		console.log(toUpdate);
 
 		const updatePassword = await setPassword(userPasswordRequired, toUpdate);
 		res.status(200).json(updatePassword);
-	} catch(err) {
+	} catch (err) {
 		next(err);
 	}
 }

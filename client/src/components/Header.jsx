@@ -3,12 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { HiUserCircle, HiMenu } from 'react-icons/hi';
-import { useSelector, useDispatch } from 'react-redux';
-import { showLogin, showRegister } from '../store/ModalSlice';
-import { getToken, logout } from '../utils/utils';
+import { useDispatch } from 'react-redux';
+import { getToken, getUserType, logout } from '../utils/utils';
 import Selector from './Selector';
 import TableDatePicker from './DatePicker';
-
+import Logo from '../assets/logo.png';
 import { reset } from '../store/OptionSlice';
 
 const StyledHeader = styled.header`
@@ -152,10 +151,6 @@ const StyledLink = styled(Link)`
 	}
 `;
 
-const StyledBtnWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-`;
 const StyledBtn = styled.button`
 	background: none;
 	border: none;
@@ -179,7 +174,16 @@ const StyledLogout = styled.div`
 		margin: 5px 0px;
 	}
 `;
-
+const LogoContainer = styled.div`
+	cursor: pointer;
+`;
+const LogoName = styled.span`
+	vertical-align: middle;
+`;
+const LogoImg = styled.img`
+	width: 4rem;
+	height: 3rem;
+`;
 const beforeLoginList = [
 	{
 		id: 1,
@@ -216,9 +220,30 @@ const afterLoginList = [
 	},
 ];
 
-const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
-	const loginModalState = useSelector((state) => state.modal.loginModal);
-	const optionState = useSelector((state) => state.option);
+const farmerLoginList = [
+	{
+		id: 7,
+		name: '농장정보관리',
+		path: '/farm',
+	},
+	{
+		id: 8,
+		name: '체험시간표관리',
+		path: '/farm/timetable',
+	},
+	{
+		id: 9,
+		name: '예약관리',
+		path: '/farm/reservation',
+	},
+	{
+		id: 10,
+		name: '후기 관리',
+		path: '/farm',
+	},
+];
+
+const Header = () => {
 	const dispatch = useDispatch();
 
 	const [isOpenSearchBar, setIsOpenSearchBar] = useState(false); // 검색 바 상태
@@ -227,15 +252,11 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 
 	const [toggleMenu, setToggleMenu] = useState(false);
 	const token = getToken();
+	const userType = getUserType();
 	const navigate = useNavigate();
 	const params = useParams();
 	const ref = useRef();
-
 	const searchRef = useRef(); // 검색 바 참조
-
-	const handleToggleMenu = () => {
-		setToggleMenu((prev) => !prev);
-	};
 
 	const handleClickOutSide = (e) => {
 		if (toggleMenu && !ref.current.contains(e.target)) {
@@ -278,7 +299,10 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 
 	return (
 		<StyledHeader>
-			<img src="" alt="logo" />
+			<LogoContainer onClick={() => navigate('/')}>
+				<LogoImg src={Logo} alt="logo" />
+				<LogoName>나도 땀</LogoName>
+			</LogoContainer>
 			{isOpenSearchBar && (
 				<ActiveSearchBar toggle={isOpenSearchBar} ref={searchRef}>
 					<div>
@@ -327,24 +351,31 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 				</StyledNav>
 				<StyledMenu toggle={toggleMenu} ref={ref}>
 					{token === null ? (
-						<StyledBtnWrapper>
-							<StyledBtn
-								onClick={() => {
-									dispatch(showLogin());
-									setToggleMenu(false);
-								}}
-							>
-								로그인
-							</StyledBtn>
-							<StyledBtn
-								onClick={() => {
-									dispatch(showRegister());
-									setToggleMenu(false);
-								}}
-							>
-								회원가입
-							</StyledBtn>
-						</StyledBtnWrapper>
+						<div>
+							{beforeLoginList.map((item) => (
+								<StyledLink to={item.path} key={item.id}>
+									{item.name}
+								</StyledLink>
+							))}
+						</div>
+					) : userType === 'farmer' ? (
+						<div>
+							{farmerLoginList.map((item) => (
+								<StyledLink to={item.path} key={item.id}>
+									{item.name}
+								</StyledLink>
+							))}
+							<StyledLogout>
+								<StyledBtn
+									onClick={() => {
+										setToggleMenu(false);
+										logout();
+									}}
+								>
+									로그아웃
+								</StyledBtn>
+							</StyledLogout>
+						</div>
 					) : (
 						<div>
 							{afterLoginList.map((item) => (

@@ -41,38 +41,36 @@ const TimeTables = (sequelize, DataTypes) => {
 		db.TimeTables.belongsTo(db.Farms);
 	};
 
-	timeTable.getAll = () => {
-		return timeTable.findAll({
-			attributes: [
-				'id',
-				'date',
-				'price',
-				'start_time',
-				'end_time',
-				// [DataTypes.col('farm.type'), 'type'],
-				// [DataTypes.col('farm.name'), 'name'],
-			],
-			include: {
-				model: db.Farms,
-				//attributes: [],
-			},
-		});
-	};
-
-	// timeTable.getByDate = (date) => {};
+	// timeTable.getAll = () => {
+	// 	return timeTable.findAll({
+	// 		attributes: [
+	// 			'id',
+	// 			'date',
+	// 			'personnel',
+	// 			'price',
+	// 			'start_time',
+	// 			'end_time',
+	// 			// [DataTypes.col('farm.type'), 'type'],
+	// 			// [DataTypes.col('farm.name'), 'name'],
+	// 		],
+	// 		include: {
+	// 			model: db.Farms,
+	// 			//attributes: [],
+	// 		},
+	// 	});
+	// };
 
 	timeTable.getById = (id) => {
 		return timeTable.findOne({ where: { id } });
 	};
 
 	timeTable.createTable = (tableInfo) => {
-		console.log(tableInfo);
 		return timeTable.create(tableInfo).then((data) => {
 			return data;
 		});
 	};
 
-	timeTable.findFarmId = (id) => {
+	timeTable.findtimetableFromFarmId = (id) => {
 		return timeTable.findAll({ where: { farmId: id } });
 	};
 
@@ -82,6 +80,9 @@ const TimeTables = (sequelize, DataTypes) => {
 		});
 	};
 
+	timeTable.remove = (id) => {
+		return timeTable.destroy({ where: { id } });
+	};
 	return timeTable;
 };
 

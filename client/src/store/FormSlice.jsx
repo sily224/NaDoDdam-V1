@@ -22,9 +22,12 @@ const formSlice = createSlice({
         },
         getTime(state,action){
             state.time = action.payload;
+        },
+        initDate(state, action){
+            state.date = "";
         }
     }
 });
 
 export default formSlice.reducer;
-export const {getDate,getTotalPrice,getHeadCount,getTime} = formSlice.actions;
+export const {getDate,getTotalPrice,getHeadCount,getTime,initDate} = formSlice.actions;

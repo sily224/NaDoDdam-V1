@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { showModal } from '../store/ModalSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { showModal, closeModal } from '../store/ModalSlice';
+import { initDate } from '../store/FormSlice';
 import ModalContainer from '../components/Modal'
 import FarmPeriod from '../components/FarmPeriod';
 import FarmFormat from '../components/FarmFormat';
-import styled from 'styled-components';
-import axios from 'axios';
 import FarmTime from '../components/FarmTime';
+import Pagination from '../components/Pagination';
+import styled from 'styled-components';
+
+import * as userApi from '../lib/userApi';
 
 const Subject = styled.h2`
 	text-align: center;
@@ -19,8 +22,9 @@ const TimeTableList = styled.div`
     margin-bottom: 20px;
     margin-left: 3%;
 `;
-const Img = styled.img`
+const FarmImg = styled.img`
     margin-right: 20px;
+    width: 20%;
 `;
 const TimTableContent = styled.div`
     display:block
@@ -44,22 +48,36 @@ const TimeTableButton =styled.button`
         margin-bottom:10px;
     }
 `;
+const H3 = styled.h3`
+    margin : 30px 0 10px;
+    font-size : 1.3rem;
+`;
+const SubmitBtn = styled.button`
+    margin-top : 20px;
+`;
+const FailAnnouncement = styled.p`
+	text-align: center;
+	margin-top: 5rem;
+`;
 
 
-//TimeTable
+
+//memo 지혜 : TimeTable
 const TimeTable = ()=>{
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
-    const [cost, setCost] = useState(0);
     const [maxHeadCount, setMaxHeadCount] = useState([]);
+    const [cost, setCost] = useState('');
+    const [page, setPage] = useState(1);
+    
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
 
     const fetchData = async () => {
         try {
-            await axios.get('/timetable.json').then((res) => {
-                // console.log(res.data);
-                setTimeTable(res.data);
+            await userApi.get('http://localhost:3500/api/timetables/owner').then((res) => {
+                console.log(res.data);
+                setTimeTable([...res.data]);
             });
         }
         catch(e){
@@ -77,46 +95,62 @@ const TimeTable = ()=>{
 
     const handleSubmit = async(e) =>{   
         e.preventDefault();
+        console.log(postData.timeList);
+        if(postData.timeList.length < 1 || cost < 1 ||!postData.startDate || !postData.endDate) {
+            alert('모든 값을 올바르게 기입해주세요');
+            return;
+        };
+        
         const d1 = new Date(postData.startDate);
         const d2 = new Date(postData.endDate);
         const {timeList} = postData;
+
         let diffDate = d1.getTime() - d2.getTime();
         diffDate = Math.abs(diffDate /(1000*60*60*24));
-        console.log("diffDate: " + diffDate);
 
         for (let i = 0; i < diffDate + 1 ; i++ ){
             const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
-            console.log("date : "+date);
-            for (let j = 0; j< timeList[0].length;j++){
-                console.log(timeList);
+            
+            for (let j = 0; j< timeList[0].length -1;j++){
                 const start_time = timeList[j][0];
                 const end_time = timeList[j][1];
                 const personnel = maxHeadCount[j];
+
                 try {
-                    await axios.post('http://localhost:3500/api/timetables/1',{
+                    const res = await userApi.post('http://localhost:3500/api/timetables',{
                         'date': date,
                         'personnel':personnel,
                         'price':cost,
                         'start_time':start_time,
                         'end_time':end_time
                     });
+                    console.log(res);
                 }
                 catch(e){
                     console.log(e);
                 }
             }
         }
-        alert('체험시간표 등록완료')
+        alert('체험시간표 등록완료');
+        dispatch(closeModal());
+        dispatch(initDate());
+        setCost(0);
+        fetchData();
     };
 
-    const onTimeTableDelete = (idx) => {
-        timeTable.splice(idx,1);
-        setTimeTable([...timeTable]);
-        // 삭제 요청api
+    const onTimeTableDelete = async(id) => {
+        await userApi.delete(`http://localhost:3500/api/timetables/${id}`);
+        fetchData();
     };
 
-    const onTimeTableUpdate = (e)=>{
-        dispatch(showModal())
+    const onTimeTableUpdate = (id)=>{
+        dispatch(showModal());
+
+
+        // axios.put(`http://localhost:3500/api/timetables/${idx}`,{
+
+
+        // });
     };
 
     useEffect (() => {
@@ -130,14 +164,15 @@ const TimeTable = ()=>{
             
             <Subject>체험시간표</Subject>
             <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
-            { timeTable && 
-                    timeTable.map((table,idx) =>{
+            <Pagination total={timeTable.length} limit={5} page={page} setPage={setPage}/>
 
+            { timeTable.length < 1 ? <FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement> : 
+                    timeTable.map((table,idx) =>{
                         return(
-                            <TimeTableList>
+                            <TimeTableList key={idx}>
                                 <h4>체험테이블{idx+1}</h4>
                                 <TimTableItem>
-                                    <Img alt='농장이미지'></Img>
+                                    <FarmImg src={table.farm? table.farm.url:''} alt='농장이미지'></FarmImg>
                                     <TimTableContent>
                                         <div>
                                             <span>날짜 : </span>
@@ -162,11 +197,11 @@ const TimeTable = ()=>{
                                             <span>인원수 : </span>
                                             <span>{table.personnel}</span>
                                         </div>
-                                </TimTableContent>
-                                <TimeTableButtons>
-                                    <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx)}>수정</TimeTableButton>
-                                    <TimeTableButton type='button' onClick={()=>onTimeTableDelete(idx)}>삭제</TimeTableButton>
-                                </TimeTableButtons>
+                                    </TimTableContent>
+                                    <TimeTableButtons>
+                                        <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(table.id)}>수정</TimeTableButton>
+                                        <TimeTableButton type='button' onClick={()=>onTimeTableDelete(table.id)}>삭제</TimeTableButton>
+                                    </TimeTableButtons>
                                 </TimTableItem>
                             </TimeTableList>
                         )
@@ -178,20 +213,20 @@ const TimeTable = ()=>{
                 <form onSubmit={handleSubmit}>
                     <h1>체험시간표</h1>
                     <div>
-                        <h3>체험 날짜</h3>
+                        <H3>체험 날짜</H3>
                         <FarmPeriod onStateLiftining ={stateLiftining}/>  
                     </div>
 
                     <div>
-                        <h3>체험 시간</h3>
+                        <H3>체험 시간</H3>
                         <FarmTime onStateLiftining={stateLiftining} getHeadCount={getHeadCount}></FarmTime>
                         
                     </div>
                     <div>
-                        <h3>체험 비용</h3>
-                        <input type='text' placeholder='입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
+                        <H3>체험 비용</H3>
+                        <input type='text' placeholder='체험비용을 입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
                     </div>
-                    <button type='submit'>추가하기</button>
+                    <SubmitBtn type='submit'>추가하기</SubmitBtn>
                 </form>
             </ModalContainer>
         }

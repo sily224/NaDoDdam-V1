@@ -7,16 +7,18 @@ import * as timetableController from '../controller/timetable.js';
 
 const router = express.Router();
 
-// GET /timetables
-// GET /timetables?date=:date
-router.get('/', timetableController.getTimeTables);
+// GET /timetables/owner
+router.get('/owner', isFarmer, timetableController.getTimeTables);
+
+// GET /timetables  => 일반사용자 조회
+router.get('/:id', timetableController.getTimeTable);
 
 // POST /timetables
 router.post('/', isFarmer, timetableController.createTimeTable);
 
-// PUT /timetable/:id
-router.put('/:id', isFarmer, timetableController.updateTimeTable); // 수정
+// PUT /timetables/:id
+router.put('/:id', isFarmer, timetableController.updateTimeTable);
 
 // DELETE /timetable/:id
-// router.delete('./:id', farmController.removeFarm);
+router.delete('/:id', isFarmer, timetableController.removeTimeTable);
 export default router;

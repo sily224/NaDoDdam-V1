@@ -36,6 +36,4 @@ router.patch('/myInfo/:userId', isAuth, authController.userUpdate); //개인 정
 
 router.delete('/myInfo/:userId', isAuth, authController.userDrop); // 회원 삭제
 
-
-
 export default router;
