@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { showModal } from '../store/ModalSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { showModal, closeModal } from "../store/ModalSlice";
 import ModalContainer from '../components/Modal'
 import FarmPeriod from '../components/FarmPeriod';
 import FarmFormat from '../components/FarmFormat';
 import styled from 'styled-components';
 import axios from 'axios';
 import FarmTime from '../components/FarmTime';
+import Pagination from '../components/Pagination';
+import * as userApi from '../lib/userApi';
 
 const Subject = styled.h2`
 	text-align: center;
@@ -52,13 +54,14 @@ const TimeTable = ()=>{
     const [postData, setPostData] = useState({});
     const [cost, setCost] = useState(0);
     const [maxHeadCount, setMaxHeadCount] = useState([]);
+    const [page, setPage] = useState(1);
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
 
     const fetchData = async () => {
         try {
-            await axios.get('/timetable.json').then((res) => {
-                // console.log(res.data);
+            await userApi.get('http://localhost:3500/api/timetables').then((res) => {
+                console.log(res.data);
                 setTimeTable(res.data);
             });
         }
@@ -82,41 +85,51 @@ const TimeTable = ()=>{
         const {timeList} = postData;
         let diffDate = d1.getTime() - d2.getTime();
         diffDate = Math.abs(diffDate /(1000*60*60*24));
-        console.log("diffDate: " + diffDate);
+        console.log('diffDate: ' + diffDate);
 
         for (let i = 0; i < diffDate + 1 ; i++ ){
             const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
-            console.log("date : "+date);
+            console.log('date : '+date);
             for (let j = 0; j< timeList[0].length;j++){
                 console.log(timeList);
+                console.log("start: ",timeList[j][0]);
+                console.log("end: ",timeList[j][1]);
+
                 const start_time = timeList[j][0];
                 const end_time = timeList[j][1];
                 const personnel = maxHeadCount[j];
                 try {
-                    await axios.post('http://localhost:3500/api/timetables/1',{
+                    const res = await userApi.post('http://localhost:3500/api/timetables/',{
                         'date': date,
                         'personnel':personnel,
                         'price':cost,
                         'start_time':start_time,
                         'end_time':end_time
                     });
+                    console.log(res);
                 }
                 catch(e){
                     console.log(e);
                 }
             }
         }
-        alert('체험시간표 등록완료')
+        alert('체험시간표 등록완료');
+        dispatch(closeModal());
+        setCost(0);
     };
 
     const onTimeTableDelete = (idx) => {
-        timeTable.splice(idx,1);
-        setTimeTable([...timeTable]);
+        // axios.delete(`http://localhost:3500/api/timetables/${idx}`);
         // 삭제 요청api
     };
 
-    const onTimeTableUpdate = (e)=>{
-        dispatch(showModal())
+    const onTimeTableUpdate = (idx)=>{
+        // 수정 요청api
+        dispatch(showModal());
+        // axios.put(`http://localhost:3500/api/timetables/${idx}`,{
+
+
+        // });
     };
 
     useEffect (() => {
@@ -130,11 +143,13 @@ const TimeTable = ()=>{
             
             <Subject>체험시간표</Subject>
             <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
+            <Pagination total={timeTable.length} limit={5} page={page} setPage={setPage}/>
+
             { timeTable && 
                     timeTable.map((table,idx) =>{
 
                         return(
-                            <TimeTableList>
+                            <TimeTableList key={idx}>
                                 <h4>체험테이블{idx+1}</h4>
                                 <TimTableItem>
                                     <Img alt='농장이미지'></Img>

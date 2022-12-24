@@ -62,7 +62,7 @@ const TimeTables = (sequelize, DataTypes) => {
 	// timeTable.getByDate = (date) => {};
 
 	timeTable.getById = (id) => {
-		return timeTable.findOne({ id });
+		return timeTable.findOne({ where: { id } });
 	};
 
 	timeTable.createTable = (tableInfo) => {

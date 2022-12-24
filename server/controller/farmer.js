@@ -69,6 +69,22 @@ export async function information(req, res, next) {
 	}
 }
 
+export async function updateInfo(req, res, next) {
+	const { email, password, name, phoneNum } = req.body;
+	try {
+		const farmerId = req.farmerId;
+		const found = await db.Farmers.findByFarmerEmail(email);
+		if (found) {
+			throw new Error(`${email}은 이미 존재합니다`);
+		}
+		const update = { email, password, name, phoneNum };
+		const updated = await db.Farmers.updateFarmer(farmerId, update);
+		res.status(200).json(updated);
+	} catch (err) {
+		next(err);
+	}
+}
+
 const createJwtToken = (id) => {
 	return jwt.sign({ id }, config.jwt, {
 		expiresIn: '2d',

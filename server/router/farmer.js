@@ -33,7 +33,7 @@ router.post('/login', validateCredential, farmerController.login); //농장주 �
 router.get('/information', isFarmer, farmerController.information); //개인 회원정보 조회
 
 //농장주 정보 수정
-
+router.put('/update', isFarmer, farmerController.updateInfo);
 //농장주 삭제
 
 export default router;

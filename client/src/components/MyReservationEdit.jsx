@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import styled from 'styled-components';
 import { showModal } from '../store/ModalSlice';
+import { closeModal } from '../store/ModalSlice';
 import ModalContainer from '../components/Modal';
 import { StyledList, StyledListInner,StyledImageWrap, StyledNavWrapper } from "../pages/MyReservation";
 import Location from '../components/Location';
@@ -42,9 +43,11 @@ const MyReservationEdit = () => {
         authorization: token,
       },
     });
-    setReservationData(res.data);
+    setReservationData(res);
     setfilterdData(res.data)
   };
+
+  console.log(reservationData)
 
   useEffect(() => {
     getReservationData();
@@ -178,7 +181,7 @@ const MyReservationEdit = () => {
                           <p>인원</p>
                           <p>{item.personnel}명</p>
                         </div>
-                        {/* <Location location='충청남도 보령시 남포면 농장길 194-61'/> */}
+                        <Location location='충청남도 보령시 남포면 농장길 194-61'/>
                       </StyledContentWrap>
                       <div>
                         <div>
@@ -193,8 +196,11 @@ const MyReservationEdit = () => {
                     </div>
                     {item.status === ("예약완료" || "예약대기")
                     ? <button 
-                      onClick={() => 
-                      setCancleReservation(prev =>!prev)}> 
+                      onClick={() => {
+                        setCancleReservation(prev =>!prev)
+                        dispatch(closeModal())
+                      }}
+                      > 
                         예약취소
                       </button> 
                     : null}

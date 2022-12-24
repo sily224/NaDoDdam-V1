@@ -75,9 +75,9 @@ const Farmers = (sequelize, DataTypes) => {
 		return farmer.findOne({ where: { farmId: id } });
 	};
 
-	// farmer.updateFarmer = ({ farmerId, update }) => {
-	// 	return farmer.update(update, { where: { id: farmerId } });
-	// };
+	farmer.updateFarmer = (farmerId, update) => {
+		return farmer.update(update, { where: { id: farmerId } });
+	};
 
 	farmer.registeFarmId = (id, farmerId) => {
 		return farmer.update({ farmId: id }, { where: { id: farmerId } }); // id가 어디인데서

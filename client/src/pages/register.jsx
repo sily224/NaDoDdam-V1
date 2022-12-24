@@ -7,7 +7,7 @@ import { showLogin } from '../store/ModalSlice';
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {formSchema} from '../hooks/useForm';
+import { formSchema } from '../hooks/useForm';
 
 const ModalTitle = styled.h1`
 	color: blue;
@@ -36,7 +36,7 @@ function Register() {
 	const dispatch = useDispatch();
 
 	// 입력값 유효성 검사할 형태
-	
+
 	const {
 		register,
 		handleSubmit,
@@ -48,10 +48,25 @@ function Register() {
 		try {
 			const joinData = { email, password, phoneNum, name };
 
-			const join = await userApi
+			await userApi
 				.post('//localhost:3500/api/signup', joinData)
 				.then((res) => {
-					alert(`정상적으로 회원가입되었습니다.`);
+					alert(`정상적으로 회원 가입되었습니다.`);
+					dispatch(showLogin());
+				});
+		} catch (err) {
+			alert(err.response.data.message);
+		}
+	};
+
+	const joinFarmer = async ({ email, name, password, phoneNum }) => {
+		try {
+			const joinData = { email, password, phoneNum, name };
+
+			await userApi
+				.post('//localhost:3500/api/farmers/signup', joinData)
+				.then((res) => {
+					alert(`정상적으로 농장주 가입되었습니다.`);
 					dispatch(showLogin());
 				});
 		} catch (err) {
@@ -70,7 +85,7 @@ function Register() {
 			<>
 				<ModalContainer>
 					<ModalTitle>회원가입</ModalTitle>
-					<InputForm onSubmit={handleSubmit((data) => joinUser(data))}>
+					<InputForm>
 						<Label htmlFor="email">이메일</Label>
 						<Input id="email" type="email" {...register('email')} />
 						{errors.email && <small role="alert">{errors.email.message}</small>}
@@ -109,8 +124,19 @@ function Register() {
 							<small role="alert">{errors.phoneNum.message}</small>
 						)}
 
-						<RegisterBtn type="submit" disabled={isSubmitting}>
-							가입하기
+						<RegisterBtn
+							type="submit"
+							disabled={isSubmitting}
+							onClick={handleSubmit((data) => joinUser(data))}
+						>
+							일반 회원 가입하기
+						</RegisterBtn>
+						<RegisterBtn
+							type="submit"
+							disabled={isSubmitting}
+							onClick={handleSubmit((data) => joinFarmer(data))}
+						>
+							농장주 가입하기
 						</RegisterBtn>
 					</InputForm>
 					<LoginBtn onClick={() => dispatch(showLogin())}>로그인하기</LoginBtn>

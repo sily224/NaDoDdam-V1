@@ -6,154 +6,150 @@ import { HiUserCircle, HiMenu } from 'react-icons/hi';
 import { useSelector, useDispatch } from 'react-redux';
 import { showLogin, showRegister } from '../store/ModalSlice';
 import { getToken, logout } from '../utils/utils';
-import Selector from "./Selector";
+import Selector from './Selector';
 import TableDatePicker from './DatePicker';
 
-import {reset} from '../store/OptionSlice';
+import { reset } from '../store/OptionSlice';
 
 const StyledHeader = styled.header`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.2% 5%;
-  box-sizing: border-box;
-  border-bottom: 1px solid lightgray;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1.2% 5%;
+	box-sizing: border-box;
+	border-bottom: 1px solid lightgray;
 `;
 
 const StyledSearchBar = styled.div`
-  border-radius: 20px;
-  height: 40px;
-  width: 25%;
-  position: relative;
-  border: 1px solid #c3c2c2;
-  cursor: pointer;
+	border-radius: 20px;
+	height: 40px;
+	width: 25%;
+	position: relative;
+	border: 1px solid #c3c2c2;
+	cursor: pointer;
 
-  > svg {
-    position: absolute;
-    top: 6px;
-    right: 5px;
-  }
+	> svg {
+		position: absolute;
+		top: 6px;
+		right: 5px;
+	}
 
-  ${(props) =>
-    props.toggle &&
-    css`
-      display: none;
-    `}
+	${(props) =>
+		props.toggle &&
+		css`
+			display: none;
+		`}
 `;
 
 const ActiveSearchBar = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  width: 40%;
-  position: relative;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	width: 40%;
+	position: relative;
 
-  button {
-    border: 0;
-    cursor: pointer;
-    background-color: white;
-    margin: 0 40px;
-    font-size: 30px;
+	button {
+		border: 0;
+		cursor: pointer;
+		background-color: white;
+		margin: 0 40px;
+		font-size: 30px;
 
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+		&:hover {
+			text-decoration: underline;
+		}
+	}
 
-  & > div {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-  }
+	& > div {
+		display: flex;
+		justify-content: space-around;
+		width: 100%;
+	}
 `;
 
 const SearchOption = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  border: 1px solid black;
-  border-radius: 20px;
-  height: 60px;
+	display: flex;
+	align-items: center;
+	margin-top: 20px;
+	border: 1px solid black;
+	border-radius: 20px;
+	height: 60px;
 
-  & > div {
-    display: flex;
-    align-items: center;
-    border-radius: 20px;
-    height: 100%;
-    z-index: 9999;
-  }
+	& > div {
+		display: flex;
+		align-items: center;
+		border-radius: 20px;
+		height: 100%;
+		z-index: 9999;
+	}
 
-  & > div:hover {
-    cursor: pointer;
-    background-color: lightgray;
-  }
+	& > div:hover {
+		cursor: pointer;
+		background-color: lightgray;
+	}
 `;
 
-const SearchMenu = ({children}) => {
-  return (
-    <SearchContainer>
-      {children}
-    </SearchContainer>
-  );
-}
+const SearchMenu = ({ children }) => {
+	return <SearchContainer>{children}</SearchContainer>;
+};
 
 const SearchContainer = styled.div`
-  position : absolute;
-  border: 1px solid black;
-  background-color:white;
-  top : 150px;
-  z-index: 9999;
-`
+	position: absolute;
+	border: 1px solid black;
+	background-color: white;
+	top: 150px;
+	z-index: 9999;
+`;
 
 const StyledNav = styled.div`
-  border-radius: 20px;
-  border: 1px solid #c3c2c2;
-  padding: 3px;
-  ${(props) =>
-    props.toggle &&
-    css`
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-      transition: box-shadow 0.2s ease;
-    `}
-  button {
-    border: none;
-    background: transparent;
-    display: flex;
-    align-items: center;
-  }
+	border-radius: 20px;
+	border: 1px solid #c3c2c2;
+	padding: 3px;
+	${(props) =>
+		props.toggle &&
+		css`
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+			transition: box-shadow 0.2s ease;
+		`}
+	button {
+		border: none;
+		background: transparent;
+		display: flex;
+		align-items: center;
+	}
 
-  svg + svg {
-    padding-left: 3px;
-  }
+	svg + svg {
+		padding-left: 3px;
+	}
 `;
 
 const StyledMenu = styled.div`
-  display: none;
-  ${(props) =>
-    props.toggle &&
-    css`
-      display: block;
-    `}
-  position: absolute;
-  top: 10%;
-  right: 5%;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: -1px -1px 10px rgba(0, 0, 0, 0.18);
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  width: 20%;
-  padding: 1% 0;
-  box-sizing: border-box;
-  z-index: 2;
+	display: none;
+	${(props) =>
+		props.toggle &&
+		css`
+			display: block;
+		`}
+	position: absolute;
+	top: 10%;
+	right: 5%;
+	background: #fff;
+	border-radius: 10px;
+	box-shadow: -1px -1px 10px rgba(0, 0, 0, 0.18);
+	border: 1px solid rgba(0, 0, 0, 0.18);
+	width: 20%;
+	padding: 1% 0;
+	box-sizing: border-box;
+	z-index: 2;
 `;
-  const StyledLink = styled(Link)`
-    padding: 5%;
-  
-    &:hover {
-      background: lightgray;
-    }
+const StyledLink = styled(Link)`
+	padding: 5%;
+
+	&:hover {
+		background: lightgray;
+	}
 `;
 
 const StyledBtnWrapper = styled.div`
@@ -209,96 +205,105 @@ const afterLoginList = [
 
 const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 	const loginModalState = useSelector((state) => state.modal.loginModal);
-  const optionState = useSelector(state=>state.option);
+	const optionState = useSelector((state) => state.option);
 	const dispatch = useDispatch();
 
-  const [isOpenSearchBar, setIsOpenSearchBar] = useState(false); // 검색 바 상태
-  const [searchOption, setSearchOption] = useState("location"); // 지역, 과일 선택
-  const [option, setOption] = useState(null); // 검색 세부 옵션
+	const [isOpenSearchBar, setIsOpenSearchBar] = useState(false); // 검색 바 상태
+	const [searchOption, setSearchOption] = useState('location'); // 지역, 과일 선택
+	const [option, setOption] = useState(null); // 검색 세부 옵션
 
-  const [toggleMenu, setToggleMenu] = useState(false);
+	const [toggleMenu, setToggleMenu] = useState(false);
 	const token = getToken();
 	const navigate = useNavigate();
 	const params = useParams();
 	const ref = useRef();
 
-  const searchRef = useRef(); // 검색 바 참조
+	const searchRef = useRef(); // 검색 바 참조
 
-  const handleToggleMenu = () => {
-    setToggleMenu((prev) => !prev);
-  };
+	const handleToggleMenu = () => {
+		setToggleMenu((prev) => !prev);
+	};
 
-  const handleClickOutSide = (e) => {
-    if (toggleMenu && !ref.current.contains(e.target)) {
-      setToggleMenu(false);
-    }
-    if (isOpenSearchBar && !searchRef.current.contains(e.target)){
-      setIsOpenSearchBar(false); // 검색 바 원복
-      setOption(false); // 검색 세부 옵션 원복
-    }
-  };
+	const handleClickOutSide = (e) => {
+		if (toggleMenu && !ref.current.contains(e.target)) {
+			setToggleMenu(false);
+		}
+		if (isOpenSearchBar && !searchRef.current.contains(e.target)) {
+			setIsOpenSearchBar(false); // 검색 바 원복
+			setOption(false); // 검색 세부 옵션 원복
+		}
+	};
 
-  useEffect(() => {
-    if (toggleMenu) document.addEventListener("mousedown", handleClickOutSide);
-    if (isOpenSearchBar) document.addEventListener("mousedown", handleClickOutSide); // 이벤트 등록
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutSide); // 이벤트 제거
-    };
-  });
+	useEffect(() => {
+		if (toggleMenu) document.addEventListener('mousedown', handleClickOutSide);
+		if (isOpenSearchBar)
+			document.addEventListener('mousedown', handleClickOutSide); // 이벤트 등록
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutSide); // 이벤트 제거
+		};
+	});
 
-  useEffect(() => {
-    setToggleMenu(false);
-  }, [params]);
+	useEffect(() => {
+		setToggleMenu(false);
+	}, [params]);
 
-  const logout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+	const handleSearchBar = () => {
+		// 검색 바 핸들러
+		if (!isOpenSearchBar) setIsOpenSearchBar(true);
+	};
 
-  const handleSearchBar = () => { // 검색 바 핸들러
-    if (!isOpenSearchBar) setIsOpenSearchBar(true);
-  };
+	const handleSearchOption = (e) => {
+		// 검색 옵션 핸들러
+		setSearchOption(e.target.name);
+		dispatch(reset());
+	};
 
-  const handleSearchOption = (e) => { // 검색 옵션 핸들러
-    setSearchOption(e.target.name);
-    dispatch(reset());
-  };
+	const handleSearchMenu = (e) => {
+		// 검색 세부 옵션 핸들러
+		setOption(e.target.id);
+	};
 
-  const handleSearchMenu = (e) => { // 검색 세부 옵션 핸들러
-    setOption(e.target.id);
-  };
-
-  return (
-    <StyledHeader>
-      <img src="" alt="logo" />
-      {isOpenSearchBar && (
-        <ActiveSearchBar toggle={isOpenSearchBar} ref={searchRef}>
-          <div>
-            <button name="location" onClick={(e) => handleSearchOption(e)}>
-              지역
-            </button>
-            <button name="fruit" onClick={(e) => handleSearchOption(e)}>
-              과일
-            </button>
-          </div>
-          <SearchOption>
-            {searchOption === "location" ? (
-              <div id="location" onClick={e=> handleSearchMenu(e)}>장소</div>
-            ) : (
-              <div id="fruit" onClick={e=>handleSearchMenu(e)}>과일</div>
-            )}
-            <div id="date" onClick={e=>handleSearchMenu(e)}>날짜</div>
-          </SearchOption>
-          {
-            option === "location" && searchOption === 'location' && <SearchMenu children={<Selector searchType={option}/>}/> ||
-            option === "date" && <SearchMenu children={<TableDatePicker/>}/> ||
-            option === "fruit" && searchOption === 'fruit' && <SearchMenu children={<Selector searchType={option}/>}/>
-          }
-        </ActiveSearchBar>
-      )}
-      <StyledSearchBar toggle={isOpenSearchBar} onClick={handleSearchBar}>
-        <AiOutlineSearch size={25} />
-      </StyledSearchBar>
+	return (
+		<StyledHeader>
+			<img src="" alt="logo" />
+			{isOpenSearchBar && (
+				<ActiveSearchBar toggle={isOpenSearchBar} ref={searchRef}>
+					<div>
+						<button name="location" onClick={(e) => handleSearchOption(e)}>
+							지역
+						</button>
+						<button name="fruit" onClick={(e) => handleSearchOption(e)}>
+							과일
+						</button>
+					</div>
+					<SearchOption>
+						{searchOption === 'location' ? (
+							<div id="location" onClick={(e) => handleSearchMenu(e)}>
+								장소
+							</div>
+						) : (
+							<div id="fruit" onClick={(e) => handleSearchMenu(e)}>
+								과일
+							</div>
+						)}
+						<div id="date" onClick={(e) => handleSearchMenu(e)}>
+							날짜
+						</div>
+					</SearchOption>
+					{(option === 'location' && searchOption === 'location' && (
+						<SearchMenu children={<Selector searchType={option} />} />
+					)) ||
+						(option === 'date' && (
+							<SearchMenu children={<TableDatePicker />} />
+						)) ||
+						(option === 'fruit' && searchOption === 'fruit' && (
+							<SearchMenu children={<Selector searchType={option} />} />
+						))}
+				</ActiveSearchBar>
+			)}
+			<StyledSearchBar toggle={isOpenSearchBar} onClick={handleSearchBar}>
+				<AiOutlineSearch size={25} />
+			</StyledSearchBar>
 
 			<div ref={ref}>
 				<StyledNav toggle={toggleMenu} ref={ref}>
@@ -309,33 +314,33 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 				</StyledNav>
 				<StyledMenu toggle={toggleMenu} ref={ref}>
 					{token === null ? (
-            <StyledBtnWrapper>
-            <StyledBtn
-              onClick={() => {
-                dispatch(showLogin());
-                setToggleMenu(false);
-              }}
-            >
-              로그인
-            </StyledBtn>
-            <StyledBtn
-              onClick={() => {
-                dispatch(showRegister());
-                setToggleMenu(false);
-              }}
-            >
-              회원가입
-            </StyledBtn>
-          </StyledBtnWrapper>
-            ) : (
-              <div>
-                {afterLoginList.map((item) => (
-                  <StyledLink to={item.path} key={item.id}>
-                    {item.name}
-                  </StyledLink>
-                ))}
-                <StyledLogout>
-                <StyledBtn
+						<StyledBtnWrapper>
+							<StyledBtn
+								onClick={() => {
+									dispatch(showLogin());
+									setToggleMenu(false);
+								}}
+							>
+								로그인
+							</StyledBtn>
+							<StyledBtn
+								onClick={() => {
+									dispatch(showRegister());
+									setToggleMenu(false);
+								}}
+							>
+								회원가입
+							</StyledBtn>
+						</StyledBtnWrapper>
+					) : (
+						<div>
+							{afterLoginList.map((item) => (
+								<StyledLink to={item.path} key={item.id}>
+									{item.name}
+								</StyledLink>
+							))}
+							<StyledLogout>
+								<StyledBtn
 									onClick={() => {
 										setToggleMenu(false);
 										logout();
@@ -343,7 +348,7 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
 								>
 									로그아웃
 								</StyledBtn>
-                </StyledLogout>
+							</StyledLogout>
 						</div>
 					)}
 				</StyledMenu>
