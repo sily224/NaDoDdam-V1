@@ -15,4 +15,6 @@ router.delete('/review/:reviewId', isAuth, reviewController.reviewDrop); //리�
 router.patch('/review/:reviewId', isAuth, reviewController.reviewUpdate); //리뷰 수정
 
 router.get('/review/farmer', isFarmer, reviewController.getReviewDataFarmer); //농장주가 본인 농장 후기 조회
+
+router.delete('/review/farmer/:reviewId', isFarmer, reviewController.reviewDropFarmer); //농장주가 본인 농장 후기 삭제
 export default router;
