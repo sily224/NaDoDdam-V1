@@ -16,6 +16,30 @@ const StyledTitleWrap = styled.div`
   display:flex;
 `
 
+const StyledTitle = styled.div`
+  margin-bottom: 1%;
+
+  > h3 {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+
+  > span {
+    background-color: lightgrey;
+    padding: 1%;
+    margin-left: 1%;
+    border-radius: 10px;
+  }
+`
+
+const StyledContent = styled.div`
+  width:70%;
+
+  >p {
+    margin-bottom: 0;
+  }
+`
+
 const StyledContentWrap = styled.div`
   display:flex;
   justify-content:space-between;
@@ -36,6 +60,7 @@ const StyledList = styled.div`
   width: 100%;
   padding: 3%;
   box-sizing: border-box;
+  margin-bottom: 2%;
 `
 
 const StyledListInner = styled.div`
@@ -45,20 +70,16 @@ const StyledListInner = styled.div`
 `
 
 const StyledImageWrap = styled.div`
-  border: 1px solid #000;
-  width: 150px;
-  height: 150px;
+  width: 30%;
+  height: 100%;
   margin-right: 20px;
+  overflow: hidden;
+  border-radius: 20px;
 
   >img {
     width: 100%;
   }
 `
-const optionList = [
-  { value: '지난 3개월', label: '지난 3개월' },
-  { value: '지난 6개월', label: '지난 6개월' },
-  { value: '지난 1년', label: '지난 1년' }
-]
 
 const MyReservationEdit = () => {
   const [originalData, setOriginalData] = useState([]);
@@ -66,7 +87,7 @@ const MyReservationEdit = () => {
   const [dataIndex, setDataIndex] = useState();
   const [statusOption , setStatusOption] = useState('전체');
   const [dateOption , setDateOption] = useState('지난 3개월');
-  const [cancleReservation, setCancleReservation] = useState(false);
+  const [canclePage, setCanclePage] = useState(false);
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
   const [page, setPage] = useState(1);
@@ -123,7 +144,7 @@ const MyReservationEdit = () => {
 
   const ShowDefault = () => {
     return <>
-      {!cancleReservation 
+      {!canclePage 
       ? <>
         <h1>예약조회</h1>
         <StyledNavWrapper>
@@ -146,30 +167,29 @@ const MyReservationEdit = () => {
 
   const ShowResrvation = () => {
     return (<>
-      {filteredData.slice(offset, offset + 10).map((item , index) => { 
-        const start_time = item.time.start_time.slice(0,5);
-        const end_time = item.time.end_time.slice(0,5);
+      {filteredData.slice(offset, offset + 10).map((reservation , index) => { 
+        const {farm, time, reserve} = reservation;
+        const start_time = time.start_time.slice(0,5);
+        const end_time = time.end_time.slice(0,5);
         return (
           <StyledList key={index}>
             <StyledListInner>
               <StyledImageWrap>
-                <img src={item.farm.url} alt="농장사진"/>
+                <img src={farm.url} alt="농장사진"/>
               </StyledImageWrap>
-              <div>
-                <div>
+              <StyledContent>
+                <StyledTitle>
                   <h3 style={{
-                    textDecoration : item.reserve.status === '예약취소' 
-                    ? 'line-through' 
-                    : 'none'}}>
-                      {item.farm.name}
-                      <span>({item.reserve.status})</span>
-                  </h3> 
-                </div>
-                <p>날짜: {item.time.date}</p>
+                  textDecoration : reserve.status === '예약취소' 
+                  ? 'line-through' 
+                  : 'none'}}>{farm.name}</h3>
+                  <span>{reserve.status}</span>
+                </StyledTitle>
+                <p>날짜: {time.date}</p>
                 <p>체험시간: {start_time} -  {end_time}</p>
-                <p>인원: {item.reserve.personnel}명</p>
-                <p>결제금액 : {(item.reserve.total_price).toLocaleString()}원</p>
-              </div>
+                <p>인원: {reserve.personnel}명</p>
+                <p>결제금액 : {(reserve.total_price).toLocaleString()}원</p>
+              </StyledContent>
             </StyledListInner>
             <div>
               <button 
@@ -179,13 +199,13 @@ const MyReservationEdit = () => {
                 dispatch(showModal())}}>
                 더보기
               </button>
-                {item.reserve.status === '체험완료' && <button>후기작성</button> }
-                {(item.reserve.status === '예약대기' || item.reserve.status === '예약완료')
+                {reserve.status === '체험완료' && <button>후기작성</button> }
+                {(reserve.status === '예약대기' || reserve.status === '예약완료')
                   && <button 
                   name={index}
                   onClick={(e)=> {
                     setDataIndex(e.target.name)
-                    setCancleReservation(prev =>!prev)
+                    setCanclePage(prev =>!prev)
                   }}>
                   예약취소
                </button>
@@ -203,57 +223,58 @@ const MyReservationEdit = () => {
     
     return (
       <>
-        {filterDataArr.map(item => {
-          const start_time = item.time.start_time.slice(0,5);
-          const end_time = item.time.end_time.slice(0,5);
-          return <div key={`${dataIndex}`-`${item.farm.id}`}>
-            {!cancleReservation 
+        {filterDataArr.map(reservation => {
+          const {farm, time, reserve} = reservation;
+          const start_time = time.start_time.slice(0,5);
+          const end_time = time.end_time.slice(0,5);
+          return <div key={`${dataIndex}`-`${farm.id}`}>
+            {!canclePage 
               ? (<div>
                     <StyledTitleWrap>
                       <StyledImageWrap>
-                        <img src={item.farm.url} alt="농장사진"/>
+                        <img src={farm.url} alt="농장사진"/>
                       </StyledImageWrap>
                       <div>
                         <h4 style={{
-                          textDecoration : item.reserve.status === '예약취소' 
+                          textDecoration : reserve.status === '예약취소' 
                           ? 'line-through' 
                           : 'none'}}>
-                            {item.farm.name}({item.reserve.status})
+                            {farm.name}({reserve.status})
                         </h4> 
-                        <p>{item.time.date}</p>
+                        <p>{time.date}</p>
                       </div>
                   </StyledTitleWrap>
                     <div>
                       <p>예약정보</p>
                       <StyledContentWrap>
                         <div>
-                          <p>날짜: {item.time.date}</p>
+                          <p>날짜: {time.date}</p>
                           <p>시간: {start_time}-{end_time}</p>
-                          <p>인원: {item.reserve.personnel}명</p>
+                          <p>인원: {reserve.personnel}명</p>
                         </div>
-                        <Location location={item.farm.address}/>
+                        <Location location={farm.address}/>
                       </StyledContentWrap>
                       <div>
                         <div>
                           <p>결제수단</p>
-                          <p>결제수단</p>
+                          <p>{reserve.payment === 'card' && '카드결제'}</p>
                         </div>
                         <div>
-                          <p>결제금액: {item.reserve.total_price.toLocaleString()}원</p>
+                          <p>결제금액: {reserve.total_price.toLocaleString()}원</p>
                         </div>
                       </div>
                     </div>
-                    {(item.reserve.status === "예약완료" || item.reserve.status === "예약대기") 
+                    {(reserve.status === "예약완료" || reserve.status === "예약대기") 
                     && <button 
                       onClick={() => {
-                        setCancleReservation(prev =>!prev)
+                        setCanclePage(prev =>!prev)
                         dispatch(closeModal())
                       }}> 
                         예약취소
                       </button>
                     }
                   </div>) 
-                : <CancleReservation />
+                : <canclePage />
               }
             </div>
           })}
@@ -261,23 +282,40 @@ const MyReservationEdit = () => {
     )
   }
 
-  const CancleReservation = () => {
+  const CancleReservationPage = () => {
     const filterDataArr = [filteredData[dataIndex]];
+
+    const cancleResevation = async(e) => {
+      const id = e.target.name;
+      try {
+        await userApi.patch(`//localhost:3500/api/reserve/${id}`, {
+          status: '예약취소',
+        }); 
+        getReservationData();
+        setCanclePage(prev =>!prev);
+        
+      } catch (err) {
+        console.log(err.response.data.Error)
+      }
+    }
+
     return (
       <>
-      {filterDataArr.map(item => {
-        const start_time = item.time.start_time.slice(0,5);
-        const end_time = item.time.end_time.slice(0,5);
+      {filterDataArr.map(reservation => {
+        const {farm, time, reserve} = reservation;
+        const start_time = time.start_time.slice(0,5);
+        const end_time = time.end_time.slice(0,5);
         return (
-         <div key={`${dataIndex}-${item.farm.id}`}>
-          <p>{item.farm.name}</p>
-          <p>{item.farm.description}</p>
-          <p>{item.time.date}</p>
+         <div key={`${dataIndex}-${farm.id}`}>
+          <p>{farm.name}</p>
+          <p>{farm.description}</p>
+          <p>{time.date}</p>
           <p>{start_time}-{end_time}</p>
-          <p>인원{item.reserve.personnel}명</p>
+          <p>인원{reserve.personnel}명</p>
           <p>취소사유</p>
-          <p>최종환불금액: {item.reserve.total_price.toLocaleString()}</p>
-          <button onClick={() => setCancleReservation(prev =>!prev)}>이전</button>
+          <p>최종환불금액: {reserve.total_price.toLocaleString()}</p>
+          <button onClick={() => setCanclePage(prev =>!prev)}>이전</button>
+          <button name={reserve.id} onClick={(e) => cancleResevation(e)}>예약취소</button>
         </div>
       )}
     )} 
@@ -288,7 +326,7 @@ const MyReservationEdit = () => {
   return (
     <>
     <ShowDefault/>
-    {!cancleReservation ? <ShowResrvation />: <CancleReservation/>}
+    {!canclePage ? <ShowResrvation />: <CancleReservationPage/>}
     {modalOpen && <ModalContainer><DetailReservation /></ModalContainer>}
     <Pagination
 			total={filteredData.length}

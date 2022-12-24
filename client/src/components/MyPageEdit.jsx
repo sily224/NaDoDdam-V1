@@ -116,7 +116,7 @@ const MyPageSecurityEdit = ({userId}) => {
 
   const upDatePassword = async({oldpassword, password}) => {
     try {
-      await userApi.passwordPatch(`//localhost:3500/api/myPasword/${userId}`, {
+      await userApi.patch(`//localhost:3500/api/myPasword/${userId}`, {
         currentPassword: oldpassword,
         password: password,
       }); 
