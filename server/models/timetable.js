@@ -90,6 +90,19 @@ const TimeTables = (sequelize, DataTypes) => {
 	timeTable.getTimeTables = (farmId, lastId, limit) => {
 		let cursor = lastId || 0;
 		return timeTable.findAll({
+			attributes: [
+				'id',
+				'date',
+				'personnel',
+				'price',
+				'start_time',
+				'end_time',
+				[DataTypes.col('farm.url'), 'url'],
+			],
+			include: {
+				model: db.Farms,
+				attributes: [],
+			},
 			limit: parseInt(limit),
 			where: {
 				farmId,
