@@ -3,7 +3,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const getFavorite = async () => {
 
@@ -29,9 +29,7 @@ const getFavorite = async () => {
 const Home = React.memo(() => {
 
   const option = useSelector(state=>state.option.search);
-
   const [favorite, setFavorite] = useState([]); // 찜 목록 상태
-
   const setInitialFavorite = async () => {
     const data = await getFavorite(); // 찜 목록 가져오기
 
