@@ -306,10 +306,10 @@ const Payment = () => {
 	}, []);
 
 	useEffect(() => {
-		GetData();
+		getData();
 	}, []);
 
-	const GetData = async () => {
+	const getData = async () => {
 		try {
 			const res = await axios.get('/pay.json');
 			const data = await res.data;

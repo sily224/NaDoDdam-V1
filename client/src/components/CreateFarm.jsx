@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import FarmInputForm from './FarmInputForm';
+import FarmNullInputForm from './FarmNullInputForm';
 import FarmForm from './FarmForm';
 import styled from 'styled-components';
 
 const Button = styled.button``;
 
 function CreateFarm({ farmData }) {
-	const [farmInfo, setFarmInfo] = useState(false);
+	const [isAddFarm, setIsAddFarm] = useState(false);
 	const [onInput, setOnInput] = useState();
 	const [saveInfo, setSaveInfo] = useState(false);
 
 	const onEdit = () => {
-		setFarmInfo(true);
+		setIsAddFarm(true);
 	};
-
 	const NullFarm = () => {
 		return (
 			<>
@@ -22,17 +22,16 @@ function CreateFarm({ farmData }) {
 					<br />
 					새로 등록해주세요.
 				</p>
-				<button onClick={() => onEdit()}>등록하기</button>
+				<button onClick={() => onAddFarm()}>등록하기</button>
 			</>
 		);
 	};
-	const onSave = () => {
-		setSaveInfo(true);
+	const onAddFarm = () => {
+		setIsAddFarm(true);
 	};
-
 	return (
 		<>
-			{farmInfo ? (
+			{isAddFarm ? (
 				<div>
 					{saveInfo ? (
 						<div>
@@ -40,10 +39,7 @@ function CreateFarm({ farmData }) {
 							<Button>수정</Button>
 						</div>
 					) : (
-						<div>
-							<FarmInputForm></FarmInputForm>
-							<Button onClick={() => onSave()}>완료</Button>
-						</div>
+						<FarmNullInputForm />
 					)}
 				</div>
 			) : (

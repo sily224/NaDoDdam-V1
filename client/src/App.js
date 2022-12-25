@@ -12,7 +12,6 @@ import FarmReservation from './pages/FarmReservation';
 import FarmTimeTable from './pages/FarmTimeTable';
 import MyReservation from './pages/MyReservation';
 import Favorite from './pages/Favorite';
-import FarmInfo from './pages/FarmInfo';
 import NotFound from './pages/NotFound';
 import FarmReview from './pages/FarmReview';
 
@@ -113,7 +112,6 @@ function App() {
 						}
 					/>
 					<Route path="/notfound" element={<NotFound />} />
-					<Route path="/farm/farminfo" element={<FarmInfo />} />
 				</Route>
 			</Routes>
 		</div>
