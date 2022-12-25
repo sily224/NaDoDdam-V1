@@ -5,12 +5,47 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
+const getFavorite = async () => {
+
+  const token = localStorage.getItem('token');
+	const header = {
+		headers: {
+			authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json',
+		},
+	};
+
+  const result = await axios
+  .get('http://localhost:3500/api/like', header)
+  .then((res) => res.data)
+  .then((data) => {
+
+    return data.map((x) => x.id);
+  });
+
+  return result;
+}
+
 const Home = React.memo(() => {
 
   const option = useSelector(state=>state.option.search);
 
-  const favorite = useSelector(state=>state.favorite.favorites);
-  console.log(favorite);
+  const [favorite, setFavorite] = useState([]); // 찜 목록 상태
+
+  const setInitialFavorite = async () => {
+    const data = await getFavorite(); // 찜 목록 가져오기
+
+    setFavorite(data);
+  }
+
+  // DB에서 찜 목록 가져오기
+  useEffect(()=>{
+    if (localStorage.getItem('token')) setInitialFavorite(); // 찜 목록 초기화
+  }, []);
+
+  useEffect(()=>{
+    console.log('찜 목록 상태 변화', favorite); // 찜 목록 변화 시 출력
+  },[favorite]);
 
   const [contents, setContents] = useState([]);
   // const [page, setPage] = useState(0);
@@ -45,7 +80,6 @@ const Home = React.memo(() => {
     })
     .then(data=>setContents(data));
   })
-
 
 //   const getData = useCallback( async (options) => {
 // // /api/farm/location?address/:page
@@ -88,7 +122,7 @@ const Home = React.memo(() => {
       // scrollThreshold='1000px'>
       //   <FarmList contents={contents}/>
       // </InfiniteScroll>
-      <FarmList contents={contents} favorite={favorite}/>
+      <FarmList contents={contents} favorite={favorite} setFavorite={setFavorite}/>
   )
 });
 

@@ -1,56 +1,58 @@
 import axios from 'axios';
 import React, {useCallback} from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setFavorite } from '../store/FavoriteSlice';
+// import { setFavorite } from '../store/FavoriteSlice';
 import { Link } from 'react-router-dom';
 import styled, {css} from 'styled-components';
 
-const handleButton = async (e) => {
-	// 로그인 유무 확인
-	if (!localStorage.getItem('token')){
-		alert('찜 기능은 로그인이 필요합니다.');
-		return;
-	}
 
-	const farmId = Number(e.target.id);
-	console.log('입력된 농장 아이디', farmId);
-	if (e.target.style.backgroundColor !== 'red')
-		e.target.style.backgroundColor = 'red';
-	else e.target.style.backgroundColor = 'white';
+const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 
-	const token = localStorage.getItem('token');
-	const header = {
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`,
-		},
-	};
+	const handleButton = async (e) => {
+		// 로그인 유무 확인
+		if (!localStorage.getItem('token')){
+			alert('찜 기능은 로그인이 필요합니다.');
+			return;
+		}
+	
+		const farmId = Number(e.target.id);
+		console.log('이벤트 타겟', e.target);
 
-	// 선택한 농장이 찜 목록에 있는지 확인
-	await axios
-		.get('http://localhost:3500/api/like', header)
-		.then((res) => res.data)
-		.then(async (data) => {
-			console.log('찜 목록들', data);
-			for (let i = 0; i < data.length; i++) {
-				if (data[i].id === farmId) {
-					console.log('찜 목록 있으니 삭제하겠음'); // 찜 목록에 있음
+		console.log('입력된 농장 아이디', farmId);
 
-					// 찜 삭제
-					await axios(`http://localhost:3500/api/like/${farmId}`, {
-						method: 'DELETE',
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: `Bearer ${localStorage.getItem('token')}`,
-						},
-					});
-					return;
-				}
-			}
+		// 찜 등록 로딩 후 실행 안됨
+		if (e.target.style.backgroundColor !== 'red') e.target.style.backgroundColor = 'red';
+		else if (e.target.style.backgroundColor = 'red') {
+			e.target.style.backgroundColor = 'white';
+		};
 
-			console.log('찜 목록 없으니 등록하겠음'); // 찜 목록에 없음
+		console.log('변경 후 버튼 색', e.target.style.backgroundColor);
+		console.log('변경 후 이벤트 타겟', e.target);
 
-			// 찜 등록
+		const token = localStorage.getItem('token');
+		// const header = {
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		Authorization: `Bearer ${token}`,
+		// 	},
+		// };
+
+		// // // /// // // / // / / / /  //
+		// 찜 등록에 있으면 찜에서 삭제를 한다.
+		if (favorite.includes(farmId)){
+			console.log('찜 등록에 있으면 찜에서 삭제');
+			await axios(`http://localhost:3500/api/like/${farmId}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			setFavorite(favorite.filter(x=>x!==farmId));
+		} else {
+			// 찜 등록에 없으면 찜에 등록한다.
+			console.log('찜 등록에 없으면 찜에 등록');
 			await axios(`http://localhost:3500/api/like/${farmId}`, {
 				method: 'POST',
 				headers: {
@@ -58,10 +60,80 @@ const handleButton = async (e) => {
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 			});
-		});
-};
 
-const FarmList = React.memo(({ contents, favorite}) => {
+			setFavorite([...favorite, farmId]);
+
+		}
+
+		// if (favorite.includes(farmId)){
+		// 	console.log('찜 등록에 있으므로 찜에서 삭제');
+		// 	await axios(`http://localhost:3500/api/like/${farmId}`, {
+		// 		method: 'DELETE',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			Authorization: `Bearer ${localStorage.getItem('token')}`,
+		// 		},
+		// 	});
+
+		// 	setFavorite(favorite.filter(x=>!farmId)); // 찜 상태에서 삭제
+		// 	console.log(favorite);
+
+		// } else {
+		// 	console.log('찜에 등록');
+		// 	await axios(`http://localhost:3500/api/like/${farmId}`, {
+		// 		method: 'POST',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			Authorization: `Bearer ${localStorage.getItem('token')}`,
+		// 		},
+		// 	});
+		// }
+
+		/// / / // / / /// / /// // / // / /
+		// 이전 코드
+	
+		// 선택한 농장이 찜 목록에 있는지 확인
+		// await axios
+		// 	.get('http://localhost:3500/api/like', header)
+		// 	.then((res) => res.data)
+		// 	.then(async (data) => {
+		// 		console.log('찜 목록들', data);
+		// 		for (let i = 0; i < data.length; i++) {
+		// 			if (data[i].id === farmId) {
+		// 				console.log('찜 목록 있으니 삭제하겠음'); // 찜 목록에 있음
+	
+		// 				// 찜 삭제
+		// 				await axios(`http://localhost:3500/api/like/${farmId}`, {
+		// 					method: 'DELETE',
+		// 					headers: {
+		// 						'Content-Type': 'application/json',
+		// 						Authorization: `Bearer ${localStorage.getItem('token')}`,
+		// 					},
+		// 				});
+
+		// 				setFavorite(favorite.filter(x=>!farmId)); // 찜 상태에서 삭제
+
+		// 				return;
+		// 			}
+		// 		}
+	
+		// 		console.log('찜 목록 없으니 등록하겠음'); // 찜 목록에 없음
+	
+		// 		// 찜 등록
+		// 		await axios(`http://localhost:3500/api/like/${farmId}`, {
+		// 			method: 'POST',
+		// 			headers: {
+		// 				'Content-Type': 'application/json',
+		// 				Authorization: `Bearer ${localStorage.getItem('token')}`,
+		// 			},
+		// 		});
+
+		// 	});
+	};
+
+	useEffect(()=> {
+		console.log('FarmList에서 찜 상태',favorite);
+	}, [favorite]);
 
 	if (contents.length === 0) {
 		return <Container>게시물 없음</Container>;
@@ -72,7 +144,10 @@ const FarmList = React.memo(({ contents, favorite}) => {
 					{contents.map((content) => {
 						return (
 							<Item key={content.id}>
-								<Button type="button" id={content.id} onClick={handleButton} color={favorite.includes(content.id).toString()} />
+								<Button type="button" id={content.id} onClick={(e) => {
+									handleButton(e);
+									
+									}} color={favorite.includes(content.id).toString()} />
 								<Link to={`/detail/${content.id}`}>
 									<img src={content.url} alt={content.name} />
 									<TextContainer>
@@ -91,6 +166,63 @@ const FarmList = React.memo(({ contents, favorite}) => {
 });
 
 const FavoriteList = React.memo(({ contents }) => {
+
+	const handleButton = async (e) => {
+		// 로그인 유무 확인
+		if (!localStorage.getItem('token')){
+			alert('찜 기능은 로그인이 필요합니다.');
+			return;
+		}
+	
+		const farmId = Number(e.target.id);
+		console.log('입력된 농장 아이디', farmId);
+		if (e.target.style.backgroundColor !== 'red')
+			e.target.style.backgroundColor = 'red';
+		else if (e.target.style.backgroundColor = 'red')
+			e.target.style.backgroundColor = 'white';
+	
+		const token = localStorage.getItem('token');
+		const header = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+		};
+	
+		// 선택한 농장이 찜 목록에 있는지 확인
+		await axios
+			.get('http://localhost:3500/api/like', header)
+			.then((res) => res.data)
+			.then(async (data) => {
+				console.log('찜 목록들', data);
+				for (let i = 0; i < data.length; i++) {
+					if (data[i].id === farmId) {
+						console.log('찜 목록 있으니 삭제하겠음'); // 찜 목록에 있음
+	
+						// 찜 삭제
+						await axios(`http://localhost:3500/api/like/${farmId}`, {
+							method: 'DELETE',
+							headers: {
+								'Content-Type': 'application/json',
+								Authorization: `Bearer ${localStorage.getItem('token')}`,
+							},
+						});
+						return;
+					}
+				}
+	
+				console.log('찜 목록 없으니 등록하겠음'); // 찜 목록에 없음
+	
+				// 찜 등록
+				await axios(`http://localhost:3500/api/like/${farmId}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				});
+			});
+	};
 	
 	const favorite = useSelector(state=>state.favorite.favorites);
 	console.log('찜 목록', favorite);

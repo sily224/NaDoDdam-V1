@@ -4,7 +4,30 @@ import { useState } from 'react';
 import React, { useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
+const getFavorite = async () => {
+
+  const token = localStorage.getItem('token');
+	const header = {
+		headers: {
+			authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json',
+		},
+	};
+
+  const result = await axios
+  .get('http://localhost:3500/api/like', header)
+  .then((res) => res.data)
+  .then((data) => {
+
+    return data.map((x) => x.id);
+  });
+
+  return result;
+}
+
 const Favorite = () => {
+
+
   const favorite = useSelector((state) => state.favorite.favorites);
 
 	const [contents, setContents] = useState([]);
@@ -24,7 +47,7 @@ const Favorite = () => {
 			.then((res) => res.data)
 			.then((data) => {
 				console.log('찜목록 조회', data);
-				setContents(data);
+				setContents(data); // 찜 데이터
 			});
 	});
 
