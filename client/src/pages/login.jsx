@@ -7,10 +7,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginformSchema } from '../hooks/useForm';
 
-import ModalContainer from './../components/Modal';
-import { useDispatch, useSelector } from 'react-redux';
-import { showModal } from '../store/ModalSlice';
-
 const LoginWrapper = styled.div`
 	padding: 10%;
 `;
@@ -61,9 +57,6 @@ const SocialButton = styled.button`
 `;
 
 function Login() {
-	const dispatch = useDispatch();
-	const modalOpen = useSelector((state) => state.modal.modal);
-
 	const navigate = useNavigate();
 
 	const {
@@ -145,16 +138,9 @@ function Login() {
 			<Link to="/register">회원가입하기</Link>
 			<Line />
 			<SocialLogin>
-				<SocialButton onClick={() => dispatch(showModal())}>
-					카카오
-				</SocialButton>
+				<SocialButton>카카오</SocialButton>
 				<SocialButton>구글</SocialButton>
 			</SocialLogin>
-			{modalOpen && (
-				<ModalContainer>
-					<input></input>
-				</ModalContainer>
-			)}
 		</LoginWrapper>
 	);
 }

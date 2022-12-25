@@ -6,10 +6,10 @@ import ModalContainer from '../components/Modal'
 import FarmPeriod from '../components/FarmPeriod';
 import FarmFormat from '../components/FarmFormat';
 import FarmTime from '../components/FarmTime';
-import Pagination from '../components/Pagination';
+import Pagination from '../components/TimeTablePagination';
 import styled from 'styled-components';
 
-import * as userApi from '../lib/userApi';
+import * as API from '../lib/userApi';
 
 const Subject = styled.h2`
 	text-align: center;
@@ -66,18 +66,31 @@ const FailAnnouncement = styled.p`
 const TimeTable = ()=>{
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
+
     const [maxHeadCount, setMaxHeadCount] = useState([]);
     const [cost, setCost] = useState('');
+
     const [page, setPage] = useState(1);
+
+    // memo 지혜 : 페이지네이션
+    const limit = 20;
+    const perpage = 5;
+    const offset = (page - 1) * perpage;
+    const [lastId, setLastId] = useState(0);
+    const [first,setFirst] = useState(1);
+    const [last,setLast] = useState(1);
     
+
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
 
     const fetchData = async () => {
         try {
-            await userApi.get('http://localhost:3500/api/timetables/owner').then((res) => {
-                console.log(res.data);
-                setTimeTable([...res.data]);
+            await API.get(`//localhost:3500/api/timetables/owner?lastId=${lastId}&limit=${limit}`).then((res) => {
+                const data = res.data;
+                console.log(data);
+                setLastId(data[data.length - 1].id);
+                setTimeTable([...timeTable,...data]);
             });
         }
         catch(e){
@@ -93,31 +106,33 @@ const TimeTable = ()=>{
         setPostData({...postData,...state});
     }
 
+    // memo 지혜 : 체험테이블 생성
     const handleSubmit = async(e) =>{   
         e.preventDefault();
-        console.log(postData.timeList);
+
         if(postData.timeList.length < 1 || cost < 1 ||!postData.startDate || !postData.endDate) {
             alert('모든 값을 올바르게 기입해주세요');
             return;
         };
         
-        const d1 = new Date(postData.startDate);
-        const d2 = new Date(postData.endDate);
-        const {timeList} = postData;
-
+        const {timeList,startDate,endDate} = postData;
+        const d1 = new Date(startDate);
+        const d2 = new Date(endDate);
+        
         let diffDate = d1.getTime() - d2.getTime();
         diffDate = Math.abs(diffDate /(1000*60*60*24));
 
-        for (let i = 0; i < diffDate + 1 ; i++ ){
+        for (let i = 0; i <= diffDate ; i++ ){
             const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
             
-            for (let j = 0; j< timeList[0].length -1;j++){
+            for (let j = 0; j< timeList.length; j++){
+
                 const start_time = timeList[j][0];
                 const end_time = timeList[j][1];
                 const personnel = maxHeadCount[j];
 
                 try {
-                    const res = await userApi.post('http://localhost:3500/api/timetables',{
+                    const res = await API.post('http://localhost:3500/api/timetables',{
                         'date': date,
                         'personnel':personnel,
                         'price':cost,
@@ -134,12 +149,12 @@ const TimeTable = ()=>{
         alert('체험시간표 등록완료');
         dispatch(closeModal());
         dispatch(initDate());
-        setCost(0);
+        setCost('');
         fetchData();
     };
 
     const onTimeTableDelete = async(id) => {
-        await userApi.delete(`http://localhost:3500/api/timetables/${id}`);
+        await API.delete(`http://localhost:3500/api/timetables/${id}`);
         fetchData();
     };
 
@@ -164,13 +179,15 @@ const TimeTable = ()=>{
             
             <Subject>체험시간표</Subject>
             <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
-            <Pagination total={timeTable.length} limit={5} page={page} setPage={setPage}/>
+            <Pagination limit={limit} length={timeTable.length} perpage={perpage} page={page} setPage={setPage}
+            first={first} last={last} setFirst={setFirst} setLast={setLast} fetchData={fetchData} />
 
             { timeTable.length < 1 ? <FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement> : 
-                    timeTable.map((table,idx) =>{
+                    timeTable.slice(offset, offset + perpage).map((table,idx) =>{
                         return(
                             <TimeTableList key={idx}>
-                                <h4>체험테이블{idx+1}</h4>
+                                {/* <h4>체험테이블{idx+ 1 + perpage }</h4> */}
+                                
                                 <TimTableItem>
                                     <FarmImg src={table.farm? table.farm.url:''} alt='농장이미지'></FarmImg>
                                     <TimTableContent>

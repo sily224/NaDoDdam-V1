@@ -1,5 +1,4 @@
 import { useState, useEffect} from "react";
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Moment from 'moment';
 import styled from 'styled-components';
@@ -7,7 +6,6 @@ import { showModal } from '../store/ModalSlice';
 import { closeModal } from '../store/ModalSlice';
 import ModalContainer from '../components/Modal';
 import Location from '../components/Location';
-import Pagination from './Pagination';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 
@@ -90,8 +88,6 @@ const MyReservationEdit = () => {
   const [canclePage, setCanclePage] = useState(false);
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
-  const [page, setPage] = useState(1);
-	const offset = (page - 1) * 10;
   const statusList = ["전체", "예약대기", "예약완료", "예약취소", "체험완료"];
 
   const getReservationData = async () => {
@@ -138,6 +134,8 @@ const MyReservationEdit = () => {
     setFilteredData(filteredData);
   };
 
+  console.log(filteredData);
+
   useEffect(()=> {
     filterData();
   },[statusOption, dateOption])
@@ -167,7 +165,7 @@ const MyReservationEdit = () => {
 
   const ShowResrvation = () => {
     return (<>
-      {filteredData.slice(offset, offset + 10).map((reservation , index) => { 
+      {filteredData.map((reservation , index) => { 
         const {farm, time, reserve} = reservation;
         const start_time = time.start_time.slice(0,5);
         const end_time = time.end_time.slice(0,5);
@@ -199,12 +197,13 @@ const MyReservationEdit = () => {
                 dispatch(showModal())}}>
                 더보기
               </button>
-                {reserve.status === '체험완료' && <button>후기작성</button> }
+                {reserve.status === '체험완료' && <button name={index}  onClick={(e)=> {console.log(e.target.name)}}>후기작성</button> }
                 {(reserve.status === '예약대기' || reserve.status === '예약완료')
                   && <button 
                   name={index}
                   onClick={(e)=> {
                     setDataIndex(e.target.name)
+                    console.log(e.target.name)
                     setCanclePage(prev =>!prev)
                   }}>
                   예약취소
@@ -282,22 +281,22 @@ const MyReservationEdit = () => {
     )
   }
 
+  const cancleResevation = async(e) => {
+    const id = e.target.name;
+    try {
+      await userApi.patch(`//localhost:3500/api/reserve/${id}`, {
+        status: '예약취소',
+      }); 
+      getReservationData();
+      setCanclePage(prev =>!prev);
+      
+    } catch (err) {
+      console.log(err.response.data.Error)
+    }
+  }
+
   const CancleReservationPage = () => {
     const filterDataArr = [filteredData[dataIndex]];
-
-    const cancleResevation = async(e) => {
-      const id = e.target.name;
-      try {
-        await userApi.patch(`//localhost:3500/api/reserve/${id}`, {
-          status: '예약취소',
-        }); 
-        getReservationData();
-        setCanclePage(prev =>!prev);
-        
-      } catch (err) {
-        console.log(err.response.data.Error)
-      }
-    }
 
     return (
       <>
@@ -326,14 +325,10 @@ const MyReservationEdit = () => {
   return (
     <>
     <ShowDefault/>
-    {!canclePage ? <ShowResrvation />: <CancleReservationPage/>}
+    {!canclePage ? 
+    <><ShowResrvation /></>
+    : <CancleReservationPage/>}
     {modalOpen && <ModalContainer><DetailReservation /></ModalContainer>}
-    <Pagination
-			total={filteredData.length}
-			limit={10}
-			page={page}
-			setPage={setPage}
-		/>
     </>
   )
 }
