@@ -38,13 +38,13 @@ const FarmPeriod = (props) =>{
 
     useEffect (() => {
         //memo 지혜 : 상위 컴포넌트로 startDate전달
-        props.onStateLiftining({startDate:startDate});
+        props.onStateLifting({startDate:startDate});
         dispatch(initDate());
     },[startDate]);
 
     useEffect (() => {
         //memo 지혜 : 상위 컴포넌트로 endDate전달
-        props.onStateLiftining({endDate:endDate});
+        props.onStateLifting({endDate:endDate});
         dispatch(initDate());
     },[endDate]);
 
