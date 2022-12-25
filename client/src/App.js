@@ -14,6 +14,7 @@ import MyReservation from './pages/MyReservation';
 import Favorite from './pages/Favorite';
 import NotFound from './pages/NotFound';
 import FarmReview from './pages/FarmReview';
+import PaymentCopy from './pages/PaymentCopy';
 
 // memo 지우: NonMemberRoute -> 비회원일 때만 페이지 전환
 // MemberRoute -> 일반 회원일 때만 페이지 전화
@@ -51,7 +52,7 @@ function App() {
 						path="/pay"
 						element={
 							<MemberRoute>
-								<Payment />
+								<PaymentCopy />
 							</MemberRoute>
 						}
 					/>

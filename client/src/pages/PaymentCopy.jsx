@@ -11,6 +11,8 @@ import { showModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Calender from '../components/ReactCalender';
 
+// Memo 혜실: 상세페이지를 수정 중이라 데이터가 안넘어와서 결제창을 수정할 수 없음, 그래서 카피본을 만들어서 목데이터로 일단 수정중
+
 const Context = styled.div``;
 
 const H1 = styled.h1``;
@@ -74,28 +76,28 @@ const ModalContent = styled.div`
 	overflow-x: hidden;
 `;
 // 예약정보
-const ReservationInfo = ({ payData }) => {
+const ReservationInfo = ({ data }) => {
 	const modalOpen = useSelector((state) => state.modal.modal);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		console.log(payData.period);
-	}, [payData]);
+		console.log(data.period);
+	}, [data]);
 
-	const { times } = payData;
+	const { times } = data;
 
 	return (
 		<>
-			{payData && (
+			{data && (
 				<>
 					<H1>예약 및 결제</H1>
 					<H2>예약 정보</H2>
 					<H3>날짜</H3>
-					<Info>{payData.date}</Info>
+					<Info>{data.date}</Info>
 					<H3>시간</H3>
-					<Info>{payData.time}</Info>
+					<Info>{data.time}</Info>
 					<H3>인원</H3>
-					<Info>{payData.headCount}</Info>
+					<Info>{data.headCount}</Info>
 					<Button onClick={() => dispatch(showModal())}>예약정보수정</Button>
 
 					{modalOpen && (
@@ -107,8 +109,8 @@ const ReservationInfo = ({ payData }) => {
 								<ModalContent>
 									<Calender
 										period={{
-											start: payData.period.start,
-											end: payData.period.end,
+											start: data.period.start,
+											end: data.period.end,
 										}}
 										update
 									/>
@@ -140,12 +142,12 @@ const ReservationInfo = ({ payData }) => {
 };
 
 //SideBar
-const SideBar = ({ payData }) => {
-	const { farm, programName, price, headCount, totalPrice } = payData;
+const SideBar = ({ data }) => {
+	const { farm, programName, price, headCount, totalPrice } = data;
 
 	return (
 		<>
-			{payData && (
+			{data && (
 				<div>
 					<PayboxTop>
 						{/* img 데이터 받기 */}
@@ -293,16 +295,15 @@ const PaymentInfo = () => {
 	);
 };
 
-const Payment = () => {
-	const location = useLocation();
-	const navigate = useNavigate();
-	const [payData, setPayData] = useState({});
+function Payment() {
+	// const location = useLocation();
+	// const [data, setPayData] = useState({});
 	const [data, setData] = useState({});
 
-	useEffect(() => {
-		console.log(location.state);
-		setPayData(location.state);
-	}, []);
+	// useEffect(() => {
+	// 	console.log(location.state);
+	// 	setPayData(location.state);
+	// }, []);
 
 	useEffect(() => {
 		getData();
@@ -319,26 +320,22 @@ const Payment = () => {
 		}
 	};
 
-	// const goDetail = () => {
-	// 	navigate('/detail');
-	// };
-
 	return (
 		<>
 			<div style={{ display: 'flex', alignItems: 'flex-start' }}>
 				<Context>
-					<ReservationInfo payData={payData}></ReservationInfo>
+					<ReservationInfo data={data}></ReservationInfo>
 					<SubscriberInfo data={data}></SubscriberInfo>
 					<PaymentInfo></PaymentInfo>
 				</Context>
 				<StickyBox offsetTop={20} offsetBottom={20}>
 					<SideBarDiv>
-						<SideBar payData={payData}></SideBar>
+						<SideBar data={data}></SideBar>
 					</SideBarDiv>
 				</StickyBox>
 			</div>
 		</>
 	);
-};
+}
 
 export default Payment;

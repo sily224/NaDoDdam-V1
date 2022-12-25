@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-// import Postcode from './AddressApi';
-// import Post from './daumApi';
+import Post from './daumApi';
 import * as userApi from '../lib/userApi';
-// import Img from './ImgUpload';
+import Img from './ImgUpload';
 
-// todo 혜실 : 수정중으로 주석이 많으나 추후 삭제 예정
 const Tittle = styled.h1``;
 
 const Form = styled.form`
@@ -30,6 +28,7 @@ function FarmInputForm({ farmData }) {
 	const [description, setDescription] = useState(farmData.farmInfo.description);
 	const [owner, setOwner] = useState(farmData.farmInfo.owner);
 	const [disabled, setDisabled] = useState(false);
+	const [isForm, setIsForm] = useState(true);
 	const farmId = farmData.farmInfo.id;
 
 	const handleSubmit = async (e) => {
@@ -38,6 +37,7 @@ function FarmInputForm({ farmData }) {
 		await new Promise((r) => setTimeout(r, 1000));
 		putData();
 		setDisabled(false);
+		setIsForm(false);
 	};
 	const putData = async (e) => {
 		try {
@@ -59,7 +59,6 @@ function FarmInputForm({ farmData }) {
 	};
 	return (
 		<>
-			{/* <Post></Post> */}
 			<Tittle>농장 정보</Tittle>
 			<Form onSubmit={handleSubmit}>
 				<Label>과일종류</Label>
@@ -77,15 +76,16 @@ function FarmInputForm({ farmData }) {
 					onChange={(e) => setName(e.target.value)}
 				></input>
 				<Label>농장주소</Label>
+				<Post></Post>
 				<input
 					type="text"
 					name="address"
 					value={address}
+					placeholder="상세주소"
 					onChange={(e) => setAddress(e.target.value)}
 				></input>
-				{/* <Postcode>주소검색</Postcode> */}
 				<Label>이미지</Label>
-				{/* <Img></Img> */}
+				<Img></Img>
 				<input
 					type="text"
 					name="url"

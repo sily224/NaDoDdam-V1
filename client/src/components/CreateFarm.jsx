@@ -29,6 +29,7 @@ function CreateFarm({ farmData }) {
 	const onAddFarm = () => {
 		setIsAddFarm(true);
 	};
+	//memo 혜실 : 등록하기 버튼을 누르면 빈 농장등록 폼이 나오고, 등록하면 농장 내용을 볼 수 있음
 	return (
 		<>
 			{isAddFarm ? (

@@ -16,6 +16,7 @@ function EditFarm({ farmData }) {
 		setOnChange(!onChange);
 	};
 
+	// memo 혜실: 농장 내용을 보여주고, 수정 버튼을 누르면 기존에 작성한 농장 내용이 담긴 농장등록 폼이 나옴
 	return (
 		<>
 			{onChange ? (
