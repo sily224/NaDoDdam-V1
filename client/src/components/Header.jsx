@@ -211,7 +211,7 @@ const afterLoginList = [
 	{
 		id: 5,
 		name: '나의후기',
-		path: '/register',
+		path: '/myreview',
 	},
 	{
 		id: 6,

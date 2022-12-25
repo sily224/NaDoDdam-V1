@@ -4,8 +4,8 @@ import Moment from 'moment';
 import styled from 'styled-components';
 import { showModal } from '../store/ModalSlice';
 import { closeModal } from '../store/ModalSlice';
-import ModalContainer from '../components/Modal';
-import Location from '../components/Location';
+import ModalContainer from './Modal';
+import Location from './Location';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 
@@ -79,7 +79,7 @@ const StyledImageWrap = styled.div`
   }
 `
 
-const MyReservationEdit = () => {
+const MyReservationTable = () => {
   const [originalData, setOriginalData] = useState([]);
   const [filteredData, setFilteredData] =useState([]);
   const [dataIndex, setDataIndex] = useState();
@@ -333,4 +333,4 @@ const MyReservationEdit = () => {
   )
 }
 
-export default MyReservationEdit;
+export default MyReservationTable;
