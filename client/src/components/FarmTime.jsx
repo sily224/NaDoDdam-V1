@@ -101,7 +101,7 @@ const FarmTime = (props) =>{
     useEffect(() => {
         let [hour,min] = startTime.split(':');   
         hour = parseInt(hour) + parseInt(forTime);
-        setEndTime([ hour , min].join(':'));
+        setEndTime([ hour > 9 ? hour : `0${hour}` , min].join(':'));
     },[startTime,forTime]);
     
     useEffect(() =>{
