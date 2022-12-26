@@ -72,6 +72,7 @@ const TimeTables = (sequelize, DataTypes) => {
 				'start_time',
 				'end_time',
 				[DataTypes.col('farm.name'), 'name'],
+				[DataTypes.col('farm.url'), 'url'],
 			],
 			include: {
 				model: db.Farms,

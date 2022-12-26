@@ -10,6 +10,7 @@ import reviewRouter from './router/review.js';
 import timeTableRouter from './router/timetable.js';
 import farmerRouter from './router/farmer.js';
 import likeFarmsRouter from './router/likeFarms.js';
+import { errorHandler } from './middleware/error-handler.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,6 +37,7 @@ app.get('/', (req, res) => {
 	res.send('Server Response Success');
 });
 
+app.use(errorHandler);
 db.sequelize
 	.sync()
 	.then(() => {

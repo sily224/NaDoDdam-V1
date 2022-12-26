@@ -3,6 +3,7 @@ import 'express-async-errors';
 import * as reviewController from '../controller/review.js';
 import { isAuth } from '../middleware/auth.js';
 import { isFarmer } from '../middleware/farmerAuth.js';
+import { errorHandler } from '../middleware/error-handler.js';
 
 const router = express.Router();
 

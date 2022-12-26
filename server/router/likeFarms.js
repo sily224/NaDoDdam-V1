@@ -2,6 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import * as likeFarmsController from '../controller/likeFarms.js';
 import { isAuth } from '../middleware/auth.js';
+import { errorHandler } from '../middleware/error-handler.js';
 
 const router = express.Router();
 
