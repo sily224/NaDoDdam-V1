@@ -60,7 +60,7 @@ export async function getReserveData(req, res, next) {
 		reserve.forEach((res) => timeId.push(res.time_id));
 
 		for (let i = 0; i < timeId.length; i++) {
-			const time = await db.TimeTables.getAll(timeId[i])
+			const time = await db.TimeTables.getAll(timeId[i]);
 			timeInfo.push({
 				id: time.id,
 				date: time.date,
@@ -69,19 +69,35 @@ export async function getReserveData(req, res, next) {
 				people: time.personnel,
 				address: time.dataValues.address,
 				name: time.dataValues.name,
-				url: time.dataValues.url
+				url: time.dataValues.url,
 			});
 		}
 		for (let i = 0; i < reserve.length; i++) {
-			results.push({
-				info: timeInfo[i],
-				reserve: {
-					total_price: reserve[i].total_price,
-					status: reserve[i].status,
-					personnel: reserve[i].personnel,
-					payment: reserve[i].payment,
-				}
-			});
+			const review = await db.Reviews.findByReserveId(reserve[i].id);
+			if (review !== null) {
+				results.push({
+					info: timeInfo[i],
+					reserve: {
+						id: reserve[i].id,
+						total_price: reserve[i].total_price,
+						status: reserve[i].status,
+						personnel: reserve[i].personnel,
+						payment: reserve[i].payment,
+						review: review.dataValues.content,
+					},
+				});
+			} else {
+				results.push({
+					info: timeInfo[i],
+					reserve: {
+						id: reserve[i].id,
+						total_price: reserve[i].total_price,
+						status: reserve[i].status,
+						personnel: reserve[i].personnel,
+						payment: reserve[i].payment,
+					},
+				});
+			}
 		}
 		res.status(200).json(results);
 	} catch (err) {
