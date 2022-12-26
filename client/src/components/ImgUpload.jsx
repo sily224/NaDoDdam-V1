@@ -2,7 +2,7 @@ import React from 'react';
 
 //에러 3: 이미지 불러와서 미리보기는 되는데 콘솔창에 이미지 경로가 안나옵니다!
 // 데모 링크: https://codesandbox.io/s/weathered-monad-ffdf7?file=/src/App.js
-// 여기서 코드 그대로 가져왔는데 안됩니다(ps. 구현할 때는 npm 깔았는데, 깃랩에 올릴 때는 package.json에서 빼고 올렸습니다)
+// 여기서 코드 그대로 가져왔는데 안됩니다
 import ImageUploader from 'react-image-upload';
 import 'react-image-upload/dist/index.css';
 import styled from 'styled-components';
@@ -26,7 +26,9 @@ export default function Img() {
 			<div>
 				<h4>대표이미지</h4>
 				<ImageUploader
-					style={{ height: 200, width: 200, background: 'rgb(211 211 211)' }} // style image to your preference
+					// onFileAdded={(img) => getImageFileObject(img)}
+					// onFileRemoved={(img) => runAfterImageDelete(img)}}
+					style={{ height: 200, width: 200, background: 'rgb(0 182 255)' }}
 					deleteIcon={
 						<img
 							src="https://img.icons8.com/ios-glyphs/30/000000/delete-sign.png"
@@ -55,7 +57,7 @@ export default function Img() {
 			<div>
 				<h4>이미지1</h4>
 				<ImageUploader
-					style={{ height: 200, width: 200, background: 'rgb(211 211 211)' }} // style image to your preference
+					style={{ height: 200, width: 200, background: 'rgb(0 182 255)' }}
 					deleteIcon={
 						<img
 							src="https://img.icons8.com/ios-glyphs/30/000000/delete-sign.png"
@@ -84,7 +86,7 @@ export default function Img() {
 			<div>
 				<h4>이미지2</h4>
 				<ImageUploader
-					style={{ height: 200, width: 200, background: 'rgb(211 211 211)' }} // style image to your preference
+					style={{ height: 200, width: 200, background: 'rgb(0 182 255)' }}
 					deleteIcon={
 						<img
 							src="https://img.icons8.com/ios-glyphs/30/000000/delete-sign.png"

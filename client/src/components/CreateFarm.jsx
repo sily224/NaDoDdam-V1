@@ -8,12 +8,8 @@ const Button = styled.button``;
 
 function CreateFarm({ farmData }) {
 	const [isAddFarm, setIsAddFarm] = useState(false);
-	const [onInput, setOnInput] = useState();
 	const [saveInfo, setSaveInfo] = useState(false);
 
-	const onEdit = () => {
-		setIsAddFarm(true);
-	};
 	const NullFarm = () => {
 		return (
 			<>

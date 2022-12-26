@@ -3,13 +3,13 @@ import axios from 'axios';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import StickyBox from 'react-sticky-box';
-import { useLocation, useNavigate } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ModalContainer from './../components/Modal';
 import { showModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Calender from '../components/ReactCalender';
+import * as userApi from '../lib/userApi';
 
 // Memo 혜실: 상세페이지를 수정 중이라 데이터가 안넘어와서 결제창을 수정할 수 없음, 그래서 카피본을 만들어서 목데이터로 일단 수정중
 
@@ -121,19 +121,17 @@ const ReservationInfo = ({ data }) => {
 											</option>
 										))}
 									</Select>
-									<select>
+									<Select>
 										{[...Array(10).keys()].map((n) => (
 											<option key={`HeadCount-${n + 1}`} value={n + 1}>
 												{n + 1}
 											</option>
 										))}
-									</select>
+									</Select>
 								</ModalContent>
 							</ModalLayout>
 						</ModalContainer>
 					)}
-					{/* <TimeBtns></TimeBtns> */}
-					{/* {isEdit ? <ReactCalender></ReactCalender> : null} */}
 					<Line />
 				</>
 			)}
@@ -143,18 +141,17 @@ const ReservationInfo = ({ data }) => {
 
 //SideBar
 const SideBar = ({ data }) => {
-	const { farm, programName, price, headCount, totalPrice } = data;
+	const { farm, price, headCount, totalPrice } = data;
 
 	return (
 		<>
 			{data && (
 				<div>
 					<PayboxTop>
-						{/* img 데이터 받기 */}
+						{/* memo 혜실 : img 데이터 받기 구현 예정 */}
 						<Image></Image>
 						<PayboxName>
 							<NameInfo>{farm}</NameInfo>
-							<NameInfo>{programName}</NameInfo>
 						</PayboxName>
 					</PayboxTop>
 					<H3>요금 세부정보</H3>
@@ -171,21 +168,21 @@ const SideBar = ({ data }) => {
 		</>
 	);
 };
-
+// Memo 혜실 : 받은 유저 정보 렌더링
 // 예약자 정보
-const SubscriberInfo = ({ data }) => {
+const SubscriberInfo = ({ userData }) => {
 	const [nameOpen, setNameOpen] = useState(false);
-	const [name, setName] = useState(data.name);
+	const [name, setName] = useState('');
 	const [phoneNumberOpen, setPhoneNumberOpen] = useState(false);
-	const [phoneNumber, setPhoneNumber] = useState(data.phoneNumber);
+	const [phoneNumber, setPhoneNumber] = useState('');
 	const [emailOpen, setEmailOpen] = useState(false);
-	const [email, setEmail] = useState(data.email);
+	const [email, setEmail] = useState('');
 
 	useEffect(() => {
-		setName(data.name);
-		setPhoneNumber(data.phoneNumber);
-		setEmail(data.email);
-	}, [data]);
+		setName(userData.name);
+		setPhoneNumber(userData.phoneNum);
+		setEmail(userData.email);
+	}, [userData]);
 
 	return (
 		<>
@@ -248,13 +245,17 @@ const SubscriberInfo = ({ data }) => {
 };
 
 //결제 수단
-const PaymentInfo = () => {
+const PaymentInfo = (props) => {
 	return (
 		<>
 			<H3>결제 수단</H3>
-			<Select name="cardOption">
-				<Option value="card">카드결제</Option>
-				<Option value="transfer">계좌이체</Option>
+			<Select onChange={props.optionHandle} value={'카드결제'}>
+				<option value="card" key={1}>
+					카드결제
+				</option>
+				<option value="transfer" key={2}>
+					계좌이체
+				</option>
 			</Select>
 			<Accordion>
 				<Accordion.Item eventKey="0">
@@ -290,23 +291,21 @@ const PaymentInfo = () => {
 			</Accordion>
 			<Line />
 			<P>주문 내용을 확인하였으며, 위 내용에 동의합니다.</P>
-			<Button>확인 및 결제</Button>
 		</>
 	);
 };
 
 function Payment() {
-	// const location = useLocation();
-	// const [data, setPayData] = useState({});
 	const [data, setData] = useState({});
+	const [userData, setUserData] = useState({});
+	const [Selected, setSelected] = useState('card');
 
-	// useEffect(() => {
-	// 	console.log(location.state);
-	// 	setPayData(location.state);
-	// }, []);
-
+	const optionHandle = (e) => {
+		setSelected(e.target.value);
+	};
 	useEffect(() => {
 		getData();
+		getUserData();
 	}, []);
 
 	const getData = async () => {
@@ -319,14 +318,50 @@ function Payment() {
 			console.log(e);
 		}
 	};
+	// Memo 혜실: user정보 받아오기
+	const getUserData = async () => {
+		try {
+			const res = await userApi.get('//localhost:3500/api/myInfo');
+			const userData = await res.data;
+			console.log(userData);
+			setUserData({
+				name: userData.name,
+				phoneNum: userData.phoneNum,
+				email: userData.email,
+			});
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const postData = async (e) => {
+		try {
+			const reserData = await userApi.post(
+				'http://localhost:3500/api/reserve',
+				{
+					total_price: data.totalPrice,
+					payment: Selected,
+					name: userData.name,
+					phoneNum: userData.phoneNum,
+					email: userData.email,
+					personnel: data.headCount,
+					time_id: '4',
+				},
+			);
+			console.log(reserData);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	return (
 		<>
 			<div style={{ display: 'flex', alignItems: 'flex-start' }}>
 				<Context>
 					<ReservationInfo data={data}></ReservationInfo>
-					<SubscriberInfo data={data}></SubscriberInfo>
-					<PaymentInfo></PaymentInfo>
+					<SubscriberInfo userData={userData}></SubscriberInfo>
+					<PaymentInfo option={optionHandle}></PaymentInfo>
+					<Button onClick={postData}>확인 및 결제</Button>
 				</Context>
 				<StickyBox offsetTop={20} offsetBottom={20}>
 					<SideBarDiv>
