@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import Post from './daumApi';
 
 const Tittle = styled.h1``;
 
@@ -68,7 +69,30 @@ function FarmNullInputForm() {
 
 	const onChangeImg = async (e) => {
 		e.preventDefault();
+
+		if (e.target.files) {
+			const uploadFile = e.target.files;
+			console.log(e.target.files);
+			const formData = new FormData();
+			// formData.append('files', uploadFile);
+			console.log(Array.from(uploadFile));
+			Array.from(uploadFile).forEach((el, index) => {
+				formData.append(index, el);
+			});
+			console.log(Array.isArray(uploadFile));
+			console.log(formData);
+			const res = await axios(`http://localhost:3500/api/farms`, {
+				method: 'POST',
+				data: formData,
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			console.log(res);
+		}
 	};
+
 	return (
 		<>
 			<div>
@@ -87,11 +111,7 @@ function FarmNullInputForm() {
 						onChange={(e) => setName(e.target.value)}
 					></Input>
 					<Label>농장주소</Label>
-					<Input
-						type="text"
-						value={address}
-						onChange={(e) => setAddress(e.target.value)}
-					></Input>
+					<Post></Post>
 					<Label htmlFor="profile-upload">이미지</Label>
 					<Input
 						type="file"
