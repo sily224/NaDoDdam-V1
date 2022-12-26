@@ -129,7 +129,7 @@ function FarmInputForm({ farmData }) {
 					value={owner}
 					onChange={(e) => setOwner(e.target.value)}
 				></Input>
-				<Button type="submit" disabled={disabled}>
+				<Button type="button" disabled={disabled}>
 					완료
 				</Button>
 			</Form>

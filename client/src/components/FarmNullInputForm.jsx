@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import Post from './daumApi';
@@ -77,7 +77,10 @@ function FarmNullInputForm() {
 			// formData.append('files', uploadFile);
 			console.log(Array.from(uploadFile));
 			Array.from(uploadFile).forEach((el, index) => {
-				formData.append(index, el);
+				// formData.append(index, el);
+				formData.append('file', el);
+				console.log(index);
+				console.log(el);
 			});
 			console.log(Array.isArray(uploadFile));
 			console.log(formData);
@@ -132,7 +135,7 @@ function FarmNullInputForm() {
 						value={owner}
 						onChange={(e) => setOwner(e.target.value)}
 					></Input>
-					<Button type="submit" disabled={disabled}>
+					<Button type="button" disabled={disabled}>
 						완료
 					</Button>
 				</Form>

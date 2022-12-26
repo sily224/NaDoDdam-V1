@@ -15,9 +15,6 @@ const Context = styled.p``;
 function FarmForm({ farmData }) {
 	console.log(farmData);
 
-	// const goInput = () => {
-
-	// }
 	return (
 		<>
 			{farmData && (

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import FarmInputForm from './FarmInputForm';
 import FarmNullInputForm from './FarmNullInputForm';
 import FarmForm from './FarmForm';
 import styled from 'styled-components';

@@ -50,6 +50,10 @@ const Reviews = (sequelize, DataTypes) => {
 		return Reviews.findOne({ where: { id: id, farm_id: farmId } });
 	}
 
+	Reviews.findByReserveId = (id) => {
+		return Reviews.findOne({where: {reserve_id: id}})
+	}
+
 	Reviews.findByUserId = (id) => {
 		return Reviews.findAll({ where: { user_id: id } });
 	};

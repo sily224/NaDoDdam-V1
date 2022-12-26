@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import ModalContainer from './../components/Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-
-// 에러 1: 콘솔창 에러(사진참고)
-// 에러 2: farmInputForm.jsx에서 daumApi.jsx 속 input value 값을 가져오고 싶은데 어떻게 가져와야 할까요?
 
 const Input = styled.input`
 	width: 500px;
