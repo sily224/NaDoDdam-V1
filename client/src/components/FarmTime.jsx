@@ -101,22 +101,33 @@ const FarmTime = (props) =>{
     useEffect(() => {
         let [hour,min] = startTime.split(':');   
         hour = parseInt(hour) + parseInt(forTime);
-        setEndTime([ hour , min].join(':'));
+        setEndTime([ hour > 9 ? hour : `0${hour}` , min].join(':'));
     },[startTime,forTime]);
     
     useEffect(() =>{
-        props.getHeadCount(maxHeadCountList);
+        props.LiftingHeadCount(maxHeadCountList);
     },[maxHeadCountList])
 
     // memo 지혜 : timeList변경시 사이드이펙트
     useEffect (() => {
         //memo 지혜 : 상위 컴포넌트로 timeList전달
-        props.onStateLiftining({timeList:[...timeList]});
+        props.onStateLifting({timeList:[...timeList]});
 
         // memo 지혜 : 하나이상의 타임이 등록되면 forTime를 변경하지 못하게 함
         // formTime이 변경되면 체험시간이 달라져도 같은 금액으로 측정되기때문
         const formTimeInput = document.getElementById('forTime');
         timeList.length >0 ? formTimeInput.readOnly = true : formTimeInput.readOnly = false;
+        
+
+        //memo 지혜 : 수정할 경우
+        if(props.target!='') {
+            const el =   document.getElementById('createBtn');
+            if(timeList.length > 0){
+                el.disabled = true;
+            }else{
+                el.disabled = false;
+            }
+        }
         
         renderTime();
     },[timeList]);
@@ -141,7 +152,7 @@ const FarmTime = (props) =>{
 
                     <TimeContent>
                         <label>추가</label>
-                        <CreateBtn type='button' onClick={onCreateTime}>+</CreateBtn>
+                        <CreateBtn id='createBtn' type='button' onClick={onCreateTime} >+</CreateBtn>
                     </TimeContent>
                 </TimeConatiner>   
                 <div>
