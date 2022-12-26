@@ -41,24 +41,47 @@ const TimeTables = (sequelize, DataTypes) => {
 		db.TimeTables.belongsTo(db.Farms);
 	};
 
-	// timeTable.getAll = () => {
-	// 	return timeTable.findAll({
-	// 		attributes: [
-	// 			'id',
-	// 			'date',
-	// 			'personnel',
-	// 			'price',
-	// 			'start_time',
-	// 			'end_time',
-	// 			// [DataTypes.col('farm.type'), 'type'],
-	// 			// [DataTypes.col('farm.name'), 'name'],
-	// 		],
-	// 		include: {
-	// 			model: db.Farms,
-	// 			//attributes: [],
-	// 		},
-	// 	});
-	// };
+	timeTable.getAll = (id) => {
+		return timeTable.findOne({
+			attributes: [
+				'id',
+				'date',
+				'personnel',
+				'price',
+				'start_time',
+				'end_time',
+				[DataTypes.col('farm.address'), 'address'],
+				[DataTypes.col('farm.name'), 'name'],
+				[DataTypes.col('farm.url'), 'url']
+			],
+			include: {
+				model: db.Farms,
+				//attributes: [],
+			},
+			where: {id}
+		});
+	};
+
+	timeTable.getAllWithFarmName = (id) => {
+		return timeTable.findOne({
+			attributes: [
+				'id',
+				'date',
+				'personnel',
+				'price',
+				'start_time',
+				'end_time',
+				[DataTypes.col('farm.name'), 'name'],
+			],
+			include: {
+				model: db.Farms,
+				//attributes: [],
+			},
+			where: {id}
+		});
+	};
+
+
 	timeTable.findFarmId = (id) => {
 		return timeTable.findAll({ where: { farmId: id } });
 	};
@@ -90,6 +113,19 @@ const TimeTables = (sequelize, DataTypes) => {
 	timeTable.getTimeTables = (farmId, lastId, limit) => {
 		let cursor = lastId || 0;
 		return timeTable.findAll({
+			attributes: [
+				'id',
+				'date',
+				'personnel',
+				'price',
+				'start_time',
+				'end_time',
+				[DataTypes.col('farm.url'), 'url'],
+			],
+			include: {
+				model: db.Farms,
+				attributes: [],
+			},
 			limit: parseInt(limit),
 			where: {
 				farmId,
@@ -97,6 +133,7 @@ const TimeTables = (sequelize, DataTypes) => {
 					[DataTypes.Op.gt]: cursor,
 				},
 			},
+			order: [['date', 'DESC']],
 		});
 	};
 

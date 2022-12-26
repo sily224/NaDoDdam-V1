@@ -70,6 +70,8 @@ const Reservations = (sequelize, DataTypes) => {
 		return Reservations.findAll({ where: { time_id: id } });
 	};
 
+	Reservations.finByRe
+
 	Reservations.deleteReserve = (id) => {
 		return Reservations.destroy({ where: { id } });
 	};

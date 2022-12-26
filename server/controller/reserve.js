@@ -50,37 +50,37 @@ export async function getReserveData(req, res, next) {
 	try {
 		const timeId = []; // 예약한 것들의 타임 id
 		const timeInfo = [];
-		const farmInfo = [];
 
 		let results = [];
 		const reserve = await db.Reservations.findByUserId(id);
-		if(!reserve) {
-			throw new Error('유저의 예약 내역이 없습니다.')
+		if (!reserve) {
+			throw new Error('유저의 예약 내역이 없습니다.');
 		}
 
 		reserve.forEach((res) => timeId.push(res.time_id));
+
 		for (let i = 0; i < timeId.length; i++) {
-			const time = await db.TimeTables.getById(timeId[i]);
+			const time = await db.TimeTables.getAll(timeId[i])
 			timeInfo.push({
-				id: time.dataValues.id,
-				date: time.dataValues.date,
-				start_time: time.dataValues.start_time,
-				end_time: time.dataValues.end_time,
-				people: time.dataValues.personnel,
-				farmId: time.dataValues.farmId,
+				id: time.id,
+				date: time.date,
+				start_time: time.start_time,
+				end_time: time.end_time,
+				people: time.personnel,
+				address: time.dataValues.address,
+				name: time.dataValues.name,
+				url: time.dataValues.url
 			});
 		}
-
-		for (let i = 0; i < timeInfo.length; i++) {
-			const data = await db.Farms.findById(timeInfo[i].farmId);
-			farmInfo.push(data);
-		}
-
 		for (let i = 0; i < reserve.length; i++) {
 			results.push({
-				time: timeInfo[i],
-				reserve: reserve[i],
-				farm: farmInfo[i],
+				info: timeInfo[i],
+				reserve: {
+					total_price: reserve[i].total_price,
+					status: reserve[i].status,
+					personnel: reserve[i].personnel,
+					payment: reserve[i].payment,
+				}
 			});
 		}
 		res.status(200).json(results);
@@ -115,17 +115,17 @@ export async function getFarmerData(req, res, next) {
 			const reserve = await db.Reservations.findByTimeId(data[i]);
 			reserve.forEach((res) => {
 				datas.push(res);
-				timeNum.push(res.dataValues.time_id);
+				timeNum.push(res.time_id);
 			});
 		}
 
 		for (let i = 0; i < timeNum.length; i++) {
 			const time = await db.TimeTables.getById(timeNum[i]);
 			timeInfo.push({
-				date: time.dataValues.date,
-				start_time: time.dataValues.start_time,
-				end_time: time.dataValues.end_time,
-				people: time.dataValues.personnel,
+				date: time.date,
+				start_time: time.start_time,
+				end_time: time.end_time,
+				people: time.personnel,
 			});
 		}
 
