@@ -15,6 +15,11 @@ export async function review(req, res, next) {
 			throw new Error('체험이 완료되지 않아 리뷰를 작성할 수 없습니다.');
 		}
 
+		const isReview = await db.Reviews.findByReserveId(reserve_id);
+		if(isReview) {
+			throw new Error('해당 예약에 대한 리뷰가 존재합니다.')
+		}
+
 		const timeTableInfo = await db.TimeTables.getById(reserve.time_id);
 		const farm_id = timeTableInfo.farmId;
 
