@@ -56,7 +56,6 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 									<TextContainer>
 										<div>농장 : {content.name}</div>
 										<div>주소 : {content.address}</div>
-										<div>가격 : {content.price}</div>
 									</TextContainer>
 								</Link>
 							</Item>
@@ -112,7 +111,6 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 									<TextContainer>
 										<div>농장 : {content.name}</div>
 										<div>주소 : {content.address}</div>
-										<div>가격 : {content.price}</div>
 									</TextContainer>
 								</Link>
 							</Item>

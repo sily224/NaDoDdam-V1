@@ -46,15 +46,15 @@ const Home = React.memo(() => {
   },[favorite]);
 
   const [contents, setContents] = useState([]);
-  // const [page, setPage] = useState(0);
+  const [page, setPage] = useState(0);
 
   // 최초 렌더링 시 전체 데이터 조회
   useEffect(()=>{
-    // setPage(0);
-    getFarmData(option);
+    setPage(0);
+    getFarmData(option, page);
   },[option])
 
-  const getFarmData = useCallback( async ({location, fruit, date}) => {
+  const getFarmData = useCallback( async ({location, fruit}, page) => {
 
     const header = {
         headers: {
@@ -62,7 +62,7 @@ const Home = React.memo(() => {
         }
     }
 
-    let url = "http://localhost:3500/api/farms"; // default 전체 조회
+    let url = `http://localhost:3500/api/farms?lastId=${page}`; // default 전체 조회
     if(location) {
       url = `http://localhost:3500/api/farms?location=${location}`; // 지역 조회
     }else if(fruit){
@@ -76,7 +76,9 @@ const Home = React.memo(() => {
       console.log(data);
       return data;
     })
-    .then(data=>setContents(data));
+    .then(data=>{
+      setContents(contents.concat(data));
+    });
   })
 
 //   const getData = useCallback( async (options) => {
@@ -110,17 +112,17 @@ const Home = React.memo(() => {
 
   return (
     // <FarmList contents={contents}/>
-      // <InfiniteScroll 
-      // dataLength={contents.length}
-      // next={()=>{
-      //   // getData(option);
-      //   // setPage(page+1);
-      // }}
-      // hasMore={true}
-      // scrollThreshold='1000px'>
-      //   <FarmList contents={contents}/>
-      // </InfiniteScroll>
+      <InfiniteScroll 
+      dataLength={contents.length}
+      next={()=>{
+        getFarmData(option, page);
+        setPage(page+1);
+      }}
+      hasMore={true}
+      scrollThreshold='1000px'>
       <FarmList contents={contents} favorite={favorite} setFavorite={setFavorite}/>
+      </InfiniteScroll>
+      // <FarmList contents={contents} favorite={favorite} setFavorite={setFavorite}/>
   )
 });
 
