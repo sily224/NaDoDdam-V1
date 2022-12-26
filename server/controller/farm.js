@@ -1,5 +1,7 @@
 import 'express-async-errors';
 import db from '../models/index.js';
+import { upload } from '../middleware/s3.js';
+import multer from 'multer';
 
 // 서비스가 확장되어 타입이 늘어나면 ex (딸기, 수박, 파인애플 등등) 특정타입을 받아 특정타입의 농장을 조회
 export async function getFarms(req, res, next) {
@@ -51,8 +53,13 @@ export async function getByFarm(req, res, next) {
 }
 
 export async function createFarm(req, res, next) {
-	const { type, name, address, description, owner, url } = req.body;
+	const { type, name, address, description, owner } = req.body;
+
 	try {
+		console.log({ type, name, address, description, owner });
+		console.log(req.files);
+		const locations = req.files.map((data) => data.location);
+		const url = locations.toString();
 		const farmerId = req.farmerId;
 		const foundFarmer = db.Farmers.findById(farmerId);
 		if (!foundFarmer) {
