@@ -81,7 +81,8 @@ export async function getReviewData(req, res, next) {
 				start_time: info.start_time,
 				end_time: info.end_time,
 				farmId: info.farmId,
-				farmName:info.dataValues.name 
+				farmName:info.dataValues.name,
+				url: info.dataValues.url
 			});
 		}
 

@@ -24,26 +24,24 @@ const validateSignup = [
 ];
 
 // signup
-router.post('/signup', validateSignup, authController.signup, errorHandler); // 회원가입
+router.post('/signup', validateSignup, authController.signup); // 회원가입
 // login
-router.post('/login',validateCredential,  authController.login, errorHandler); //로그인
+router.post('/login',validateCredential,  authController.login); //로그인
 // me
 router.get('/myInfo', isAuth , authController.myInfo); //개인 회원정보 조회
 
 router.patch(
 	'/myPassword/:userId',
 	isAuth,
-	authController.passwordUpdate,
-	errorHandler
+	authController.passwordUpdate
 ); //비밀번호 수정
 
 router.patch(
 	'/myInfo/:userId',
 	isAuth,
-	authController.userUpdate,
-	errorHandler
+	authController.userUpdate
 ); //개인 정보 수정
 
-router.delete('/myInfo/:userId', isAuth, authController.userDrop, errorHandler); // 회원 삭제
+router.delete('/myInfo/:userId', isAuth, authController.userDrop); // 회원 삭제
 
 export default router;
