@@ -25,9 +25,10 @@ ModalContainer.defaultProps = {
 	children: '',
 	w: '50%',
 	h: '70%',
+	overflow: 'auto',
 };
 
-function ModalContainer({ children, w, h }) {
+function ModalContainer({ children, w, h, overflow }) {
 	const modalOpen = useSelector((state) => state.modal.modal);
 	const dispatch = useDispatch();
 
@@ -43,14 +44,14 @@ function ModalContainer({ children, w, h }) {
 						backgroundColor: 'rgba(255, 255, 255, 0.75)',
 					},
 					content: {
-						top: '15%',
+						top: '50%',
 						left: '50%',
-						right: '50%',
-						transform: 'translate(-50%)',
+						transform: 'translate(-50%, -50%)',
 						width: `${w}`,
 						height: `${h}`,
 						padding: '2rem',
 						zIndex: 100,
+						overflow: `${overflow}`,
 					},
 				}}
 			>
