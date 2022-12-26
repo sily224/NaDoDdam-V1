@@ -15,7 +15,7 @@ const TimeTables = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			personnel: {
-				type: DataTypes.INTEGER,
+				type: DataTypes.INTEGER, // NUMBER 로 바꿔줘야할 것 같음
 				allowNull: false,
 			},
 			price: {
@@ -137,6 +137,12 @@ const TimeTables = (sequelize, DataTypes) => {
 			order: [['date', 'DESC']],
 		});
 	};
+
+	// timeTable.subtractPersonnel = (timetableId, perssonel) => {
+	// 	return timeTable.findOne({
+	// 		where: { id: timetableId },
+	// 	});
+	// };
 
 	return timeTable;
 };

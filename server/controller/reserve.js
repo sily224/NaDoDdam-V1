@@ -23,6 +23,35 @@ export async function reserve(req, res, next) {
 	}
 }
 
+// 구현 중
+// export async function reserve(req, res, next) {
+// 	const { time_id, total_price, personnel, payment, name, phoneNum, email } =
+// 		req.body;
+// 	const user_id = req.userId;
+
+// 	try {
+// 		const new_reserve = await db.Reservations.createReserve({
+// 			total_price,
+// 			user_id,
+// 			time_id,
+// 			payment,
+// 			name,
+// 			phoneNum,
+// 			email,
+// 			personnel,
+// 		});
+// 		console.log(parseInt(new_reserve.dataValues.personnel));
+// 		const table = await db.TimeTables.getById(new_reserve.dataValues.time_id);
+// 		await table.decrement(
+// 			('personnel', parseInt(new_reserve.dataValues.personnel)),
+// 		);
+
+// 		res.status(201).json(new_reserve);
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// }
+
 export async function reserveDrop(req, res, next) {
 	const userId = req.userId;
 	const id = req.params.id;
