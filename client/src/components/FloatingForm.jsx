@@ -16,8 +16,7 @@ const Form = styled.form`
 const SelectBox = styled.select``;
 
 const FloatingForm = () => {
-	const { detailData: data } = useContext(DetailContext);
-	const { price, title, company, period, times } = data;
+	const {farmData} = useContext(DetailContext);
 
 	const [headCount, setHeadCount] = useState(1);
 	const [totalPrice, setTotalPrice] = useState(undefined);
@@ -25,24 +24,30 @@ const FloatingForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const formData = useSelector((state) => state.form);
+	const {startTime, endTime, price, date, personnel, timeId} = formData;
 
 	const handleHeadCount = (e) => {
 		setHeadCount(e.target.value);
 	};
 
 	const handleSubmit = (e) => {
-		// 페이지 이동전, 인원이 초과 되는 지 확인을 위한 get 요청
-		// 인원초과 되면 alert창 + return
-		// + 동시접속에 대한 확인요청
+	// todo 지혜
+	// 페이지 이동전, 인원이 초과 되는 지 확인을 위한 get 요청
+	// 인원초과 되면 alert창 + return
+	// + 동시접속에 대한 확인요청
+		console.log(timeId)
+		if(timeId === null){alert("날짜와 시간을 선택하세요"); return;} 
 
 		navigate('/pay', {
 			state: {
-				...formData,
+				id : timeId,
+				date : date,
+				farm: farmData.name,
+				headCount : headCount,
 				price: price,
-				farm: company.name,
-				programName: title,
-				period: { start: period[0], end: period[1] },
-				times: times,
+				totalPrice: totalPrice,				
+				startTime : startTime,
+				endTime : endTime,
 			},
 		});
 	};
@@ -59,11 +64,11 @@ const FloatingForm = () => {
 	return (
 		<>
 			<Form onSubmit={handleSubmit}>
-				<p>{formData.date}</p>
-				<p>{formData.time}</p>
+				<p>{date}</p>
+				<p>{startTime || "시작시간"}~{endTime || "종료시간"}</p>
 				<p>{price}원/명</p>
 				<SelectBox onChange={handleHeadCount} value={headCount}>
-					{[...Array(10).keys()].map((n) => (
+					{[...Array(personnel).keys()].map((n) => (
 						<option key={`HeadCount-${n + 1}`} value={n + 1}>
 							{n + 1}
 						</option>
