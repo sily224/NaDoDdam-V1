@@ -106,7 +106,7 @@ const MyReservationTable = () => {
     getReservationData();
   },[]);
 
-  const  filterData= (e) => {
+  const  filterData= () => {
     let filteredData = [...originalData];
     const today =  Moment().format('YYYY-MM-DD');
 
