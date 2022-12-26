@@ -141,7 +141,7 @@ const Detail = () => {
                             <Location />
                             <DetailCompany farm={farm} farmer={farmer}/>
                         </DetailInform>
-                        {/* <FloatingFormDiv><FloatingForm /></FloatingFormDiv> */}
+                        <FloatingFormDiv><FloatingForm /></FloatingFormDiv>
                     
                     </DetailContent>
 

@@ -1,7 +1,7 @@
 import {useState,useEffect,useContext} from 'react';
 import { DetailContext } from '../pages/DetailPage';
 import { useDispatch, useSelector } from 'react-redux';
-import { getStartTime,getEndTime } from '../store/FormSlice';
+import { getStartTime, getEndTime, getPersonnel, getPrice } from '../store/FormSlice';
 import styled from 'styled-components';
 
 
@@ -22,6 +22,8 @@ const TimeButton = styled.button`
 const TimeBtns = () =>{
     const [startTimeList, setStartTimeList] = useState([]);
     const [endTimeList, setEndTimeList] =  useState([]);
+    const [personnel, setPersonnel] =  useState([]);
+    const [price, setPrice] =  useState([]);
     const [timeBtnActive, setTimeBtnActive] = useState(0);
     
     const {timeTable} = useContext(DetailContext);
@@ -30,17 +32,22 @@ const TimeBtns = () =>{
     
     useEffect(() => {
         if(timeTable){
+            // 타켓 날짜의 모든 타임내역
             const targetTable = timeTable.filter(table => table.date === date);
             // console.log(targetTable);
 
             setStartTimeList([...targetTable.map((table)=> table.start_time)]);
             setEndTimeList([...targetTable.map((table)=> table.end_time)]);
+            setPersonnel([...targetTable.map((table)=> table.personnel)]);
+            setPrice([...targetTable.map((table)=> table.price)]);
         }
     },[timeTable,date])
     
     useEffect(()=>{
         dispatch(getStartTime(startTimeList[timeBtnActive]));
         dispatch(getEndTime(endTimeList[timeBtnActive]));
+        dispatch(getPersonnel(personnel[timeBtnActive]));
+        dispatch(getPrice(price[timeBtnActive]));
     },[timeBtnActive]);
 
     const handleTimeSelect = (e) => {
