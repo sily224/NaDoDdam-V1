@@ -127,7 +127,7 @@ const MyPageSecurityEdit = ({userId}) => {
     } catch (err) {
       console.log(err.response.data.Error)
     }
-  }
+  };
 
   const deleteUser = async() => {
     try {
@@ -136,7 +136,7 @@ const MyPageSecurityEdit = ({userId}) => {
     } catch (err) {
       console.log(err.response.data.Error)
     }
-  }
+  };
 
   return (
     <>

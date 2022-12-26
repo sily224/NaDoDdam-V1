@@ -15,6 +15,11 @@ export async function review(req, res, next) {
 			throw new Error('체험이 완료되지 않아 리뷰를 작성할 수 없습니다.');
 		}
 
+		const isReview = await db.Reviews.findByReserveId(reserve_id);
+		if(isReview) {
+			throw new Error('해당 예약에 대한 리뷰가 존재합니다.')
+		}
+
 		const timeTableInfo = await db.TimeTables.getById(reserve.time_id);
 		const farm_id = timeTableInfo.farmId;
 
@@ -57,6 +62,7 @@ export async function getReviewData(req, res, next) {
 		let result = [];
 		const time = [];
 		const timeInfo = [];
+
 		const review = await db.Reviews.findByUserId(userId);
 
 		if (!review) {
@@ -73,19 +79,20 @@ export async function getReviewData(req, res, next) {
 		}
 
 		for (let i = 0; i < time.length; i++) {
-			const info = await db.TimeTables.getById(time[i].time_id);
+			const info = await db.TimeTables.getAllWithFarmName(time[i].time_id);
 			timeInfo.push({
 				id: info.id,
 				date: info.date,
 				start_time: info.start_time,
 				end_time: info.end_time,
 				farmId: info.farmId,
+				farmName:info.dataValues.name,
+				url: info.dataValues.url
 			});
 		}
 
 		for (let i = 0; i < review.length; i++) {
 			result.push({
-				farm: farm[i],
 				review: review[i],
 				time: timeInfo[i],
 				reserveInfo: time[i],
@@ -157,6 +164,7 @@ export async function getReviewDataFarmer(req, res, next) {
 				start_time: timeInfo.start_time,
 				end_time: timeInfo.end_time,
 				farmId: timeInfo.farmId,
+				personnel: data.personnel
 			});
 		}
 

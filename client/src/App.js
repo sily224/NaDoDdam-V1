@@ -4,16 +4,26 @@ import Layout from './pages/Layout';
 import Home from './pages/Home';
 import Login from './pages/login';
 import Register from './pages/register';
+
 import DetailPage from './pages/DetailPage';
 import Payment from './pages/Payment';
+
 import { MyPage } from './pages/MyPage';
+import MyReview from './pages/MyReview';
+import MyReservation from './pages/MyReservation';
+import CreateReviewPage from './pages/CreateReviewPage';
+import UpdateReviewPage from './pages/UpdateReviewPage';
+
 import Farm from './pages/Farm';
 import FarmReservation from './pages/FarmReservation';
 import FarmTimeTable from './pages/FarmTimeTable';
-import MyReservation from './pages/MyReservation';
 import Favorite from './pages/Favorite';
-import NotFound from './pages/NotFound';
+import FarmInfo from './pages/FarmInfo';
 import FarmReview from './pages/FarmReview';
+
+import NotFound from './pages/NotFound';
+
+
 
 // memo 지우: NonMemberRoute -> 비회원일 때만 페이지 전환
 // MemberRoute -> 일반 회원일 때만 페이지 전화
@@ -72,6 +82,30 @@ function App() {
 						}
 					/>
 					<Route
+						path="/myreview"
+						element={
+							<MemberRoute>
+								<MyReview />
+							</MemberRoute>
+						}
+					/>\
+					<Route
+						path="/writereview/:id"
+						element={
+							<MemberRoute>
+								<CreateReviewPage />
+							</MemberRoute>
+						}
+					/>
+					<Route
+						path="/myreview/updateeview/:id"
+						element={
+							<MemberRoute>
+								<UpdateReviewPage />
+							</MemberRoute>
+						}
+					/>
+					<Route
 						path="/favorite"
 						element={
 							<MemberRoute>
@@ -112,6 +146,7 @@ function App() {
 						}
 					/>
 					<Route path="/notfound" element={<NotFound />} />
+					<Route path="/farm/farminfo" element={<FarmInfo />} />
 				</Route>
 			</Routes>
 		</div>
