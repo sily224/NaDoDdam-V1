@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalContainer from './Modal';
 import { showModal } from '../store/ModalSlice';
+import { Link } from 'react-router-dom';
 
 const StyledTitleWrap = styled.div`
   display:flex;
@@ -164,7 +165,7 @@ const MyReviewTable = () => {
                   </StyledContentWrap>
                   <p>{review.content}</p>
                 </div>
-                <button>수정</button>
+                <Link to='writereview'>수정</Link>
                 <button>삭제</button>
             </div>)
         }

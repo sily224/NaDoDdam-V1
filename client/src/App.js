@@ -11,7 +11,7 @@ import Payment from './pages/Payment';
 import { MyPage } from './pages/MyPage';
 import MyReview from './pages/MyReview';
 import MyReservation from './pages/MyReservation';
-import ReviewCreatePage from './pages/ReviewCreatePage';
+import CreateReviewPage from './pages/CreateReviewPage';
 
 import Farm from './pages/Farm';
 import FarmReservation from './pages/FarmReservation';
@@ -85,6 +85,14 @@ function App() {
 						element={
 							<MemberRoute>
 								<MyReview />
+							</MemberRoute>
+						}
+					/>
+					<Route
+						path="/myreview/writereview"
+						element={
+							<MemberRoute>
+								<CreateReviewPage />
 							</MemberRoute>
 						}
 					/>
