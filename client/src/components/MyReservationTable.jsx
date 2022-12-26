@@ -1,5 +1,6 @@
 import { useState, useEffect} from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
 import Moment from 'moment';
 import styled from 'styled-components';
 import { showModal } from '../store/ModalSlice';
@@ -194,7 +195,10 @@ const MyReservationTable = () => {
                 dispatch(showModal())}}>
                 더보기
               </button>
-                {reserve.status === '체험완료' && <button name={index}  onClick={(e)=> {console.log(e.target.name)}}>후기작성</button> }
+                {reserve.status === '체험완료' && 
+                <Link to={`writereview/${reserve.id}`}>
+                  후기작성
+                </Link>}
                 {(reserve.status === '예약대기' || reserve.status === '예약완료')
                   && <button 
                   name={index}

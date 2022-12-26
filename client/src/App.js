@@ -87,9 +87,17 @@ function App() {
 								<MyReview />
 							</MemberRoute>
 						}
+					/>\
+					<Route
+						path="/myreservation/writereview/:id"
+						element={
+							<MemberRoute>
+								<CreateReviewPage />
+							</MemberRoute>
+						}
 					/>
 					<Route
-						path="/myreview/writereview"
+						path="/myreview/writereview/:id"
 						element={
 							<MemberRoute>
 								<CreateReviewPage />

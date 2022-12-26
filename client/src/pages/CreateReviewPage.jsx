@@ -1,6 +1,6 @@
 import {CreateReview, UpdateReview} from '../components/CreateReview';
 
-const ReviewCreatePage = () => {
+const CreateReviewPage = () => {
     return (
     <>
     <CreateReview />
@@ -9,4 +9,4 @@ const ReviewCreatePage = () => {
     )
 }
 
-export default ReviewCreatePage;
+export default CreateReviewPage;
