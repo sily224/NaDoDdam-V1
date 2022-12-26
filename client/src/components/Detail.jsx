@@ -118,7 +118,7 @@ const DetailCompany = ({farm,farmer}) => {
 
 const Detail = () => {
     const { farmData : farm, farmerData : farmer } = useContext(DetailContext);
-    
+
     return (
         <>
             {
@@ -130,12 +130,12 @@ const Detail = () => {
                         <DetailInform>
                             {/* <DetailGrade grade={data.grade} /> */}
                             <DetailDescription description={farm.description} />
-                            {/* <DetailPeriod>
+                            <DetailPeriod>
                                 <Calender />
                                 <TimButtonContainer>
                                     <TimeBtns />
                                 </TimButtonContainer>
-                            </DetailPeriod> */}
+                            </DetailPeriod> 
                             <Review />
                             <p>찾아오는길</p>
                             <Location />
