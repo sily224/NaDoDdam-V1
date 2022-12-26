@@ -24,7 +24,7 @@ const FloatingForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const formData = useSelector((state) => state.form);
-	const {startTime, endTime, price, date, personnel} = formData;
+	const {startTime, endTime, price, date, personnel, timeId} = formData;
 
 	const handleHeadCount = (e) => {
 		setHeadCount(e.target.value);
@@ -35,9 +35,12 @@ const FloatingForm = () => {
 	// 페이지 이동전, 인원이 초과 되는 지 확인을 위한 get 요청
 	// 인원초과 되면 alert창 + return
 	// + 동시접속에 대한 확인요청
+		console.log(timeId)
+		if(timeId === null){alert("날짜와 시간을 선택하세요"); return;} 
 
 		navigate('/pay', {
 			state: {
+				id : timeId,
 				date : date,
 				farm: farmData.name,
 				headCount : headCount,

@@ -8,6 +8,7 @@ const initialState = {
     endTime:"",
     personnel : 0,
     price:0,
+    timeId:0,
 };
 
 const formSlice = createSlice({
@@ -35,6 +36,9 @@ const formSlice = createSlice({
         getPrice(state,action){
             state.price = action.payload;
         },
+        getTimeId(state,action){
+            state.timeId = action.payload;
+        },
         initDate(state, action){
             state.date = "";
         }
@@ -42,4 +46,4 @@ const formSlice = createSlice({
 });
 
 export default formSlice.reducer;
-export const {getDate,getTotalPrice,getHeadCount,getStartTime,getEndTime,getPersonnel,getPrice,initDate} = formSlice.actions;
+export const {getDate,getTotalPrice,getHeadCount,getStartTime,getEndTime,getPersonnel,getPrice,getTimeId,initDate} = formSlice.actions;
