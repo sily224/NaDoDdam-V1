@@ -4,12 +4,13 @@ import { showModal, closeModal } from '../store/ModalSlice';
 import { initDate } from '../store/FormSlice';
 import ModalContainer from '../components/Modal'
 import FarmPeriod from '../components/FarmPeriod';
+import UpdatePeriod from '../components/UpdatePeriod';
 import FarmFormat from '../components/FarmFormat';
 import FarmTime from '../components/FarmTime';
-import Pagination from '../components/Pagination';
+import Pagination from '../components/TimeTablePagination';
 import styled from 'styled-components';
 
-import * as userApi from '../lib/userApi';
+import * as API from '../lib/userApi';
 
 const Subject = styled.h2`
 	text-align: center;
@@ -66,18 +67,38 @@ const FailAnnouncement = styled.p`
 const TimeTable = ()=>{
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
+    const [date, setDate] = useState([]);
     const [maxHeadCount, setMaxHeadCount] = useState([]);
     const [cost, setCost] = useState('');
+
+    // memo : 수정
+    const [target,setTarget] = useState('');
+
+    // memo 지혜 : 페이지네이션
     const [page, setPage] = useState(1);
+    const limit = 20;
+    const perpage = 5;
+    const offset = (page - 1) * perpage;
+    const [lastId, setLastId] = useState(0);
+    const [first,setFirst] = useState(1);
+    const [last,setLast] = useState(1);
     
+
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
 
     const fetchData = async () => {
         try {
-            await userApi.get('http://localhost:3500/api/timetables/owner').then((res) => {
-                console.log(res.data);
-                setTimeTable([...res.data]);
+            await API.get(`//localhost:3500/api/timetables/owner?lastId=${lastId}&limit=${limit}`).then((res) => {
+                const data = res.data;
+                console.log(data);
+                if(data.length === 0){
+                    // console.log('진짜마지막 원소임');
+                    window.location.reload();
+                    return;
+                }
+                setLastId(data[data.length - 1].id);
+                setTimeTable([...timeTable,...data]);
             });
         }
         catch(e){
@@ -85,69 +106,101 @@ const TimeTable = ()=>{
         }
     };
     
-    const getHeadCount = state =>{
+    const LiftingHeadCount = state =>{
         setMaxHeadCount([...maxHeadCount,...state]);
     }
+    const LiftingDate = state =>{
+        setDate([state,...date]);
+    }
 
-    const stateLiftining = state => {
+    const stateLifting = state => {
         setPostData({...postData,...state});
     }
 
-    const handleSubmit = async(e) =>{   
+    // memo 지혜 : 체험테이블 생성
+    const handleSubmit = async(e , target) =>{   
+        console.log(target);
         e.preventDefault();
-        console.log(postData.timeList);
-        if(postData.timeList.length < 1 || cost < 1 ||!postData.startDate || !postData.endDate) {
-            alert('모든 값을 올바르게 기입해주세요');
-            return;
-        };
-        
-        const d1 = new Date(postData.startDate);
-        const d2 = new Date(postData.endDate);
-        const {timeList} = postData;
 
-        let diffDate = d1.getTime() - d2.getTime();
-        diffDate = Math.abs(diffDate /(1000*60*60*24));
-
-        for (let i = 0; i < diffDate + 1 ; i++ ){
-            const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
+        if (target === ''){
+            if(postData.timeList.length < 1 || cost < 1 || !postData.startDate || !postData.endDate) {
+                alert('모든 값을 올바르게 기입해주세요');
+                return;
+            };
             
-            for (let j = 0; j< timeList[0].length -1;j++){
-                const start_time = timeList[j][0];
-                const end_time = timeList[j][1];
-                const personnel = maxHeadCount[j];
+            const {timeList,startDate,endDate} = postData;
+            const d1 = new Date(startDate);
+            const d2 = new Date(endDate);
+            
+            let diffDate = d1.getTime() - d2.getTime();
+            diffDate = Math.abs(diffDate /(1000*60*60*24));
 
-                try {
-                    const res = await userApi.post('http://localhost:3500/api/timetables',{
-                        'date': date,
-                        'personnel':personnel,
-                        'price':cost,
-                        'start_time':start_time,
-                        'end_time':end_time
-                    });
-                    console.log(res);
-                }
-                catch(e){
-                    console.log(e);
+            for (let i = 0; i <= diffDate ; i++ ){
+                const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
+                
+                for (let j = 0; j< timeList.length; j++){
+
+                    const start_time = timeList[j][0];
+                    const end_time = timeList[j][1];
+                    const personnel = maxHeadCount[j];
+
+                    try {
+                        const res = await API.post('http://localhost:3500/api/timetables',{
+                            'date': date,
+                            'personnel':personnel,
+                            'price':cost,
+                            'start_time':start_time,
+                            'end_time':end_time
+                        });
+                        console.log(res);
+                    }
+                    catch(e){
+                        console.log(e);
+                    }
                 }
             }
         }
-        alert('체험시간표 등록완료');
+        else {
+            console.log("cost: ",cost);//ok
+            console.log("timeList: ", postData.timeList[0][0]," ",postData.timeList[0][1]);//ok
+            console.log("maxHeadCount : ",maxHeadCount[0]);
+            console.log("date: ",date[0]);
+            try {
+                const res = await API.put(`http://localhost:3500/api/timetables/${target}`,{
+                    'date': date[0],
+                    'personnel':maxHeadCount[0],
+                    'price':cost,
+                    'start_time':postData.timeList[0][0],
+                    'end_time':postData.timeList[0][1]
+                });
+                console.log(res);
+            }
+            catch(e){
+                console.log(e);
+            }
+        }
+        
+        alert(`체험시간표 ${target === "" ? "등록" : "수정"}완료`);
         dispatch(closeModal());
         dispatch(initDate());
-        setCost(0);
-        fetchData();
+        setDate('');
+        setCost('');
+        setTarget('');
+        // fetchData();
     };
 
     const onTimeTableDelete = async(id) => {
-        await userApi.delete(`http://localhost:3500/api/timetables/${id}`);
+        await API.delete(`http://localhost:3500/api/timetables/${id}`);
         fetchData();
     };
 
     const onTimeTableUpdate = (id)=>{
+        setTarget(id);
+        console.log(id);
         dispatch(showModal());
-
-
-        // axios.put(`http://localhost:3500/api/timetables/${idx}`,{
+        
+        
+        // axios.put(`http://localhost:3500/api/timetables/${id}`,{
 
 
         // });
@@ -157,20 +210,27 @@ const TimeTable = ()=>{
         fetchData();
     }, []);
 
+    const handleCreate = () => {
+        setTarget('');
+        dispatch(showModal());
+    }
+
     
     return (
         <>
         <FarmFormat>
             
             <Subject>체험시간표</Subject>
-            <AddTimTable type='button' onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
-            <Pagination total={timeTable.length} limit={5} page={page} setPage={setPage}/>
+            <AddTimTable type='button' onClick = {() => handleCreate()}>추가하기</AddTimTable>
+            <Pagination limit={limit} length={timeTable.length} perpage={perpage} page={page} setPage={setPage}
+            first={first} last={last} setFirst={setFirst} setLast={setLast} fetchData={fetchData} />
 
             { timeTable.length < 1 ? <FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement> : 
-                    timeTable.map((table,idx) =>{
+                    timeTable.slice(offset, offset + perpage).map((table,idx) =>{
                         return(
                             <TimeTableList key={idx}>
-                                <h4>체험테이블{idx+1}</h4>
+                                {/* <h4>체험테이블{idx+ 1 + perpage }</h4> */}
+                                
                                 <TimTableItem>
                                     <FarmImg src={table.farm? table.farm.url:''} alt='농장이미지'></FarmImg>
                                     <TimTableContent>
@@ -210,23 +270,23 @@ const TimeTable = ()=>{
         </FarmFormat>
 
         { modalOpen && <ModalContainer>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={(e) => handleSubmit(e , target)}>
                     <h1>체험시간표</h1>
                     <div>
                         <H3>체험 날짜</H3>
-                        <FarmPeriod onStateLiftining ={stateLiftining}/>  
+                        {target==="" ? <FarmPeriod onStateLifting ={stateLifting}/> : <UpdatePeriod timeTable={timeTable} target={target}  LiftingDate ={LiftingDate}/>}
                     </div>
 
                     <div>
                         <H3>체험 시간</H3>
-                        <FarmTime onStateLiftining={stateLiftining} getHeadCount={getHeadCount}></FarmTime>
+                        <FarmTime onStateLifting={stateLifting} LiftingHeadCount={LiftingHeadCount} target={target}></FarmTime>
                         
                     </div>
                     <div>
                         <H3>체험 비용</H3>
                         <input type='text' placeholder='체험비용을 입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
                     </div>
-                    <SubmitBtn type='submit'>추가하기</SubmitBtn>
+                    <SubmitBtn type='submit'>{target=="" ? "등록하기" : "수정하기"}</SubmitBtn>
                 </form>
             </ModalContainer>
         }

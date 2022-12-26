@@ -4,6 +4,8 @@ import { body } from 'express-validator';
 import { validate } from '../middleware/validate.js';
 import { isFarmer } from '../middleware/farmerAuth.js';
 import * as farmController from '../controller/farm.js';
+import { upload } from '../middleware/s3.js';
+import multer from 'multer';
 
 const router = express.Router();
 
@@ -21,7 +23,7 @@ router.get('/location', farmController.getByLocation);
 router.get('/:farmId', farmController.getByFarm);
 
 // 농장 등록하기 post
-router.post('/', isFarmer, farmController.createFarm);
+router.post('/', isFarmer, upload.array('file', 4), farmController.createFarm);
 
 // 농장 정보 수정하기 put
 router.put('/:id', isFarmer, farmController.updateFarm);

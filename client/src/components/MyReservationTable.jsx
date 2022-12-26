@@ -1,13 +1,12 @@
 import { useState, useEffect} from "react";
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
 import Moment from 'moment';
 import styled from 'styled-components';
 import { showModal } from '../store/ModalSlice';
 import { closeModal } from '../store/ModalSlice';
-import ModalContainer from '../components/Modal';
-import Location from '../components/Location';
-import Pagination from './Pagination';
+import ModalContainer from './Modal';
+import Location from './Location';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 
@@ -81,17 +80,15 @@ const StyledImageWrap = styled.div`
   }
 `
 
-const MyReservationEdit = () => {
+const MyReservationTable = () => {
   const [originalData, setOriginalData] = useState([]);
-  const [filteredData, setFilteredData] =useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [dataIndex, setDataIndex] = useState();
   const [statusOption , setStatusOption] = useState('전체');
   const [dateOption , setDateOption] = useState('지난 3개월');
   const [canclePage, setCanclePage] = useState(false);
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
-  const [page, setPage] = useState(1);
-	const offset = (page - 1) * 10;
   const statusList = ["전체", "예약대기", "예약완료", "예약취소", "체험완료"];
 
   const getReservationData = async () => {
@@ -101,15 +98,22 @@ const MyReservationEdit = () => {
         authorization: token,
       },
     });
-    setOriginalData(res.data);
-    setFilteredData(res.data);
+    const result = res.data.sort((a, b) => {
+      let aTime = a.info.date;
+      let bTime = b.info.date;
+      if (aTime > bTime) return -1;
+      if (aTime === bTime) return 0;
+      if (aTime < bTime) return 1;
+    });
+    setOriginalData(result);
+    setFilteredData(result);
   };
 
   useEffect(() => {
     getReservationData();
   },[]);
 
-  const  filterData= (e) => {
+  const  filterData= () => {
     let filteredData = [...originalData];
     const today =  Moment().format('YYYY-MM-DD');
 
@@ -118,29 +122,28 @@ const MyReservationEdit = () => {
       console.log(statusOption)
     }
 
-    if(dateOption === '지난 3개월'){
+    if(dateOption === 'threeMonthAgo'){
       filteredData = filteredData.filter(item => 
-        (Moment().subtract('3', 'months').format('YYYY-MM-DD') < item.reserve.createdAt.split("T")[0]) 
-        && item.reserve.createdAt.split("T")[0] <= today
+        (Moment().subtract('3', 'months').format('YYYY-MM-DD') < item.info.date) 
+        && item.info.date <= today
         );
-    }else if (dateOption === '지난 6개월'){
+    }else if(dateOption === 'sixMonthAgo'){
       filteredData = filteredData.filter(item =>
-        (Moment().subtract('6', 'months').format('YYYY-MM-DD') < item.reserve.createdAt.split("T")[0]) 
-        && item.reserve.createdAt.split("T")[0] <= today
+        (Moment().subtract('6', 'months').format('YYYY-MM-DD') < item.info.date) 
+        && item.info.date <= today
         );
-    }else if(dateOption === '지난 1년'){
+    }else if(dateOption === 'oneYearAgo'){
       filteredData = filteredData.filter(item => 
-        (Moment().subtract('1', 'years').format('YYYY-MM-DD') < item.reserve.createdAt.split("T")[0]) 
-        && item.reserve.createdAt.split("T")[0] <= today
+        (Moment().subtract('1', 'years').format('YYYY-MM-DD') < item.info.date) 
+        && item.info.date <= today
         );
     }
-    
     setFilteredData(filteredData);
   };
 
   useEffect(()=> {
     filterData();
-  },[statusOption, dateOption])
+  },[statusOption, dateOption]);
 
   const ShowDefault = () => {
     return <>
@@ -154,9 +157,9 @@ const MyReservationEdit = () => {
           ))}
         </div>
         <select value={dateOption} onChange={(e) => setDateOption(e.target.value)}>
-						<option value="지난 3개월">지난 3개월</option>
-						<option value="지난 6개월">지난 6개월</option>
-						<option value="지난 1년">지난 1년</option>
+					<option value="threeMonthAgo">지난 3개월</option>
+					<option value="sixMonthAgo">지난 6개월</option>
+					<option value="oneYearAgo">지난 1년</option>
 				</select>
         </StyledNavWrapper>
       </>
@@ -167,25 +170,26 @@ const MyReservationEdit = () => {
 
   const ShowResrvation = () => {
     return (<>
-      {filteredData.slice(offset, offset + 10).map((reservation , index) => { 
-        const {farm, time, reserve} = reservation;
-        const start_time = time.start_time.slice(0,5);
-        const end_time = time.end_time.slice(0,5);
+      {filteredData.map((reservation , index) => { 
+        const {info, reserve} = reservation;
+        const start_time = info.start_time.slice(0,5);
+        const end_time = info.end_time.slice(0,5);
         return (
           <StyledList key={index}>
             <StyledListInner>
               <StyledImageWrap>
-                <img src={farm.url} alt="농장사진"/>
+                <img src={info.url} alt="농장사진"/>
               </StyledImageWrap>
               <StyledContent>
                 <StyledTitle>
                   <h3 style={{
-                  textDecoration : reserve.status === '예약취소' 
+                  textDecoration 
+                  : reserve.status === '예약취소' 
                   ? 'line-through' 
-                  : 'none'}}>{farm.name}</h3>
+                  : 'none'}}>{info.name}</h3>
                   <span>{reserve.status}</span>
                 </StyledTitle>
-                <p>날짜: {time.date}</p>
+                <p>날짜: {info.date}</p>
                 <p>체험시간: {start_time} -  {end_time}</p>
                 <p>인원: {reserve.personnel}명</p>
                 <p>결제금액 : {(reserve.total_price).toLocaleString()}원</p>
@@ -199,7 +203,10 @@ const MyReservationEdit = () => {
                 dispatch(showModal())}}>
                 더보기
               </button>
-                {reserve.status === '체험완료' && <button>후기작성</button> }
+                {reserve.status === '체험완료' && 
+                <Link to={`/writereview/${reserve.id}`}>
+                  후기작성
+                </Link>}
                 {(reserve.status === '예약대기' || reserve.status === '예약완료')
                   && <button 
                   name={index}
@@ -214,6 +221,7 @@ const MyReservationEdit = () => {
           </StyledList>
           )
         })}
+        {modalOpen && <ModalContainer><DetailReservation /></ModalContainer>}
       </>  
     );
   };
@@ -224,35 +232,35 @@ const MyReservationEdit = () => {
     return (
       <>
         {filterDataArr.map(reservation => {
-          const {farm, time, reserve} = reservation;
-          const start_time = time.start_time.slice(0,5);
-          const end_time = time.end_time.slice(0,5);
-          return <div key={`${dataIndex}`-`${farm.id}`}>
+          const {info, reserve} = reservation;
+          const start_time = info.start_time.slice(0,5);
+          const end_time = info.end_time.slice(0,5);
+          return <div key={`${dataIndex}`-`${info.id}`}>
             {!canclePage 
               ? (<div>
                     <StyledTitleWrap>
                       <StyledImageWrap>
-                        <img src={farm.url} alt="농장사진"/>
+                        <img src={info.url} alt="농장사진"/>
                       </StyledImageWrap>
                       <div>
                         <h4 style={{
                           textDecoration : reserve.status === '예약취소' 
                           ? 'line-through' 
                           : 'none'}}>
-                            {farm.name}({reserve.status})
+                            {info.name}({reserve.status})
                         </h4> 
-                        <p>{time.date}</p>
+                        <p>{info.date}</p>
                       </div>
                   </StyledTitleWrap>
                     <div>
                       <p>예약정보</p>
                       <StyledContentWrap>
                         <div>
-                          <p>날짜: {time.date}</p>
+                          <p>날짜: {info.date}</p>
                           <p>시간: {start_time}-{end_time}</p>
                           <p>인원: {reserve.personnel}명</p>
                         </div>
-                        <Location location={farm.address}/>
+                        <Location location={info.address}/>
                       </StyledContentWrap>
                       <div>
                         <div>
@@ -267,8 +275,8 @@ const MyReservationEdit = () => {
                     {(reserve.status === "예약완료" || reserve.status === "예약대기") 
                     && <button 
                       onClick={() => {
-                        setCanclePage(prev =>!prev)
-                        dispatch(closeModal())
+                        setCanclePage(prev =>!prev);
+                        dispatch(closeModal());
                       }}> 
                         예약취소
                       </button>
@@ -282,40 +290,45 @@ const MyReservationEdit = () => {
     )
   }
 
+  const cancleResevationHandler = async(e) => {
+    const id = e.target.name;
+    try {
+      await userApi.patch(`//localhost:3500/api/reserve/${id}`, {
+        status: '예약취소',
+      }); 
+      dispatch(closeModal());
+      getReservationData();
+      setCanclePage(prev =>!prev);
+    } catch (err) {
+      console.log(err.response.data.Error)
+    }
+  }
+
   const CancleReservationPage = () => {
     const filterDataArr = [filteredData[dataIndex]];
-
-    const cancleResevation = async(e) => {
-      const id = e.target.name;
-      try {
-        await userApi.patch(`//localhost:3500/api/reserve/${id}`, {
-          status: '예약취소',
-        }); 
-        getReservationData();
-        setCanclePage(prev =>!prev);
-        
-      } catch (err) {
-        console.log(err.response.data.Error)
-      }
-    }
 
     return (
       <>
       {filterDataArr.map(reservation => {
-        const {farm, time, reserve} = reservation;
-        const start_time = time.start_time.slice(0,5);
-        const end_time = time.end_time.slice(0,5);
+        const {info, reserve} = reservation;
+        const start_time = info.start_time.slice(0,5);
+        const end_time = info.end_time.slice(0,5);
         return (
-         <div key={`${dataIndex}-${farm.id}`}>
-          <p>{farm.name}</p>
-          <p>{farm.description}</p>
-          <p>{time.date}</p>
+         <div key={`${dataIndex}-${info.id}`}>
+          <p>{info.name}</p>
+          <p>{info.description}</p>
+          <p>{info.date}</p>
           <p>{start_time}-{end_time}</p>
           <p>인원{reserve.personnel}명</p>
           <p>취소사유</p>
           <p>최종환불금액: {reserve.total_price.toLocaleString()}</p>
           <button onClick={() => setCanclePage(prev =>!prev)}>이전</button>
-          <button name={reserve.id} onClick={(e) => cancleResevation(e)}>예약취소</button>
+          <button onClick={() => dispatch(showModal())}>예약취소</button>
+          {modalOpen && <ModalContainer w="25%" h="20%" overflow="hidden">
+            예약을 취소하시겠습니까?
+            <button name={reserve.id} onClick={(e) => cancleResevationHandler(e)}>취소하기</button>
+            <button onClick={() => dispatch(closeModal())}>이전</button>
+          </ModalContainer>}
         </div>
       )}
     )} 
@@ -326,16 +339,9 @@ const MyReservationEdit = () => {
   return (
     <>
     <ShowDefault/>
-    {!canclePage ? <ShowResrvation />: <CancleReservationPage/>}
-    {modalOpen && <ModalContainer><DetailReservation /></ModalContainer>}
-    <Pagination
-			total={filteredData.length}
-			limit={10}
-			page={page}
-			setPage={setPage}
-		/>
+    {!canclePage ? <ShowResrvation /> : <CancleReservationPage/>}
     </>
   )
 }
 
-export default MyReservationEdit;
+export default MyReservationTable;
