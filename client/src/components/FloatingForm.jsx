@@ -55,7 +55,7 @@ const FloatingForm = () => {
 	useEffect(() => {
 		setTotalPrice(headCount * price);
 		dispatch(getHeadCount(headCount));
-	}, [headCount, setTotalPrice]);
+	}, [headCount]);
 
 	useEffect(() => {
 		dispatch(getTotalPrice(totalPrice));
