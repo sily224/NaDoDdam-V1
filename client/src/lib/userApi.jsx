@@ -79,7 +79,7 @@ async function put(endpoint,data) {
 	const apiUrl = endpoint;
 	const bodyData = JSON.stringify(data);
   
-	const res = await fetch(apiUrl, {
+	const res = await axios(apiUrl, {
 	  method: "PUT",
 	  headers: {
 		"Content-Type": "application/json",
