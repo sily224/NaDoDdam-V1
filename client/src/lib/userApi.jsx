@@ -96,4 +96,28 @@ async function del(endpoint) {
 	return res;
 }
 
+async function put(endpoint, data) {
+	const apiUrl = endpoint;
+	const bodyData = JSON.stringify(data);
+
+	const res = await fetch(apiUrl, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('token')}`,
+		},
+		data: bodyData,
+	});
+
+	// 응답 코드가 4XX 계열일 때 (400, 403 등)
+	if (!res.ok) {
+		const errorContent = await res.json();
+		const { reason } = errorContent;
+
+		throw new Error(reason);
+	}
+
+	return res;
+}
+
 export { post, get, patch, put, del as delete };

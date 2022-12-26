@@ -13,16 +13,20 @@ const PageBtn = styled.button``;
 
 const Pagination = ( {limit, length, perpage, page, setPage, first,setFirst, last, setLast ,fetchData}) => {
 
-	let pageCount = Math.ceil(limit / perpage);
-
-    if (length/perpage > pageCount){
-        pageCount = (length/perpage)-pageCount;
+	let pageCount = Math.ceil(limit / perpage); 
+    const current = Math.ceil(length/perpage); 
+    
+    if (current < pageCount){
+        pageCount = current;
     }
-
+    if (current < last){
+        last = current;
+    }
+    
     const pageNum = () =>{
         let pageList = [];
         
-        console.log(first,last);
+        // console.log(first,last);
         for (let i = first; i <= last; i++) {
             pageList.push(
                 <PageBtn
@@ -47,7 +51,7 @@ const Pagination = ( {limit, length, perpage, page, setPage, first,setFirst, las
     }
     const handleNextPage = () =>{
         setFirst(last+1);   
-        setPage(page+1);
+        setPage(pageCount+1);
         fetchData();
     }
 
@@ -68,7 +72,7 @@ const Pagination = ( {limit, length, perpage, page, setPage, first,setFirst, las
 				<PageBtn onClick={() => setPage(page + 1)} disabled={page === last}>
 					&gt;
 				</PageBtn>
-                <PageBtn onClick={() => handleNextPage()} >
+                <PageBtn onClick={() => handleNextPage()} disabled={length < limit}>
 					{'>>'}
 				</PageBtn>
 			</PageWrapper>
