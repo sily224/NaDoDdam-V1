@@ -76,6 +76,7 @@ export async function getReserveData(req, res, next) {
 			results.push({
 				info: timeInfo[i],
 				reserve: {
+					id: reserve[i].id,
 					total_price: reserve[i].total_price,
 					status: reserve[i].status,
 					personnel: reserve[i].personnel,
