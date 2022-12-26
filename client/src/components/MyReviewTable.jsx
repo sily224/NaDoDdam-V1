@@ -3,6 +3,10 @@ import * as userApi from "../lib/userApi";
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { useDispatch, useSelector } from 'react-redux';
+import ModalContainer from './Modal';
+import { showModal } from '../store/ModalSlice';
+
 const StyledTitleWrap = styled.div`
   display:flex;
 `
@@ -72,10 +76,11 @@ const StyledImageWrap = styled.div`
   }
 `
 
-  
-
 const MyReviewTable = () => {
-  const [data, setData] = useState()
+  const [data, setData] = useState([]);
+  const [dataIndex, setDataIndex] = useState(null);
+  const dispatch = useDispatch();
+  const modalOpen = useSelector((state) => state.modal.modal);
     
   const getReviewData = async() => {
     try {
@@ -94,8 +99,6 @@ const MyReviewTable = () => {
   useEffect(() => {
     getReviewData();
   },[])
-
-  console.log(data);
 
   const ShowResrvation = () => {
     return (<>
@@ -118,27 +121,10 @@ const MyReviewTable = () => {
                 <p>{review.content}</p>
               </StyledContent>
             </StyledListInner>
-            <div>
-              {/* <button 
-                name={index} 
-                onClick={(e)=> {
-                setDataIndex(e.target.name)
-                dispatch(showModal())}}>
-                더보기
-              </button> */}
-                {/* {reserve.status === '체험완료' && <button name={index}  onClick={(e)=> {console.log(e.target.name)}}>후기작성</button> }
-                {(reserve.status === '예약대기' || reserve.status === '예약완료')
-                  && <button 
-                  name={index}
-                  onClick={(e)=> {
-                    setDataIndex(e.target.name)
-                    console.log(e.target.name)
-                    setCanclePage(prev =>!prev)
-                  }}>
-                  예약취소
-               </button>
-              } */}
-            </div>
+            <button onClick={() => {
+              dispatch(showModal());
+              setDataIndex(index);
+            }}>더보기</button>
           </StyledList>
           )
         })}
@@ -146,9 +132,52 @@ const MyReviewTable = () => {
     );
   };
 
+  const ShowDetail = () => {
+    const detailDataArr = [data[dataIndex]];
+    console.log(detailDataArr)
+    
+    return (
+      <>
+      {modalOpen && <ModalContainer>
+        {detailDataArr.map(reservation => {
+          const {farm, time, review, reserveInfo} = reservation;
+          const start_time = time.start_time.slice(0,5);
+          const end_time = time.end_time.slice(0,5);
+
+          return (
+            <div>
+                <StyledTitleWrap>
+                  <StyledImageWrap>
+                    <img src={farm.url} alt="농장사진"/>
+                  </StyledImageWrap>
+                  <div>
+                    <h4>{farm.name}</h4> 
+                    <p>{time.date}</p>
+                  </div>
+                </StyledTitleWrap>
+                <div>
+                  <p>예약정보</p>
+                  <StyledContentWrap>
+                      <p>날짜: {time.date}</p>
+                      <p>시간: {start_time}-{end_time}</p>
+                      <p>인원: {reserveInfo.personnel}명</p>
+                  </StyledContentWrap>
+                  <p>{review.content}</p>
+                </div>
+                <button>수정</button>
+                <button>삭제</button>
+            </div>)
+        }
+        )}
+      </ModalContainer>}
+      </>
+    )
+  }
+
   return (
     <>
     <ShowResrvation />
+    <ShowDetail />
     </>
     )
 }

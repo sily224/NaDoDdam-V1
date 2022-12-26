@@ -111,7 +111,6 @@ const MyReservationTable = () => {
 
     if(statusOption !== "전체" ){
       filteredData = filteredData.filter(item => item.reserve.status === statusOption);
-      console.log(statusOption)
     }
 
     if(dateOption === '지난 3개월'){
@@ -130,11 +129,8 @@ const MyReservationTable = () => {
         && item.reserve.createdAt.split("T")[0] <= today
         );
     }
-    
     setFilteredData(filteredData);
   };
-
-  console.log(filteredData);
 
   useEffect(()=> {
     filterData();

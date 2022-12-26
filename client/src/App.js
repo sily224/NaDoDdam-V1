@@ -11,6 +11,7 @@ import Payment from './pages/Payment';
 import { MyPage } from './pages/MyPage';
 import MyReview from './pages/MyReview';
 import MyReservation from './pages/MyReservation';
+import ReviewCreatePage from './pages/ReviewCreatePage';
 
 import Farm from './pages/Farm';
 import FarmReservation from './pages/FarmReservation';
