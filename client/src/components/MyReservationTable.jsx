@@ -82,7 +82,7 @@ const StyledImageWrap = styled.div`
 
 const MyReservationTable = () => {
   const [originalData, setOriginalData] = useState([]);
-  const [filteredData, setFilteredData] =useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [dataIndex, setDataIndex] = useState();
   const [statusOption , setStatusOption] = useState('전체');
   const [dateOption , setDateOption] = useState('지난 3개월');
@@ -98,8 +98,15 @@ const MyReservationTable = () => {
         authorization: token,
       },
     });
-    setOriginalData(res.data);
-    setFilteredData(res.data);
+    const result = res.data.sort((a, b) => {
+      let aTime = a.info.date;
+      let bTime = b.info.date;
+      if (aTime > bTime) return -1;
+      if (aTime === bTime) return 0;
+      if (aTime < bTime) return 1;
+    });
+    setOriginalData(result);
+    setFilteredData(result);
   };
 
   useEffect(() => {
@@ -120,7 +127,7 @@ const MyReservationTable = () => {
         (Moment().subtract('3', 'months').format('YYYY-MM-DD') < item.info.date) 
         && item.info.date <= today
         );
-    }else if (dateOption === 'sixMonthAgo'){
+    }else if(dateOption === 'sixMonthAgo'){
       filteredData = filteredData.filter(item =>
         (Moment().subtract('6', 'months').format('YYYY-MM-DD') < item.info.date) 
         && item.info.date <= today
@@ -176,7 +183,8 @@ const MyReservationTable = () => {
               <StyledContent>
                 <StyledTitle>
                   <h3 style={{
-                  textDecoration : reserve.status === '예약취소' 
+                  textDecoration 
+                  : reserve.status === '예약취소' 
                   ? 'line-through' 
                   : 'none'}}>{info.name}</h3>
                   <span>{reserve.status}</span>
@@ -196,7 +204,7 @@ const MyReservationTable = () => {
                 더보기
               </button>
                 {reserve.status === '체험완료' && 
-                <Link to={`writereview/${reserve.id}`}>
+                <Link to={`/writereview/${reserve.id}`}>
                   후기작성
                 </Link>}
                 {(reserve.status === '예약대기' || reserve.status === '예약완료')
@@ -204,7 +212,6 @@ const MyReservationTable = () => {
                   name={index}
                   onClick={(e)=> {
                     setDataIndex(e.target.name)
-                    console.log(e.target.name)
                     setCanclePage(prev =>!prev)
                   }}>
                   예약취소
@@ -268,8 +275,8 @@ const MyReservationTable = () => {
                     {(reserve.status === "예약완료" || reserve.status === "예약대기") 
                     && <button 
                       onClick={() => {
-                        setCanclePage(prev =>!prev)
-                        dispatch(closeModal())
+                        setCanclePage(prev =>!prev);
+                        dispatch(closeModal());
                       }}> 
                         예약취소
                       </button>
@@ -283,16 +290,15 @@ const MyReservationTable = () => {
     )
   }
 
-  const cancleResevation = async(e) => {
+  const cancleResevationHandler = async(e) => {
     const id = e.target.name;
-    console.log(id);
     try {
       await userApi.patch(`//localhost:3500/api/reserve/${id}`, {
         status: '예약취소',
       }); 
+      dispatch(closeModal());
       getReservationData();
       setCanclePage(prev =>!prev);
-      
     } catch (err) {
       console.log(err.response.data.Error)
     }
@@ -319,9 +325,9 @@ const MyReservationTable = () => {
           <button onClick={() => setCanclePage(prev =>!prev)}>이전</button>
           <button onClick={() => dispatch(showModal())}>예약취소</button>
           {modalOpen && <ModalContainer w="25%" h="20%" overflow="hidden">
-          예약을 취소하시겠습니까?
-          <button name={info.id} onClick={(e) => cancleResevation(e)}>취소하기</button>
-          <button onClick={() => dispatch(closeModal())}>이전</button>
+            예약을 취소하시겠습니까?
+            <button name={reserve.id} onClick={(e) => cancleResevationHandler(e)}>취소하기</button>
+            <button onClick={() => dispatch(closeModal())}>이전</button>
           </ModalContainer>}
         </div>
       )}
@@ -333,13 +339,7 @@ const MyReservationTable = () => {
   return (
     <>
     <ShowDefault/>
-    {!canclePage ? <ShowResrvation />
-    :<> 
-    <CancleReservationPage/>
-    
-    </>
-    }
-    
+    {!canclePage ? <ShowResrvation /> : <CancleReservationPage/>}
     </>
   )
 }

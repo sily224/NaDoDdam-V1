@@ -12,6 +12,7 @@ import { MyPage } from './pages/MyPage';
 import MyReview from './pages/MyReview';
 import MyReservation from './pages/MyReservation';
 import CreateReviewPage from './pages/CreateReviewPage';
+import UpdateReviewPage from './pages/UpdateReviewPage';
 
 import Farm from './pages/Farm';
 import FarmReservation from './pages/FarmReservation';
@@ -89,7 +90,7 @@ function App() {
 						}
 					/>\
 					<Route
-						path="/myreservation/writereview/:id"
+						path="/writereview/:id"
 						element={
 							<MemberRoute>
 								<CreateReviewPage />
@@ -97,10 +98,10 @@ function App() {
 						}
 					/>
 					<Route
-						path="/myreview/writereview/:id"
+						path="/myreview/updateeview/:id"
 						element={
 							<MemberRoute>
-								<CreateReviewPage />
+								<UpdateReviewPage />
 							</MemberRoute>
 						}
 					/>
