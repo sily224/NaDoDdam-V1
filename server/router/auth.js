@@ -4,7 +4,7 @@ import { body } from 'express-validator';
 import { validate } from '../middleware/validate.js';
 import * as authController from '../controller/auth.js';
 import { isAuth } from '../middleware/auth.js';
-
+import { errorHandler } from '../middleware/error-handler.js';
 const router = express.Router();
 
 const validateCredential = [
@@ -26,13 +26,21 @@ const validateSignup = [
 // signup
 router.post('/signup', validateSignup, authController.signup); // 회원가입
 // login
-router.post('/login', validateCredential, authController.login); //로그인
+router.post('/login',validateCredential,  authController.login); //로그인
 // me
-router.get('/myInfo', isAuth, authController.myInfo); //개인 회원정보 조회
+router.get('/myInfo', isAuth , authController.myInfo); //개인 회원정보 조회
 
-router.patch('/myPassword/:userId', isAuth, authController.passwordUpdate); //비밀번호 수정
+router.patch(
+	'/myPassword/:userId',
+	isAuth,
+	authController.passwordUpdate
+); //비밀번호 수정
 
-router.patch('/myInfo/:userId', isAuth, authController.userUpdate); //개인 정보 수정
+router.patch(
+	'/myInfo/:userId',
+	isAuth,
+	authController.userUpdate
+); //개인 정보 수정
 
 router.delete('/myInfo/:userId', isAuth, authController.userDrop); // 회원 삭제
 
