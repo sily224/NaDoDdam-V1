@@ -24,7 +24,7 @@ const TimeBtns = () =>{
     const [endTimeList, setEndTimeList] =  useState([]);
     const [personnel, setPersonnel] =  useState([]);
     const [price, setPrice] =  useState([]);
-    const [timeId, setTimeId] = useState(null);
+    const [timeId, setTimeId] = useState([]);
     const [timeBtnActive, setTimeBtnActive] = useState(0);
     
     const {timeTable} = useContext(DetailContext);
