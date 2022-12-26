@@ -42,8 +42,17 @@ const Farms = (sequelize, DataTypes) => {
 		return farm.findByPk(id);
 	};
 
-	farm.getAll = () => {
-		return farm.findAll({}); // 내림차순으로 정렬해야하나 오름차순으로 정렬해야하나
+	farm.getAll = (lastId, limit) => {
+		let cursor = lastId || 0;
+		return farm.findAll({
+			limit: parseInt(limit),
+			where: {
+				id: {
+					[DataTypes.Op.gt]: cursor,
+				},
+			},
+			order: [['createdAt', 'DESC']],
+		});
 	};
 
 	farm.getByType = (type) => {
