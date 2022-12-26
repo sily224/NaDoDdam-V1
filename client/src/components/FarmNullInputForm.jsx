@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-// import Postcode from './AddressApi';
-// import Post from './daumApi';
-// import SignUp from './test';
-import * as userApi from '../lib/userApi';
-// import Img from './ImgUpload';
+import axios from 'axios';
 
-// todo 혜실 : 수정중으로 주석이 많으나 추후 삭제 예정
 const Tittle = styled.h1``;
 
 const Form = styled.form`
@@ -26,7 +21,6 @@ function FarmNullInputForm() {
 	const [type, setType] = useState('');
 	const [name, setName] = useState('');
 	const [address, setAddress] = useState('');
-	const [url, setUrl] = useState('');
 	const [description, setDescription] = useState('');
 	const [owner, setOwner] = useState('');
 	const [disabled, setDisabled] = useState(false);
@@ -39,27 +33,46 @@ function FarmNullInputForm() {
 		setDisabled(false);
 	};
 	const postData = async (e) => {
-		try {
-			const changeData = await userApi.post('http://localhost:3500/api/farms', {
-				type: type,
-				name: name,
-				address: address,
-				description: description,
-				url: url,
-				owner: owner,
+		if (e.target.files) {
+			const uploadFile = e.target.files;
+			console.log(e.target.files);
+			const formData = new FormData();
+			// formData.append('files', uploadFile);
+			console.log(Array.from(uploadFile));
+			Array.from(uploadFile).forEach((el, index) => {
+				formData.append(index, el);
 			});
-			console.log(changeData);
+			console.log(Array.isArray(uploadFile));
+			console.log(formData);
+		}
+		try {
+			const res = await axios.post(`http://localhost:3500/api/farms/`, {
+				// data: formData,
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				body: {
+					type: type,
+					name: name,
+					address: address,
+					description: description,
+					owner: owner,
+				},
+			});
+			console.log(res);
 		} catch (e) {
 			console.log(e);
 		}
 	};
 
+	const onChangeImg = async (e) => {
+		e.preventDefault();
+	};
 	return (
 		<>
 			<div>
-				{/* <SignUp>주소검색</SignUp> */}
-				{/* <Post></Post> */}
-				<Tittle>농장 정보111</Tittle>
+				<Tittle>농장 정보</Tittle>
 				<Form onSubmit={handleSubmit}>
 					<Label>과일종류</Label>
 					<Input
@@ -79,8 +92,14 @@ function FarmNullInputForm() {
 						value={address}
 						onChange={(e) => setAddress(e.target.value)}
 					></Input>
-					{/* <Postcode>주소검색</Postcode> */}
-					<Label>이미지</Label>
+					<Label htmlFor="profile-upload">이미지</Label>
+					<Input
+						type="file"
+						id="profile-upload"
+						accept="image/*"
+						multiple="multiple"
+						onChange={onChangeImg}
+					/>
 					<Label>체험설명</Label>
 					<Textarea
 						type="text"

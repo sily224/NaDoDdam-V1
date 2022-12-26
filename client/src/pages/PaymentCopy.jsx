@@ -245,18 +245,10 @@ const SubscriberInfo = ({ userData }) => {
 };
 
 //결제 수단
-const PaymentInfo = (props) => {
+const PaymentInfo = () => {
 	return (
 		<>
 			<H3>결제 수단</H3>
-			<Select onChange={props.optionHandle} value={'카드결제'}>
-				<option value="card" key={1}>
-					카드결제
-				</option>
-				<option value="transfer" key={2}>
-					계좌이체
-				</option>
-			</Select>
 			<Accordion>
 				<Accordion.Item eventKey="0">
 					<Accordion.Header>
@@ -360,6 +352,14 @@ function Payment() {
 				<Context>
 					<ReservationInfo data={data}></ReservationInfo>
 					<SubscriberInfo userData={userData}></SubscriberInfo>
+					<Select>
+						<option value="card" key={1}>
+							카드결제
+						</option>
+						<option value="transfer" key={2}>
+							계좌이체
+						</option>
+					</Select>
 					<PaymentInfo option={optionHandle}></PaymentInfo>
 					<Button onClick={postData}>확인 및 결제</Button>
 				</Context>

@@ -16,7 +16,7 @@ const App = styled.div`
 `;
 export default function Img() {
 	function getImageFileObject(imageFile) {
-		console.log({ onAdd: imageFile });
+		console.log({ onAdd: imageFile.dataUrl });
 	}
 	function runAfterImageDelete(file) {
 		console.log({ onDele: file });
@@ -25,7 +25,28 @@ export default function Img() {
 		<App>
 			<div>
 				<h4>대표이미지</h4>
-				<ImageUploader
+				<div>
+					<h4>Default Example</h4>
+					<ImageUploader
+						onFileAdded={(img) => getImageFileObject(img)} // function that runs to confirm that your image actually exists
+						onFileRemoved={(img) => runAfterImageDelete(img)} // function runs on once you delete your image
+					/>
+				</div>
+				{/* <div>
+					<h4>이미지1</h4>
+					<ImageUploader
+						onFileAdded={(img) => getImageFileObject(img)} // function that runs to confirm that your image actually exists
+						onFileRemoved={(img) => runAfterImageDelete(img)} // function runs on once you delete your image
+					/>
+				</div>
+				<div>
+					<h4>이미지2</h4>
+					<ImageUploader
+						onFileAdded={(img) => getImageFileObject(img)} // function that runs to confirm that your image actually exists
+						onFileRemoved={(img) => runAfterImageDelete(img)} // function runs on once you delete your image
+					/>
+				</div> */}
+				{/* <ImageUploader
 					// onFileAdded={(img) => getImageFileObject(img)}
 					// onFileRemoved={(img) => runAfterImageDelete(img)}}
 					style={{ height: 200, width: 200, background: 'rgb(0 182 255)' }}
@@ -110,7 +131,7 @@ export default function Img() {
 							<line x1="50" y1="32.5" x2="50" y2="67.5" strokeWidth="5"></line>
 						</svg>
 					}
-				/>
+				/> */}
 			</div>
 		</App>
 	);
