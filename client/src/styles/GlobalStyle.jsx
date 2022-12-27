@@ -16,17 +16,17 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Noto Sans KR', sans-serif;
     }
 
-  ul, li {
-    list-style: none;
-  }
+    ul, li {
+      list-style: none;
+    }
 
-  a {
-    text-decoration: none;
-    display: block;
-    color: #000;
-    &:hover {
+    a {
+      text-decoration: none;
+      display: block;
       color: #000;
-   }
+      &:hover {
+        color: #000;
+    }
   }
 `
 export default GlobalStyle;

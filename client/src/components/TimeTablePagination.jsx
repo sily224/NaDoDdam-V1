@@ -1,13 +1,6 @@
-import styled from 'styled-components';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import {PageWrapper, PageBtn} from '../styles/Styled'
 
-const PageWrapper = styled.div`
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	margin-top: 10px;
-`;
-const PageBtn = styled.button``;
 
 const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, page, setPage, first, setFirst, last, setLast , lastId, setLastId}) => {
     const current = Math.ceil(timeTable.length/perpage) + pageCount * pageGroup; 

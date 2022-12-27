@@ -7,31 +7,31 @@ import TimeBtns from './TimeBtns';
 import { DetailContext } from '../pages/DetailPage';
 import FloatingForm from './FloatingForm';
 import Carousel from 'react-bootstrap/Carousel'
+import {StyledTitle, StyledParagraph, StyledSubTitle,ContentContainer} from '../styles/Styled'
 
 const DisplayFlex = styled.div`
     display:flex;
     flex-direction:column;
 `;
-
 const DetailContainer = styled(DisplayFlex)`
     width:100%;
     text-align: left;
 `;
-
 const Header = styled(DisplayFlex)`
-    width:100%;
-`;
-
-const Title = styled.h1`
     display: block;
     width : 100%;
 `;
-
+const Title = styled(StyledTitle)`
+    margin-bottom: 1%;
+`;
+const Address = styled(StyledParagraph)`
+    margin:  1% 0 2%;
+`;
 const DetailContent = styled.div`
     display: flex;
 `;
-
-const DetailPeriod = styled(DetailContent)`
+const DetailPeriod = styled.div`
+    display: flex;
     justify-content: flex-start;
 `;
 const DetailInform = styled.div`
@@ -44,95 +44,111 @@ const FloatingFormDiv = styled.div`
     justify-content : flex-end;
     flex: 1;
 `;
-const DetailCompanyContainer = styled.div`
-    border : 1px solid black;
-`;
 const TimButtonContainer = styled(DisplayFlex)`
     justify-content:center;
+    width : 30%;
     margin-left : 3%;
 `;
 const CarouselImg = styled.img`
-    height: 400px;
+    height : 480px;
 `;
 
-const DetailHeader = ({ name, address, url }) => {
+const DetailHeader = ({ name, address }) => {
     return (
         <Header>
             <Title>{name}</Title>
-            <p>{address}</p>
-            
-                <Carousel slide={false}>
-        `           <Carousel.Item>
-                        <CarouselImg
-                        className="d-block w-100"
-                        src={url}
-                        alt="First slide"
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <CarouselImg
-                        className="d-block w-100"
-                        src={url}
-                        alt="Second slide"
-                        />
-
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <CarouselImg
-                        className="d-block w-100"
-                        src={url}
-                        alt="Third slide"
-                        />
-                    </Carousel.Item>`
-                </Carousel>
-            
+            <Address>{address}</Address>
         </Header>
     );
 };
 
-const DetailGrade = ({ grade }) => {
-    return <p>{grade}점 </p>
+const DetailImg = ({imgUrl}) =>{
+    return (
+        <Carousel>
+            <Carousel.Item>
+            <CarouselImg
+            className='d-block w-100'
+            src={imgUrl}
+            alt='First slide'
+            />
+        </Carousel.Item>
+        <Carousel.Item>
+            <CarouselImg
+            className='d-block w-100'
+            src={imgUrl}
+            alt='Second slide'
+            />
+
+        </Carousel.Item>
+        <Carousel.Item>
+            <CarouselImg
+            className='d-block w-100'
+            src={imgUrl}
+            alt='Third slide'
+            />
+        </Carousel.Item>`
+    </Carousel>
+    )
 };
 
 const DetailDescription = ({ description }) => {
-    return <p>{description}</p>
+    return (
+        <ContentContainer>
+            <StyledSubTitle>체험소개</StyledSubTitle>
+            <hr />
+            <div>
+                <StyledParagraph>{description}</StyledParagraph>
+            </div>
+        </ContentContainer>
+    )
 };
 
 const DetailCompany = ({farm,farmer}) => {
+    const phoneNum = farmer.phoneNum;
     return (
-        <DetailCompanyContainer>
-            <p>농장정보</p>
-            <p>농장명 : {farm.name}</p>
-            <p>농장상품 : {farm.type}</p>
-            <p>농장주 : {farm.owner}</p>
-            <p>E-mail : {farmer.email}</p>
-            <p>전화번호: {farmer.phoneNum}</p>
-        </DetailCompanyContainer>
+        <>
+            <StyledSubTitle>농장정보</StyledSubTitle>
+            <hr />
+            <div>
+                <StyledParagraph>농장명 : {farm.name}</StyledParagraph>
+                <StyledParagraph>농장상품 : {farm.type}</StyledParagraph>
+                <StyledParagraph>농장주 : {farm.owner}</StyledParagraph>
+                <StyledParagraph>E-mail : {farmer.email}</StyledParagraph>
+                <StyledParagraph>전화번호: {phoneNum.slice(0,3)}-{phoneNum.slice(3,7)}-{phoneNum.slice(7,)}</StyledParagraph>
+            </div>
+        </>
     );
 };
 
+const DetailSchedule = () =>{
+    return (
+        <ContentContainer>
+            <StyledSubTitle>체험일정</StyledSubTitle>
+            <hr />
+            <DetailPeriod>
+                <Calender />
+                <TimButtonContainer>
+                    <TimeBtns />
+                </TimButtonContainer>
+            </DetailPeriod>
+        </ContentContainer>
+    )
+}
+
 const Detail = () => {
     const { farmData : farm, farmerData : farmer } = useContext(DetailContext);
-
     return (
         <>
             {
                 farm &&
                 <DetailContainer key={`${farm.name}-${new Date()}`}>
-                    <DetailHeader name={farm.name} address={farm.address} url={farm.url} />
-                    
+                    <DetailHeader name={farm.name} address={farm.address} />
+                    <DetailImg imgUrl={farm.url}></DetailImg>
                     <DetailContent>
                         <DetailInform>
-                            {/* <DetailGrade grade={data.grade} /> */}
                             <DetailDescription description={farm.description} />
-                            <DetailPeriod>
-                                <Calender />
-                                <TimButtonContainer>
-                                    <TimeBtns />
-                                </TimButtonContainer>
-                            </DetailPeriod> 
+                            <DetailSchedule />
                             <Review />
-                            <p>찾아오는길</p>
                             <Location />
                             <DetailCompany farm={farm} farmer={farmer}/>
                         </DetailInform>

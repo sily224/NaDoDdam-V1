@@ -28,7 +28,7 @@ const Farms = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			url: {
-				type: DataTypes.STRING,
+				type: DataTypes.STRING(1234),
 				allowNull: false,
 			},
 		},
