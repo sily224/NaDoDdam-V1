@@ -56,7 +56,7 @@ const Location = ({location}) =>{
 
                     // 인포윈도우로 장소에 대한 설명을 표시합니다
                     var infowindow = new kakao.maps.InfoWindow({
-                        content: '<div style="width:150px;text-align:center;padding:6px 0;">우리농장</div>'
+                        content: "<div style='width:150px;text-align:center;padding:6px 0;'>우리농장</div>"
                     });
                     infowindow.open(map, marker);
 
@@ -70,6 +70,7 @@ const Location = ({location}) =>{
     return (
         <ContentContainer>
             <StyledSubTitle>찾아오는길</StyledSubTitle>
+            <hr />
             <MapDiv id='map'></MapDiv>
         </ContentContainer>
     );

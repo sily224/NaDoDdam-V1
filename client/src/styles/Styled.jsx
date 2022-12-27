@@ -66,6 +66,7 @@ export const StyledSubTitle = styled.h5`
 export const StyledParagraph = styled.p`
     margin-bottom: 10px;
 `
+//memo 지혜 : 컨텐트 컨테이터
 export const ContentContainer = styled.div`
     display: block;
     width: 100%;

@@ -6,6 +6,7 @@ import { DetailContext } from '../pages/DetailPage';
 import styled from 'styled-components';
 import {StyledParagraph, SubmitButton} from '../styles/Styled'
 
+
 const Form = styled.form`
 	width: 70%;
 	height: 270px;
@@ -19,12 +20,12 @@ const Form = styled.form`
 const SubmitBtn = styled(SubmitButton)`
 	margin: 15% 0 5%;
 	width: 100%;
-	background-color: #83d644;
 `;
 const SelectBox = styled.select``;
 const Hr = styled.hr`
-	margin : 5% 0 ;
-`
+	margin : 5% 0;
+`;
+
 const FloatingForm = () => {
 	const {farmData} = useContext(DetailContext);
 	const {name, id} = farmData;
@@ -94,7 +95,7 @@ const FloatingForm = () => {
 				<br />
 				<SubmitBtn type='submit'>예약하기</SubmitBtn>
 				<Hr />
-				<StyledParagraph>결제금액 : {totalPrice || 0}원</StyledParagraph>
+				<StyledParagraph>결제금액 : {totalPrice ? totalPrice.toLocaleString('ko-KR') : 0}원</StyledParagraph>
 			</Form>
 		</>
 	);

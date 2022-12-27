@@ -13,17 +13,14 @@ const DisplayFlex = styled.div`
     display:flex;
     flex-direction:column;
 `;
-
 const DetailContainer = styled(DisplayFlex)`
     width:100%;
     text-align: left;
 `;
-
 const Header = styled(DisplayFlex)`
     display: block;
     width : 100%;
 `;
-
 const Title = styled(StyledTitle)`
     margin-bottom: 1%;
 `;
@@ -33,7 +30,6 @@ const Address = styled(StyledParagraph)`
 const DetailContent = styled.div`
     display: flex;
 `;
-
 const DetailPeriod = styled.div`
     display: flex;
     justify-content: flex-start;
@@ -48,7 +44,6 @@ const FloatingFormDiv = styled.div`
     justify-content : flex-end;
     flex: 1;
 `;
-
 const TimButtonContainer = styled(DisplayFlex)`
     justify-content:center;
     width : 30%;
@@ -57,7 +52,6 @@ const TimButtonContainer = styled(DisplayFlex)`
 const CarouselImg = styled.img`
     height: 450px;
 `;
-
 
 const DetailHeader = ({ name, address }) => {
     return (
@@ -68,32 +62,6 @@ const DetailHeader = ({ name, address }) => {
     );
 };
 
-const DetailDescription = ({ description }) => {
-    return (
-        <ContentContainer>
-            <StyledSubTitle>체험소개</StyledSubTitle>
-            <div>
-                <StyledParagraph>{description}</StyledParagraph>
-            </div>
-        </ContentContainer>
-    )
-};
-
-const DetailCompany = ({farm,farmer}) => {
-    return (
-        <>
-            <StyledSubTitle>농장정보</StyledSubTitle>
-            <div>
-                <StyledParagraph>농장정보</StyledParagraph>
-                <StyledParagraph>농장명 : {farm.name}</StyledParagraph>
-                <StyledParagraph>농장상품 : {farm.type}</StyledParagraph>
-                <StyledParagraph>농장주 : {farm.owner}</StyledParagraph>
-                <StyledParagraph>E-mail : {farmer.email}</StyledParagraph>
-                <StyledParagraph>전화번호: {farmer.phoneNum}</StyledParagraph>
-            </div>
-        </>
-    );
-};
 const DetailImg = ({imgUrl}) =>{
     return (
         <Carousel slide={false}>
@@ -121,11 +89,41 @@ const DetailImg = ({imgUrl}) =>{
         </Carousel.Item>`
     </Carousel>
     )
-}
+};
+
+const DetailDescription = ({ description }) => {
+    return (
+        <ContentContainer>
+            <StyledSubTitle>체험소개</StyledSubTitle>
+            <hr />
+            <div>
+                <StyledParagraph>{description}</StyledParagraph>
+            </div>
+        </ContentContainer>
+    )
+};
+
+const DetailCompany = ({farm,farmer}) => {
+    return (
+        <>
+            <StyledSubTitle>농장정보</StyledSubTitle>
+            <hr />
+            <div>
+                <StyledParagraph>농장명 : {farm.name}</StyledParagraph>
+                <StyledParagraph>농장상품 : {farm.type}</StyledParagraph>
+                <StyledParagraph>농장주 : {farm.owner}</StyledParagraph>
+                <StyledParagraph>E-mail : {farmer.email}</StyledParagraph>
+                <StyledParagraph>전화번호: {farmer.phoneNum}</StyledParagraph>
+            </div>
+        </>
+    );
+};
+
 const DetailSchedule = () =>{
     return (
         <ContentContainer>
             <StyledSubTitle>체험일정</StyledSubTitle>
+            <hr />
             <DetailPeriod>
                 <Calender />
                 <TimButtonContainer>
@@ -138,7 +136,6 @@ const DetailSchedule = () =>{
 
 const Detail = () => {
     const { farmData : farm, farmerData : farmer } = useContext(DetailContext);
-
     return (
         <>
             {

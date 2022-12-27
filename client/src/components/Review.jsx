@@ -5,6 +5,7 @@ import ModalContainer from './../components/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
 import { StyledParagraph, StyledSubTitle, ContentContainer} from '../styles/Styled';
+import {ConfirmButton} from '../styles/Styled'
 
 const ReviewDiv = styled.div`
     display: grid;
@@ -65,7 +66,7 @@ const ReviewItems = ({review,showAll}) =>{
                 <StyledParagraph>★ {rating}</StyledParagraph>
                 <ReviewName key = {`${value.createdAt}-${idx}`}>{createdAt}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
-                { isTextOverflow && <button onClick={()=> setTab(!tab)} >더보기</button>}
+                { isTextOverflow && <ConfirmButton onClick={()=> setTab(!tab)} >더보기</ConfirmButton>}
             </ReviewItem>
         );
     })
@@ -80,11 +81,12 @@ const Review = ()=>{
     return (
         <ContentContainer>
             <StyledSubTitle>후기</StyledSubTitle>
+            <hr />
             <div>
                 <ReviewDiv len={review.length}> 
                     <ReviewItems review={review}/>
                 </ReviewDiv>
-                {review.length > 6 && <button onClick = {() => dispatch(showModal())}>모두보기</button>}
+                {review.length > 6 && <ConfirmButton onClick = {() => dispatch(showModal())}>모두보기</ConfirmButton>}
                 { modalOpen &&
                     <ModalContainer>
                         <ModalLayout>
