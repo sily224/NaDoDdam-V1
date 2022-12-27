@@ -23,7 +23,7 @@ const FloatingForm = () => {
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const formData = useSelector((state) => state.form);
+	const formData = useSelector(({form}) => form);
 	const {startTime, endTime, price, date, personnel, timeId} = formData;
 
 	const handleHeadCount = (e) => {

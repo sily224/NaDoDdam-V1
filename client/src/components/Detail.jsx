@@ -55,8 +55,6 @@ const CarouselImg = styled.img`
     height: 400px;
 `;
 
-
-
 const DetailHeader = ({ name, address, url }) => {
     return (
         <Header>
@@ -100,7 +98,6 @@ const DetailDescription = ({ description }) => {
     return <p>{description}</p>
 };
 
-
 const DetailCompany = ({farm,farmer}) => {
     return (
         <DetailCompanyContainer>
@@ -113,8 +110,6 @@ const DetailCompany = ({farm,farmer}) => {
         </DetailCompanyContainer>
     );
 };
-
-
 
 const Detail = () => {
     const { farmData : farm, farmerData : farmer } = useContext(DetailContext);

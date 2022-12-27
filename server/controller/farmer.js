@@ -10,7 +10,7 @@ export async function signup(req, res, next) {
 	try {
 		const found = await db.Farmers.findByFarmerEmail(email);
 		if (found) {
-			throw new Error(`${email} already exists`);
+			throw new Error(`${email}는 이미 존재하는 이메일 입니다. `);
 		}
 		const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
 		const userId = await db.Farmers.createFarmer({

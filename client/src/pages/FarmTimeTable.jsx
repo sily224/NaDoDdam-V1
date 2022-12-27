@@ -75,30 +75,35 @@ const TimeTable = ()=>{
     const [target,setTarget] = useState('');
 
     // memo 지혜 : 페이지네이션
-    const [page, setPage] = useState(1);
-    const limit = 20;
-    const perpage = 5;
-    const offset = (page - 1) * perpage;
-    const [lastId, setLastId] = useState(0);
+    const [page, setPage] = useState(1);    
+    const [lastId, setLastId] = useState([0]);
     const [first,setFirst] = useState(1);
     const [last,setLast] = useState(1);
-    
+    const [pageGroup, setPageGroup] = useState(0);
+    const limit = 20;
+    const perpage = 5;
+    const pageCount = limit / perpage;
+    const offset = ((page-1) - (pageCount * pageGroup) )* perpage;
+
 
     const dispatch = useDispatch();
-    const modalOpen = useSelector((state) => state.modal.modal);
+    const modalOpen = useSelector(({modal}) => modal);
 
     const fetchData = async () => {
         try {
-            await API.get(`//localhost:3500/api/timetables/owner?lastId=${lastId}&limit=${limit}`).then((res) => {
+            await API.get(`//localhost:3500/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then((res) => {
                 const data = res.data;
                 console.log(data);
+                console.log(lastId);
                 // if(data.length === 0 ){
                     // console.log('진짜마지막 원소임');
                     // if(page>1) window.location.reload();
                     // return;
                 // }
-                // setLastId(data[data.length - 1].id);
+
+
                 setTimeTable([...data]);
+                
             });
         }
         catch(e){
@@ -161,10 +166,6 @@ const TimeTable = ()=>{
             }
         }
         else {
-            console.log('cost: ',cost);//ok
-            console.log('timeList: ', postData.timeList[0][0],' ',postData.timeList[0][1]);//ok
-            console.log('maxHeadCount : ',maxHeadCount[0]);
-            console.log('date: ',date[0]);
             try {
                 const res = await API.put(`http://localhost:3500/api/timetables/${target}`,{
                     'date': date[0],
@@ -191,7 +192,6 @@ const TimeTable = ()=>{
 
     const onTimeTableDelete = async(id) => {
         await API.delete(`http://localhost:3500/api/timetables/${id}`);
-        //삭제후 리로드
         fetchData();
     };
 
@@ -208,10 +208,7 @@ const TimeTable = ()=>{
 
     useEffect (() => {
         fetchData();
-    }, []);
-    useEffect (()=>{
-        console.log(timeTable);
-    },[timeTable])
+    }, [lastId,pageGroup]);
     
     return (
         <>
@@ -220,16 +217,18 @@ const TimeTable = ()=>{
             <Subject>체험시간표</Subject>
             <AddTimTable type='button' onClick = {() => handleCreate()}>추가하기</AddTimTable>
             { timeTable.length > 0 
-            && <Pagination limit={limit} length={timeTable.length} perpage={perpage} page={page} setPage={setPage}
-                    first={first} last={last} setFirst={setFirst} setLast={setLast} fetchData={fetchData} />}
+            && <Pagination pageCount={pageCount} timeTable={timeTable} 
+                perpage={perpage} page={page} setPage={setPage}
+                pageGroup={pageGroup} setPageGroup={setPageGroup} 
+                first={first} last={last} 
+                setFirst={setFirst} setLast={setLast} 
+                fetchData={fetchData} lastId = {lastId} setLastId={setLastId}/>}
 
-            { timeTable.length === 0 ? (<FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement>) : 
+            { timeTable.length > 0 ? 
 
                     timeTable.slice(offset, offset + perpage).map((table,idx) =>{
                         return(
                             <TimeTableList key={idx}>
-                                {/* <h4>체험테이블{idx+ 1 + perpage }</h4> */}
-                                
                                 <TimTableItem>
                                     <FarmImg src={table.farm? table.farm.url:''} alt='농장이미지'></FarmImg>
                                     <TimTableContent>
@@ -264,7 +263,8 @@ const TimeTable = ()=>{
                                 </TimTableItem>
                             </TimeTableList>
                         )
-                    })
+                    }) 
+                    : (<FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement>) 
             }
         </FarmFormat>
 

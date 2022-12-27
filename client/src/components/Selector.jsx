@@ -34,13 +34,17 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
         {location.map((x, i) => (
           <Item to="/" key={i} id={x[1]} onClick={e=>{
             dispatch(setLocation(e.target.id));
+            dispatch(setFruit(null));
           }}>{location[i][0]}</Item>
         ))}
       </Container>
     ) || searchType === "fruit" && (
       <Container>
         {produces.map((x, i)=>(
-          <Item to="/" key={i} id={x} onClick={e=>dispatch(setFruit(e.target.id))}>{produces[i]}</Item>
+          <Item to="/" key={i} id={x} onClick={e=>{
+            dispatch(setFruit(e.target.id));
+            dispatch(setLocation(null));
+          }}>{produces[i]}</Item>
         ))}
       </Container>
     )
@@ -71,6 +75,14 @@ const produces = [
   '딸기',
   '복숭아',
   '감',
+  '수박',
+  '대추',
+  '호박',
+  '사과',
+  '포도',
+  '귤',
+  '당근',
+  '참외'
 ];
 
 //

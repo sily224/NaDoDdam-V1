@@ -119,7 +119,6 @@ const MyReservationTable = () => {
 
     if(statusOption !== "전체" ){
       filteredData = filteredData.filter(item => item.reserve.status === statusOption);
-      console.log(statusOption)
     }
 
     if(dateOption === 'threeMonthAgo'){
@@ -171,7 +170,7 @@ const MyReservationTable = () => {
   const ShowResrvation = () => {
     return (<>
       {filteredData.map((reservation , index) => { 
-        const {info, reserve} = reservation;
+        const {info, reserve} = reservation || {};
         const start_time = info.start_time.slice(0,5);
         const end_time = info.end_time.slice(0,5);
         return (
@@ -203,7 +202,7 @@ const MyReservationTable = () => {
                 dispatch(showModal())}}>
                 더보기
               </button>
-                {reserve.status === '체험완료' && 
+                {(reserve.status === '체험완료' && reserve.review === undefined) &&
                 <Link to={`/writereview/${reserve.id}`}>
                   후기작성
                 </Link>}
@@ -211,8 +210,9 @@ const MyReservationTable = () => {
                   && <button 
                   name={index}
                   onClick={(e)=> {
-                    setDataIndex(e.target.name)
-                    setCanclePage(prev =>!prev)
+                    setDataIndex(e.target.name);
+                    setCanclePage(prev =>!prev);
+                    dispatch(closeModal());
                   }}>
                   예약취소
                </button>
@@ -232,7 +232,7 @@ const MyReservationTable = () => {
     return (
       <>
         {filterDataArr.map(reservation => {
-          const {info, reserve} = reservation;
+          const {info, reserve} = reservation || {};
           const start_time = info.start_time.slice(0,5);
           const end_time = info.end_time.slice(0,5);
           return <div key={`${dataIndex}`-`${info.id}`}>
@@ -275,8 +275,8 @@ const MyReservationTable = () => {
                     {(reserve.status === "예약완료" || reserve.status === "예약대기") 
                     && <button 
                       onClick={() => {
-                        setCanclePage(prev =>!prev);
                         dispatch(closeModal());
+                        setCanclePage(prev =>!prev);
                       }}> 
                         예약취소
                       </button>
@@ -310,7 +310,7 @@ const MyReservationTable = () => {
     return (
       <>
       {filterDataArr.map(reservation => {
-        const {info, reserve} = reservation;
+        const {info, reserve} = reservation || {};
         const start_time = info.start_time.slice(0,5);
         const end_time = info.end_time.slice(0,5);
         return (
