@@ -2,8 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Layout from './pages/Layout';
 import Home from './pages/Home';
-import Login from './pages/login';
-import Register from './pages/register';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 import DetailPage from './pages/DetailPage';
 import Payment from './pages/Payment';
@@ -13,17 +13,13 @@ import MyReview from './pages/MyReview';
 import MyReservation from './pages/MyReservation';
 import CreateReviewPage from './pages/CreateReviewPage';
 import UpdateReviewPage from './pages/UpdateReviewPage';
-
 import Farm from './pages/Farm';
+import EditFarm from './pages/EditFarm';
 import FarmReservation from './pages/FarmReservation';
 import FarmTimeTable from './pages/FarmTimeTable';
 import Favorite from './pages/Favorite';
-import FarmInfo from './pages/FarmInfo';
 import FarmReview from './pages/FarmReview';
-
 import NotFound from './pages/NotFound';
-
-
 
 // memo 지우: NonMemberRoute -> 비회원일 때만 페이지 전환
 // MemberRoute -> 일반 회원일 때만 페이지 전화
@@ -88,7 +84,8 @@ function App() {
 								<MyReview />
 							</MemberRoute>
 						}
-					/>\
+					/>
+					\
 					<Route
 						path="/writereview/:id"
 						element={
@@ -98,7 +95,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/myreview/updateeview/:id"
+						path="/updatereview/:id"
 						element={
 							<MemberRoute>
 								<UpdateReviewPage />
@@ -118,6 +115,14 @@ function App() {
 						element={
 							<FarmerRoute>
 								<Farm />
+							</FarmerRoute>
+						}
+					/>
+					<Route
+						path="/farm/edit"
+						element={
+							<FarmerRoute>
+								<EditFarm />
 							</FarmerRoute>
 						}
 					/>
@@ -146,7 +151,6 @@ function App() {
 						}
 					/>
 					<Route path="/notfound" element={<NotFound />} />
-					<Route path="/farm/farminfo" element={<FarmInfo />} />
 				</Route>
 			</Routes>
 		</div>

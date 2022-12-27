@@ -8,7 +8,7 @@ import { getToken, getUserType, logout } from '../utils/utils';
 import Selector from './Selector';
 import TableDatePicker from './DatePicker';
 import Logo from '../assets/logo.png';
-import { reset } from '../store/OptionSlice';
+import { reset, setLocation, setFruit } from '../store/OptionSlice';
 
 const StyledHeader = styled.header`
 	width: 100%;
@@ -98,7 +98,7 @@ const SearchContainer = styled.div`
 	position: absolute;
 	border: 1px solid black;
 	background-color: white;
-	top: 150px;
+	top: 100px;
 	z-index: 9999;
 `;
 
@@ -295,6 +295,9 @@ const Header = () => {
 	const handleSearchMenu = (e) => {
 		// 검색 세부 옵션 핸들러
 		setOption(e.target.id);
+		e.target.id === 'location' ? setFruit(null) : setLocation(null);
+		console.log('전체 지역 과일 중 ', e.target.id);
+		if(e.target.id === 'total') dispatch(reset());
 	};
 
 	return (
@@ -305,35 +308,32 @@ const Header = () => {
 			</LogoContainer>
 			{isOpenSearchBar && (
 				<ActiveSearchBar toggle={isOpenSearchBar} ref={searchRef}>
-					<div>
+					{/* <div>
 						<button name="location" onClick={(e) => handleSearchOption(e)}>
 							지역
 						</button>
 						<button name="fruit" onClick={(e) => handleSearchOption(e)}>
 							과일
 						</button>
-					</div>
+					</div> */}
 					<SearchOption>
-						{searchOption === 'location' ? (
-							<div id="location" onClick={(e) => handleSearchMenu(e)}>
-								장소
+							<div id="total" onClick={(e)=> handleSearchMenu(e)}>
+								전체
 							</div>
-						) : (
+							<div id="location" onClick={(e) => handleSearchMenu(e)}>
+								지역
+							</div>
 							<div id="fruit" onClick={(e) => handleSearchMenu(e)}>
 								과일
 							</div>
-						)}
-						<div id="date" onClick={(e) => handleSearchMenu(e)}>
+						{/* <div id="date" onClick={(e) => handleSearchMenu(e)}>
 							날짜
-						</div>
+						</div> */}
 					</SearchOption>
-					{(option === 'location' && searchOption === 'location' && (
+					{(option === 'location' && (
 						<SearchMenu children={<Selector searchType={option} />} />
 					)) ||
-						(option === 'date' && (
-							<SearchMenu children={<TableDatePicker />} />
-						)) ||
-						(option === 'fruit' && searchOption === 'fruit' && (
+						(option === 'fruit' && (
 							<SearchMenu children={<Selector searchType={option} />} />
 						))}
 				</ActiveSearchBar>

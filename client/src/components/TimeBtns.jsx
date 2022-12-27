@@ -24,8 +24,8 @@ const TimeBtns = () =>{
     const [endTimeList, setEndTimeList] =  useState([]);
     const [personnel, setPersonnel] =  useState([]);
     const [price, setPrice] =  useState([]);
-    const [timeId, setTimeId] = useState(null);
-    const [timeBtnActive, setTimeBtnActive] = useState(0);
+    const [timeId, setTimeId] = useState([]);
+    const [timeBtnActive, setTimeBtnActive] = useState(null);
     
     const {timeTable} = useContext(DetailContext);
     const date = useSelector((state) => state.form.date);
@@ -36,8 +36,8 @@ const TimeBtns = () =>{
             // 타켓 날짜의 모든 타임내역
             const targetTable = timeTable.filter(table => table.date === date);
 
-            setStartTimeList([...targetTable.map((table)=> table.start_time)]);
-            setEndTimeList([...targetTable.map((table)=> table.end_time)]);
+            setStartTimeList([...targetTable.map((table)=> table.start_time.slice(0,5))]);
+            setEndTimeList([...targetTable.map((table)=> table.end_time.slice(0,5))]);
             setPersonnel([...targetTable.map((table)=> table.personnel)]);
             setPrice([...targetTable.map((table)=> table.price)]);
             setTimeId([...targetTable.map((table)=> table.id)]);
