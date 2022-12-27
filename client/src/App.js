@@ -14,6 +14,7 @@ import MyReservation from './pages/MyReservation';
 import CreateReviewPage from './pages/CreateReviewPage';
 import UpdateReviewPage from './pages/UpdateReviewPage';
 import Farm from './pages/Farm';
+import EditFarm from './pages/EditFarm';
 import FarmReservation from './pages/FarmReservation';
 import FarmTimeTable from './pages/FarmTimeTable';
 import Favorite from './pages/Favorite';
@@ -114,6 +115,14 @@ function App() {
 						element={
 							<FarmerRoute>
 								<Farm />
+							</FarmerRoute>
+						}
+					/>
+					<Route
+						path="/farm/edit"
+						element={
+							<FarmerRoute>
+								<EditFarm />
 							</FarmerRoute>
 						}
 					/>
