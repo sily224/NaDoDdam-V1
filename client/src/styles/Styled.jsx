@@ -1,4 +1,4 @@
-import styled,{css} from "styled-components";
+import styled,{css} from 'styled-components';
 
 //memo 가영 : 로그인, 회원가입 등 큰 버튼
 export const SubmitButton = styled.button`
@@ -65,4 +65,9 @@ export const StyledSubTitle = styled.h5`
 //memo 가영 : 콘텐츠 글자
 export const StyledParagraph = styled.p`
     margin-bottom: 10px;
+`
+export const ContentContainer = styled.div`
+    display: block;
+    width: 100%;
+    margin : 8% 0;
 `

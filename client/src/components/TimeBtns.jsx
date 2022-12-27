@@ -3,19 +3,30 @@ import { DetailContext } from '../pages/DetailPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStartTime, getEndTime, getPersonnel, getPrice, getTimeId } from '../store/FormSlice';
 import styled from 'styled-components';
+import {green,yellow} from '../global-variables';
 
-
+const TimeButtonContainer = styled.div`
+    display:flex;
+    flex-direction:column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height:100%;
+`;
 const TimeButton = styled.button`
-    display:block;
     width : 100%;
     height : 90px;
     font-size : 1rem;
     background-color : white;
-    border : 1px orange solid;
+    border : 1px ${green} solid;
     &.active {
-        background-color : orange;
-        opacity: 0.5;
+        font-size : 1.2rem;
+        background-color : ${green};
         color : white;
+    }
+    &:hover{
+        background-color : ${green};
+        opacity: 0.5;
     }
 `;
 
@@ -57,13 +68,13 @@ const TimeBtns = () =>{
     };
 
     return  startTimeList && startTimeList.map( (start,idx)=>{
-        return <div key= {`TimeButtonContainer-${idx}`}>
+        return <TimeButtonContainer key= {`TimeButtonContainer-${idx}`}>
                 <TimeButton 
                     key= {`TimeButton-${idx}`}
                     className={'btn' + (idx == timeBtnActive ? ' active' : '')} 
-                    value ={idx} onClick={handleTimeSelect}>{`${idx+1}타임  ${start} ${endTimeList[idx]}`}
+                    value ={idx} onClick={handleTimeSelect}>{`${idx+1}타임  ${start} ~ ${endTimeList[idx]}`}
                 </TimeButton>
-            </div>
+            </TimeButtonContainer>
     });
 };
 

@@ -1,6 +1,7 @@
 import React, { useEffect , useContext } from 'react';
 import styled from 'styled-components';
 import { DetailContext } from '../pages/DetailPage';
+import {StyledSubTitle, ContentContainer} from '../styles/Styled'
 
 const { kakao } = window;
 
@@ -16,7 +17,7 @@ const IsDetail = () =>{
 }
 
 const Location = ({location}) =>{
-    let address = "";
+    let address = '';
 
     if (location){
         address = location;
@@ -67,10 +68,10 @@ const Location = ({location}) =>{
     }, []);
 
     return (
-        <div>
-            <p>찾아오는길</p>
+        <ContentContainer>
+            <StyledSubTitle>찾아오는길</StyledSubTitle>
             <MapDiv id='map'></MapDiv>
-        </div>
+        </ContentContainer>
     );
 };
 
