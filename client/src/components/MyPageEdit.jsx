@@ -6,11 +6,12 @@ import { useNavigate } from 'react-router-dom';
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {formSchema} from '../hooks/useForm';
+import {userformSchema} from '../hooks/useForm';
 import { logout } from '../utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalContainer from './Modal';
 import { showModal } from '../store/ModalSlice';
+import { closeModal } from '../store/ModalSlice';
 import { AiOutlineLock } from "react-icons/ai";
 import { AiOutlineUserDelete } from "react-icons/ai";
 
@@ -118,20 +119,19 @@ const MyPageSecurityEdit = ({userId}) => {
 		register,
 		handleSubmit,
 		formState: { isSubmitting, errors },
-	} = useForm({ mode: 'onChange', resolver: yupResolver(formSchema) });
+	} = useForm({ mode: 'onChange', resolver: yupResolver(userformSchema) });
 
-  const onSubmit = data => {console.log(data);}
-  const upDatePassword = async(data) => {
+  const upDatePassword = async({oldpassword, password}) => {
     try {
-      const {oldpassword, password} = data;
       await userApi.patch(`//localhost:3500/api/myPassword/${userId}`, {
         currentPassword: oldpassword,
         password: password,
       }); 
       alert('비밀번호가 변경되었습니다. 다시 로그인 해주세요.');
-      navigate('/login');
+      dispatch(closeModal());
+      logout();
     } catch (err) {
-      console.log(err.response.data.message)
+      alert(err.response.data.message);
     }
   };
 
@@ -152,7 +152,7 @@ const MyPageSecurityEdit = ({userId}) => {
             <>
               {modalOpen && 
                 <ModalContainer w="25%" h="60%">
-                   <StyledForm>
+                  <StyledForm>
                   <label>현재비밀번호</label>
                   <Input 
                     type="password" 
@@ -175,7 +175,10 @@ const MyPageSecurityEdit = ({userId}) => {
                   <small role="alert">{errors.passwordConfirm.message}</small>
                   )}
                   <button type="submit" 
-                  onClick={handleSubmit(onSubmit)}
+                  disabled={isSubmitting}
+                  onClick={handleSubmit(data => {
+                    console.log(data)
+                    upDatePassword(data)})}
                   >저장</button>
                   </StyledForm>
                 </ModalContainer>
