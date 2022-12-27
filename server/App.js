@@ -15,12 +15,7 @@ import { errorHandler } from './middleware/error-handler.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-var corsOptions = {
-	origin: 'http://localhost:3000',
-	credentials: true,
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

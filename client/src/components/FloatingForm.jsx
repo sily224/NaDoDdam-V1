@@ -17,8 +17,8 @@ const SelectBox = styled.select``;
 
 const FloatingForm = () => {
 	const {farmData} = useContext(DetailContext);
-
-	const [headCount, setHeadCount] = useState("none");
+	const {name, id} = farmData;
+	const [headCount, setHeadCount] = useState('none');
 	const [totalPrice, setTotalPrice] = useState(undefined);
 
 	const dispatch = useDispatch();
@@ -38,14 +38,15 @@ const FloatingForm = () => {
 		e.preventDefault();
 
 		if(!timeId || !date){alert('날짜와 시간을 선택하세요'); return;} 
-		if(headCount==="none"){alert('인원을 선택하세요'); return;} 
+		if(headCount==='none'){alert('인원을 선택하세요'); return;} 
 		
 
 		navigate('/pay', {
 			state: {
-				id : timeId,
+				farmId : id,
+				timeId : timeId,
 				date : date,
-				farm: farmData.name,
+				farm: name,
 				headCount : headCount,
 				price: price,
 				totalPrice: totalPrice,				
@@ -72,7 +73,7 @@ const FloatingForm = () => {
 				<p>{price}원/명</p>
 
 				<SelectBox onChange={handleHeadCount} value={headCount}>
-					<option value="none">=선택=</option>
+					<option value='none'>=선택=</option>
 
 					{personnel && [...Array(personnel).keys()].map((n) => (
 						<option key={`HeadCount-${n + 1}`} value={ n + 1 }>
