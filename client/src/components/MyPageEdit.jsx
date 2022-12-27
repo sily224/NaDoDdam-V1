@@ -1,41 +1,57 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import styled from 'styled-components'
-import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage';
 import * as userApi from "../lib/userApi";
 import { useNavigate } from 'react-router-dom';
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {userformSchema} from '../hooks/useForm';
-import { logout } from '../utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalContainer from './Modal';
 import { showModal } from '../store/ModalSlice';
 import { closeModal } from '../store/ModalSlice';
+import { logout } from '../utils/utils';
+import styled from 'styled-components'
 import { AiOutlineLock } from "react-icons/ai";
 import { AiOutlineUserDelete } from "react-icons/ai";
-
-const Input = styled.input`
-  border-radius: 10px;
-  border: 1px solid lightgray;
-  padding: 10px;
-`
+import { SubmitButton, Input, StyledSubTitle, StyledParagraph, ConfirmButton } from '../styles/Styled';
 
 const StyledForm = styled.form`
  display: flex;
  flex-direction: column;
 `
-
-const StyledModal = styled.div`
-    display: flex;
-    flex-direction: column;
+const StyledLable = styled.label`
+  margin-top:2%;
+  font-weight: 500;
+`
+const StyledSubHeading = styled.p`
+  margin: 10px 0px;
+  font-weight: 400;
+  color: gray;
+`
+const StyledUserInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+`
+const StyledUserInfoWrap = styled.div`
+  padding-bottom: 1%;
+  &::after {
+    content:'';
+    height: 1px;
+    background-color:lightgray;
+    display: block;
+    margin-top: 5px;
+}
+`
+const StyledConfirmModal = styled.div`
+  text-align: center;
 `
 
 const MyPageProfileEdit = ({id, name, title, userId}) => {
   const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
   const textInput = useRef();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const setReplaceName = useCallback(() => {
     setReName({
@@ -76,7 +92,7 @@ const MyPageProfileEdit = ({id, name, title, userId}) => {
       <StyledUserInfo>
         <div><span>{reName.value}</span></div>
         <div>
-          <StyledButton onClick={changeEditMode}>수정</StyledButton> 
+          <ConfirmButton onClick={changeEditMode}>수정</ConfirmButton> 
         </div>
       </StyledUserInfo>
     )
@@ -96,8 +112,8 @@ const MyPageProfileEdit = ({id, name, title, userId}) => {
           />
         </div>
         <div>
-          <StyledButton onClick={upDateComponents}>확인</StyledButton> 
-          <StyledButton onClick={changeEditMode}>취소</StyledButton>
+          <ConfirmButton onClick={upDateComponents}>확인</ConfirmButton> 
+          <ConfirmButton onClick={changeEditMode} reject>취소</ConfirmButton>
         </div>
       </StyledUserInfo>
     )
@@ -105,7 +121,7 @@ const MyPageProfileEdit = ({id, name, title, userId}) => {
 
   return(
     <StyledUserInfoWrap>
-      <div><h4>{title}</h4></div>
+      <StyledSubHeading>{title}</StyledSubHeading>
       {change ? <RenderEditView/> : <DefaultView />}
     </StyledUserInfoWrap>  
   )
@@ -114,7 +130,8 @@ const MyPageProfileEdit = ({id, name, title, userId}) => {
 const MyPageSecurityEdit = ({userId}) => {
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
-  const navigate = useNavigate();
+  const [modalPassword, setModalPassword]= useState(false);
+  const [modalConfirm, setModalConfirm]= useState(false);
   const {
 		register,
 		handleSubmit,
@@ -148,17 +165,21 @@ const MyPageSecurityEdit = ({userId}) => {
     <>
       <StyledUserInfoWrap>
           <StyledUserInfo>
-            <div><h4><AiOutlineLock />비밀번호</h4></div>
+            <StyledParagraph>
+              <AiOutlineLock />
+              비밀번호
+            </StyledParagraph>
             <>
-              {modalOpen && 
-                <ModalContainer w="25%" h="60%">
+              {modalPassword && modalOpen &&
+                <ModalContainer w="400px" h="450px" overflow="auto">
+                  <StyledSubTitle>비밀번호 변경</StyledSubTitle>
                   <StyledForm>
-                  <label>현재비밀번호</label>
+                  <StyledLable>현재비밀번호</StyledLable>
                   <Input 
                     type="password" 
                     name="currentPassword" 
                     {...register('oldpassword')}/>
-                  <label>새비밀번호</label>
+                  <StyledLable>새비밀번호</StyledLable>
                   <Input 
                     type="password" 
                     name="newPassword" 
@@ -174,27 +195,48 @@ const MyPageSecurityEdit = ({userId}) => {
                   {errors.passwordConfirm && (
                   <small role="alert">{errors.passwordConfirm.message}</small>
                   )}
-                  <button type="submit" 
-                  disabled={isSubmitting}
-                  onClick={handleSubmit(data => {
-                    console.log(data)
+                  <SubmitButton 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    onClick={handleSubmit(data => {
                     upDatePassword(data)})}
-                  >저장</button>
+                  >저장
+                  </SubmitButton>
                   </StyledForm>
                 </ModalContainer>
               }
             </>
-            <StyledButton type="button" onClick={() => {
-              dispatch(showModal())
+            <ConfirmButton 
+              type="button" 
+              onClick={() => {
+              dispatch(showModal());
+              setModalPassword(prev => !prev);
+              setModalConfirm(false);
             }}>
               비밀번호재설정
-            </StyledButton>
+            </ConfirmButton>
           </StyledUserInfo>
       </StyledUserInfoWrap>
       <StyledUserInfoWrap>
           <StyledUserInfo>
-            <div><h4><AiOutlineUserDelete/>회원탈퇴</h4></div>
-            <StyledButton onClick={deleteUser}>회원탈퇴</StyledButton>
+            <StyledParagraph>
+              <AiOutlineUserDelete/>
+              회원탈퇴
+            </StyledParagraph>
+            <ConfirmButton onClick={() => {
+              dispatch(showModal());
+              setModalConfirm(prev => !prev);
+              setModalPassword(false);
+            }}>회원탈퇴</ConfirmButton>
+            {modalConfirm && modalOpen && 
+              <ModalContainer w="320px" h="200px">
+                <StyledConfirmModal>
+                <p>탈퇴 시 복구할 수 없습니다. <br />
+                  탈퇴하시겠습니까?</p>
+                <SubmitButton onClick={deleteUser}>확인</SubmitButton>
+                <SubmitButton reject>취소</SubmitButton>
+                </StyledConfirmModal>
+              </ModalContainer>}
           </StyledUserInfo>
       </StyledUserInfoWrap>
       </>
