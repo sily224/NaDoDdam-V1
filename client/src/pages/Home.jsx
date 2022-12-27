@@ -25,6 +25,8 @@ const getFavorite = async () => {
 	return result;
 };
 
+let toggle = true;
+
 const Home = React.memo(() => {
 	const option = useSelector((state) => state.option.search);
 	const [favorite, setFavorite] = useState([]); // 찜 목록 상태
@@ -45,63 +47,81 @@ const Home = React.memo(() => {
 
 	const [contents, setContents] = useState([]);
 	const [page, setPage] = useState(0);
-  const length = 10;
+  const length = 20;
   const last = length*(page+1);
-  let toggle = true;
 
 	// 최초 렌더링 시 전체 데이터 조회
 	useEffect(() => {
-		setPage(0);
+    toggle=true;
+    setPage(0);
+    console.log('서치 옵션', option);
     setContents([]);
-    console.log(option);
-		getFarmData(option, last);
-    setPage(1);
+    getFarmData(option, 20);
 	}, [option]);
+
+  useEffect(()=>{
+    console.log('컨텐츠 상태', contents);
+  }, [contents])
+
+  useEffect(()=> {
+    console.log('페이지 = ', page);
+  }, [page])
 
 	const getFarmData = useCallback(
 		async ({ location, fruit }, last) => {
 
-      console.log(location, fruit)
-
 			const header = {
-				headers: {
-					'Content-Type':'application/json;charset=UTF-8',
-				},
-        params:{'location':location}
+        headers: {
+          'Content-Type':'application/json;charset=UTF-8',
+        },
+        params: {
+          location:location, type:fruit
+        }
 			};
 
 			let url = `http://localhost:3500/api/farms?limit=${last}`; // default 전체 조회
 
 			if (location) {
-				url = `http://localhost:3500/api/farms`; // 지역 조회
-			} else if (fruit) {
-				url = `http://localhost:3500/api/farms`; // 과일 조회
-			}
-
-			console.log(url);
-			await axios.get(url, {
-        headers: {
-					'Content-Type':'application/json;charset=UTF-8',
-        },
-        params: {
-          location:location, type:fruit
-        }
-      })
-				.then((res) => {
-					const data = res.data;
-          console.log('page =', page);
-          const d = data.slice(length*page, length*(page+1));
-          console.log('배열 길이', d.length);
-					console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
-          if (d.length === 0) {
-            console.log('데이터 없다.');
+				url = `http://localhost:3500/api/farms/location`; // 지역 조회
+        await axios.get(url, header)
+          .then((res) => {
+            const data = res.data;
+            setPage(0);
+            setContents(data);
             toggle = false;
             return;
-          }
-          setContents(contents.concat(d));
-          setPage(page + 1);
-				});
-		},
+          });
+			} else if (fruit) {
+				url = `http://localhost:3500/api/farms`; // 과일 조회
+        await axios.get(url, header)
+          .then((res) => {
+            const data = res.data;
+            setContents(data);
+            setPage(0);
+            toggle = false;
+            return;
+          });
+			} else{
+        console.log('전체 조회');
+        await axios.get(url, header)
+          .then((res) => {
+            const data = res.data;
+            const d = data.slice(length*page, length*(page+1));
+            console.log('배열 길이', d.length);
+            console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
+            if (d.length === 0) {
+              console.log('no data');
+              toggle = false;
+              setPage(0);
+              return;
+            }
+            
+            if (page === 0) setContents(d);
+            else setContents(contents.concat(d));
+            setPage(page + 1);
+          });
+      }
+    }
 	);
 
 	//   const getData = useCallback( async (options) => {
@@ -138,7 +158,8 @@ const Home = React.memo(() => {
 		<InfiniteScroll
 			dataLength={contents.length}
 			next={() => {
-        if (toggle) getFarmData(option, last);
+        if (toggle) {
+          getFarmData(option, last);}
 			}}
 			hasMore={true}
 			scrollThreshold="1000px"
