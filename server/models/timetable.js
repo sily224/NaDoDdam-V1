@@ -15,7 +15,7 @@ const TimeTables = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			personnel: {
-				type: DataTypes.INTEGER,
+				type: DataTypes.INTEGER, // NUMBER 로 바꿔줘야할 것 같음
 				allowNull: false,
 			},
 			price: {
@@ -34,6 +34,7 @@ const TimeTables = (sequelize, DataTypes) => {
 		{
 			charset: 'utf8',
 			collate: 'utf8_general_ci', //한글 저장
+			//paranoid: true => destroy 했을 때, 완전 삭제가 안되고 deleted_At에 시간이 저장됨 복구시킬려면 .restore() 하면됨, 강제로 삭제는 {force: true}
 		},
 	);
 
@@ -52,13 +53,13 @@ const TimeTables = (sequelize, DataTypes) => {
 				'end_time',
 				[DataTypes.col('farm.address'), 'address'],
 				[DataTypes.col('farm.name'), 'name'],
-				[DataTypes.col('farm.url'), 'url']
+				[DataTypes.col('farm.url'), 'url'],
 			],
 			include: {
 				model: db.Farms,
 				//attributes: [],
 			},
-			where: {id}
+			where: { id },
 		});
 	};
 
@@ -78,10 +79,9 @@ const TimeTables = (sequelize, DataTypes) => {
 				model: db.Farms,
 				//attributes: [],
 			},
-			where: {id}
+			where: { id },
 		});
 	};
-
 
 	timeTable.findFarmId = (id) => {
 		return timeTable.findAll({ where: { farmId: id } });
@@ -137,6 +137,12 @@ const TimeTables = (sequelize, DataTypes) => {
 			order: [['date', 'DESC']],
 		});
 	};
+
+	// timeTable.subtractPersonnel = (timetableId, perssonel) => {
+	// 	return timeTable.findOne({
+	// 		where: { id: timetableId },
+	// 	});
+	// };
 
 	return timeTable;
 };

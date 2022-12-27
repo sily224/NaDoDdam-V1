@@ -92,13 +92,13 @@ const TimeTable = ()=>{
             await API.get(`//localhost:3500/api/timetables/owner?lastId=${lastId}&limit=${limit}`).then((res) => {
                 const data = res.data;
                 console.log(data);
-                if(data.length === 0){
+                // if(data.length === 0 ){
                     // console.log('진짜마지막 원소임');
-                    window.location.reload();
-                    return;
-                }
-                setLastId(data[data.length - 1].id);
-                setTimeTable([...timeTable,...data]);
+                    // if(page>1) window.location.reload();
+                    // return;
+                // }
+                // setLastId(data[data.length - 1].id);
+                setTimeTable([...data]);
             });
         }
         catch(e){
@@ -161,10 +161,10 @@ const TimeTable = ()=>{
             }
         }
         else {
-            console.log("cost: ",cost);//ok
-            console.log("timeList: ", postData.timeList[0][0]," ",postData.timeList[0][1]);//ok
-            console.log("maxHeadCount : ",maxHeadCount[0]);
-            console.log("date: ",date[0]);
+            console.log('cost: ',cost);//ok
+            console.log('timeList: ', postData.timeList[0][0],' ',postData.timeList[0][1]);//ok
+            console.log('maxHeadCount : ',maxHeadCount[0]);
+            console.log('date: ',date[0]);
             try {
                 const res = await API.put(`http://localhost:3500/api/timetables/${target}`,{
                     'date': date[0],
@@ -180,17 +180,18 @@ const TimeTable = ()=>{
             }
         }
         
-        alert(`체험시간표 ${target === "" ? "등록" : "수정"}완료`);
+        alert(`체험시간표 ${target === '' ? '등록' : '수정'}완료`);
         dispatch(closeModal());
         dispatch(initDate());
         setDate('');
         setCost('');
         setTarget('');
-        // fetchData();
+        fetchData();
     };
 
     const onTimeTableDelete = async(id) => {
         await API.delete(`http://localhost:3500/api/timetables/${id}`);
+        //삭제후 리로드
         fetchData();
     };
 
@@ -198,23 +199,19 @@ const TimeTable = ()=>{
         setTarget(id);
         console.log(id);
         dispatch(showModal());
-        
-        
-        // axios.put(`http://localhost:3500/api/timetables/${id}`,{
-
-
-        // });
     };
-
-    useEffect (() => {
-        fetchData();
-    }, []);
 
     const handleCreate = () => {
         setTarget('');
         dispatch(showModal());
     }
 
+    useEffect (() => {
+        fetchData();
+    }, []);
+    useEffect (()=>{
+        console.log(timeTable);
+    },[timeTable])
     
     return (
         <>
@@ -222,10 +219,12 @@ const TimeTable = ()=>{
             
             <Subject>체험시간표</Subject>
             <AddTimTable type='button' onClick = {() => handleCreate()}>추가하기</AddTimTable>
-            <Pagination limit={limit} length={timeTable.length} perpage={perpage} page={page} setPage={setPage}
-            first={first} last={last} setFirst={setFirst} setLast={setLast} fetchData={fetchData} />
+            { timeTable.length > 0 
+            && <Pagination limit={limit} length={timeTable.length} perpage={perpage} page={page} setPage={setPage}
+                    first={first} last={last} setFirst={setFirst} setLast={setLast} fetchData={fetchData} />}
 
-            { timeTable.length < 1 ? <FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement> : 
+            { timeTable.length === 0 ? (<FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement>) : 
+
                     timeTable.slice(offset, offset + perpage).map((table,idx) =>{
                         return(
                             <TimeTableList key={idx}>
@@ -274,7 +273,7 @@ const TimeTable = ()=>{
                     <h1>체험시간표</h1>
                     <div>
                         <H3>체험 날짜</H3>
-                        {target==="" ? <FarmPeriod onStateLifting ={stateLifting}/> : <UpdatePeriod timeTable={timeTable} target={target}  LiftingDate ={LiftingDate}/>}
+                        {target==='' ? <FarmPeriod onStateLifting ={stateLifting}/> : <UpdatePeriod timeTable={timeTable} target={target}  LiftingDate ={LiftingDate}/>}
                     </div>
 
                     <div>
@@ -286,7 +285,7 @@ const TimeTable = ()=>{
                         <H3>체험 비용</H3>
                         <input type='text' placeholder='체험비용을 입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
                     </div>
-                    <SubmitBtn type='submit'>{target=="" ? "등록하기" : "수정하기"}</SubmitBtn>
+                    <SubmitBtn type='submit'>{target=='' ? '등록하기' : '수정하기'}</SubmitBtn>
                 </form>
             </ModalContainer>
         }
