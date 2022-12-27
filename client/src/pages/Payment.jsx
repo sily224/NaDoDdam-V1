@@ -57,7 +57,6 @@ const PayboxName = styled.div`
 // 예약정보
 const ReservationInfo = ({ payData }) => {
 	const navigate = useNavigate();
-	const { date, startTime, endTime, headCount } = payData;
 	const goDetail = () => {
 		// memo 혜실: farmid 들어갈자리
 		navigate(`/detail`);
@@ -70,13 +69,13 @@ const ReservationInfo = ({ payData }) => {
 					<H1>예약 및 결제</H1>
 					<H2>예약 정보</H2>
 					<H3>날짜</H3>
-					<Info>{date}</Info>
+					<Info>{payData.date}</Info>
 					<H3>시간</H3>
 					<Info>
-						{startTime} ~ {endTime}
+						{payData.startTime} ~ {payData.endTime}
 					</Info>
 					<H3>인원</H3>
-					<Info>{headCount}</Info>
+					<Info>{payData.headCount}</Info>
 					<Button onClick={goDetail}>예약정보수정</Button>
 					<Line />
 				</>
@@ -174,12 +173,11 @@ const Payment = () => {
 
 	useEffect(() => {
 		setPayData(location.state);
-	}, []);
-
-	useEffect(() => {
 		getUserData();
 	}, []);
-
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [payData]);
 	const getUserData = async () => {
 		try {
 			const res = await userApi.get('//localhost:3500/api/myInfo');
@@ -229,10 +227,6 @@ const Payment = () => {
 		setPhoneNumber(userData.phoneNum);
 		setEmail(userData.email);
 	}, [userData]);
-
-	const showReserve = () => {
-		navigate(`/myreservation`);
-	};
 
 	return (
 		<>
@@ -314,11 +308,22 @@ const Payment = () => {
 				{modalOpen && (
 					<ModalContainer>
 						<H1>결제완료</H1>
-						<Button onClick={() => dispatch(closeModal())}>확인</Button>
-						<Button onClick={() => {
-							dispatch(closeModal())
-							navigate(`/myreservation`);
-						}}>구매내역보기</Button>
+						<Button
+							onClick={() => {
+								dispatch(closeModal());
+								navigate(`/`);
+							}}
+						>
+							확인
+						</Button>
+						<Button
+							onClick={() => {
+								dispatch(closeModal());
+								navigate(`/myreservation`);
+							}}
+						>
+							구매내역보기
+						</Button>
 					</ModalContainer>
 				)}
 			</div>
