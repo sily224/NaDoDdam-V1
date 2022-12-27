@@ -35,7 +35,8 @@ const EditFarm = () => {
 	const [farmId, setFarmId] = useState(null);
 
 	// memo 지우: 초기 렌더링시 데이터 받아와서 상태값 설정 -> input value에 넣기
-	const fetchData = async () => {
+	async function fetchData() {
+		let farmId;
 		try {
 			await API.get(`${HOST}/api/farms/farminformation`).then((res) => {
 				if (res.data.farmInfo !== null) {
@@ -53,7 +54,7 @@ const EditFarm = () => {
 			alert('농장 정보를 불러올 수 없습니다.');
 			console.error(e.response.data.message);
 		}
-	};
+	}
 
 	// memo 지우: 이미지 파일 선택 -> 이미지 정보가 담긴 배열이 상태에 저장됨
 	const onChangeImg = (e) => {
