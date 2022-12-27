@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import heartLogo from '../assets/favorite.png';
 
 const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 
@@ -121,7 +122,7 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 		);
 	}
 });
-
+// #FFCC00 #FF0000 #65F7CE #f4d815 #83d644
 const Container = styled.div`
 	box-sizing: border-box;
 	display: flex;
@@ -140,19 +141,20 @@ const ItemList = styled.div`
 	max-width: 2100px;
 	width: 100%;
 	height: 100%;
+	position:absolute;
 `;
 
 const Item = styled.div`
 	display: flex;
 	flex-direction: column;
 	flex-basis: auto;
-	height: auto;
 	height: 400px;
 	width: auto;
 	border: 1px solid black;
 	position: relative;
 	border-radius: 10px;
 	overflow:hidden;
+	background-color: white;
 
 	img {
 		width: 100%;
@@ -162,12 +164,14 @@ const Item = styled.div`
 
 	&:hover {
 		transition: 0.5s;
-		border: solid 5px #FF0000;
+		transform: scale(1.3);
+		border: solid 5px #FFCC00;
 		img {
 			transition: 0.5s;
 			height: 400px;
 			width: 100%;
 		}
+		z-index:100;
 	}
 `;
 
@@ -176,13 +180,20 @@ const Button = styled.button`
 	height: 30px;
 	background-color: ${(props) => (props.color === 'true' ? 'red' : 'white')};
 	position: absolute;
+	transition: all 0.5s;
+	transform: rotateY(540deg);
+	filter: ${(props)=> (props.color === 'false' ? 'grayscale(100)' : 'grayscale(0)')};
 	top: 5%;
 	right: 5%;
+	border: none;
+	width: 50px;
+	height: 50px;
+
+	background: url(${heartLogo}) no-repeat;
 
 	&:hover {
-		transition: .5s;
-		transform:scale(1.5);
-	background-color: gray;
+		transition: 1s;
+		transform:scale(2);
 	}
 `
 
@@ -192,7 +203,6 @@ const TextContainer = styled.div`
 	object-fit: cover;
 	grid-template-rows: 1fr 1fr 1fr;
 	border-radius: 0 0 10px 10px;
-	background-color: #f4d815;
 
 	&hover: {
 		transition: 0.5s;
