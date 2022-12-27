@@ -128,6 +128,12 @@ export const StyledSubTitle = styled.h5`
 export const StyledParagraph = styled.p`
     margin-bottom: 10px;
 `
+//memo 지혜 : 컨텐트 컨테이터
+export const ContentContainer = styled.div`
+    display: block;
+    width: 100%;
+    margin : 8% 0;
+`
 //memo 가영 : 예약조회, 후기조회 등 리스트의 이미지
 export const StyledImageWrap = styled.div`
   width: 30%;
