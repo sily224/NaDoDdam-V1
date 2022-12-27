@@ -129,6 +129,7 @@ const Container = styled.div`
 	justify-content: center;
 	width: 100%;
 	margin: 0;
+	background-color: white;
 `;
 
 const ItemList = styled.div`
@@ -146,13 +147,27 @@ const Item = styled.div`
 	flex-direction: column;
 	flex-basis: auto;
 	height: auto;
+	height: 400px;
 	width: auto;
 	border: 1px solid black;
 	position: relative;
+	border-radius: 10px;
+	overflow:hidden;
 
 	img {
 		width: 100%;
-		height: 240px;
+		height: 330px;
+		border-radius: 10px 10px 0 0;
+	}
+
+	&:hover {
+		transition: 0.5s;
+		border: solid 5px #FF0000;
+		img {
+			transition: 0.5s;
+			height: 400px;
+			width: 100%;
+		}
 	}
 `;
 
@@ -165,6 +180,8 @@ const Button = styled.button`
 	right: 5%;
 
 	&:hover {
+		transition: .5s;
+		transform:scale(1.5);
 	background-color: gray;
 	}
 `
@@ -174,6 +191,13 @@ const TextContainer = styled.div`
 	height: auto;
 	object-fit: cover;
 	grid-template-rows: 1fr 1fr 1fr;
+	border-radius: 0 0 10px 10px;
+	background-color: #f4d815;
+
+	&hover: {
+		transition: 0.5s;
+		display:hidden;
+	}
 `;
 
 export { FarmList, FavoriteList };
