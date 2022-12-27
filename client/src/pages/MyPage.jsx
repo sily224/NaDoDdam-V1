@@ -70,8 +70,6 @@ const MyPage = () => {
       email: res.data.email,
     })
   };
-
-  console.log(userInfo)
   
   useEffect(() => {
     getUserInfo();
