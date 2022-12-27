@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 import styled from 'styled-components'
 import * as userApi from "../lib/userApi";
 
+import { getToken } from '../utils/utils';
+
 const RatingBox = styled.div`
   margin: 0 auto;
 
@@ -19,16 +21,16 @@ const ShowReservation = ({reservationData}) => {
  return (
   <>
     {reservationData.map(item => {
-      const {time, reserveInfo} = item;
-      const start_time = time.start_time.slice(0,5);
-      const end_time = time.end_time.slice(0,5);
+      const {info, reserve} = item || {};
+      // const start_time = info.start_time.slice(0,5);
+      // const end_time = info.end_time.slice(0,5);
       return (
-        <div key={time.id}>
-        <img src={time.url} alt="농장이미지"/>
-        <h1>{time.name}</h1>
-        <p>날짜: {time.date}</p>
-        <p>체험시간: {start_time} - {end_time}</p>
-        <p>인원: {reserveInfo.personnel}명</p>
+        <div key={info.id}>
+        <img src={info.url} alt="농장이미지"/>
+        <h1>{info.name}</h1>
+        <p>날짜: {info.date}</p>
+        {/* <p>체험시간: {start_time} - {end_time}</p> */}
+        <p>인원: {reserve.personnel}명</p>
         </div>
       )
     })}
@@ -84,10 +86,24 @@ const CreateReview = ({id, farmId}) => {
   )
 }
 
-const UpdateReview = ({content, rating, id}) => {
+const UpdateReview = ({id}) => {
   const [clicked, setClicked] = useState([true,true,true,true,true]);
-  const [reviewContent, setReviewContent] = useState(content);
+  const [reviewContent, setReviewContent] = useState('');
+  const [rating, setRating] = useState(null);
   const navigate = useNavigate();
+
+  const getReviewnData = async () => {
+    const token = getToken();
+    const res = await userApi.get(`//localhost:3500/api/review`, {
+      headers: {
+        authorization: token,
+      },
+    });
+    const result  = res.data.filter(item => item.reserveInfo.id === Number(id));
+    console.log(result)
+    // setReviewContent([result.review.content]);
+    // setRating([result.review.rating]);
+};
 
   const showRating = () => {
     let clickStates = [...clicked];
@@ -96,15 +112,17 @@ const UpdateReview = ({content, rating, id}) => {
   }
 
   useEffect(()=>{
-    setReviewContent(content);
     showRating();
-  },[content, rating]);
+    getReviewnData();
+  },[]);
 
   const handleStarClick = index => {
     let clickStates = [...clicked];
     clickStates.forEach((i, idx) => clickStates[idx] = idx <= index ? true : false)
     setClicked(clickStates);
    };
+
+
 
    const updateReviewHandler = async(e) => {
     try {
