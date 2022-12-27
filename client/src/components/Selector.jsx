@@ -94,17 +94,29 @@ const Container = styled.div`
 
   width: 100%;
   background-color: white;
-  border: 1px solid black;
-  height:200px;
+  border-radius:20px;
+  
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
   z-index:9999;
 `;
 
 const Item = styled(Link)`
-  border: 1px solid black;
+  padding: 10px 0px;
+  border-bottom: 1px solid #c3c2c2;
+  border-left: 1px solid #c3c2c2;
+
+  &:nth-child(n+13) {
+    border-bottom: none;
+  }
+
+  &:nth-child(1), &:nth-child(5), &:nth-child(9), &:nth-child(13) {
+    border-left: none;
+  }
 
   &:hover {
-    background-color: lightgray;
-  }
+    cursor: pointer;
+		font-weight:700;
+		color: #f4d815;
 `;
 
 

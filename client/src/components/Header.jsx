@@ -16,23 +16,28 @@ const StyledHeader = styled.header`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 1.2% 5%;
+	padding: 1.2rem 5.5rem;
 	box-sizing: border-box;
 	border-bottom: 1px solid lightgray;
 `;
 
 const StyledSearchBar = styled.div`
 	border-radius: 20px;
-	height: 40px;
-	width: 25%;
+	height: 45px;
+	width: 20%;
 	position: relative;
-	border: 1px solid #c3c2c2;
 	cursor: pointer;
+	border:1px solid rgba(0, 0, 0, 0.18);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 
 	> svg {
 		position: absolute;
-		top: 6px;
-		right: 5px;
+		top: 7px;
+		right: 10px;
+		background: #f4d815;
+		border-radius: 50%;
+		padding: 2px;
+		color:#fff;
 	}
 
 	${(props) =>
@@ -65,16 +70,17 @@ const ActiveSearchBar = styled.div`
 		display: flex;
 		justify-content: space-around;
 		width: 100%;
+		border-radius: 20px;
 	}
 `;
 
 const SearchOption = styled.div`
 	display: flex;
 	align-items: center;
-	margin-top: 20px;
-	border: 1px solid black;
+	padding: 20px 0px;
+	box-shadow: -1px -1px 10px rgba(0, 0, 0, 0.18);
+	border: 1px solid rgba(0, 0, 0, 0.18);
 	border-radius: 20px;
-	height: 60px;
 
 	& > div {
 		display: flex;
@@ -82,11 +88,19 @@ const SearchOption = styled.div`
 		border-radius: 20px;
 		height: 100%;
 		z-index: 9999;
+		position: relative;
 	}
 
 	& > div:hover {
 		cursor: pointer;
-		background-color: lightgray;
+		font-weight:700;
+		&:after {
+			content:'';
+			height:3px;
+			width:100%;
+			background-color: #f4d815;
+			position: absolute;
+			bottom:0px;
 	}
 `;
 
@@ -96,16 +110,18 @@ const SearchMenu = ({ children }) => {
 
 const SearchContainer = styled.div`
 	position: absolute;
-	border: 1px solid black;
+	border: 1px solid #c3c2c2;
 	background-color: white;
 	top: 100px;
 	z-index: 9999;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 `;
 
 const StyledNav = styled.div`
 	border-radius: 20px;
 	border: 1px solid #c3c2c2;
 	padding: 3px;
+
 	${(props) =>
 		props.toggle &&
 		css`
@@ -121,6 +137,7 @@ const StyledNav = styled.div`
 
 	svg + svg {
 		padding-left: 3px;
+		color:#f4d815
 	}
 `;
 
@@ -138,7 +155,7 @@ const StyledMenu = styled.div`
 	border-radius: 10px;
 	box-shadow: -1px -1px 10px rgba(0, 0, 0, 0.18);
 	border: 1px solid rgba(0, 0, 0, 0.18);
-	width: 20%;
+	width: 230px;
 	padding: 1% 0;
 	box-sizing: border-box;
 	z-index: 2;
@@ -148,6 +165,7 @@ const StyledLink = styled(Link)`
 
 	&:hover {
 		background: lightgray;
+		color:#000;
 	}
 `;
 
@@ -177,12 +195,9 @@ const StyledLogout = styled.div`
 const LogoContainer = styled.div`
 	cursor: pointer;
 `;
-const LogoName = styled.span`
-	vertical-align: middle;
-`;
 const LogoImg = styled.img`
 	width: 4rem;
-	height: 3rem;
+	height: 4rem;
 `;
 const beforeLoginList = [
 	{
@@ -304,7 +319,6 @@ const Header = () => {
 		<StyledHeader>
 			<LogoContainer onClick={() => navigate('/')}>
 				<LogoImg src={Logo} alt="logo" />
-				<LogoName>나도 땀</LogoName>
 			</LogoContainer>
 			{isOpenSearchBar && (
 				<ActiveSearchBar toggle={isOpenSearchBar} ref={searchRef}>
@@ -338,7 +352,9 @@ const Header = () => {
 						))}
 				</ActiveSearchBar>
 			)}
-			<StyledSearchBar toggle={isOpenSearchBar} onClick={handleSearchBar}>
+			<StyledSearchBar 
+				toggle={isOpenSearchBar} 
+				onClick={handleSearchBar} >
 				<AiOutlineSearch size={25} />
 			</StyledSearchBar>
 

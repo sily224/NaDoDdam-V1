@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
     html,body {
-      height: 100%;
+      height: 100vh;
     }
     
     html {
@@ -24,6 +24,9 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     display: block;
     color: #000;
+    &:hover {
+      color: #000;
+   }
   }
 `
 export default GlobalStyle;
