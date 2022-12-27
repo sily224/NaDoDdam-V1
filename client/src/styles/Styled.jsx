@@ -1,4 +1,4 @@
-import styled,{css} from "styled-components";
+import styled,{css} from 'styled-components';
 
 //memo 가영 : 로그인, 회원가입 등 큰 버튼
 export const SubmitButton = styled.button`
@@ -41,7 +41,36 @@ export const ConfirmButton = styled.button`
     }
     
 `
+//memo 지혜 : red삭제버튼
+export const DeleteButton = styled.button`
+    border: 1px solid red;
+    border-radius: 10px;
+    color: red;
+    font-weight: 500;
+    background-color:rgba(255, 0, 0, 0.18);
 
+    ${props => props.reject && css`
+        border:1px solid #b1b0ac;
+        background: #b1b0ac3b;
+        color:#b1b0ac;
+    `}
+
+    +button {
+        margin-left: 6px;
+    }
+`
+//memo 지혜 : 일반 블랙/화이트 버튼
+export const NormalButton = styled.button`
+    border : 1px black solid;
+    border-radius: 10px;
+    color : black;
+    font-weight: 500;
+    background-color : white;
+
+    +button {
+        margin-left: 6px;
+    }
+`
 //memo 가영 : input
 export const Input = styled.input`
     border-radius: 10px;
@@ -65,4 +94,31 @@ export const StyledSubTitle = styled.h5`
 //memo 가영 : 콘텐츠 글자
 export const StyledParagraph = styled.p`
     margin-bottom: 10px;
+`
+//memo 지혜 : 페이지 wrapper
+export const PageWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	margin-top: 10px;
+`;
+//memo 지혜 : 페이지
+export const PageBtn = styled.button`
+	background-color: white;
+    font-weight: 700;
+	color: black;
+    border: black solid 1px;
+
+    & .active {
+        background-color: darkgray;
+        color: white;
+    }
+    ${props => props.disabled && css`
+        color: darkgray;
+        background-color: lightgray;
+    `}
+`
+export const ContentContainer = styled.div`
+    display : block;
+    width: 100%;
 `
