@@ -22,6 +22,7 @@ export async function getFarm(req, res, next) {
 		const farmerInfo = await db.Farmers.getFarmInfo(farmerId);
 		const farmId = farmerInfo.farmId;
 		const farmInfo = await db.Farms.findById(farmId);
+		console.log(farmInfo);
 		res.status(200).json({ farmInfo, farmerInfo });
 	} catch (err) {
 		next(err);
@@ -96,14 +97,16 @@ export async function updateFarm(req, res, next) {
 		if (parseInt(id) !== foundFarmId) {
 			throw new Error('농장수정은 해당 농장주만 수정할 수 있습니다.');
 		}
-		const updatedFarm = await db.Farms.updateFarm(id, {
-			type,
-			name,
-			address,
-			description,
-			owner,
-			url,
-		});
+
+		const toUpdate = {
+			...(type && { type }),
+			...(name && { name }),
+			...(address && { address }),
+			...(description && { description }),
+			...(owner && { owner }),
+			...(url && { url }),
+		};
+		const updatedFarm = await db.Farms.updateFarm(id, toUpdate);
 		res.status(200).json(updatedFarm);
 	} catch (err) {
 		next(err);

@@ -26,7 +26,7 @@ router.get('/:farmId', farmController.getByFarm);
 router.post('/', isFarmer, upload.array('file', 4), farmController.createFarm);
 
 // 농장 정보 수정하기 put
-router.put('/:id', isFarmer, farmController.updateFarm);
+router.patch('/:id', isFarmer, farmController.updateFarm);
 
 // 농장 정보 삭제하기 delete
 router.delete('/:id', isFarmer, farmController.removeFarm);
