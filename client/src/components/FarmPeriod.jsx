@@ -26,7 +26,7 @@ const FarmPeriod = (props) =>{
     const [endCalenderOpen, setEndCalenderOpen] = useState(false);
     const dispatch = useDispatch();
 
-    const date = useSelector((state) => state.form.date);
+    const date = useSelector(({form}) => form.date);
     
     useEffect (() => {
         setStartDate(date);

@@ -22,7 +22,6 @@ const ReviewId = styled.p`
     font-size: 1rem;
     font-weight: bold;
 `;
-
 const ReviewName = styled.p`
     font-size: 0.7rem;
 `;
@@ -56,7 +55,6 @@ const ModalContent =styled.div`
     overflow-y:auto;
     overflow-x:hidden;
 `;
-
 
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
