@@ -4,54 +4,21 @@ import {MyPageProfileEdit,MyPageSecurityEdit} from '../components/MyPageEdit';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { StyledSubTitle, StyledTitle } from '../styles/Styled';
 
 
 const Container = styled.div`
   width: 80%;
   margin: 0 auto;
 `
+const StyledInfoContainer = styled.div`
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 50px;
+  box-shadow: -1px -1px 10px rgb(0 0 0 / 18%);
+  border: 1px solid rgba(0,0,0,0.18);
+`
 
-const StyledTitle = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
-  position: relative;
-  margin-bottom: 3%;
-  display: inline-block;
-
-  &::after {
-    content:'';
-    width: 100%;
-    height: 2px;
-    background-color:lightgray;
-    display: block;
-    position: absolute;
-  }
-`
-const StyledUserInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-`
-const StyledUserInfoWrap = styled.div`
-  position: relative;
-  padding-bottom: 1%;
-  &::after {
-    content:'';
-    width: 100%;
-    height: 1px;
-    background-color:lightgray;
-    display: block;
-    position: absolute;
-    bottom: 0;
-}
-`
-const StyledButton = styled.button`
-  border: none;
-  position: relative;
-  background: none;
-  text-decoration: underline;
-  font-size: 1rem;
-`
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({}); 
@@ -70,8 +37,6 @@ const MyPage = () => {
       email: res.data.email,
     })
   };
-
-  console.log(userInfo)
   
   useEffect(() => {
     getUserInfo();
@@ -100,23 +65,31 @@ const MyPage = () => {
   return (
     <Container>
       <StyledTitle>내 정보 관리</StyledTitle>
-      <h4>기본정보<AiOutlineExclamationCircle/></h4>
-      {list.map((item) => (
-        <MyPageProfileEdit 
-          key={item.id}
-          id={item.id}
-          name={item.name}
-          title={item.title}
-          userId={id}
-        />
-      ))}
-      <h4>보안설정<AiOutlineExclamationCircle/></h4>
-      <MyPageSecurityEdit
-        userId={id}
-      />
+      <StyledInfoContainer>
+        <StyledSubTitle>
+          기본정보
+          <AiOutlineExclamationCircle/>
+        </StyledSubTitle>
+        {list.map((item) => (
+          <MyPageProfileEdit 
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            title={item.title}
+            userId={id}
+          />
+        ))}
+      </StyledInfoContainer>
+      <StyledInfoContainer>
+        <StyledSubTitle>
+          보안설정
+          <AiOutlineExclamationCircle/>
+        </StyledSubTitle>
+        <MyPageSecurityEdit userId={id} />
+      </StyledInfoContainer>
     </Container>
   )
-}
+};
 
 
-export { MyPage, StyledButton, StyledUserInfo, StyledUserInfoWrap };
+export default MyPage;

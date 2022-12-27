@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import DetailPage from './pages/DetailPage';
 import Payment from './pages/Payment';
 
-import { MyPage } from './pages/MyPage';
+import MyPage  from './pages/MyPage';
 import MyReview from './pages/MyReview';
 import MyReservation from './pages/MyReservation';
 import CreateReviewPage from './pages/CreateReviewPage';
