@@ -2,33 +2,27 @@ import { useState, useEffect} from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import Moment from 'moment';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import { showModal } from '../store/ModalSlice';
 import { closeModal } from '../store/ModalSlice';
 import ModalContainer from './Modal';
 import Location from './Location';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
+import {
+  StyledSubmitButton, 
+  ConfirmButton, 
+  StyledImageWrap, 
+  StyledTitle, 
+  StyledSubTitle,
+  StatusButton,
+  StatusSelect
+} from '../styles/Styled';
 
 
 const StyledTitleWrap = styled.div`
   display:flex;
-`
-
-const StyledTitle = styled.div`
-  margin-bottom: 1%;
-
-  > h3 {
-    display: inline-block;
-    margin-bottom: 0;
-  }
-
-  > span {
-    background-color: lightgrey;
-    padding: 1%;
-    margin-left: 1%;
-    border-radius: 10px;
-  }
+  align-items:center
 `
 
 const StyledContent = styled.div`
@@ -67,18 +61,16 @@ const StyledListInner = styled.div`
   align-items: center;
     
 `
-
-const StyledImageWrap = styled.div`
-  width: 30%;
-  height: 100%;
-  margin-right: 20px;
-  overflow: hidden;
-  border-radius: 20px;
-
-  >img {
-    width: 100%;
-  }
+const StyledStatusLabel = styled.span`
+  border: none;
+  background: #83d644;
+  border-radius: 5px;
+  padding: 0.2rem;
+  color: #fff;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
 `
+
 
 const MyReservationTable = () => {
   const [originalData, setOriginalData] = useState([]);
@@ -148,11 +140,18 @@ const MyReservationTable = () => {
     return <>
       {!canclePage 
       ? <>
-        <h1>예약조회</h1>
+        <StyledTitle>예약조회</StyledTitle>
         <StyledNavWrapper>
         <div>
-          {statusList.map((status) => (
-            <button key={status} onClick={()=>setStatusOption(status)}>{status}</button>
+          {statusList.map((state) => (
+            <StatusButton 
+              key={state} 
+              onClick={()=>
+              setStatusOption(state)}
+              clicked = {statusOption === state ? true : false}
+              >
+              {state}
+            </StatusButton>
           ))}
         </div>
         <select value={dateOption} onChange={(e) => setDateOption(e.target.value)}>
@@ -180,14 +179,19 @@ const MyReservationTable = () => {
                 <img src={info.url} alt="농장사진"/>
               </StyledImageWrap>
               <StyledContent>
-                <StyledTitle>
-                  <h3 style={{
-                  textDecoration 
-                  : reserve.status === '예약취소' 
-                  ? 'line-through' 
-                  : 'none'}}>{info.name}</h3>
-                  <span>{reserve.status}</span>
-                </StyledTitle>
+                <StyledTitleWrap>
+                  <h5
+                    style={{
+                      textDecoration 
+                      : reserve.status === '예약취소' 
+                      ? 'line-through' 
+                      : 'none'}}>
+                        {info.name}
+                  </h5>
+                  <StyledStatusLabel>
+                    {reserve.status}
+                  </StyledStatusLabel>
+                </StyledTitleWrap>
                 <p>날짜: {info.date}</p>
                 <p>체험시간: {start_time} -  {end_time}</p>
                 <p>인원: {reserve.personnel}명</p>
@@ -195,27 +199,32 @@ const MyReservationTable = () => {
               </StyledContent>
             </StyledListInner>
             <div>
-              <button 
+              <ConfirmButton
                 name={index} 
                 onClick={(e)=> {
                 setDataIndex(e.target.name)
                 dispatch(showModal())}}>
                 더보기
-              </button>
+              </ConfirmButton>
                 {(reserve.status === '체험완료' && reserve.review === undefined) &&
-                <Link to={`/writereview/${reserve.id}`}>
-                  후기작성
-                </Link>}
+                  <ConfirmButton>
+                    <Link to={`/writereview/${reserve.id}`}>
+                      후기작성
+                    </Link>
+                  </ConfirmButton>
+                }
                 {(reserve.status === '예약대기' || reserve.status === '예약완료')
-                  && <button 
+                  && <ConfirmButton 
                   name={index}
                   onClick={(e)=> {
                     setDataIndex(e.target.name);
                     setCanclePage(prev =>!prev);
                     dispatch(closeModal());
-                  }}>
+                  }}
+                  reject
+                  >
                   예약취소
-               </button>
+               </ConfirmButton>
               }
             </div>
           </StyledList>
