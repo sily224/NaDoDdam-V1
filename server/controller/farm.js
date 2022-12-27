@@ -85,7 +85,8 @@ export async function createFarm(req, res, next) {
 }
 
 export async function updateFarm(req, res, next) {
-	const { type, name, address, description, owner, url } = req.body;
+	const { type, name, address, description, owner } = req.body;
+	let url = req.body.url;
 	try {
 		const { id } = req.params;
 		const farmerId = req.farmerId;
@@ -96,6 +97,12 @@ export async function updateFarm(req, res, next) {
 		const foundFarmId = await db.Farmers.getFarmIdFromFarmer(farmerId);
 		if (parseInt(id) !== foundFarmId) {
 			throw new Error('농장수정은 해당 농장주만 수정할 수 있습니다.');
+		}
+
+		upload.array('file', 4);
+		if (req.files) {
+			const locations = req.files.map((data) => data.location);
+			url = locations.toString();
 		}
 
 		const toUpdate = {
