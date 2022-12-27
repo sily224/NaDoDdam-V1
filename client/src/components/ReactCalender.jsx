@@ -37,7 +37,7 @@ const IsNotPay = () => {
 
 const ReactCalender = (props) => {
 
-	const [date, setDate] = useState(new Date());
+	const [date, setDate] = useState(null);
 	const dispatch = useDispatch();
 	let [min,max] = [new Date(), new Date()]
 
@@ -54,9 +54,11 @@ const ReactCalender = (props) => {
 	}
 
 	useEffect(() => {
+		if (date){
 		const dateForm = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 		// console.log(dateForm);
 		dispatch(getDate(dateForm));
+		}
 	}, [date]);
 
 	return (
