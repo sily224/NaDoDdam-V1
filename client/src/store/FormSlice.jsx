@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    date: "",
+    date: '',
     totalPrice : 0,
     headCount : 0,
-    startTime:"",
-    endTime:"",
+    startTime:'',
+    endTime:'',
     personnel : 0,
     price: 0,
     timeId: 0,
 };
 
 const formSlice = createSlice({
-    name: "form",
+    name: 'form',
     initialState,
     reducers: {
         getDate(state,action) {
@@ -40,7 +40,7 @@ const formSlice = createSlice({
             state.timeId = action.payload;
         },
         initDate(state, action){
-            state.date = "";
+            state.date = '';
         }
     }
 });

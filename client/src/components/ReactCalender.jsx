@@ -63,7 +63,7 @@ const ReactCalender = (props) => {
 
 	return (
 		<Calendar
-			calendarType="US"
+			calendarType='US'
 			onChange={setDate}
 			value={date}
 			minDate={min}
