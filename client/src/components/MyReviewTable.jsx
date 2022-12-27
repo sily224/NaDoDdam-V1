@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ModalContainer from './Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Button } from 'bootstrap';
 
 const StyledTitleWrap = styled.div`
   display:flex;
@@ -129,7 +130,6 @@ const MyReviewTable = () => {
   const [dataIndex, setDataIndex] = useState(0);
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
-  const navigate = useNavigate();
     
   const getReviewData = async() => {
     try {
@@ -158,6 +158,19 @@ const MyReviewTable = () => {
   },[])
 
   const ShowReviewList = () => {
+    const deleteReviewHandler = async(e) => {
+      const id = e.target.name;
+      console.log(id)
+      try{
+        await userApi.delete(`//localhost:3500/api/review/${id}`);
+        alert('삭제되었습니다.');
+        dispatch(closeModal());
+        getReviewData();
+      }catch(err){
+        console.log(err);
+      }
+    };
+
     return (<>
       {data.map((item, index) => { 
         const {review, reserveInfo, time} = item || {};
@@ -179,10 +192,19 @@ const MyReviewTable = () => {
                 <StarRate rating={review.rating}/>
               </StyledContent>
             </StyledListInner>
-            <button onClick={() => {
-              dispatch(showModal());
-              setDataIndex(index);
-            }}>더보기</button>
+            <div>
+            <button>
+              <Link to ={`/updatereview/${reserveInfo.id}`}>
+                수정
+              </Link>
+            </button>
+            <button onClick={() => dispatch(showModal())}>삭제</button>
+            {modalOpen && <ModalContainer>
+                  <p>리뷰를 삭제하시겠습니까?</p>
+                  <button>닫기</button>
+                  <button onClick={(e) => {deleteReviewHandler(e)}}>확인</button>
+            </ModalContainer>}
+            </div>
           </StyledList>
           )
         })}
@@ -190,64 +212,9 @@ const MyReviewTable = () => {
     );
   };
 
-  const ShowDetail = () => {
-    const detailDataArr = [data[dataIndex]];
-    
-    const deleteReviewHandler = async(e) => {
-      const id = e.target.name;
-      console.log(id)
-      try{
-        await userApi.delete(`//localhost:3500/api/review/${id}`);
-        dispatch(closeModal());
-        getReviewData();
-      }catch(err){
-        console.log(err);
-      }
-    };
-
-    return (
-      <>
-        {detailDataArr.map(item => {
-          const {time, review, reserveInfo} = item || {};
-          const start_time = time.start_time.slice(0,5);
-          const end_time = time.end_time.slice(0,5);
-          return (
-            <div>
-                <StyledTitleWrap>
-                  <StyledImageWrap>
-                    {/* <img src={farm.url} alt="농장사진"/> */}
-                  </StyledImageWrap>
-                  <div>
-                    <h4>{time.farmname}</h4> 
-                    <p>{time.date}</p>
-                  </div>
-                </StyledTitleWrap>
-                <div>
-                  <p>예약정보</p>
-                  <StyledContentWrap>
-                      <p>날짜: {time.date}</p>
-                      <p>시간: {start_time}-{end_time}</p>
-                      <p>인원: {reserveInfo.personnel}명</p>
-                  </StyledContentWrap>
-                  <p>{review.content}</p>
-                </div>
-                <button onClick={() => {dispatch(closeModal())
-                }}><Link to ={`/writereview/${reserveInfo.id}`}>수정</Link></button>
-                <button
-                name={review.id}
-                onClick={(e) => {deleteReviewHandler(e)}}
-                >삭제</button>
-            </div>)
-          }
-        )}
-      </>
-    )
-  }
-
   return (
     <>
     <ShowReviewList />
-    {modalOpen && <ModalContainer><ShowDetail /></ModalContainer>}
     </>
     )
 }

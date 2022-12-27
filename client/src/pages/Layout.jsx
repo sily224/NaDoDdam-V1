@@ -38,19 +38,20 @@ const getFavoriteFarmId = async () => {
 };
 
 const Layout = () => {
-	const favorite = useSelector((state) => state.favorite);
-	const dispatch = useDispatch();
+	// const favorite = useSelector((state) => state.favorite.favorites);
+	// const dispatch = useDispatch();
 
-	const getFavoriteFarmIds = async () => {
-		const farmIds = await getFavoriteFarmId();
-		dispatch(setFavorite(farmIds));
-	};
+	// const setFavoriteFarmIds = async () => {
+	// 	const farmIds = await getFavoriteFarmId(); // 찜 목록 아이디
+  //   dispatch(setFavorite(farmIds));
+	// };
 
-	console.log(favorite);
+	// console.log('layout에서의 찜 목록', favorite);
 
-	useEffect(() => {
-		if (localStorage.getItem('token')) getFavoriteFarmIds();
-	}, []);
+	// useEffect(() => {
+	// 	if (localStorage.getItem('token')) setFavoriteFarmIds();
+  //   console.log('useEffect', favorite);
+	// }, []);
 
 	return (
 		<>
