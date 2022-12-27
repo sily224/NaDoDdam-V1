@@ -95,7 +95,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/myreview/updateeview/:id"
+						path="/updatereview/:id"
 						element={
 							<MemberRoute>
 								<UpdateReviewPage />

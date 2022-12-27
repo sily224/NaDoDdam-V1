@@ -93,12 +93,12 @@
 //     const page = Number(req.params.page);
   
 //     if (page === 0){
-//       const data = testContents.slice(0, 100);
+//       const data = testContents.slice(0, 50);
 //       return res(ctx.status(200), ctx.json(data)); 
 //     }else{
 //       console.log('page 0 아닐 때 실행', page);
-//       console.log(testContents.slice(100, ))
-//       const data = testContents.slice(100 + 10*(page-1), 100 + 10*(page));
+//       // console.log(testContents.slice(100, ))
+//       const data = testContents.slice(50 + 10*(page-1), 50 + 10*(page));
 //       return res(ctx.status(200), ctx.json(data));
 //     }
 //   }),
