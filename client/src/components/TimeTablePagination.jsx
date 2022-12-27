@@ -11,11 +11,12 @@ const PageWrapper = styled.div`
 const PageBtn = styled.button``;
 
 
-const Pagination = ( {limit, length, perpage, page, setPage, first,setFirst, last, setLast ,fetchData}) => {
+const Pagination = ( {limit, length, perpage, page, setPage, first,setFirst, last, setLast , setLastId, fetchData}) => {
 
-	let pageCount = Math.ceil(limit / perpage); 
+	let pageCount = Math.ceil(limit / perpage);  
     const current = Math.ceil(length/perpage); 
-    
+    const pageGroup = Math.ceil(page / pageCount);
+
     if (current < pageCount){
         pageCount = current;
     }
@@ -41,18 +42,20 @@ const Pagination = ( {limit, length, perpage, page, setPage, first,setFirst, las
     };
 
     useEffect(()=>{
-        setLast( first + pageCount - 1);
+        setLast(pageGroup * pageCount);
     },[first,last,pageCount]);
 
     const handlePrevPage = () =>{
-        setFirst(last - pageCount +1);
+        console.log(last);
+        setFirst(last - pageCount);
         setLast( first + pageCount - 1);
-        fetchData();
+        setPage(last - 1);
+        fetchData(pageGroup-2);
     }
     const handleNextPage = () =>{
         setFirst(last+1);   
-        setPage(pageCount+1);
-        fetchData();
+        setPage(pageGroup * pageCount + 1);
+        fetchData(pageGroup);
     }
 
 	return (
