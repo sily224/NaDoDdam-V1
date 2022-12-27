@@ -69,6 +69,11 @@ export const StatusSelect = styled.select`
     color:#d1b80d;
     border-radius: 5px;
     padding: 0.2rem 0.4rem;
+
+    select option:checked {
+        background: #83d644;
+    }
+`
 //memo 지혜 : red삭제버튼
 export const DeleteButton = styled.button`
     border: 1px solid red;
@@ -97,10 +102,6 @@ export const NormalButton = styled.button`
 
     +button {
         margin-left: 6px;
-    }
-`
-    select option:checked {
-        background: #83d644;
     }
 `
 //memo 가영 : input
