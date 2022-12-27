@@ -58,7 +58,6 @@ const PayboxName = styled.div`
 const ReservationInfo = ({ payData }) => {
 	const navigate = useNavigate();
 	const goDetail = () => {
-		// memo 혜실: farmid 들어갈자리
 		navigate(-1);
 	};
 
@@ -177,6 +176,7 @@ const Payment = () => {
 		setPayData(location.state);
 		getUserData();
 	}, []);
+
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, [payData]);
@@ -210,7 +210,7 @@ const Payment = () => {
 					phoneNum: phoneNumber,
 					email: email,
 					personnel: payData.headCount,
-					time_id: payData.id,
+					time_id: payData.timeId,
 				},
 			);
 		} catch (e) {
@@ -229,11 +229,13 @@ const Payment = () => {
 
 	const getReserveData = async () => {
 		try {
-			const res = await userApi.get(`http://localhost:3500/api/timetables/1`);
+			const res = await userApi.get(
+				`http://localhost:3500/api/timetables/${payData.farmId}`,
+			);
 			const resData = await res.data;
 			setResData(resData);
 			for (let i = 0; i < resData.length; i++) {
-				if (resData[i].id === payData.id) {
+				if (resData[i].id === payData.timeId) {
 					setPersonnel(resData[i].personnel);
 				}
 			}
@@ -357,7 +359,7 @@ const Payment = () => {
 								<Button
 									onClick={() => {
 										dispatch(closeModal());
-										navigate(`/detail/1`);
+										navigate(-1);
 									}}
 								>
 									확인
