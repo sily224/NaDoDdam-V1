@@ -222,9 +222,20 @@ export async function reserveUpdate(req, res, next) {
 		};
 
 		const reserve = await db.Reservations.findByReserveId(id, userId);
+
 		if (reserve.status === '체험완료') {
 			throw new Error('유저는 체험이 완료되어 변경할 수 없습니다.');
 		}
+
+		if (toUpdate.status === '예약취소') {
+			const reserveInfo = await db.Reservations.findByReserveNumId(id);
+			db.TimeTables.getById(reserveInfo.dataValues.time_id).then( data => {
+				return data.increment('personnel', {by: reserveInfo.dataValues.personnel})
+			}).then(data => {
+				data.reload();
+			})
+		}
+		
 
 		const updateReserveInfo = await setReserve(reserveInfo, toUpdate);
 		res.status(200).json({ message: 'update!' });
