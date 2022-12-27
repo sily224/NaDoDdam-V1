@@ -7,8 +7,8 @@ const initialState = {
     startTime:"",
     endTime:"",
     personnel : 0,
-    price:0,
-    timeId:0,
+    price: 0,
+    timeId: 0,
 };
 
 const formSlice = createSlice({

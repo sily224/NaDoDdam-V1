@@ -1,10 +1,16 @@
 import 'express-async-errors';
 import db from '../models/index.js';
 
+// 구현 중
 export async function reserve(req, res, next) {
 	const { time_id, total_price, personnel, payment, name, phoneNum, email } =
 		req.body;
 	const user_id = req.userId;
+
+	const ispersonnel = await db.TimeTables.getById(time_id);
+	if(ispersonnel.personnel < personnel) {
+		throw new Error('해당 예약의 정원보다 신청 인원이 더 많습니다.')
+	}
 
 	try {
 		const new_reserve = await db.Reservations.createReserve({
@@ -17,40 +23,17 @@ export async function reserve(req, res, next) {
 			email,
 			personnel,
 		});
+		db.TimeTables.getById(new_reserve.dataValues.time_id).then( data => {
+			return data.decrement('personnel', {by: new_reserve.dataValues.personnel})
+		}).then(data => {
+			data.reload();
+		})
+
 		res.status(201).json(new_reserve);
 	} catch (err) {
 		next(err);
 	}
 }
-
-// 구현 중
-// export async function reserve(req, res, next) {
-// 	const { time_id, total_price, personnel, payment, name, phoneNum, email } =
-// 		req.body;
-// 	const user_id = req.userId;
-
-// 	try {
-// 		const new_reserve = await db.Reservations.createReserve({
-// 			total_price,
-// 			user_id,
-// 			time_id,
-// 			payment,
-// 			name,
-// 			phoneNum,
-// 			email,
-// 			personnel,
-// 		});
-// 		console.log(parseInt(new_reserve.dataValues.personnel));
-// 		const table = await db.TimeTables.getById(new_reserve.dataValues.time_id);
-// 		await table.decrement(
-// 			('personnel', parseInt(new_reserve.dataValues.personnel)),
-// 		);
-
-// 		res.status(201).json(new_reserve);
-// 	} catch (err) {
-// 		next(err);
-// 	}
-// }
 
 export async function reserveDrop(req, res, next) {
 	const userId = req.userId;

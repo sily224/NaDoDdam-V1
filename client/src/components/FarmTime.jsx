@@ -119,7 +119,7 @@ const FarmTime = (props) =>{
         timeList.length >0 ? formTimeInput.readOnly = true : formTimeInput.readOnly = false;
         
 
-        //memo 지혜 : 수정할 경우
+        //memo 지혜 : 수정할 경우 ( = 타켓이 있다면 수정)
         if(props.target!='') {
             const el =   document.getElementById('createBtn');
             if(timeList.length > 0){

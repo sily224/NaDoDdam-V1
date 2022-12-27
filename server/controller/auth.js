@@ -10,7 +10,7 @@ export async function signup(req, res, next) {
 	try {
 		const found = await db.Users.findByUserEmail(email);
 		if (found) {
-			throw new Error(`${email} already exists`);
+			throw new Error(`${email}는 이미 존재하는 이메일 입니다. `);
 		}
 		const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
 		const userId = await db.Users.createUser({
@@ -34,13 +34,13 @@ export async function login(req, res, next) {
 	try {
 		const user = await db.Users.findByUserEmail(email);
 		if (!user) {
-			throw new Error('유효하지 않은 사용자 또는 비밀번호 입니다.');
+			throw new Error('사용자를 찾을 수 없습니다.');
 		}
 
 		const isValidPassword = await bcrypt.compare(password, user.password);
 
 		if (!isValidPassword) {
-			throw new Error('유효하지 않은 사용자 또는 비밀번호 입니다.');
+			throw new Error('패스워드가 일치하지 않습니다.');
 		}
 		const token = createJwtToken({ id: user.id, role: user.role });
 		res.status(200).json({ token, email });
