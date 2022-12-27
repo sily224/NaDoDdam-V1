@@ -50,7 +50,7 @@ const TimButtonContainer = styled(DisplayFlex)`
     margin-left : 3%;
 `;
 const CarouselImg = styled.img`
-    height: 450px;
+    height : 480px;
 `;
 
 const DetailHeader = ({ name, address }) => {
@@ -64,7 +64,7 @@ const DetailHeader = ({ name, address }) => {
 
 const DetailImg = ({imgUrl}) =>{
     return (
-        <Carousel slide={false}>
+        <Carousel>
             <Carousel.Item>
             <CarouselImg
             className='d-block w-100'
@@ -104,6 +104,7 @@ const DetailDescription = ({ description }) => {
 };
 
 const DetailCompany = ({farm,farmer}) => {
+    const phoneNum = farmer.phoneNum;
     return (
         <>
             <StyledSubTitle>농장정보</StyledSubTitle>
@@ -113,7 +114,7 @@ const DetailCompany = ({farm,farmer}) => {
                 <StyledParagraph>농장상품 : {farm.type}</StyledParagraph>
                 <StyledParagraph>농장주 : {farm.owner}</StyledParagraph>
                 <StyledParagraph>E-mail : {farmer.email}</StyledParagraph>
-                <StyledParagraph>전화번호: {farmer.phoneNum}</StyledParagraph>
+                <StyledParagraph>전화번호: {phoneNum.slice(0,3)}-{phoneNum.slice(3,7)}-{phoneNum.slice(7,)}</StyledParagraph>
             </div>
         </>
     );

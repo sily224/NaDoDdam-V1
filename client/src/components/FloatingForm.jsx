@@ -9,7 +9,7 @@ import {StyledParagraph, SubmitButton} from '../styles/Styled'
 
 const Form = styled.form`
 	width: 70%;
-	height: 270px;
+	height: 300px;
 	padding: 8% 8%;
 	margin-top : 5%;
 	border: 1px solid black;
@@ -79,7 +79,7 @@ const FloatingForm = () => {
 		<>
 			<Form onSubmit={handleSubmit}>
 				<StyledParagraph>{date||'날짜를 선택하세요'}</StyledParagraph>
-				<StyledParagraph>{startTime || '시작시간'}~{endTime || '종료시간'}</StyledParagraph>
+				<StyledParagraph>{startTime || '시작시간'} ~ {endTime || '종료시간'}</StyledParagraph>
 				<StyledParagraph>{price}원/명</StyledParagraph>
 
 				<SelectBox onChange={handleHeadCount} value={headCount}>
