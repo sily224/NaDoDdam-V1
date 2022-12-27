@@ -43,7 +43,8 @@ const FloatingForm = () => {
 
 		navigate('/pay', {
 			state: {
-				id : timeId,
+				farmId : farmData.id,
+				timeId : timeId,
 				date : date,
 				farm: farmData.name,
 				headCount : headCount,
