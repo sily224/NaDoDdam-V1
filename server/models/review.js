@@ -6,11 +6,11 @@ const Reviews = (sequelize, DataTypes) => {
 				type: DataTypes.TEXT('long'),
 				allowNull: false,
 			},
-			type: {
-				type: DataTypes.STRING(64),
+			reserve_id: {
+				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
-			type_id: {
+			farm_id: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
@@ -42,11 +42,30 @@ const Reviews = (sequelize, DataTypes) => {
 		return Reviews.findOne({ where: { id } });
 	};
 
+	Reviews.findByUserPkId = (id, userId) => {
+		return Reviews.findOne({ where: { id: id, user_id: userId } });
+	};
+
+	Reviews.findByFarmerPkId = (id, farmId) => {
+		return Reviews.findOne({ where: { id: id, farm_id: farmId } });
+	}
+
+	Reviews.findByReserveId = (id) => {
+		return Reviews.findOne({where: {reserve_id: id}})
+	}
+
+	Reviews.findByUserId = (id) => {
+		return Reviews.findAll({ where: { user_id: id } });
+	};
+	Reviews.findByFarmId = (id) => {
+		return Reviews.findAll({ where: { farm_id: id } });
+	};
+
 	Reviews.deleteReview = (id) => {
 		return Reviews.destroy({ where: { id } });
 	};
 
-	Reviews.updateReveiw = ({ id, update }) => {
+	Reviews.updateReview = ({ id, update }) => {
 		return Reviews.update(update, { where: { id } });
 	};
 

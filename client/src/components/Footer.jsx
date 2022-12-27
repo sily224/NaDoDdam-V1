@@ -9,7 +9,7 @@ const StyledContainer = styled.footer`
     padding: 2% 5%;
     background-color:#fff;
     height: 100%;
-    z-index: 99;
+    z-index: 80;
 `;
 
 const StyledFooter= styled.div`
@@ -23,7 +23,7 @@ const StyledFooterMenu = styled.a`
  font-size: 0.9rem;
 `
 
-const Footer = () => {
+const Footer = (() => {
     return (
         <StyledContainer>
             <StyledFooter>
@@ -34,6 +34,6 @@ const Footer = () => {
             </StyledFooter>
         </StyledContainer>
     )
-}
+});
 
 export default Footer;

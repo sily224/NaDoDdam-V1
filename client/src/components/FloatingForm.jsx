@@ -1,78 +1,92 @@
-import {useState,useEffect,useContext} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getHeadCount ,getTotalPrice} from '../store/FormSlice';
+import { getHeadCount, getTotalPrice } from '../store/FormSlice';
 import { useNavigate } from 'react-router-dom';
 import { DetailContext } from '../pages/DetailPage';
 import styled from 'styled-components';
 
 const Form = styled.form`
-    width : 50%;
-    height: 200px;
-    border : 1px solid black;
-    padding : 5%;
-    position: sticky;
-    top: 20%;
+	width: 50%;
+	height: 200px;
+	border: 1px solid black;
+	padding: 5%;
+	position: sticky;
+	top: 20%;
 `;
 const SelectBox = styled.select``;
 
+const FloatingForm = () => {
+	const {farmData} = useContext(DetailContext);
+	const {name, id} = farmData;
+	const [headCount, setHeadCount] = useState('none');
+	const [totalPrice, setTotalPrice] = useState(undefined);
 
-const FloatingForm = () =>{
-    const {detailData:data} = useContext(DetailContext);
-    const {price,title,company,period,times} = data;
-    
-    const [headCount, setHeadCount] = useState(1);
-    const [totalPrice, setTotalPrice] = useState(undefined);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const formData = useSelector(({form}) => form);
+	const {startTime, endTime, price, date, personnel, timeId} = formData;
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const formData = useSelector(state => state.form);
+	const handleHeadCount = (e) => {
+		setHeadCount(e.target.value);
+	};
 
-    const handleHeadCount = (e) => {
-        setHeadCount(e.target.value);  
-    };
+	const handleSubmit = (e) => {
+	// todo 지혜
+	// 페이지 이동전, 인원이 초과 되는 지 확인을 위한 get 요청
+	// 인원초과 되면 alert창 + return
+	// + 동시접속에 대한 확인요청
+		e.preventDefault();
 
-    const handleSubmit = (e) =>{   
+		if(!timeId || !date){alert('날짜와 시간을 선택하세요'); return;} 
+		if(headCount==='none'){alert('인원을 선택하세요'); return;} 
+		
 
-        // 페이지 이동전, 인원이 초과 되는 지 확인을 위한 get 요청 
-        // 인원초과 되면 alert창 + return 
-        // + 동시접속에 대한 확인요청
+		navigate('/pay', {
+			state: {
+				farmId : id,
+				timeId : timeId,
+				date : date,
+				farm: name,
+				headCount : headCount,
+				price: price,
+				totalPrice: totalPrice,				
+				startTime : startTime,
+				endTime : endTime,
+			},
+		});
+	};
 
-        navigate('/pay',{
-            state : {
-                ...formData,
-                price:price,
-                farm: company.name,
-                programName :title,
-                period :period,
-                times : times,
-            }
-        });
-    };
+	useEffect(() => {
+		setTotalPrice(headCount * price);
+		dispatch(getHeadCount(headCount));
+	}, [headCount]);
 
-    useEffect(()=>{
-        setTotalPrice(headCount*price);
-        dispatch(getHeadCount(headCount));
-    },[headCount,setTotalPrice])
+	useEffect(() => {
+		dispatch(getTotalPrice(totalPrice));
+	}, [totalPrice]);
 
-    useEffect(()=>{
-        dispatch(getTotalPrice(totalPrice));
-    },[totalPrice]);
+	return (
+		<>
+			<Form onSubmit={handleSubmit}>
+				<p>{date||'날짜를 선택하세요'}</p>
+				<p>{startTime || '시작시간'}~{endTime || '종료시간'}</p>
+				<p>{price}원/명</p>
 
-    return(
-        <>
-        <Form onSubmit={handleSubmit}>
-            <p>{formData.date}</p>
-            <p>{formData.time}</p>
-            <p>{price}원/명</p>
-            <SelectBox onChange={handleHeadCount} value={headCount}>
-                {[...Array(10).keys()].map(n => <option key={`HeadCount-${n+1}`} value={n+1} >{n+1}</option>)}
-            </SelectBox>
-            <span>명</span>
-            <button type='submit'>예약하기</button>
-            <p>총 합게 : { totalPrice || price }</p> 
-        </Form>
-        </>
-    );
+				<SelectBox onChange={handleHeadCount} value={headCount}>
+					<option value='none'>=선택=</option>
+
+					{personnel && [...Array(personnel).keys()].map((n) => (
+						<option key={`HeadCount-${n + 1}`} value={ n + 1 }>
+							{ n + 1 }
+						</option>
+					))}
+				</SelectBox>
+				<span>명</span>
+				<button type='submit'>예약하기</button>
+				<p>결제금액 : {totalPrice || 0}원</p>
+			</Form>
+		</>
+	);
 };
 
 export default FloatingForm;

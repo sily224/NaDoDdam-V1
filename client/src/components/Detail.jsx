@@ -6,7 +6,7 @@ import Review from './Review';
 import TimeBtns from './TimeBtns';
 import { DetailContext } from '../pages/DetailPage';
 import FloatingForm from './FloatingForm';
-
+import Carousel from 'react-bootstrap/Carousel'
 
 const DisplayFlex = styled.div`
     display:flex;
@@ -51,15 +51,41 @@ const TimButtonContainer = styled(DisplayFlex)`
     justify-content:center;
     margin-left : 3%;
 `;
+const CarouselImg = styled.img`
+    height: 400px;
+`;
 
-
-
-const DetailHeader = ({ title, location }) => {
+const DetailHeader = ({ name, address, url }) => {
     return (
         <Header>
-            <Title>{title}</Title>
-            <p>{location}</p>
-            <img src='' alt={`${title}이미지`} />
+            <Title>{name}</Title>
+            <p>{address}</p>
+            
+                <Carousel slide={false}>
+        `           <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="First slide"
+                        />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="Second slide"
+                        />
+
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <CarouselImg
+                        className="d-block w-100"
+                        src={url}
+                        alt="Third slide"
+                        />
+                    </Carousel.Item>`
+                </Carousel>
+            
         </Header>
     );
 };
@@ -72,47 +98,46 @@ const DetailDescription = ({ description }) => {
     return <p>{description}</p>
 };
 
-
-const DetailCompany = ({ company }) => {
+const DetailCompany = ({farm,farmer}) => {
     return (
         <DetailCompanyContainer>
-            <p>업체정보</p>
-            {
-                Object.entries(company).map((values, idx) => {
-                    return <p key={`idx${idx}-${values[0]}`}>{`${values[0]}`} : {`${values[1]}`}</p>
-                })
-            }
+            <p>농장정보</p>
+            <p>농장명 : {farm.name}</p>
+            <p>농장상품 : {farm.type}</p>
+            <p>농장주 : {farm.owner}</p>
+            <p>E-mail : {farmer.email}</p>
+            <p>전화번호: {farmer.phoneNum}</p>
         </DetailCompanyContainer>
     );
 };
 
-
-
 const Detail = () => {
-    const { detailData: data } = useContext(DetailContext);
+    const { farmData : farm, farmerData : farmer } = useContext(DetailContext);
 
     return (
         <>
             {
-                data &&
-                <DetailContainer key={`${data.title}-${new Date()}`}>
-                    <DetailHeader title={data.title} location={data.location} />
-
+                farm &&
+                <DetailContainer key={`${farm.name}-${new Date()}`}>
+                    <DetailHeader name={farm.name} address={farm.address} url={farm.url} />
+                    
                     <DetailContent>
                         <DetailInform>
-                            <DetailGrade grade={data.grade} />
-                            <DetailDescription description={data.description} />
+                            {/* <DetailGrade grade={data.grade} /> */}
+                            <DetailDescription description={farm.description} />
                             <DetailPeriod>
                                 <Calender />
                                 <TimButtonContainer>
                                     <TimeBtns />
                                 </TimButtonContainer>
-                            </DetailPeriod>
+                            </DetailPeriod> 
                             <Review />
+                            <p>찾아오는길</p>
                             <Location />
-                            <DetailCompany company={data.company} />
+                            <DetailCompany farm={farm} farmer={farmer}/>
                         </DetailInform>
                         <FloatingFormDiv><FloatingForm /></FloatingFormDiv>
+                    
                     </DetailContent>
 
                 </DetailContainer>

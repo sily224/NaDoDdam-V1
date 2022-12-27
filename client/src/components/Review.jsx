@@ -22,7 +22,6 @@ const ReviewId = styled.p`
     font-size: 1rem;
     font-weight: bold;
 `;
-
 const ReviewName = styled.p`
     font-size: 0.7rem;
 `;
@@ -44,7 +43,6 @@ const ReviewItem = styled.div`
 `;
 const ModalLayout = styled.div`
     display: felx;
-    margin-top : 5%;
 `;
 const ModalTitle = styled.div`
     width: 30%;
@@ -52,25 +50,26 @@ const ModalTitle = styled.div`
 `;
 const ModalContent =styled.div`
     width: 60%;
-    height: 600px;
+    height: 450px;
+    margin-top : 5%;
     overflow-y:auto;
     overflow-x:hidden;
 `;
-
 
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
     const MaxLength = 20;
 
     return review.map((value, idx) => {
-        const {id, name,content}= value;
+        const {id,content,createdAt,rating}= value;
         const isTextOverflow = MaxLength < value.content.length;
         
         if (idx >5) if(!showAll) return;
         return(      
             <ReviewItem key = {`reveiw-${idx}`} >
                 <ReviewId  key = {`${value.id}-${idx}`}>{id}</ReviewId>
-                <ReviewName key = {`${value.name}-${idx}`}>{name}</ReviewName>
+                <p>★ {rating}</p>
+                <ReviewName key = {`${value.createdAt}-${idx}`}>{createdAt}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
                 { isTextOverflow && <button onClick={()=> setTab(!tab)} >더보기</button>}
             </ReviewItem>
@@ -79,8 +78,7 @@ const ReviewItems = ({review,showAll}) =>{
 }
 
 const Review = ()=>{
-    const {detailData : data} = useContext(DetailContext);
-    const {review} = data;
+    const {reviewData : review} = useContext(DetailContext);
 
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);

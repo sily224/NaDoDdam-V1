@@ -1,9 +1,11 @@
 import Sequelize from 'sequelize';
 import Users from './auth.js';
-import Reservations from './Reservations.js';
+import Reservations from './reservations.js';
 import Farms from './farm.js';
 import Reviews from './review.js';
 import TimeTables from './timetable.js';
+import Farmers from './farmer.js';
+import LikeFarms from './likeFarms.js';
 // import { fileURLToPath } from 'url';
 // const __filename = fileURLToPath(import.meta.url);
 // const env = process.env.NODE_ENV || 'development';
@@ -22,6 +24,8 @@ db.Reservations = Reservations(sequelize, Sequelize);
 db.Farms = Farms(sequelize, Sequelize);
 db.Reviews = Reviews(sequelize, Sequelize);
 db.TimeTables = TimeTables(sequelize, Sequelize);
+db.Farmers = Farmers(sequelize, Sequelize);
+db.LikeFarms = LikeFarms(sequelize, Sequelize);
 
 Object.keys(db).forEach((modelName) => {
 	if (db[modelName].associate) {

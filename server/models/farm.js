@@ -1,11 +1,10 @@
 import Sequelize from 'sequelize';
+import db from './index.js';
 const Op = Sequelize.Op;
 
-import db from '../models/index.js';
-
 const Farms = (sequelize, DataTypes) => {
-	const Farms = sequelize.define(
-		'Farms',
+	const farm = sequelize.define(
+		'farm',
 		{
 			type: {
 				type: DataTypes.STRING,
@@ -20,7 +19,7 @@ const Farms = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			description: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				defaultValue: '설명 없음',
 			},
@@ -28,55 +27,61 @@ const Farms = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
+			url: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
 		},
 		{
 			charset: 'utf8',
-			collate: 'utf8_general_ci', //한글 저장
-			tableName: 'Farms',
-			timestamps: true,
+			collate: 'utf8_general_ci',
 		},
 	);
 
-	Farms.findById = (id) => {
-		return Farms.findByPk(id).then((data) => {
-			console.log(data);
-			return data;
+	farm.findById = (id) => {
+		return farm.findByPk(id);
+	};
+
+	farm.getAll = (lastId, limit) => {
+		let cursor = lastId || 0;
+		return farm.findAll({
+			limit: parseInt(limit),
+			where: {
+				id: {
+					[DataTypes.Op.gt]: cursor,
+				},
+			},
+			order: [['createdAt', 'DESC']],
 		});
 	};
 
-	Farms.getAll = () => {
-		return Farms.findAll();
+	farm.getByType = (type) => {
+		return farm.findAll({ where: { type } });
 	};
 
-	Farms.getByType = (type) => {
-		return Farms.findAll({ where: { type } });
-	};
-
-	Farms.getByAddress = (address) => {
-		return Farms.findAll({
+	farm.getByAddress = (location) => {
+		return farm.findAll({
 			where: {
 				address: {
-					[Op.like]: '%' + address + '%',
+					[Op.like]: '%' + location + '%',
 				},
 			},
 		});
 	};
 
-	Farms.updateFarm = (id, updateInfo) => {
-		return Farms.update(updateInfo, { where: { id } }).then((data) => {
-			return data;
-		});
+	farm.updateFarm = (id, updateInfo) => {
+		return farm.update(updateInfo, { where: { id } });
 	};
 
-	Farms.createFarm = (farmInfo) => {
-		return Farms.create(farmInfo);
+	farm.createFarm = (farmInfo) => {
+		return farm.create(farmInfo);
 	};
 
-	Farms.remove = (id) => {
-		return Farms.findByPk(id).then((farm) => farm.destroy());
+	farm.remove = (id) => {
+		return farm.findByPk(id).then((farm) => farm.destroy());
 	};
 
-	return Farms;
+	return farm;
 };
 
 export default Farms;

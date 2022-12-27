@@ -10,7 +10,7 @@ export async function signup(req, res, next) {
 	try {
 		const found = await db.Users.findByUserEmail(email);
 		if (found) {
-			throw new Error(`${email} already exists`);
+			throw new Error(`${email}는 이미 존재하는 이메일 입니다. `);
 		}
 		const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
 		const userId = await db.Users.createUser({
@@ -34,30 +34,28 @@ export async function login(req, res, next) {
 	try {
 		const user = await db.Users.findByUserEmail(email);
 		if (!user) {
-			throw new Error('유효하지 않은 사용자 또는 비밀번호 입니다.');
+			throw new Error('사용자를 찾을 수 없습니다.');
 		}
 
 		const isValidPassword = await bcrypt.compare(password, user.password);
 
 		if (!isValidPassword) {
-			throw new Error('유효하지 않은 사용자 또는 비밀번호 입니다.');
+			throw new Error('패스워드가 일치하지 않습니다.');
 		}
-		const token = createJwtToken(user.id);
+		const token = createJwtToken({ id: user.id, role: user.role });
 		res.status(200).json({ token, email });
 	} catch (err) {
 		next(err);
 	}
 }
 
-export async function me(req, res, next) {
+export async function myInfo(req, res, next) {
 	try {
 		const user = await db.Users.findById(req.userId);
 		if (!user) {
 			throw new Error('사용자를 찾을 수 없습니다.');
 		}
-		res
-			.status(200)
-			.json({ email: user.email, name: user.name, phoneNum: user.phoneNum });
+		res.status(200).json(user);
 	} catch (err) {
 		next(err);
 	}
@@ -70,7 +68,7 @@ const createJwtToken = (id) => {
 };
 
 async function setUser(userInfoRequired, toUpdate) {
-	const { userId, currentPassword } = userInfoRequired;
+	const { userId } = userInfoRequired;
 
 	let user = await db.Users.findById(userId);
 
@@ -78,7 +76,64 @@ async function setUser(userInfoRequired, toUpdate) {
 		throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
 	}
 
-	// //비밀번호 일치 여부 확인
+	user = await db.Users.updateUser({
+		userId,
+		update: toUpdate,
+	});
+
+	return user;
+}
+
+export async function userUpdate(req, res, next) {
+	const userId = req.params.userId;
+	const { name, email, phoneNum } = req.body;
+
+	try {
+		const userInfoRequired = { userId };
+
+		const toUpdate = {
+			...(name && { name }),
+			...(email && { email }),
+			...(phoneNum && { phoneNum }),
+		};
+
+		if (toUpdate.email) {
+			const isEmail = await db.Users.findByUserEmail(toUpdate.email);
+			if (isEmail) {
+				throw new Error('해당 이메일이 존재합니다. 다시 한 번 확인해 주세요.');
+			}
+		}
+
+		const updatedUserInfo = await setUser(userInfoRequired, toUpdate);
+		res.status(200).json(updatedUserInfo);
+	} catch (err) {
+		next(err);
+	}
+}
+
+export async function userDrop(req, res, next) {
+	try {
+		const userId = req.params.userId;
+
+		const user = await db['Users'].deleteUser(userId);
+
+		res.status(200).json({ userId: userId, message: 'delete !' });
+	} catch (err) {
+		next(err);
+	}
+}
+
+async function setPassword(userPasswordRequired, toUpdate) {
+	const { userId, currentPassword } = userPasswordRequired;
+
+	console.log(currentPassword);
+
+	let user = await db.Users.findById(userId);
+
+	if (!user) {
+		throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
+	}
+
 	const corretPasswordHash = user.password;
 	const isPasswordCorrect = await bcrypt.compare(
 		currentPassword,
@@ -104,7 +159,7 @@ async function setUser(userInfoRequired, toUpdate) {
 		toUpdate.password = newPasswordHash;
 	}
 
-	user = await db.Users.updateUser({
+	user = await db.Users.updatePassword({
 		userId,
 		update: toUpdate,
 	});
@@ -112,37 +167,22 @@ async function setUser(userInfoRequired, toUpdate) {
 	return user;
 }
 
-export async function userUpdate(req, res, next) {
+export async function passwordUpdate(req, res, next) {
 	const userId = req.params.userId;
-	const { name, email, password, phoneNum } = req.body;
+	const { password } = req.body;
 
 	try {
-		// body data로 부터 확인용으로 사용할 현재 비밀번호 추출함.
 		const currentPassword = req.body.currentPassword;
-
-		const userInfoRequired = { userId, currentPassword };
+		const userPasswordRequired = { userId, currentPassword };
 
 		const toUpdate = {
-			...(name && { name }),
-			...(email && { email }),
 			...(password && { password }),
-			...(phoneNum && { phoneNum }),
 		};
 
-		const updatedUserInfo = await setUser(userInfoRequired, toUpdate);
-		res.status(200).json(updatedUserInfo);
-	} catch (err) {
-		next(err);
-	}
-}
+		console.log(toUpdate);
 
-export async function userDrop(req, res, next) {
-	try {
-		const userId = req.params.userId;
-
-		const user = await db['Users'].deleteUser(userId);
-
-		res.status(200).json({ userId: userId, message: 'delete !' });
+		const updatePassword = await setPassword(userPasswordRequired, toUpdate);
+		res.status(200).json(updatePassword);
 	} catch (err) {
 		next(err);
 	}
