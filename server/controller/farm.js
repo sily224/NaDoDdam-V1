@@ -99,7 +99,6 @@ export async function updateFarm(req, res, next) {
 			throw new Error('농장수정은 해당 농장주만 수정할 수 있습니다.');
 		}
 
-		upload.array('file', 4);
 		if (req.files) {
 			const locations = req.files.map((data) => data.location);
 			url = locations.toString();
