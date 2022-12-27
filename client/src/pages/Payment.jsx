@@ -315,7 +315,10 @@ const Payment = () => {
 					<ModalContainer>
 						<H1>결제완료</H1>
 						<Button onClick={() => dispatch(closeModal())}>확인</Button>
-						<Button onClick={showReserve}>구매내역보기</Button>
+						<Button onClick={() => {
+							dispatch(closeModal())
+							navigate(`/myreservation`);
+						}}>구매내역보기</Button>
 					</ModalContainer>
 				)}
 			</div>

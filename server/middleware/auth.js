@@ -9,7 +9,7 @@ export const isAuth = async (req, res, next) => {
 	if (!(authHeader && authHeader.startsWith('Bearer '))) {
 		return res.status(401).json({
 			result: AUTH_ERROR,
-			reason: '로그인한 유저만 사용할 수 있는 서비스입니다.',
+			message: '로그인한 유저만 사용할 수 있는 서비스입니다.',
 		});
 	}
 	const token = authHeader.split(' ')[1];
