@@ -56,8 +56,7 @@ export async function createFarm(req, res, next) {
 	const { type, name, address, description, owner } = req.body;
 
 	try {
-		console.log({ type, name, address, description, owner });
-		console.log(req.files);
+		// 이미지를 s3에 에러핸들링 후 넣어야함 (미구현)
 		const locations = req.files.map((data) => data.location);
 		const url = locations.toString();
 		const farmerId = req.farmerId;
