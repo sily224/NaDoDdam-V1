@@ -17,7 +17,7 @@ const SelectBox = styled.select``;
 
 const FloatingForm = () => {
 	const {farmData} = useContext(DetailContext);
-
+	const {name, id} = farmData;
 	const [headCount, setHeadCount] = useState('none');
 	const [totalPrice, setTotalPrice] = useState(undefined);
 
@@ -43,9 +43,10 @@ const FloatingForm = () => {
 
 		navigate('/pay', {
 			state: {
-				id : timeId,
+				farmId : id,
+				timeId : timeId,
 				date : date,
-				farm: farmData.name,
+				farm: name,
 				headCount : headCount,
 				price: price,
 				totalPrice: totalPrice,				
