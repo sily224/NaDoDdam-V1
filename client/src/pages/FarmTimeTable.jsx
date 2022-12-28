@@ -10,6 +10,7 @@ import FarmTime from '../components/FarmTime';
 import Pagination from '../components/TimeTablePagination';
 import styled from 'styled-components';
 import {ConfirmButton, DeleteButton, ContentContainer, NormalButton} from '../styles/Styled';
+import { HOST } from '../global-variables';
 
 import * as API from '../lib/userApi';
 
@@ -102,7 +103,7 @@ const TimeTable = ()=>{
 
     const fetchData = async () => {
         try {
-            await API.get(`//localhost:3500/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then((res) => {
+            await API.get(`${HOST}/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then((res) => {
                 const data = res.data;
                 // console.log(data);
                 // console.log(lastId);
@@ -154,7 +155,7 @@ const TimeTable = ()=>{
                     const personnel = maxHeadCount[j];
 
                     try {
-                        const res = await API.post('http://localhost:3500/api/timetables',{
+                        const res = await API.post(`${HOST}/api/timetables`,{
                             'date': date,
                             'personnel':personnel,
                             'price':cost,
@@ -171,7 +172,7 @@ const TimeTable = ()=>{
         }
         else {
             try {
-                const res = await API.put(`http://localhost:3500/api/timetables/${target}`,{
+                const res = await API.put(`{HOST}/api/timetables/${target}`,{
                     'date': date[0],
                     'personnel':maxHeadCount[0],
                     'price':cost,
@@ -195,7 +196,7 @@ const TimeTable = ()=>{
     };
 
     const onTimeTableDelete = async(id) => {
-        await API.delete(`http://localhost:3500/api/timetables/${id}`);
+        await API.delete(`${HOST}/api/timetables/${id}`);
         fetchData();
     };
 
