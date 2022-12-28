@@ -138,10 +138,10 @@ const ItemList = styled.div`
 	grid-template-columns: repeat(auto-fill, minmax(400px, auto));
 	grid-gap: 25px;
 	width: auto;
-	padding: 0 100px;
+	padding: 0 100px 100px 100px;
 	max-width: 2300px;
 	width: 100%;
-	height: 100%;
+	height: auto;
 	position:absolute;
 `;
 
