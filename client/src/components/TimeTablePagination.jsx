@@ -61,7 +61,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 	return (
 		<>
 			<PageWrapper>
-                <PageBtn onClick={() => handlePrevPage()}  disabled={page < pageCount+1}>
+                <PageBtn onClick={handlePrevPage}  disabled={page < pageCount+1}>
 					{'<<'}
 				</PageBtn>
 				<PageBtn onClick={() => setPage(page - 1)} disabled={page===first}>
@@ -75,7 +75,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 				<PageBtn onClick={() => setPage(page + 1)} disabled={page === last}>
 					&gt;
 				</PageBtn>
-                <PageBtn onClick={() => handleNextPage()} disabled={last < (pageGroup+1) * pageCount}>
+                <PageBtn onClick={handleNextPage} disabled={last < (pageGroup+1) * pageCount}>
 					{'>>'}
 				</PageBtn>
 			</PageWrapper>

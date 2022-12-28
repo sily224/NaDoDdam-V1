@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { initDate } from "../store/FormSlice";
 import Calender from '../components/ReactCalender';
 import styled from 'styled-components';
-
+import { NormalButton , WhiteGreenBtn} from '../styles/Styled';
+import { Calendar } from 'react-calendar';
 
 const CalenderContainer = styled.div`
     display : flex;
@@ -16,6 +17,12 @@ const CalenderContent = styled.div`
 `;
 const StartCalenderContent = styled.div``;
 const EndCalenderContent = styled.div``;
+const SelectedDate = styled.p`
+    margin : 2% 0;
+`
+const CalendarBtn = styled(WhiteGreenBtn)``
+
+
 
 //memo 지혜 : period (체험운영기간)
 const FarmPeriod = (props) =>{
@@ -58,20 +65,20 @@ const FarmPeriod = (props) =>{
         <CalenderContainer>
             <CalenderContent>
                 <StartCalenderContent>
-                    <button type='button' onClick={()=>setStartCalenderOpen(!startCalenderOpen)}>시작날짜</button>
+                    <CalendarBtn type='button' onClick={()=>setStartCalenderOpen(!startCalenderOpen)}>시작날짜</CalendarBtn>
                     {
                         startCalenderOpen ? <Calender period={{start : new Date()}} create/> : null
                     }
-                    <p>{!startCalenderOpen && startDate}</p>
+                    <SelectedDate>{!startCalenderOpen && startDate}</SelectedDate>
                 </StartCalenderContent>
             </CalenderContent>
             <CalenderContent>
                 <EndCalenderContent>
-                    <button  type='button' onClick={()=>handleEndCalenderOpen()}>마감날짜</button>
+                    <CalendarBtn type='button' onClick={()=>handleEndCalenderOpen()}>마감날짜</CalendarBtn>
                     {
                         endCalenderOpen ? <Calender period={{start : new Date(startDate)}} create/> : null
                     }
-                    <p>{!endCalenderOpen && endDate}</p>
+                    <SelectedDate>{!endCalenderOpen && endDate}</SelectedDate>
                 </EndCalenderContent>
             </CalenderContent>
         </CalenderContainer>
