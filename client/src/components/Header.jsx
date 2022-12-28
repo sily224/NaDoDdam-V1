@@ -221,12 +221,12 @@ const afterLoginList = [
 	{
 		id: 4,
 		name: '예약조회',
-		path: '/myreservation',
+		path: '/mypage/reservation',
 	},
 	{
 		id: 5,
 		name: '나의후기',
-		path: '/myreview',
+		path: '/mypage/review',
 	},
 	{
 		id: 6,

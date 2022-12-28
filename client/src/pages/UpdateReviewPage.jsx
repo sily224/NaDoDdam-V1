@@ -1,4 +1,4 @@
-import ShowReservation from "../components/WriteReviewForm";
+import {Container, ReviewReservation} from "../components/ReviewReservation";
 import UpdateReview from "../components/UpdateReview";
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
@@ -26,7 +26,7 @@ const UpdateReviewPage = () => {
 
     return (
       <>
-        <ShowReservation reservationData={reservationData}/>
+        <ReviewReservation reservationData={reservationData}/>
         <UpdateReview id={id}/>
       </>
     )

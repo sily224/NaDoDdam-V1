@@ -6,8 +6,8 @@ import { ImStarFull } from "react-icons/im";
 import { useDispatch, useSelector } from 'react-redux';
 import ModalContainer from './Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { Button } from 'bootstrap';
+import { Link } from 'react-router-dom';
+import { HOST } from '../global-variables';
 
 const StyledTitleWrap = styled.div`
   display:flex;
@@ -162,7 +162,7 @@ const MyReviewTable = () => {
       const id = e.target.name;
       console.log(id)
       try{
-        await userApi.delete(`//localhost:3500/api/review/${id}`);
+        await userApi.delete(`${HOST}/api/review/${id}`);
         alert('삭제되었습니다.');
         dispatch(closeModal());
         getReviewData();
