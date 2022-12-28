@@ -2,6 +2,7 @@ import React, { useState, useEffect,createContext } from "react";
 import axios from "axios";
 import Detail from "../components/Detail";
 import { useParams } from 'react-router-dom';
+import { HOST } from '../global-variables';
 
 export const DetailContext = createContext();
 
@@ -14,7 +15,7 @@ const DetailPage =  () => {
     
     const fetchData = async () => {
         try {
-            await axios.get(`http://localhost:3500/api/farms/${id}`).then((res) => {
+            await axios.get(`${HOST}/api/farms/${id}`).then((res) => {
                 console.log(res.data);
                 setFarmData(res.data.data);
                 setreviewData(res.data.review);
@@ -30,7 +31,7 @@ const DetailPage =  () => {
         if(farmerData){
             try {
                 const {farmId} = farmerData;
-                await axios.get(`http://localhost:3500/api/timetables/${farmId}`).then((res) => {
+                await axios.get(`${HOST}/api/timetables/${farmId}`).then((res) => {
                     console.log("timeTable : ",res.data);
                     setTimeTable(res.data);
                 })
