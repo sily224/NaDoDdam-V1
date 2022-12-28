@@ -1,32 +1,15 @@
 import express from 'express';
 import 'express-async-errors';
-import { body } from 'express-validator';
-import { validate } from '../middleware/validate.js';
 import * as authController from '../controller/auth.js';
 import { isAuth } from '../middleware/auth.js';
-import { errorHandler } from '../middleware/error-handler.js';
+import * as Auth from '../middleware/validationOption.js';
 const router = express.Router();
 
-const validateCredential = [
-	body('email').trim().normalizeEmail().isEmail().withMessage('invalid email'),
-	body('password')
-		.trim()
-		.isLength({ min: 5 })
-		.withMessage('password should be at least 5 characters'),
-	validate,
-];
-
-const validateSignup = [
-	...validateCredential,
-	// body("phoneNum").trim().notEmpty().isMobilePhone().withMessage("phoneNum should be not empty"),
-	body('name').trim().notEmpty().withMessage('username should be not empty'),
-	validate,
-];
 
 // signup
-router.post('/signup', validateSignup, authController.signup); // 회원가입
+router.post('/signup', Auth.validateSignup, authController.signup); // 회원가입
 // login
-router.post('/login',validateCredential,  authController.login); //로그인
+router.post('/login',Auth.validateLogin,  authController.login); //로그인
 // me
 router.get('/myInfo', isAuth , authController.myInfo); //개인 회원정보 조회
 
