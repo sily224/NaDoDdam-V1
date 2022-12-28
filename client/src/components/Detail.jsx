@@ -63,31 +63,23 @@ const DetailHeader = ({ name, address }) => {
 };
 
 const DetailImg = ({imgUrl}) =>{
+
     return (
         <Carousel>
-            <Carousel.Item>
-            <CarouselImg
-            className='d-block w-100'
-            src={imgUrl}
-            alt='First slide'
-            />
-        </Carousel.Item>
-        <Carousel.Item>
-            <CarouselImg
-            className='d-block w-100'
-            src={imgUrl}
-            alt='Second slide'
-            />
-
-        </Carousel.Item>
-        <Carousel.Item>
-            <CarouselImg
-            className='d-block w-100'
-            src={imgUrl}
-            alt='Third slide'
-            />
-        </Carousel.Item>`
-    </Carousel>
+        { 
+            imgUrl.split(',').map((url,idx) => {    
+                return (
+                    <Carousel.Item key={`${idx}slide`}>
+                        <CarouselImg
+                            className='d-block w-100'
+                            src={url}
+                            alt={`${idx}slide`}
+                        />
+                    </Carousel.Item>
+                )
+            })
+        }
+        </Carousel>
     )
 };
 
@@ -143,7 +135,7 @@ const Detail = () => {
                 farm &&
                 <DetailContainer key={`${farm.name}-${new Date()}`}>
                     <DetailHeader name={farm.name} address={farm.address} />
-                    <DetailImg imgUrl={farm.url}></DetailImg>
+                    <DetailImg imgUrl={farm.url} />
                     <DetailContent>
                         <DetailInform>
                             <DetailDescription description={farm.description} />

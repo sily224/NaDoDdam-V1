@@ -3,7 +3,6 @@ import 'express-async-errors';
 import * as reserveController from '../controller/reserve.js';
 import { isAuth } from '../middleware/auth.js';
 import { isFarmer } from '../middleware/farmerAuth.js';
-import { errorHandler } from '../middleware/error-handler.js';
 
 const router = express.Router();
 
@@ -30,5 +29,6 @@ router.patch(
 	isFarmer,
 	reserveController.reserveFarmerUpdate,
 ); //농장주 예약 수정
+
 
 export default router;

@@ -11,6 +11,7 @@ import timeTableRouter from './router/timetable.js';
 import farmerRouter from './router/farmer.js';
 import likeFarmsRouter from './router/likeFarms.js';
 import { errorHandler } from './middleware/error-handler.js';
+import { job } from './controller/schedule.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,6 +32,8 @@ app.use('/api', likeFarmsRouter);
 app.get('/', (req, res) => {
 	res.send('Server Response Success');
 });
+
+job;
 
 app.use(errorHandler);
 db.sequelize
