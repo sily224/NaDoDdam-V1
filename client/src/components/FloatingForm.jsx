@@ -11,7 +11,7 @@ const Form = styled.form`
 	height: 300px;
 	padding: 8% 8%;
 	margin-top : 5%;
-	border: 1px solid black;
+	border: 2px solid lightgray;
 	top: 40%;
 	position: sticky;
 	border-radius: 15px;
