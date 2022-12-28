@@ -7,12 +7,23 @@ import styled from 'styled-components';
 import 'react-calendar/dist/Calendar.css';
 
 const CalendarContainer = styled.div`
-	.react-calendar__navigation__label > span {
-		font-size:  1rem;
-		font-weight: 700;
+	.react-calendar__tile:disabled {
+		background-color: rgb(191,206,191,0.3);
 	}
 	.react-calendar__tile--now {
 		background: lightyellow;
+	}
+	.react-calendar__navigation__label > span {
+		font-size: 1rem;
+		font-weight: 500;
+	}
+	.react-calendar__navigation button:disabled {
+		background-color:  rgb(191,206,191,0.3);
+	}
+	.react-calendar__navigation button:enabled:hover,
+	.react-calendar__navigation button:enabled:focus {
+		background-color: yellowgreen;
+		opacity: 0.5;
 	}
 	.react-calendar__tile--now:enabled:hover,
 	.react-calendar__tile--now:enabled:focus {
