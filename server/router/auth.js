@@ -22,6 +22,7 @@ router.patch(
 router.patch(
 	'/myInfo/:userId',
 	isAuth,
+	Auth.validatePassword,
 	authController.userUpdate
 ); //개인 정보 수정
 
