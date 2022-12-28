@@ -10,17 +10,26 @@ import ModalContainer from './../components/Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-const Context = styled.div``;
+const MomDiv = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: start;
+	min-width: 800px;
+`;
 
-const H1 = styled.h1``;
+const ContextDiv = styled.div`
+	flex-direction: column;
+`;
 
-const H2 = styled.h2``;
+const H1 = styled.h1`
+	font-weight: 800;
+	margin-bottom: 20px;
+`;
 
-const H3 = styled.h3``;
-
-const Info = styled.p``;
-
-const NameInfo = styled.p``;
+const H2 = styled.p`
+	font-size: 130%;
+	font-weight: 600;
+`;
 
 const Button = styled.button``;
 
@@ -29,7 +38,7 @@ const Line = styled.div`
 	display: block;
 	width: 100%;
 	height: 0.5px;
-	background-color: blue;
+	background-color: #808080;
 	margin: 5% 0;
 `;
 
@@ -37,11 +46,24 @@ const Select = styled.select``;
 
 const Option = styled.option``;
 
-const P = styled.p``;
+const P = styled.p`
+	font-size: 20px;
+`;
+const Input = styled.input`
+	margin: 30px;
+`;
 
 const SideBarDiv = styled.div`
-	background: grey;
+	background: #f4d815;
 	width: 300px;
+	border-radius: 10%;
+	padding: 20px;
+	margin: 50px;
+`;
+
+const ButtonDiv = styled.div`
+	display: flex;
+	justify-content: flex-end;
 `;
 
 const PayboxTop = styled.div`
@@ -49,34 +71,65 @@ const PayboxTop = styled.div`
 	flex-direction: row;
 `;
 
-const PayboxName = styled.div`
+const TextDiv = styled.div`
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	justify-content: space-between;
+`;
+const RowDiv = styled.div`
+	display: flex;
+	flex-direction: row;
 `;
 
+const Box = styled.div`
+	width: 100%;
+	border-radius: 10px;
+	overflow: hidden;
+	margin: 20px;
+	padding: 10px;
+	transition: all 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+
+	&:hover {
+		box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+		transform: translateY(-10px);
+	}
+	div {
+		margin: 10px;
+	}
+`;
+const ImportInfo = styled.p`
+	font-size: 20px;
+	font-weight: 600;
+`;
+const Span = styled.span`
+	font-size: 20px;
+`;
 // 예약정보
 const ReservationInfo = ({ payData }) => {
 	const navigate = useNavigate();
-	const goDetail = () => {
-		navigate(-1);
-	};
 
 	return (
 		<>
 			{payData && (
 				<>
-					<H1>예약 및 결제</H1>
-					<H2>예약 정보</H2>
-					<H3>날짜</H3>
-					<Info>{payData.date}</Info>
-					<H3>시간</H3>
-					<Info>
-						{payData.startTime} ~ {payData.endTime}
-					</Info>
-					<H3>인원</H3>
-					<Info>{payData.headCount}</Info>
-					<Button onClick={goDetail}>예약정보수정</Button>
-					<Line />
+					<H1>예약 정보</H1>
+					<TextDiv>
+						<H2>날짜</H2>
+						<ImportInfo>{payData.date}</ImportInfo>
+					</TextDiv>
+					<TextDiv>
+						<H2>시간</H2>
+						<ImportInfo>
+							{payData.startTime} ~ {payData.endTime}
+						</ImportInfo>
+					</TextDiv>
+					<TextDiv>
+						<H2>인원</H2>
+						<ImportInfo>{payData.headCount}명</ImportInfo>
+					</TextDiv>
+					<ButtonDiv>
+						<Button onClick={() => navigate(-1)}>예약정보수정</Button>
+					</ButtonDiv>
 				</>
 			)}
 		</>
@@ -91,20 +144,20 @@ const SideBar = ({ payData }) => {
 		<>
 			{payData && (
 				<div>
-					<PayboxTop>
-						<PayboxName>
-							<NameInfo>{farm}</NameInfo>
-						</PayboxName>
-					</PayboxTop>
-					<H3>요금 세부정보</H3>
-					<NameInfo>1인 체험권</NameInfo>
-					<Info>
-						{price}원 X{headCount}
-					</Info>
-					<Info>{totalPrice || null}</Info>
+					<H1>{farm}</H1>
+					<H2>요금 세부정보</H2>
+					<ImportInfo>1인 체험권</ImportInfo>
+					<TextDiv>
+						<ImportInfo>
+							{price}원 X{headCount}
+						</ImportInfo>
+						<ImportInfo>{totalPrice || null}</ImportInfo>
+					</TextDiv>
 					<Line />
-					<Info>결제 예정 금액</Info>
-					<Info>{totalPrice || null}</Info>
+					<TextDiv>
+						<ImportInfo>결제 예정 금액</ImportInfo>
+						<ImportInfo>{totalPrice || null}</ImportInfo>
+					</TextDiv>
 				</div>
 			)}
 		</>
@@ -115,11 +168,10 @@ const SideBar = ({ payData }) => {
 const PaymentInfo = () => {
 	return (
 		<>
-			<H3>결제 수단</H3>
 			<Accordion>
 				<Accordion.Item eventKey="0">
 					<Accordion.Header>
-						<p>정보제공 수집 및 제공 동의</p>
+						<H2>정보제공 수집 및 제공 동의</H2>
 					</Accordion.Header>
 					<Accordion.Body>
 						<P>
@@ -130,7 +182,7 @@ const PaymentInfo = () => {
 				</Accordion.Item>
 				<Accordion.Item eventKey="1">
 					<Accordion.Header>
-						<p>환불 정책 동의</p>
+						<H2>환불 정책 동의</H2>
 					</Accordion.Header>
 					<Accordion.Body>
 						<P>
@@ -149,7 +201,10 @@ const PaymentInfo = () => {
 				</Accordion.Item>
 			</Accordion>
 			<Line />
-			<P>주문 내용을 확인하였으며, 위 내용에 동의합니다.</P>
+			<RowDiv>
+				<RiErrorWarningLine size="25" />
+				<Span>주문 내용을 확인하였으며, 위 내용에 동의합니다.</Span>
+			</RowDiv>
 		</>
 	);
 };
@@ -223,7 +278,7 @@ const Payment = () => {
 			setPay(true);
 			dispatch(showModal());
 		} else if (payData.headCount > personnel) {
-			dispatch(showModal());
+			// dispatch(showModal());
 		}
 	}, [resData]);
 
@@ -256,74 +311,93 @@ const Payment = () => {
 
 	return (
 		<>
-			<div style={{ display: 'flex', alignItems: 'flex-start' }}>
-				<Context>
-					<ReservationInfo payData={payData}></ReservationInfo>
-					<H2>예약자 정보</H2>
-					<H3>예약자</H3>
-					{nameOpen ? (
-						<input
-							type="text"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
-					) : (
-						<Info>{name}</Info>
-					)}
-					{nameOpen ? (
-						<Button onClick={() => setNameOpen(!nameOpen)}>완료</Button>
-					) : (
-						<Button onClick={() => setNameOpen(!nameOpen)}>수정</Button>
-					)}
-					<H3>연락처</H3>
-					{phoneNumberOpen ? (
-						<input
-							type="text"
-							value={phoneNumber}
-							onChange={(e) => setPhoneNumber(e.target.value)}
-						/>
-					) : (
-						<Info>{phoneNumber}</Info>
-					)}
-					{phoneNumberOpen ? (
-						<Button onClick={() => setPhoneNumberOpen(!phoneNumberOpen)}>
-							완료
-						</Button>
-					) : (
-						<Button onClick={() => setPhoneNumberOpen(!phoneNumberOpen)}>
-							수정
-						</Button>
-					)}
-					<H3>이메일</H3>
-					{emailOpen ? (
-						<input
-							type="text"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-						/>
-					) : (
-						<Info>{email}</Info>
-					)}
-					{emailOpen ? (
-						<Button onClick={() => setEmailOpen(!emailOpen)}>완료</Button>
-					) : (
-						<Button onClick={() => setEmailOpen(!emailOpen)}>수정</Button>
-					)}
-
-					<RiErrorWarningLine />
-					<P>입력하신 예약자 정보로 결제 및 예약관련 정보가 발송됩니다.</P>
-					<Line />
-					<Select onChange={handleSelect} value={selected}>
-						<Option value="card" key="card">
-							카드결제
-						</Option>
-						<Option value="transfer" key="transfer">
-							계좌이체
-						</Option>
-					</Select>
-					<PaymentInfo></PaymentInfo>
-					<Button onClick={submitHandler}>확인 및 결제</Button>
-				</Context>
+			<MomDiv>
+				<ContextDiv>
+					<Box>
+						<ReservationInfo payData={payData}></ReservationInfo>
+					</Box>
+					<Box>
+						<H1>예약자 정보</H1>
+						<H2>예약자</H2>
+						<TextDiv>
+							{nameOpen ? (
+								<Input
+									type="text"
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+								/>
+							) : (
+								<ImportInfo>{name}</ImportInfo>
+							)}
+							{nameOpen ? (
+								<Button onClick={() => setNameOpen(!nameOpen)}>완료</Button>
+							) : (
+								<Button onClick={() => setNameOpen(!nameOpen)}>수정</Button>
+							)}
+						</TextDiv>
+						<H2>연락처</H2>
+						<TextDiv>
+							{phoneNumberOpen ? (
+								<Input
+									type="text"
+									value={phoneNumber}
+									onChange={(e) => setPhoneNumber(e.target.value)}
+								/>
+							) : (
+								<ImportInfo>{phoneNumber}</ImportInfo>
+							)}
+							{phoneNumberOpen ? (
+								<Button onClick={() => setPhoneNumberOpen(!phoneNumberOpen)}>
+									완료
+								</Button>
+							) : (
+								<Button onClick={() => setPhoneNumberOpen(!phoneNumberOpen)}>
+									수정
+								</Button>
+							)}
+						</TextDiv>
+						<H2>이메일</H2>
+						<TextDiv>
+							{emailOpen ? (
+								<Input
+									type="text"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+							) : (
+								<ImportInfo>{email}</ImportInfo>
+							)}
+							{emailOpen ? (
+								<Button onClick={() => setEmailOpen(!emailOpen)}>완료</Button>
+							) : (
+								<Button onClick={() => setEmailOpen(!emailOpen)}>수정</Button>
+							)}
+						</TextDiv>
+						<RowDiv>
+							<RiErrorWarningLine size="25" />
+							<Span>
+								입력하신 예약자 정보로 결제 및 예약관련 정보가 발송됩니다.
+							</Span>
+						</RowDiv>
+					</Box>
+					<Box>
+						<TextDiv>
+							<H1>결제 수단</H1>
+							<Select onChange={handleSelect} value={selected}>
+								<Option value="card" key="card">
+									카드결제
+								</Option>
+								<Option value="transfer" key="transfer">
+									계좌이체
+								</Option>
+							</Select>
+						</TextDiv>
+						<PaymentInfo></PaymentInfo>
+					</Box>
+					<ButtonDiv>
+						<Button onClick={submitHandler}>확인 및 결제</Button>
+					</ButtonDiv>
+				</ContextDiv>
 				<StickyBox offsetTop={20} offsetBottom={20}>
 					<SideBarDiv>
 						<SideBar payData={payData}></SideBar>
@@ -357,6 +431,7 @@ const Payment = () => {
 								<P>체험 인원 초과로 예약이 실패되었습니다</P>
 								<P>다른 시간대로 예약해주세요</P>
 								<Button
+									type="button"
 									onClick={() => {
 										dispatch(closeModal());
 										navigate(-1);
@@ -368,7 +443,7 @@ const Payment = () => {
 						)}
 					</ModalContainer>
 				)}
-			</div>
+			</MomDiv>
 		</>
 	);
 };
