@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 	res.send('Server Response Success');
 });
 
-job();
+job;
 
 app.use(errorHandler);
 db.sequelize
