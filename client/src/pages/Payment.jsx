@@ -316,11 +316,11 @@ const Payment = () => {
 	};
 	useEffect(() => {
 		if (payData.headCount <= personnel) {
-			// postData();
+			postData();
 			setPay(true);
 			dispatch(showModal());
 		} else if (payData.headCount > personnel) {
-			// dispatch(showModal());
+			dispatch(showModal());
 		}
 	}, [resData]);
 
