@@ -138,7 +138,8 @@ const ItemList = styled.div`
 	grid-template-columns: repeat(auto-fill, minmax(400px, auto));
 	grid-gap: 25px;
 	width: auto;
-	max-width: 2100px;
+	padding: 0 100px;
+	max-width: 2300px;
 	width: 100%;
 	height: 100%;
 	position:absolute;
@@ -164,7 +165,7 @@ const Item = styled.div`
 
 	&:hover {
 		transition: 0.5s;
-		transform: scale(1.3);
+		transform: scale(1.2);
 		border: solid 5px #FFCC00;
 		img {
 			transition: 0.5s;
