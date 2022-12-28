@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 	res.send('Server Response Success');
 });
 
-job();
+job;
 
 app.use(errorHandler);
 db.sequelize
@@ -48,5 +48,3 @@ db.sequelize
 app.listen(PORT, () => {
 	console.log(`Server On : http://localhost:${PORT}/`);
 });
-
-//
