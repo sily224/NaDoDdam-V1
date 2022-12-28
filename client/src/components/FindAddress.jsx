@@ -11,20 +11,17 @@ const Container = styled.div`
 	flex-direction: column;
 `;
 const AddressInput = styled(Input)`
-	width: 200px;
-	margin: 0 5px 5px 10px;
 	width: 250px;
+	min-width: 250px;
+	max-width: 250px;
+	margin: 7px 5px 5px 10px;
 `;
 
 const Line = styled.div`
 	margin-bottom: 5px;
 	display: flex;
-	justify-content: end;
+	justify-content: flex-end;
 	align-items: center;
-`;
-
-const Label = styled.label`
-	width: 80px;
 `;
 
 const FindAddress = ({ name, setAddress, setDetailAddress }) => {
@@ -60,15 +57,15 @@ const FindAddress = ({ name, setAddress, setDetailAddress }) => {
 							className="postmodal"
 							autoClose
 							onComplete={onClickComplete}
+							style={{ marginTop: '40px' }}
 						/>
 					</ModalContainer>
 				</div>
 			)}
 			<Line>
-				<Label>농장주소</Label>
 				<AddressInput value={name} type="text" readOnly />
 				<NormalButton
-					type="NormalButton"
+					type="button"
 					onClick={() => {
 						dispatch(showModal());
 						setOpenDetailAddress(true);

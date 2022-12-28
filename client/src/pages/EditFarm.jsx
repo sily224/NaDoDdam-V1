@@ -6,28 +6,28 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import FindAddress from '../components/FindAddress';
 import { HOST } from './../global-variables';
-import { StyledTitle, Input } from '../styles/Styled';
+import { StyledTitle, Input, SubmitButton } from '../styles/Styled';
 
-const Tittle = styled(StyledTitle)`
-	display: block;
+const Tittle = styled.h2`
 	text-align: center;
-	margin-bottom: 40px;
+	margin-top: 7%;
+	margin-bottom: 3%;
 `;
 
 const Form = styled.form`
 	display: flex;
 	flex-direction: column;
+	margin: 0 25%;
 `;
 
 const Wrapper = styled.div`
 	margin-bottom: 5px;
 	display: flex;
-	justify-content: end;
 	align-items: center;
 `;
 
 const Label = styled.label`
-	width: 80px;
+	min-width: 80px;
 `;
 
 const FarmInput = styled(Input)`
@@ -35,9 +35,13 @@ const FarmInput = styled(Input)`
 	margin-left: 10px;
 `;
 
-const Textarea = styled.textarea``;
+const FarmTextarea = styled.textarea`
+	border-radius: 10px;
+	border: 1px solid lightgray;
+	margin-top: 2%;
+`;
 
-const Button = styled.button``;
+const Button = styled(SubmitButton)``;
 
 const EditFarm = () => {
 	const navigate = useNavigate();
@@ -183,30 +187,30 @@ const EditFarm = () => {
 						></FarmInput>
 					</Wrapper>
 					<Wrapper>
-						<Label>농장주소</Label>
+						<Label>주소</Label>
 						<FindAddress
 							name={farmData.address}
 							setAddress={setAddress}
 							setDetailAddress={setDetailAddress}
 						/>
+					</Wrapper>
+					<Wrapper>
 						<Label htmlFor="profile-upload">이미지</Label>
 						<FarmInput
 							type="file"
 							id="profile-upload"
-							accept="image/*"
+							accept=".jpg, .jpeg, .png"
 							multiple="multiple"
 							onChange={onChangeImg}
 						/>
 					</Wrapper>
-					<Wrapper>
-						<Label>체험설명</Label>
-						<Textarea
-							type="text"
-							name="description"
-							defaultValue={farmData.description}
-							onChange={(e) => setDescription(e.target.value)}
-						></Textarea>
-					</Wrapper>
+					<Label>체험설명</Label>
+					<FarmTextarea
+						type="text"
+						name="description"
+						defaultValue={farmData.description}
+						onChange={(e) => setDescription(e.target.value)}
+					/>
 					<Button type="button" onClick={onClickModify}>
 						완료
 					</Button>
@@ -243,6 +247,7 @@ const EditFarm = () => {
 						></FarmInput>
 					</Wrapper>
 					<Wrapper>
+						<Label>주소</Label>
 						<FindAddress
 							name={address}
 							setAddress={setAddress}
@@ -259,14 +264,12 @@ const EditFarm = () => {
 							onChange={onChangeImg}
 						/>
 					</Wrapper>
-					<Wrapper>
-						<Label>체험설명</Label>
-						<Textarea
-							type="text"
-							name="description"
-							onChange={(e) => setDescription(e.target.value)}
-						></Textarea>
-					</Wrapper>
+					<Label>체험설명</Label>
+					<FarmTextarea
+						type="text"
+						name="description"
+						onChange={(e) => setDescription(e.target.value)}
+					/>
 					<Button onClick={onClickRegistration} type="button">
 						완료
 					</Button>
