@@ -6,7 +6,7 @@ export const SubmitButton = styled.button`
     background: #83d644;
     border-radius: 10px;
     margin-top: 40px;
-    padding: 2% 3%;
+    padding: 1rem 3rem;
     color: #fff;
     font-weight: 700;
 
