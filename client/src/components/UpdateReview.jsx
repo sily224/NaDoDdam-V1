@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import styled from 'styled-components'
 import * as userApi from "../lib/userApi";
 import { getToken } from '../utils/utils';
+import { StyledSubTitle, SubmitButton} from '../styles/Styled';
 
 const RatingBox = styled.div`
   margin: 0 auto;
@@ -15,6 +16,13 @@ const RatingBox = styled.div`
   .black {
     color: yellow;
   }
+`
+const StyledTextarea = styled.textarea`
+  background : #fff;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+  width: 50%;
+  height: 100px;
 `
 
 const UpdateReview = ({id}) => {
@@ -77,7 +85,9 @@ const UpdateReview = ({id}) => {
     };
     
     return (
-      <>
+      <div>
+        <hr />
+        <StyledSubTitle marginTop>수정할 내용을 작성해 주세요</StyledSubTitle>
       <RatingBox>
         {[0,1,2,3,4].map(item =>
         <ImStarFull 
@@ -88,16 +98,16 @@ const UpdateReview = ({id}) => {
         }
       </RatingBox>
       <form onSubmit={updateReviewHandler}>
-        <textarea 
+        <StyledTextarea 
           name="content"
           defaultValue={reviewContent}
           ref={textRef}
           maxLength={50}
-        ></textarea>
+        ></StyledTextarea><br />
         {reviewContent.length >= 50 && '50자 까지 작성이 가능합니다.'}
-        <button type="submit">수정</button>
+        <SubmitButton type="submit">수정</SubmitButton>
       </form>
-      </>
+      </div>
     )
   }
 

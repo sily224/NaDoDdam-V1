@@ -1,16 +1,16 @@
 import CreateReview from '../components/CreateReview';
-import {Container,  ReviewReservation} from '../components/ReviewReservation';
+import { ReviewReservation } from '../components/ReviewReservation';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import { useParams } from 'react-router';
 import { useState, useEffect } from "react";
+import { StyledTitle } from '../styles/Styled';
 
 const CreateReviewPage = () => {
     const [reservationData, setReservationData] = useState([]);
     const [farmId, setFarmId] = useState(null);
     const { id }= useParams();
     
-
     const getReservationData = async () => {
         const token = getToken();
         const res = await userApi.get(`//localhost:3500/api/reserve`, {
@@ -34,7 +34,13 @@ const CreateReviewPage = () => {
       getReservationData();
      },[]);
     
-    return <CreateReview id={id} farmId={farmId}/>
+    return (
+    <>
+      <StyledTitle>리뷰 작성</StyledTitle>
+      <ReviewReservation reservationData={reservationData} />
+      <CreateReview id={id} farmId={farmId}/>
+    </>
+    )
 }
 
 export default CreateReviewPage;

@@ -131,13 +131,9 @@ const initialState = {
   cancleModal: false,
   confirmModal: false,
   detailModal: false,
-  reviewModal: false,
 };
 
-
-
 function reducer(state, action) {
-  console.log({...state})
   switch (action.type) {
     case 'CANCLE':
       return {
@@ -495,11 +491,6 @@ const MyReservationTable = () => {
     {state.cancleModal && modalOpen && 
       <ModalContainer w="500px" h="510px">
         <CancleReservationPage/>
-      </ModalContainer>
-    }
-     {state.reviewModal && modalOpen && 
-      <ModalContainer w="500px" h="510px">
-        <CreateReview dataIndex={dataIndex}/>
       </ModalContainer>
     }
     </>
