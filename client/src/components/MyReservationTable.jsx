@@ -1,22 +1,25 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import Moment from 'moment';
 import styled, {css} from 'styled-components';
-import { showModal } from '../store/ModalSlice';
-import { closeModal } from '../store/ModalSlice';
+import { showModal, closeModal } from '../store/ModalSlice';
 import ModalContainer from './Modal';
 import Location from './Location';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
+import { HOST } from "../global-variables";
+import CreateReview from "./CreateReview";
 import {
-  StyledSubmitButton, 
+  StyledConfirmModal, 
   ConfirmButton, 
   StyledImageWrap, 
   StyledTitle, 
   StyledSubTitle,
   StatusButton,
-  StatusSelect
+  StatusSelect,
+  SubmitButton,
+  DeleteButton,
 } from '../styles/Styled';
 
 
@@ -28,14 +31,15 @@ const StyledTitleWrap = styled.div`
 const StyledContent = styled.div`
   width:70%;
 
-  >p {
+  > p {
     margin-bottom: 0;
+    color: #777;
   }
-`
 
-const StyledContentWrap = styled.div`
-  display:flex;
-  justify-content:space-between;
+  > p > span {
+    font-weight: bold;
+    color: #000;
+  }
 `
 
 const StyledNavWrapper = styled.div`
@@ -54,6 +58,10 @@ const StyledList = styled.div`
   padding: 3%;
   box-sizing: border-box;
   margin-bottom: 2%;
+
+  ${props => props.small && css`
+    width: 97%;
+ `}
 `
 
 const StyledListInner = styled.div`
@@ -65,27 +73,116 @@ const StyledStatusLabel = styled.span`
   border: none;
   background: #83d644;
   border-radius: 5px;
-  padding: 0.2rem;
+  padding: 0 0.2rem;
   color: #fff;
-  margin-left: 0.5rem;
+  margin: 0 0 0.5rem 0.5rem;
   font-size: 0.8rem;
-`
 
+  ${props => props.marginTop && css`
+   margin: 0.5rem 0 0 0;
+  `}
+`
+const StyledButtonWrap = styled.div`
+ display: flex;
+ flex-direction: column;
+
+ button + button {
+  margin: 0.2rem 0 0 0;
+ }
+`
+const StyledSelectWrap = styled.div`
+ display: flex;
+ flex-direction:column;
+ margin-top: 3rem;
+
+ >label {
+  margin-bottom: 0.5rem;
+ }
+`
+const StyledRefundEl = styled.h3`
+ text-align: center;
+ margin-top: 3rem;
+
+ > span {
+  color: red;
+ }
+`
+const StyledCancleButtonWrap = styled.div`
+ display: flex;
+ justify-content: center;
+ 
+ ${props => props.marginTop && css`
+  margin-top: 3rem;
+ `}
+
+ button + button {
+  margin-left: 0.2rem 0 0 0;
+ }
+`
+const StyledPayWrap = styled.div`
+ display: flex;
+ justify-content: space-between;
+
+ > p + p {
+  font-weight: bold;
+ }
+`
+const initialState = {
+  cancleModal: false,
+  confirmModal: false,
+  detailModal: false,
+  reviewModal: false,
+};
+
+
+
+function reducer(state, action) {
+  console.log({...state})
+  switch (action.type) {
+    case 'CANCLE':
+      return {
+        ...state,
+        cancleModal: true,
+        detailModal: false,
+      };
+    case 'CONFIRM':
+      return {
+        ...state,
+       confirmModal: true,
+      };
+    case 'DETAIL':
+      return {
+        ...state,
+        detailModal: true,
+        cancleModal:false,
+      };
+    case 'CLOSE': 
+     return {
+      cancleModal: false,
+      confirmModal: false,
+      detailModal: false,
+      reviewModal: false,
+     }
+    default: return state;
+  }
+}
 
 const MyReservationTable = () => {
   const [originalData, setOriginalData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [dataIndex, setDataIndex] = useState();
+  const [dataIndex, setDataIndex] = useState(null);
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const modalDispatch = useDispatch();
+  const modalOpen = useSelector((state) => state.modal.modal);
+
   const [statusOption , setStatusOption] = useState('전체');
   const [dateOption , setDateOption] = useState('지난 3개월');
-  const [canclePage, setCanclePage] = useState(false);
-  const dispatch = useDispatch();
-  const modalOpen = useSelector((state) => state.modal.modal);
   const statusList = ["전체", "예약대기", "예약완료", "예약취소", "체험완료"];
 
   const getReservationData = async () => {
     const token = getToken();
-    const res = await userApi.get(`//localhost:3500/api/reserve`, {
+    const res = await userApi.get(`${HOST}/api/reserve`, {
       headers: {
         authorization: token,
       },
@@ -138,8 +235,6 @@ const MyReservationTable = () => {
 
   const ShowDefault = () => {
     return <>
-      {!canclePage 
-      ? <>
         <StyledTitle>예약조회</StyledTitle>
         <StyledNavWrapper>
         <div>
@@ -154,15 +249,14 @@ const MyReservationTable = () => {
             </StatusButton>
           ))}
         </div>
-        <select value={dateOption} onChange={(e) => setDateOption(e.target.value)}>
+        <StatusSelect
+          value={dateOption} 
+          onChange={(e) => setDateOption(e.target.value)}>
 					<option value="threeMonthAgo">지난 3개월</option>
 					<option value="sixMonthAgo">지난 6개월</option>
 					<option value="oneYearAgo">지난 1년</option>
-				</select>
-        </StyledNavWrapper>
-      </>
-      : <h1>예약취소</h1>
-      }
+				</StatusSelect>
+      </StyledNavWrapper>
     </>
   };
 
@@ -180,57 +274,57 @@ const MyReservationTable = () => {
               </StyledImageWrap>
               <StyledContent>
                 <StyledTitleWrap>
-                  <h5
+                  <StyledSubTitle
                     style={{
                       textDecoration 
                       : reserve.status === '예약취소' 
                       ? 'line-through' 
                       : 'none'}}>
-                        {info.name}
-                  </h5>
+                      {info.name}
+                  </StyledSubTitle>
                   <StyledStatusLabel>
                     {reserve.status}
                   </StyledStatusLabel>
                 </StyledTitleWrap>
-                <p>날짜: {info.date}</p>
-                <p>체험시간: {start_time} -  {end_time}</p>
-                <p>인원: {reserve.personnel}명</p>
-                <p>결제금액 : {(reserve.total_price).toLocaleString()}원</p>
+                <p>체험 날짜 <span>{info.date}</span></p>
+                <p>체험 시간 <span>{start_time} -  {end_time}</span></p>
+                <p>인원 <span>{reserve.personnel}</span>명</p>
+                <p>결제금액 <span>{(reserve.total_price).toLocaleString()}</span>원</p>
               </StyledContent>
             </StyledListInner>
-            <div>
+            <StyledButtonWrap>
               <ConfirmButton
                 name={index} 
                 onClick={(e)=> {
-                setDataIndex(e.target.name)
-                dispatch(showModal())}}>
+                setDataIndex(e.target.name);
+                modalDispatch(showModal());
+                dispatch({type: 'DETAIL'})
+                }}>
                 더보기
               </ConfirmButton>
-                {(reserve.status === '체험완료' && reserve.review === undefined) &&
-                  <ConfirmButton>
-                    <Link to={`/writereview/${reserve.id}`}>
-                      후기작성
-                    </Link>
-                  </ConfirmButton>
-                }
-                {(reserve.status === '예약대기' || reserve.status === '예약완료')
-                  && <ConfirmButton 
+              {(reserve.status === '체험완료' && !reserve.review) &&
+                <ConfirmButton>
+                  <Link to={`/mypage/writereview/${reserve.id}`}>
+                    후기작성
+                  </Link>
+                </ConfirmButton>
+              }
+              {(reserve.status === '예약대기' || reserve.status === '예약완료') && 
+                <DeleteButton 
                   name={index}
                   onClick={(e)=> {
                     setDataIndex(e.target.name);
-                    setCanclePage(prev =>!prev);
-                    dispatch(closeModal());
+                    modalDispatch(showModal());
+                    dispatch({type: 'CANCLE'})
                   }}
-                  reject
-                  >
+                >
                   예약취소
-               </ConfirmButton>
+               </DeleteButton>
               }
-            </div>
+            </StyledButtonWrap>
           </StyledList>
           )
         })}
-        {modalOpen && <ModalContainer><DetailReservation /></ModalContainer>}
       </>  
     );
   };
@@ -244,57 +338,52 @@ const MyReservationTable = () => {
           const {info, reserve} = reservation || {};
           const start_time = info.start_time.slice(0,5);
           const end_time = info.end_time.slice(0,5);
-          return <div key={`${dataIndex}`-`${info.id}`}>
-            {!canclePage 
-              ? (<div>
-                    <StyledTitleWrap>
-                      <StyledImageWrap>
-                        <img src={info.url} alt="농장사진"/>
-                      </StyledImageWrap>
-                      <div>
-                        <h4 style={{
-                          textDecoration : reserve.status === '예약취소' 
-                          ? 'line-through' 
-                          : 'none'}}>
-                            {info.name}({reserve.status})
-                        </h4> 
-                        <p>{info.date}</p>
-                      </div>
-                  </StyledTitleWrap>
-                    <div>
-                      <p>예약정보</p>
-                      <StyledContentWrap>
-                        <div>
-                          <p>날짜: {info.date}</p>
-                          <p>시간: {start_time}-{end_time}</p>
-                          <p>인원: {reserve.personnel}명</p>
-                        </div>
-                        <Location location={info.address}/>
-                      </StyledContentWrap>
-                      <div>
-                        <div>
-                          <p>결제수단</p>
-                          <p>{reserve.payment === 'card' && '카드결제'}</p>
-                        </div>
-                        <div>
-                          <p>결제금액: {reserve.total_price.toLocaleString()}원</p>
-                        </div>
-                      </div>
-                    </div>
-                    {(reserve.status === "예약완료" || reserve.status === "예약대기") 
-                    && <button 
-                      onClick={() => {
-                        dispatch(closeModal());
-                        setCanclePage(prev =>!prev);
-                      }}> 
-                        예약취소
-                      </button>
-                    }
-                  </div>) 
-                : <canclePage />
-              }
-            </div>
-          })}
+          return (
+            <div key={`${dataIndex}`-`${info.id}`}>
+              <StyledList small>
+                <StyledTitleWrap>
+                  <StyledImageWrap>
+                    <img src={info.url} alt="농장사진"/>
+                  </StyledImageWrap>
+                    <StyledSubTitle style={{
+                      textDecoration : reserve.status === '예약취소' 
+                      ? 'line-through' 
+                      : 'none'}}>
+                      {info.name}<br/>
+                      <StyledStatusLabel marginTop>
+                        {reserve.status}
+                      </StyledStatusLabel>
+                    </StyledSubTitle>
+                </StyledTitleWrap>
+              </StyledList>
+                  <StyledSubTitle marginTop>예약정보</StyledSubTitle>
+                  <hr />
+                    <StyledContent>
+                      <p>체험 날짜 <span>{info.date}</span></p>
+                      <p>체험 시간 <span>{start_time} - {end_time}</span></p>
+                      <p>체험 인원 <span>{reserve.personnel}명</span></p>
+                    </StyledContent>
+                    <br />
+                    {info.address !== null && <Location location={info.address}/>}
+                    <hr />
+                    <StyledPayWrap>
+                      <p>결제수단</p>
+                      <p>{reserve.payment === 'card' && '카드결제'}</p>
+                    </StyledPayWrap>
+                    <StyledPayWrap>
+                      <p>결제금액 </p>
+                      <p>{reserve.total_price.toLocaleString()}원</p>
+                    </StyledPayWrap>
+                {(reserve.status === "예약완료" || reserve.status === "예약대기") && 
+                <SubmitButton 
+                  onClick={() => {
+                    modalDispatch(showModal());
+                    dispatch({type: 'CANCLE'})
+                  }}> 
+                    예약취소
+                </SubmitButton>}
+            </div>)
+        })}
       </>
     )
   }
@@ -302,12 +391,12 @@ const MyReservationTable = () => {
   const cancleResevationHandler = async(e) => {
     const id = e.target.name;
     try {
-      await userApi.patch(`//localhost:3500/api/reserve/${id}`, {
+      await userApi.patch(`${HOST}/api/reserve/${id}`, {
         status: '예약취소',
       }); 
-      dispatch(closeModal());
+      alert('예약이 취소되었습니다.')
+      modalDispatch(closeModal());
       getReservationData();
-      setCanclePage(prev =>!prev);
     } catch (err) {
       console.log(err.response.data.Error)
     }
@@ -324,19 +413,68 @@ const MyReservationTable = () => {
         const end_time = info.end_time.slice(0,5);
         return (
          <div key={`${dataIndex}-${info.id}`}>
-          <p>{info.name}</p>
-          <p>{info.description}</p>
-          <p>{info.date}</p>
-          <p>{start_time}-{end_time}</p>
-          <p>인원{reserve.personnel}명</p>
-          <p>취소사유</p>
-          <p>최종환불금액: {reserve.total_price.toLocaleString()}</p>
-          <button onClick={() => setCanclePage(prev =>!prev)}>이전</button>
-          <button onClick={() => dispatch(showModal())}>예약취소</button>
-          {modalOpen && <ModalContainer w="25%" h="20%" overflow="hidden">
-            예약을 취소하시겠습니까?
-            <button name={reserve.id} onClick={(e) => cancleResevationHandler(e)}>취소하기</button>
-            <button onClick={() => dispatch(closeModal())}>이전</button>
+          <StyledListInner>
+              <StyledImageWrap>
+                <img src={info.url} alt="농장사진" />
+              </StyledImageWrap>
+            <StyledContent>
+                <h4>{info.name}</h4>
+                <p>{info.date} | {start_time}-{end_time}</p>
+                <p>인원 {reserve.personnel}명</p>
+                <p>결제금액 {reserve.total_price.toLocaleString()}원</p>
+            </StyledContent>
+          </StyledListInner>
+          <StyledSelectWrap>
+            <label>취소 사유를 선택해 주세요.</label>
+            <StatusSelect>
+              <option>취소 후 다시 예약하기 위함</option>
+              <option>상품이 마음에 들지 않음</option>
+              <option>다른 농장으로 변경하기 위함</option>
+              <option>다른 농장으로 변경하기 위함</option>
+            </StatusSelect>
+          </StyledSelectWrap>
+          <hr />
+          <StyledRefundEl>
+            최종환불금액: 
+            <span>{reserve.total_price.toLocaleString()}원</span>
+          </StyledRefundEl>
+          <StyledCancleButtonWrap>
+            <SubmitButton 
+              onClick={() => {
+                dispatch({type: 'DETAIL'})
+              }}
+                reject
+              >
+                이전
+            </SubmitButton>
+            <SubmitButton onClick={() => {
+              dispatch({type: 'CONFIRM'})
+            }}>
+              예약취소
+            </SubmitButton>
+          </StyledCancleButtonWrap>
+          {state.confirmModal && modalOpen && 
+            <ModalContainer w="320px" h="170px">
+              <StyledConfirmModal>
+                <p>예약을 취소하시겠습니까?</p>
+                <StyledCancleButtonWrap marginTop>
+                  <DeleteButton 
+                  name={reserve.id}
+                  onClick={(e) => 
+                  cancleResevationHandler(e)}>
+                    확인
+                  </DeleteButton>
+                  <ConfirmButton 
+                  onClick={() => {
+                    dispatch({type: 'CLOSE'})
+                    modalDispatch(closeModal())
+                  }}
+                  reject
+                  >
+                    취소
+                  </ConfirmButton>
+                </StyledCancleButtonWrap>
+              </StyledConfirmModal>
           </ModalContainer>}
         </div>
       )}
@@ -348,7 +486,22 @@ const MyReservationTable = () => {
   return (
     <>
     <ShowDefault/>
-    {!canclePage ? <ShowResrvation /> : <CancleReservationPage/>}
+    <ShowResrvation /> 
+    {state.detailModal && modalOpen && 
+        <ModalContainer w="500px" h="510px">
+          <DetailReservation />
+        </ModalContainer>
+    }
+    {state.cancleModal && modalOpen && 
+      <ModalContainer w="500px" h="510px">
+        <CancleReservationPage/>
+      </ModalContainer>
+    }
+     {state.reviewModal && modalOpen && 
+      <ModalContainer w="500px" h="510px">
+        <CreateReview dataIndex={dataIndex}/>
+      </ModalContainer>
+    }
     </>
   )
 }

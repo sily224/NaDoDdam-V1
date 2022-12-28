@@ -1,10 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {PageWrapper, PageBtn} from '../styles/Styled'
 
 
 const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, page, setPage, first, setFirst, last, setLast , lastId, setLastId}) => {
+    const [btnActive, setBtnActive] = useState('');
     const current = Math.ceil(timeTable.length/perpage) + pageCount * pageGroup; 
-    
+
+    const hadlePageBtn = (e,i) => {
+        setPage(i);
+        setBtnActive(e.target.value);
+    };
+
     const pageNum = () =>{
         let pageList = [];
         
@@ -12,8 +18,10 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
         for (let i = first; i <= last; i++) {
             pageList.push(
                 <PageBtn
+                    value={i}
                     key={i + 1}
-                    onClick={() => setPage(i)}
+                    className={i == btnActive ? 'active' : ''}
+                    onClick={(e) => hadlePageBtn(e,i)}
                 >
                 {i}
                 </PageBtn>
@@ -53,7 +61,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 	return (
 		<>
 			<PageWrapper>
-                <PageBtn onClick={() => handlePrevPage()}  disabled={page < pageCount+1}>
+                <PageBtn onClick={handlePrevPage}  disabled={page < pageCount+1}>
 					{'<<'}
 				</PageBtn>
 				<PageBtn onClick={() => setPage(page - 1)} disabled={page===first}>
@@ -67,7 +75,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 				<PageBtn onClick={() => setPage(page + 1)} disabled={page === last}>
 					&gt;
 				</PageBtn>
-                <PageBtn onClick={() => handleNextPage()} disabled={last < (pageGroup+1) * pageCount}>
+                <PageBtn onClick={handleNextPage} disabled={last < (pageGroup+1) * pageCount}>
 					{'>>'}
 				</PageBtn>
 			</PageWrapper>

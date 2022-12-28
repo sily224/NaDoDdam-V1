@@ -6,7 +6,7 @@ export const SubmitButton = styled.button`
     background: #83d644;
     border-radius: 10px;
     margin-top: 40px;
-    padding: 2% 3%;
+    padding: 1rem 3rem;
     color: #fff;
     font-weight: 700;
 
@@ -33,7 +33,7 @@ export const ConfirmButton = styled.button`
     ${props => props.reject && css`
         border:1px solid #b1b0ac;
         background: #dbdad43b;
-        color:#d1b80d;
+        color: #b1b0ac;
     `}
 
     +button {
@@ -60,12 +60,11 @@ export const StatusButton = styled.button`
         margin-left: 6px;
     }
 `
-//memo 가영 : 예약조회페이지 - 상태목록
-//클릭된 버튼에 props로 clicked 전달
+//memo 가영 : 예약조회페이지 - 상태셀렉트 박스
 export const StatusSelect = styled.select`
     border-radius: 5px;
     border:1px solid #b1b0ac;
-    background: #dbdad43b;
+    background: #fff;
     color:#d1b80d;
     border-radius: 5px;
     padding: 0.2rem 0.4rem;
@@ -81,6 +80,7 @@ export const DeleteButton = styled.button`
     color: red;
     font-weight: 500;
     background-color:rgba(255, 0, 0, 0.18);
+    padding: 0.2rem 0.4rem;
 
     ${props => props.reject && css`
         border:1px solid #b1b0ac;
@@ -92,6 +92,11 @@ export const DeleteButton = styled.button`
         margin-left: 6px;
     }
 `
+// memo 가영: 확인을 묻는 모달
+export const StyledConfirmModal = styled.div`
+  text-align: center;
+`
+
 //memo 지혜 : 일반 블랙/화이트 버튼
 export const NormalButton = styled.button`
     border : 1px black solid;
@@ -99,6 +104,7 @@ export const NormalButton = styled.button`
     color : black;
     font-weight: 500;
     background-color : white;
+    padding: 0.2rem 0.4rem;
 
     +button {
         margin-left: 6px;
@@ -121,8 +127,15 @@ export const StyledTitle = styled.div`
 `
 //memo 가영 : 소제목
 export const StyledSubTitle = styled.h5`
-    margin-bottom: 30px;
     font-weight: 600;
+
+    ${props => props.marginBottom && css `
+        margin-bottom: 1.8rem;
+    `}
+
+    ${props => props.marginTop && css `
+        margin-top: 2rem;
+    `}
 `
 //memo 가영 : 콘텐츠 글자
 export const StyledParagraph = styled.p`
@@ -148,24 +161,42 @@ export const PageWrapper = styled.div`
 	width: 100%;
 	margin-top: 10px;
 `;
-//memo 지혜 : 페이지
+//memo 지혜 : 페이지 버튼
 export const PageBtn = styled.button`
 	background-color: white;
     font-weight: 700;
 	color: black;
     border: black solid 1px;
+    border-radius : 5px;
+    width: 30px;
+    height: 30px;
 
-    & .active {
-        background-color: darkgray;
-        color: white;
+    &.active {
+        background-color: #b1b0ac;
     }
+
     ${props => props.disabled && css`
         color: darkgray;
         background-color: lightgray;
+        opacity: 0.5;
     `}
 `
 // memo 지혜 : 컨텐트 컨테이터
 export const ContentContainer = styled.div`
-    display : block;
+    display: block;
     width: 100%;
+    margin: 8% 0;
+`
+//memo 지혜 : 배경 흰색, 테투리 green
+export const WhiteGreenBtn = styled.button`
+    border: 2px green solid;
+    border-radius: 10px;
+    color: green;
+    font-weight: 500;
+    background : white;
+    padding: 0.2rem 0.3rem;
+
+    +button {
+        margin-left: 6px;
+    }
 `

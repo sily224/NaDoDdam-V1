@@ -3,7 +3,47 @@ import { useDispatch } from 'react-redux';
 import { getDate } from '../store/FormSlice';
 import { DetailContext } from '../pages/DetailPage';
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; // css import
+import styled from 'styled-components';
+import 'react-calendar/dist/Calendar.css';
+
+const CalendarContainer = styled.div`
+	.react-calendar__tile:disabled {
+		background-color: rgb(191,206,191,0.3);
+	}
+	.react-calendar__tile--now {
+		background: lightyellow;
+	}
+	.react-calendar__navigation__label > span {
+		font-size: 1rem;
+		font-weight: 500;
+	}
+	.react-calendar__navigation button:disabled {
+		background-color:  rgb(191,206,191,0.3);
+	}
+	.react-calendar__navigation button:enabled:hover,
+	.react-calendar__navigation button:enabled:focus {
+		background-color: yellowgreen;
+		opacity: 0.5;
+	}
+	.react-calendar__tile--now:enabled:hover,
+	.react-calendar__tile--now:enabled:focus {
+		background: lightyellow;
+		border-radius: 8px;
+	}
+	.react-calendar__tile:enabled:hover{
+		color: white;
+		background-color: yellowgreen;
+		border-radius: 8px;
+		opacity: 0.5;
+	}
+	.react-calendar__tile:enabled:focus,
+	.react-calendar__tile--active {
+		color: white;
+		background-color: yellowgreen;
+		border-radius: 8px;
+	};
+`;
+
 
 const IsNotPay = () => {
 	const { timeTable } = useContext(DetailContext);
@@ -60,14 +100,15 @@ const ReactCalender = (props) => {
 	}, [date]);
 
 	return (
-
-		<Calendar
-			calendarType='US'
-			onChange={setDate}
-			value={date}
-			minDate={min}
-			maxDate={max}
-		/>
+		<CalendarContainer>
+			<Calendar
+				calendarType='US'
+				onChange={setDate}
+				value={date}
+				minDate={min}
+				maxDate={max}
+			/>
+		</CalendarContainer>
 
 	);
 };

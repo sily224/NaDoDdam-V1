@@ -66,7 +66,7 @@ const MyPage = () => {
     <Container>
       <StyledTitle>내 정보 관리</StyledTitle>
       <StyledInfoContainer>
-        <StyledSubTitle>
+        <StyledSubTitle marginBottom>
           기본정보
           <AiOutlineExclamationCircle/>
         </StyledSubTitle>
@@ -81,7 +81,7 @@ const MyPage = () => {
         ))}
       </StyledInfoContainer>
       <StyledInfoContainer>
-        <StyledSubTitle>
+        <StyledSubTitle marginBottom>
           보안설정
           <AiOutlineExclamationCircle/>
         </StyledSubTitle>

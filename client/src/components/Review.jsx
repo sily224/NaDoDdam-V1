@@ -5,7 +5,7 @@ import ModalContainer from './../components/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
 import { StyledParagraph, StyledSubTitle, ContentContainer} from '../styles/Styled';
-import {ConfirmButton} from '../styles/Styled'
+import { ConfirmButton } from '../styles/Styled'
 
 const ReviewDiv = styled.div`
     display: grid;
@@ -13,6 +13,10 @@ const ReviewDiv = styled.div`
     grid-template-rows: ${(props) => props.len > 6 ? `repeat(3,1fr)` : `repeat(${Math.ceil(props.len/2)},1fr)`};
     gap: 10px 20px;
 `; 
+const ReviewSubTitle = styled(StyledSubTitle)`
+    margin : 18% 0 10%;
+`;
+const ReviewTotalNum = styled(StyledParagraph)``;
 const ReviewId = styled.p`
     font-size: 1rem;
     font-weight: bold;
@@ -31,17 +35,21 @@ const ReviewContent= styled.p`
     `};
 `;
 const ReviewItem = styled.div`
-    border  : 1px solid black;
+    border  : 1px solid gray;
+    border-radius : 10px;
     padding : 10px;
-    overflow: hidden;   
-    p {  margin : 5px; }
+    overflow: hidden; 
+    :not(:last-child) { margin-bottom : 10px; }  
+    > button {margin-top: 10px;}
+    > p {  margin : 5px; }
 `;
 const ModalLayout = styled.div`
     display: felx;
 `;
 const ModalTitle = styled.div`
     width: 30%;
-    margin-right:5%;
+    padding-left: 5%;
+    margin-right: 5%;
 `;
 const ModalContent =styled.div`
     width: 60%;
@@ -49,6 +57,9 @@ const ModalContent =styled.div`
     margin-top : 5%;
     overflow-y:auto;
     overflow-x:hidden;
+`;
+const ShowAllReviewBtn = styled(ConfirmButton)`
+    margin-top : 1%;
 `;
 
 const ReviewItems = ({review,showAll}) =>{
@@ -86,13 +97,13 @@ const Review = ()=>{
                 <ReviewDiv len={review.length}> 
                     <ReviewItems review={review}/>
                 </ReviewDiv>
-                {review.length > 6 && <ConfirmButton onClick = {() => dispatch(showModal())}>모두보기</ConfirmButton>}
+                {review.length > 6 && <ShowAllReviewBtn onClick = {() => dispatch(showModal())}>모두보기</ShowAllReviewBtn>}
                 { modalOpen &&
-                    <ModalContainer>
+                    <ModalContainer h="75%">
                         <ModalLayout>
                             <ModalTitle>
-                                <StyledParagraph>리뷰</StyledParagraph>
-                                <StyledParagraph>후기 {review.length}개</StyledParagraph>
+                                <ReviewSubTitle>전체 후기</ReviewSubTitle>
+                                <ReviewTotalNum>총 {review.length}개</ReviewTotalNum>
                             </ModalTitle>
                             <ModalContent >
                                 <ReviewItems review={review} showAll/>

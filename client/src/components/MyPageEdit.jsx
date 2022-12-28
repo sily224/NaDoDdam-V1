@@ -13,7 +13,15 @@ import { logout } from '../utils/utils';
 import styled from 'styled-components'
 import { AiOutlineLock } from "react-icons/ai";
 import { AiOutlineUserDelete } from "react-icons/ai";
-import { SubmitButton, Input, StyledSubTitle, StyledParagraph, ConfirmButton } from '../styles/Styled';
+import { 
+  SubmitButton, 
+  Input, 
+  StyledSubTitle, 
+  StyledParagraph, 
+  ConfirmButton,
+  DeleteButton,
+  StyledConfirmModal,
+} from '../styles/Styled';
 
 const StyledForm = styled.form`
  display: flex;
@@ -42,9 +50,6 @@ const StyledUserInfoWrap = styled.div`
     display: block;
     margin-top: 5px;
 }
-`
-const StyledConfirmModal = styled.div`
-  text-align: center;
 `
 
 const MyPageProfileEdit = ({id, name, title, userId}) => {
@@ -223,13 +228,13 @@ const MyPageSecurityEdit = ({userId}) => {
               <AiOutlineUserDelete/>
               회원탈퇴
             </StyledParagraph>
-            <ConfirmButton onClick={() => {
+            <DeleteButton onClick={() => {
               dispatch(showModal());
               setModalConfirm(prev => !prev);
               setModalPassword(false);
-            }}>회원탈퇴</ConfirmButton>
+            }}>회원탈퇴</DeleteButton>
             {modalConfirm && modalOpen && 
-              <ModalContainer w="320px" h="200px">
+              <ModalContainer w="320px" h="206px">
                 <StyledConfirmModal>
                 <p>탈퇴 시 복구할 수 없습니다. <br />
                   탈퇴하시겠습니까?</p>

@@ -1,4 +1,11 @@
-const ShowReservation = ({reservationData}) => {
+import styled from 'styled-components';
+
+const Container = styled.div`
+ display: flex;
+ justify-content: space-evenly;
+`
+
+const  ReviewReservation = ({reservationData}) => {
     return (
      <>
        {reservationData.map(item => {
@@ -19,4 +26,4 @@ const ShowReservation = ({reservationData}) => {
     )
 }
 
-export default ShowReservation;
+export {Container, ReviewReservation};

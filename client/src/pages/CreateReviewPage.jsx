@@ -1,5 +1,5 @@
 import CreateReview from '../components/CreateReview';
-import ShowReservation from '../components/WriteReviewForm';
+import {Container,  ReviewReservation} from '../components/ReviewReservation';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import { useParams } from 'react-router';
@@ -9,6 +9,7 @@ const CreateReviewPage = () => {
     const [reservationData, setReservationData] = useState([]);
     const [farmId, setFarmId] = useState(null);
     const { id }= useParams();
+    
 
     const getReservationData = async () => {
         const token = getToken();
@@ -17,7 +18,14 @@ const CreateReviewPage = () => {
             authorization: token,
           },
         });
-        const result  = res.data.filter(item => item.reserve.id === Number(id));
+        const dataSort = res.data.sort((a, b) => {
+          let aTime = a.info.date;
+          let bTime = b.info.date;
+          if (aTime > bTime) return -1;
+          if (aTime === bTime) return 0;
+          if (aTime < bTime) return 1;
+        })
+        const result = dataSort.filter(item => item.reserve.id === Number(id));
         setReservationData([result[0]]);
         setFarmId(result[0].info.id);
      };
@@ -26,12 +34,7 @@ const CreateReviewPage = () => {
       getReservationData();
      },[]);
     
-    return (
-    <>
-    <ShowReservation reservationData={reservationData}/>
-    <CreateReview id={id} farmId={farmId}/>
-    </>
-    )
+    return <CreateReview id={id} farmId={farmId}/>
 }
 
 export default CreateReviewPage;
