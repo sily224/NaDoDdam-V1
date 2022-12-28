@@ -70,7 +70,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/myreservation"
+						path="/mypage/reservation"
 						element={
 							<MemberRoute>
 								<MyReservation />
@@ -78,7 +78,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/myreview"
+						path="/mypage/review"
 						element={
 							<MemberRoute>
 								<MyReview />
@@ -87,7 +87,7 @@ function App() {
 					/>
 					\
 					<Route
-						path="/writereview/:id"
+						path="/mypage/writereview/:id"
 						element={
 							<MemberRoute>
 								<CreateReviewPage />
@@ -95,7 +95,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/updatereview/:id"
+						path="/mypage/updatereview/:id"
 						element={
 							<MemberRoute>
 								<UpdateReviewPage />
