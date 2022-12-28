@@ -3,7 +3,7 @@ import {PageWrapper, PageBtn} from '../styles/Styled'
 
 
 const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, page, setPage, first, setFirst, last, setLast , lastId, setLastId}) => {
-    const [btnActive, setBtnActive] = useState("");
+    const [btnActive, setBtnActive] = useState('');
     const current = Math.ceil(timeTable.length/perpage) + pageCount * pageGroup; 
 
     const hadlePageBtn = (e,i) => {
@@ -20,7 +20,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
                 <PageBtn
                     value={i}
                     key={i + 1}
-                    className={i == btnActive ? "active" : ""}
+                    className={i == btnActive ? 'active' : ''}
                     onClick={(e) => hadlePageBtn(e,i)}
                 >
                 {i}

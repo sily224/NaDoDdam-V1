@@ -1,8 +1,9 @@
-import {PageWrapper, PageBtn} from '../styles/Styled'
+import {useState} from 'react';
+import {PageWrapper, PageBtn} from '../styles/Styled';
 
 // memo 지우: total(데이터 총 갯수), limit(한 페이지에 보여줄 갯수)
 const Pagination = ({ total, limit, page, setPage }) => {
-	const [btnActive, setBtnActive] = useState("");
+	const [btnActive, setBtnActive] = useState('');
 	const numPages = Math.ceil(total / limit);
 
     const hadlePageBtn = (e,i) => {
@@ -23,7 +24,7 @@ const Pagination = ({ total, limit, page, setPage }) => {
 						<PageBtn
 						value={i}
 							key={i + 1}
-							className={i == btnActive ? "active" : ""}
+							className={i == btnActive ? 'active' : ''}
 							onClick={(e) => hadlePageBtn(e,i)}
 							aria-current={page === i + 1 ? 'page' : null}
 						>
