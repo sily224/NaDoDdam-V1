@@ -154,18 +154,23 @@ export const PageBtn = styled.button`
     font-weight: 700;
 	color: black;
     border: black solid 1px;
+    border-radius : 5px;
+    width: 30px;
+    height: 30px;
 
-    & .active {
-        background-color: darkgray;
-        color: white;
+    &.active {
+        background-color: #b1b0ac;
     }
+
     ${props => props.disabled && css`
         color: darkgray;
         background-color: lightgray;
+        opacity: 0.5;
     `}
 `
 // memo 지혜 : 컨텐트 컨테이터
 export const ContentContainer = styled.div`
-    display : block;
+    display: block;
     width: 100%;
+    margin: 8% 0;
 `
