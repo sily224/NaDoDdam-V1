@@ -36,14 +36,14 @@ const Lable = styled(StyledSubTitle)`
 `;
 const Content = styled.div``;
 
-const ImgWrapper = styled.div`
-	width: 150px;
-	height: 120px;
-`;
+const ImgWrapper = styled.div``;
 
 const Img = styled.img`
-	width: 150px;
+	width: 200px;
+	heigth: 120px;
+	object-fit: fill;
 	margin-top: 5px;
+
 	height: + img {
 		margin-left: 5px;
 	}

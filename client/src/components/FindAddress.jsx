@@ -4,9 +4,27 @@ import ModalContainer from './../components/Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { Input, NormalButton } from '../styles/Styled';
 
-const Input = styled.input`
-	width: 500px;
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
+const AddressInput = styled(Input)`
+	width: 200px;
+	margin: 0 5px 5px 10px;
+	width: 250px;
+`;
+
+const Line = styled.div`
+	margin-bottom: 5px;
+	display: flex;
+	justify-content: end;
+	align-items: center;
+`;
+
+const Label = styled.label`
+	width: 80px;
 `;
 
 const FindAddress = ({ name, setAddress, setDetailAddress }) => {
@@ -34,7 +52,7 @@ const FindAddress = ({ name, setAddress, setDetailAddress }) => {
 	};
 
 	return (
-		<>
+		<Container>
 			{modalOpen && (
 				<div>
 					<ModalContainer>
@@ -46,27 +64,30 @@ const FindAddress = ({ name, setAddress, setDetailAddress }) => {
 					</ModalContainer>
 				</div>
 			)}
-			<Input value={name} type="text" readOnly />
+			<Line>
+				<Label>농장주소</Label>
+				<AddressInput value={name} type="text" readOnly />
+				<NormalButton
+					type="NormalButton"
+					onClick={() => {
+						dispatch(showModal());
+						setOpenDetailAddress(true);
+					}}
+				>
+					검색
+				</NormalButton>
+			</Line>
 			{openDetailAddress && (
-				<Input
+				<AddressInput
 					type="text"
 					name="detailAddress"
 					placeholder="상세주소를 입력해주세요"
 					onChange={(e) => {
 						setDetailAddress(e.target.value);
 					}}
-				></Input>
+				></AddressInput>
 			)}
-			<button
-				type="button"
-				onClick={() => {
-					dispatch(showModal());
-					setOpenDetailAddress(true);
-				}}
-			>
-				주소검색
-			</button>
-		</>
+		</Container>
 	);
 };
 
