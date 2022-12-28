@@ -1,21 +1,25 @@
 import {useState,useEffect,useContext} from 'react';
-import { DetailContext } from '../pages/DetailPage';
 import { useDispatch, useSelector } from 'react-redux';
+import { DetailContext } from '../pages/DetailPage';
 import { getStartTime, getEndTime, getPersonnel, getPrice, getTimeId } from '../store/FormSlice';
 import styled from 'styled-components';
-import {green,yellow} from '../global-variables';
+import {green} from '../global-variables';
 
 const TimeButtonContainer = styled.div`
     display:flex;
-    flex-direction:column;
+    flex-flow : column wrap;
     justify-content: flex-start;
     align-items: flex-start;
-    flex-wrap: wrap;
-    height:100%;
+    height : 270px;
+
+    > button:not(:last-child){
+        margin-bottom: 7px;
+        margin-right: 5px;
+    }
 `;
 const TimeButton = styled.button`
     width : 100%;
-    height : 90px;
+    height : 82px;
     font-size : 1rem;
     background-color : white;
     border : 1px ${green} solid;
@@ -44,7 +48,7 @@ const TimeBtns = () =>{
     
     useEffect(() => {
         if(timeTable){
-            // 타켓 날짜의 모든 타임내역
+            //memo 지혜 : 타켓 날짜의 모든 타임내역
             const targetTable = timeTable.filter(table => table.date === date);
 
             setStartTimeList([...targetTable.map((table)=> table.start_time.slice(0,5))]);
@@ -67,15 +71,19 @@ const TimeBtns = () =>{
         setTimeBtnActive(e.target.value); //index
     };
 
-    return  startTimeList && startTimeList.map( (start,idx)=>{
-        return <TimeButtonContainer key= {`TimeButtonContainer-${idx}`}>
-                <TimeButton 
-                    key= {`TimeButton-${idx}`}
-                    className={'btn' + (idx == timeBtnActive ? ' active' : '')} 
-                    value ={idx} onClick={handleTimeSelect}>{`${idx+1}타임  ${start} ~ ${endTimeList[idx]}`}
-                </TimeButton>
-            </TimeButtonContainer>
-    });
+    return ( 
+        <TimeButtonContainer>
+            {startTimeList && startTimeList.map( (start,idx)=>{
+                return (
+                    <TimeButton 
+                        key= {`TimeButton-${idx}`}
+                        className={'btn' + (idx == timeBtnActive ? ' active' : '')} 
+                        value ={idx} onClick={handleTimeSelect}>{`${idx+1}타임  ${start} ~ ${endTimeList[idx]}`}
+                    </TimeButton>
+                )
+            })}
+        </TimeButtonContainer>
+    )
 };
 
 export default TimeBtns;
