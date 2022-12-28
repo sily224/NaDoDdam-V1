@@ -9,6 +9,7 @@ import FarmFormat from '../components/FarmFormat';
 import FarmTime from '../components/FarmTime';
 import Pagination from '../components/TimeTablePagination';
 import styled from 'styled-components';
+import {ConfirmButton, DeleteButton, ContentContainer, NormalButton} from '../styles/Styled';
 
 import * as API from '../lib/userApi';
 
@@ -17,11 +18,11 @@ const Subject = styled.h2`
 	margin-top: 7%;
 	margin-bottom: 3%;
 `;
-const TimeTableList = styled.div`
-    border:1px black solid;
+const TimeTableList = styled(ContentContainer)`
+    border : 2px lightgray solid;
+    border-radius : 10px;
     padding 15px;
-    margin-bottom: 20px;
-    margin-left: 3%;
+    margin : 2% 0;
 `;
 const FarmImg = styled.img`
     margin-right: 20px;
@@ -34,7 +35,7 @@ const TimTableContent = styled.div`
 const TimTableItem = styled.div`
     display:flex;
 `;
-const AddTimTable = styled.button`
+const AddTimTable = styled(NormalButton)`
     display:block;
     margin-left:auto;
     margin-bottom:10px;
@@ -44,9 +45,21 @@ const TimeTableButtons = styled.div`
     flex-direction:column;
     margin-left:auto;
 `;
-const TimeTableButton =styled.button`
+const UpdateButton =styled(ConfirmButton)`
+    display: block;
+    width: 100%;
+    + button {
+        margin-left: 0px;
+    }
     :not(:last-child) {
         margin-bottom:10px;
+    }
+`;
+const DelButton = styled(DeleteButton)`
+    display: block;
+    width: 100%;
+    + button {
+        margin-left: 0px;
     }
 `;
 const H3 = styled.h3`
@@ -60,8 +73,6 @@ const FailAnnouncement = styled.p`
 	text-align: center;
 	margin-top: 5rem;
 `;
-
-
 
 //memo 지혜 : TimeTable
 const TimeTable = ()=>{
@@ -93,15 +104,8 @@ const TimeTable = ()=>{
         try {
             await API.get(`//localhost:3500/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then((res) => {
                 const data = res.data;
-                console.log(data);
-                console.log(lastId);
-                // if(data.length === 0 ){
-                    // console.log('진짜마지막 원소임');
-                    // if(page>1) window.location.reload();
-                    // return;
-                // }
-
-
+                // console.log(data);
+                // console.log(lastId);
                 setTimeTable([...data]);
                 
             });
@@ -248,7 +252,7 @@ const TimeTable = ()=>{
                                         
                                         <div>
                                             <span>가격 : </span>
-                                            <span>{table.price}</span>  
+                                            <span>{(table.price).toLocaleString('ko-KR')}</span>  
                                         </div>
                                             
                                         <div>
@@ -257,8 +261,8 @@ const TimeTable = ()=>{
                                         </div>
                                     </TimTableContent>
                                     <TimeTableButtons>
-                                        <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(table.id)}>수정</TimeTableButton>
-                                        <TimeTableButton type='button' onClick={()=>onTimeTableDelete(table.id)}>삭제</TimeTableButton>
+                                        <UpdateButton type='button' onClick={()=>onTimeTableUpdate(table.id)}>수정</UpdateButton>
+                                        <DelButton type='button' onClick={()=>onTimeTableDelete(table.id)}>삭제</DelButton>
                                     </TimeTableButtons>
                                 </TimTableItem>
                             </TimeTableList>

@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import store from '../store/Store';
 
 const Container = styled.main`
-	min-height: 100vh;
+	min-height: 100%;
 	padding: 3% 5% 7% 5%;
 	box-sizing: border-box;
 	position: relative;

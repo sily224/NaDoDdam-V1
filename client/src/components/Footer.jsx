@@ -1,15 +1,14 @@
 import styled from 'styled-components';
 
 const StyledContainer = styled.footer`
-    position:sticky;
+    position:fixed;
     bottom:0;
     font-size: 1rem;
-    border-top: 1px solid lightgray;
     width: 100%;
-    padding: 2% 5%;
+    padding: 1.2rem 5.5rem;
     background-color:#fff;
-    height: 100%;
     z-index: 80;
+    border-top:1px solid #f4d815;
 `;
 
 const StyledFooter= styled.div`
@@ -21,6 +20,7 @@ const StyledFooterMenu = styled.a`
     padding-right: 2%;
   }
  font-size: 0.9rem;
+
 `
 
 const Footer = (() => {

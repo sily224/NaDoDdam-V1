@@ -1,12 +1,4 @@
-import styled from 'styled-components';
-
-const PageWrapper = styled.div`
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	margin-top: 10px;
-`;
-const PageBtn = styled.button``;
+import {PageWrapper, PageBtn} from '../styles/Styled'
 
 // memo 지우: total(데이터 총 갯수), limit(한 페이지에 보여줄 갯수)
 const Pagination = ({ total, limit, page, setPage }) => {

@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getDate } from '../store/FormSlice';
 import { DetailContext } from '../pages/DetailPage';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // css import
-
-
 
 const IsNotPay = () => {
 	const { timeTable } = useContext(DetailContext);
@@ -62,6 +60,7 @@ const ReactCalender = (props) => {
 	}, [date]);
 
 	return (
+
 		<Calendar
 			calendarType='US'
 			onChange={setDate}
@@ -69,6 +68,7 @@ const ReactCalender = (props) => {
 			minDate={min}
 			maxDate={max}
 		/>
+
 	);
 };
 

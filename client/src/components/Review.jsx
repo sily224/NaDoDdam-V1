@@ -4,14 +4,9 @@ import { DetailContext } from '../pages/DetailPage'
 import ModalContainer from './../components/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
+import { StyledParagraph, StyledSubTitle, ContentContainer} from '../styles/Styled';
+import {ConfirmButton} from '../styles/Styled'
 
-
-const ReviewContainer  = styled.div`
-    border: 1px solid black;
-    border-radius: 10px;
-    padding: 10px;
-    width: 100%;
-`;
 const ReviewDiv = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -37,7 +32,7 @@ const ReviewContent= styled.p`
 `;
 const ReviewItem = styled.div`
     border  : 1px solid black;
-    padding : 5px;
+    padding : 10px;
     overflow: hidden;   
     p {  margin : 5px; }
 `;
@@ -68,10 +63,10 @@ const ReviewItems = ({review,showAll}) =>{
         return(      
             <ReviewItem key = {`reveiw-${idx}`} >
                 <ReviewId  key = {`${value.id}-${idx}`}>{id}</ReviewId>
-                <p>★ {rating}</p>
+                <StyledParagraph>★ {rating}</StyledParagraph>
                 <ReviewName key = {`${value.createdAt}-${idx}`}>{createdAt}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
-                { isTextOverflow && <button onClick={()=> setTab(!tab)} >더보기</button>}
+                { isTextOverflow && <ConfirmButton onClick={()=> setTab(!tab)} >더보기</ConfirmButton>}
             </ReviewItem>
         );
     })
@@ -84,19 +79,20 @@ const Review = ()=>{
     const modalOpen = useSelector((state) => state.modal.modal);
     
     return (
-        <>
-            <p>후기</p>
-            <ReviewContainer >
+        <ContentContainer>
+            <StyledSubTitle>후기</StyledSubTitle>
+            <hr />
+            <div>
                 <ReviewDiv len={review.length}> 
                     <ReviewItems review={review}/>
                 </ReviewDiv>
-                {review.length > 6 && <button onClick = {() => dispatch(showModal())}>모두보기</button>}
+                {review.length > 6 && <ConfirmButton onClick = {() => dispatch(showModal())}>모두보기</ConfirmButton>}
                 { modalOpen &&
                     <ModalContainer>
                         <ModalLayout>
                             <ModalTitle>
-                                <p>리뷰</p>
-                                <p>후기 {review.length}개</p>
+                                <StyledParagraph>리뷰</StyledParagraph>
+                                <StyledParagraph>후기 {review.length}개</StyledParagraph>
                             </ModalTitle>
                             <ModalContent >
                                 <ReviewItems review={review} showAll/>
@@ -104,8 +100,8 @@ const Review = ()=>{
                         </ModalLayout>
                     </ModalContainer>
                 }
-            </ReviewContainer>
-        </>
+            </div>
+        </ContentContainer>
     );
 }
 
