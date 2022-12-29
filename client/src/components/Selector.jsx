@@ -16,9 +16,9 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
   const option = useSelector(state=>state.option);
   const [cat, setCat] = useState([]);
 
-  useEffect(()=>{
-    console.log(option);
-  }, [option])
+  // useEffect(()=>{
+  //   console.log(option);
+  // }, [option])
 
   const setOption = async (e) => {
     await setTemp({
@@ -40,7 +40,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
       data.map(x=>{
         if (!cat.includes(x.type)) cat.push(x.type);
       })
-      console.log(cat);
+      // console.log(cat);
       setCat(cat);
     });
   }
@@ -57,7 +57,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
       </Container>
     ) || searchType === "fruit" && (
       <Container>
-        {cat.map((x, i)=>(
+        {cat && cat.map((x, i)=>(
           <Item to="/" key={i} id={x} onClick={e=>{
             dispatch(setFruit(e.target.id));
             dispatch(setLocation(null));

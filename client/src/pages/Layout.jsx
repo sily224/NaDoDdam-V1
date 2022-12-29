@@ -33,8 +33,7 @@ const getFavoriteFarmId = async () => {
 			// console.log(data);
 			return data.map((x) => x.id);
 		});
-	console.log(result);
-
+	// console.log(result);
 	return result;
 };
 
@@ -47,11 +46,11 @@ const Layout = () => {
     dispatch(setFavorite(farmIds));
 	};
 
-	console.log('layout에서의 찜 목록', favorite);
+	// console.log('layout에서의 찜 목록', favorite);
 
 	useEffect(() => {
 		if (localStorage.getItem('token')) setFavoriteFarmIds();
-    console.log('useEffect', favorite);
+    // console.log('useEffect', favorite);
 	}, []);
 
 	return (
