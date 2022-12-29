@@ -490,7 +490,7 @@ const Payment = () => {
 							</ModalDiv>
 						) : (
 							<ModalDiv>
-								<H1>결제실패 </H1>
+								<H1>결제실패</H1>
 								<P>체험 인원 초과로 예약이 실패되었습니다</P>
 								<P>다른 시간대로 예약해주세요</P>
 								<ModalBtnDiv>
