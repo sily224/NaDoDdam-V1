@@ -13,8 +13,8 @@ const RatingBox = styled.div`
     color: #C4C4C4;
     cursor: pointer;
   }
-  .black {
-    color: yellow;
+  .click {
+    color: #f4d815;
   }
 `
 const StyledTextarea = styled.textarea`
@@ -92,7 +92,7 @@ const UpdateReview = ({id}) => {
         {[0,1,2,3,4].map(item =>
         <ImStarFull 
         key={item}
-        className={clicked[item] && 'black'}
+        className={clicked[item] && 'click'}
         onClick={() => handleStarClick(item)}
         />)
         }

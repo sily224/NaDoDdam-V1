@@ -5,11 +5,13 @@ import * as userApi from "../lib/userApi";
 import { useParams } from 'react-router';
 import { useState, useEffect } from "react";
 import { StyledTitle } from '../styles/Styled';
+import {SkeletonReviewReservation} from '../components/Skeleton';
 
 const CreateReviewPage = () => {
     const [reservationData, setReservationData] = useState([]);
     const [farmId, setFarmId] = useState(null);
     const { id }= useParams();
+    const [loading, setLoading] = useState(true);
     
     const getReservationData = async () => {
         const token = getToken();
@@ -28,6 +30,7 @@ const CreateReviewPage = () => {
         const result = dataSort.filter(item => item.reserve.id === Number(id));
         setReservationData([result[0]]);
         setFarmId(result[0].info.id);
+        setLoading(false);
      };
 
     useEffect(() => {
@@ -37,7 +40,7 @@ const CreateReviewPage = () => {
     return (
     <>
       <StyledTitle>리뷰 작성</StyledTitle>
-      <ReviewReservation reservationData={reservationData} />
+      {loading? <SkeletonReviewReservation /> :<ReviewReservation reservationData={reservationData}/>}
       <CreateReview id={id} farmId={farmId}/>
     </>
     )

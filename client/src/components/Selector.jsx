@@ -33,7 +33,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
   }, []);
 
   const getFruits = async () => {
-    await axios.get(`api/farms?limit=100000000`)
+    await axios.get(`/api/farms?limit=100000000`)
     .then(res=>res.data)
     .then(data=>{
       const cat = [];
@@ -49,7 +49,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
     searchType === "location" && (
       <Container>
         {location.map((x, i) => (
-          <Item to="/" key={i} id={x[1]} onClick={e=>{
+          <Item to="/" key={i} id={x[0]} onClick={e=>{
             dispatch(setLocation(e.target.id));
             dispatch(setFruit(null));
           }}>{location[i][0]}</Item>

@@ -16,13 +16,13 @@ router.get('/myInfo', isAuth , authController.myInfo); //개인 회원정보 조
 router.patch(
 	'/myPassword/:userId',
 	isAuth,
+	Auth.validatePassword,
 	authController.passwordUpdate
 ); //비밀번호 수정
 
 router.patch(
 	'/myInfo/:userId',
 	isAuth,
-	Auth.validatePassword,
 	authController.userUpdate
 ); //개인 정보 수정
 
