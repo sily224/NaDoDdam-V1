@@ -10,7 +10,6 @@ import FarmTime from '../components/FarmTime';
 import Pagination from '../components/TimeTablePagination';
 import styled from 'styled-components';
 import { ConfirmButton, DeleteButton, ContentContainer, NormalButton, SubmitButton, Input } from '../styles/Styled';
-import { HOST } from '../global-variables';
 import Moment from 'moment';
 
 import * as API from '../lib/userApi';
@@ -92,7 +91,7 @@ const CostInput = styled(CommonInput)``;
 
 // const HaveFarm = async() => {
 //     try {
-//         const res = await API.get(`${HOST}/api/farmers/farmInfo`);
+//         const res = await API.get(`/api/farmers/farmInfo`);
 //         console.log(res.data);
 //         if(res.data.length < 1 ) return;
 //     }
@@ -128,14 +127,14 @@ const TimeTable = ()=>{
 
     const fetchData = async () => {
         try {
-            // await API.get(`${HOST}/api/farmers/farmInfo`).then(
+            // await API.get(`/api/farmers/farmInfo`).then(
                 // (res)=> {
                     // if (res.data.message ='농장주에게 등록된 농장이 없습니다.'){
-                    //     alert("농장을 등록하세요");
+                    //     alert('농장을 등록하세요');
                     //     return;
                     // }
             // });
-            await API.get(`${HOST}/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
+            await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
                 (res) => {
                     const data = res.data;
                     setTimeTable([...data]);
@@ -159,8 +158,8 @@ const TimeTable = ()=>{
             };
 
             const {timeList,startDate,endDate} = postData;
-            const d1 = Moment(startDate,"YYYY-MM-DD");
-            const d2 = Moment(endDate,"YYYY-MM-DD");
+            const d1 = Moment(startDate,'YYYY-MM-DD');
+            const d2 = Moment(endDate,'YYYY-MM-DD');
             const diffDate = d2.diff(d1,'days');
             let date = d1;
 
@@ -169,9 +168,8 @@ const TimeTable = ()=>{
                     const start_time = timeList[j][0];
                     const end_time = timeList[j][1];
                     const personnel = maxHeadCount[j];
-
                     try {
-                        await API.post(`${HOST}/api/timetables`,{
+                        await API.post('/api/timetables',{
                             'date': date,
                             'personnel':personnel,
                             'price':cost,
@@ -189,7 +187,7 @@ const TimeTable = ()=>{
         //memo 지혜 : 체험테이블 수정
         else {
             try {
-                const res = await API.put(`${HOST}/api/timetables/${target}`,{
+                const res = await API.put(`/api/timetables/${target}`,{
                     'date': date[0],
                     'personnel':maxHeadCount[0],
                     'price':cost,
@@ -202,7 +200,6 @@ const TimeTable = ()=>{
                 console.log(e);
             }
         }
-        
         alert(`체험시간표 ${Isupdate()}완료`);
         dispatch(closeModal());
         dispatch(initDate());
@@ -221,8 +218,11 @@ const TimeTable = ()=>{
     };
 
     const onTimeTableDelete = async(id) => {
-        await API.delete(`${HOST}/api/timetables/${id}`);
-        fetchData();
+        const result = confirm('삭제하시겠습니까?');
+        if(result){
+            await API.delete(`/api/timetables/${id}`);
+            fetchData();
+        }
     };
     const onTimeTableUpdate = (id)=>{
         resetForm();
@@ -280,19 +280,16 @@ const TimeTable = ()=>{
                                         </div>
                                         <div>
                                             <span>시작시간 : </span>
-                                            <span>{start_time}</span>
+                                            <span>{start_time.slice(0,5)}</span>
                                         </div>
-
                                         <div>
                                             <span>끝나는시간 : </span>
-                                            <span>{end_time}</span>
+                                            <span>{end_time.slice(0,5)}</span>
                                         </div>
-                                        
                                         <div>
                                             <span>가격 : </span>
                                             <span>{price.toLocaleString('ko-KR')}</span>  
                                         </div>
-                                            
                                         <div>
                                             <span>인원수 : </span>
                                             <span>{personnel}</span>

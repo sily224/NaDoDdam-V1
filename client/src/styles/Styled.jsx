@@ -80,7 +80,6 @@ export const DeleteButton = styled.button`
     color: red;
     font-weight: 500;
     background-color:rgba(255, 0, 0, 0.18);
-    padding: 0.2rem 0.4rem;
 
     ${props => props.reject && css`
         border:1px solid #b1b0ac;
