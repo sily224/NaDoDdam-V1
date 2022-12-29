@@ -1,3 +1,5 @@
+import db from './index.js';
+
 const Reviews = (sequelize, DataTypes) => {
 	const Reviews = sequelize.define(
 		'Reviews',
@@ -59,6 +61,24 @@ const Reviews = (sequelize, DataTypes) => {
 	};
 	Reviews.findByFarmId = (id) => {
 		return Reviews.findAll({ where: { farm_id: id } });
+	};
+
+	Reviews.findByFarmIdAndUser = (id) => {
+		return Reviews.findAll({
+			attributes: [
+			'id',
+			'content',
+			'reserve_id',
+			'farm_id',
+			'rating',
+			[DataTypes.col('User.name'), 'name'],
+			[DataTypes.col('User.email'), 'email'],
+			],
+			include: {
+				model: db.Users,
+			},
+			where: { farm_id: id } 
+		});
 	};
 
 	Reviews.deleteReview = (id) => {
