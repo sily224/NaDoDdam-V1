@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import optionSlice from '../store/OptionSlice';
 import { setLocation, setFruit } from "../store/OptionSlice";
 import store from '../store/Store';
+import { HOST, yellow } from './../global-variables';
 
 // 옵션 변경
 const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
@@ -32,7 +33,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
   }, []);
 
   const getFruits = async () => {
-    await axios.get('http://localhost:3500/api/farms?limit=100000000')
+    await axios.get(`${HOST}/api/farms?limit=100000000`)
     .then(res=>res.data)
     .then(data=>{
       const cat = [];
@@ -123,7 +124,7 @@ const Item = styled(Link)`
   &:hover {
     cursor: pointer;
 		font-weight:700;
-		color: #f4d815;
+		color: ${yellow};
 `;
 
 

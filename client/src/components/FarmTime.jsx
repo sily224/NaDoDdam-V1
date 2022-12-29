@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
+import { Input, ConfirmButton } from '../styles/Styled';
 
 const TimeConatiner = styled.div`
     display: flex;
@@ -12,20 +12,36 @@ const TimeContent = styled.div`
     }
     width: 30%;
 `;
-const ForTimeInput = styled.input`
+const TimeItem = styled.div`
+    display: flex;
+`
+const Time = styled.p`
+    margin: 15px 0 10px 5px;
+`
+const CommonInput = styled(Input)`
     display : block;
     width: 100%;
+    font-size : 0.9rem;
 `;
-const StartTimeInput = styled.input`
-    display : block;
-    width: 100%;
-`;
-const HeadCountInput = styled.input`
-    display : block;
-    width: 100%;
-`;
-const CreateBtn = styled.button`display:block;`;
+const ForTimeInput = styled(CommonInput)``;
+const StartTimeInput = styled(CommonInput)``;
+const HeadCountInput = styled(CommonInput)``;
 
+const AddOrDelBtn = styled(ConfirmButton)`
+    display: block;
+    width: 33px;
+    height: 33px;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 10px;
+`;
+const CreateBtn = styled(AddOrDelBtn)`
+    margin: 7% 0 0;
+`;
+const DelBtn = styled(AddOrDelBtn)``;
+const Label = styled.label`
+    font-size : 0.9rem;
+`
 // memo 지혜 : Time
 const FarmTime = (props) =>{
     const [timeList, setTimeList] = useState([]);
@@ -37,23 +53,22 @@ const FarmTime = (props) =>{
 
     const renderTime = () =>{
         return (
-        <div>
-            {
-            timeList.map((time,idx) => { 
-                return (
-                    <div key={`${time[0]}-${time[1]}-${idx}`}>
-                        <button type='button' onClick={onDelTime} value={idx}>-</button>
-                        <li>{idx+1}타임  {time[0]} ~ {time[1]} {maxHeadCountList[idx]}명</li>
-                    </div>
-                )
-            })  
-        }    
-        </div>);
+            <div>
+                {
+                    timeList.map((time,idx) => { 
+                        return (
+                            <TimeItem key={`${time[0]}-${time[1]}-${idx}`}>
+                                <DelBtn type='button' onClick={onDelTime} value={idx}>-</DelBtn>
+                                <Time>{idx+1}타임  {time[0]} ~ {time[1]} {maxHeadCountList[idx]}명</Time>
+                            </TimeItem>
+                        )
+                    })  
+                }    
+            </div>
+        );
     };
 
-
     const onCreateTime = () =>{
-
         if(!isNaN(startTime)){
             alert('시작시간을 입력해주세요.');
             return;
@@ -138,22 +153,19 @@ const FarmTime = (props) =>{
             <>
                 <TimeConatiner>
                     <TimeContent>
-                        <label>시간</label>
+                        <Label>시간</Label>
                         <ForTimeInput type='text' id='forTime' placeholder='체험시간' value={forTime} onChange={(e)=>setForTime(e.target.value)}/>
                     </TimeContent>
                     <TimeContent>
-                        <label>시작시각</label>
+                        <Label>시작시각</Label>
                         <StartTimeInput type='time' value={startTime} onChange={handleStartTime}/>
                     </TimeContent>
                     <TimeContent>
-                        <label>인원</label>
+                        <Label>인원</Label>
                         <HeadCountInput type='text' placeholder='인원' value={maxHeadCount} onChange={handleMaxHeadCount} />
                     </TimeContent>
+                    <CreateBtn id='createBtn' type='button' onClick={onCreateTime} >+</CreateBtn>
 
-                    <TimeContent>
-                        <label>추가</label>
-                        <CreateBtn id='createBtn' type='button' onClick={onCreateTime} >+</CreateBtn>
-                    </TimeContent>
                 </TimeConatiner>   
                 <div>
                     {renderTime()}

@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setFavorite } from '../store/FavoriteSlice';
 import { Provider } from 'react-redux';
 import store from '../store/Store';
+import { HOST } from './../global-variables';
 
 const Container = styled.main`
 	min-height: 100%;
@@ -26,32 +27,31 @@ const getFavoriteFarmId = async () => {
 	};
 	// 찜 목록 조회
 	const result = await axios
-		.get('http://localhost:3500/api/like', header)
+		.get(`${HOST}/api/like`, header)
 		.then((res) => res.data)
 		.then((data) => {
 			// console.log(data);
 			return data.map((x) => x.id);
 		});
-	console.log(result);
-
+	// console.log(result);
 	return result;
 };
 
 const Layout = () => {
-	// const favorite = useSelector((state) => state.favorite.favorites);
-	// const dispatch = useDispatch();
+	const favorite = useSelector((state) => state.favorite.favorites);
+	const dispatch = useDispatch();
 
-	// const setFavoriteFarmIds = async () => {
-	// 	const farmIds = await getFavoriteFarmId(); // 찜 목록 아이디
-  //   dispatch(setFavorite(farmIds));
-	// };
+	const setFavoriteFarmIds = async () => {
+		const farmIds = await getFavoriteFarmId(); // 찜 목록 아이디
+    dispatch(setFavorite(farmIds));
+	};
 
 	// console.log('layout에서의 찜 목록', favorite);
 
-	// useEffect(() => {
-	// 	if (localStorage.getItem('token')) setFavoriteFarmIds();
-  //   console.log('useEffect', favorite);
-	// }, []);
+	useEffect(() => {
+		if (localStorage.getItem('token')) setFavoriteFarmIds();
+    // console.log('useEffect', favorite);
+	}, []);
 
 	return (
 		<>
