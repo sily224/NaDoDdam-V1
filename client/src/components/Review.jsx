@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
 import { StyledParagraph, StyledSubTitle, ContentContainer} from '../styles/Styled';
 import { ConfirmButton } from '../styles/Styled'
+import { ImStarFull } from "react-icons/im";
 
 const ReviewDiv = styled.div`
     display: grid;
@@ -61,7 +62,20 @@ const ModalContent =styled.div`
 const ShowAllReviewBtn = styled(ConfirmButton)`
     margin-top : 1%;
 `;
+const RatingBox = styled.div`
+    margin: 0 auto;
 
+    & svg {
+        color: #C4C4C4;
+        cursor: pointer;
+    }
+    .black {
+        color: yellow;
+    }
+`;
+const Span = styled.span`
+    font-size: 0.7rem;
+`
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
     const MaxLength = 20;
@@ -74,7 +88,17 @@ const ReviewItems = ({review,showAll}) =>{
         return(      
             <ReviewItem key = {`reveiw-${idx}`} >
                 <ReviewId  key = {`${id}-${idx}`}>{id}</ReviewId>
-                <StyledParagraph>★ {rating}</StyledParagraph>
+                <RatingBox>
+                    {[0,1,2,3,4].map(item =>
+                        item < rating ?
+                            <ImStarFull 
+                                key={item}
+                                className={'black'}
+                            />  
+                            : <ImStarFull key={item}/>  
+                    )}
+                    <Span>({rating}점)</Span>
+                </RatingBox>
                 <ReviewName key = {`${createdAt}-${idx}`}>{createdAt}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
                 { isTextOverflow && <ConfirmButton onClick={()=> setTab(!tab)} >더보기</ConfirmButton>}
