@@ -99,7 +99,7 @@ const ReviewItems = ({review,showAll}) =>{
                     )}
                     <Span>({rating}점)</Span>
                 </RatingBox>
-                <ReviewName key = {`${createdAt}-${idx}`}>{createdAt}</ReviewName>
+                <ReviewName key = {`${createdAt}-${idx}`}>{createdAt.slice(0,-5)}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
                 { isTextOverflow && <ConfirmButton onClick={()=> setTab(!tab)} >더보기</ConfirmButton>}
             </ReviewItem>
