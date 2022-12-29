@@ -45,7 +45,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 	};
 
 	if (contents.length === 0) {
-		return <Container><Empty><img src={apple}/>찜 없음</Empty></Container>;
+		return <Container><Empty><img src={apple}/>농장 없음</Empty></Container>;
 	} else {
 		return (
 			<Container>
