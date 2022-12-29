@@ -170,6 +170,8 @@ const StyledMenu = styled.div`
 `;
 const StyledLink = styled(Link)`
 	padding: 5%;
+	color:#000;
+	text-decoration: none;
 
 	&:hover {
 		background: lightgray;

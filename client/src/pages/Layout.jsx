@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setFavorite } from '../store/FavoriteSlice';
 import { Provider } from 'react-redux';
 import store from '../store/Store';
-import { HOST } from './../global-variables';
 
 const Container = styled.main`
 	min-height: 100%;
