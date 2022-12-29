@@ -20,7 +20,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 		if (element.getAttribute('color') === 'true') element.setAttribute('color', 'false');
 		else if (element.getAttribute('color') === 'false') element.setAttribute('color', 'true');
 
-		console.log('입력된 농장 아이디', farmId);
+		// console.log('입력된 농장 아이디', farmId);
 
 		if (favorite.includes(farmId)){
 			await axios(`${HOST}/api/like/${farmId}`, {
@@ -49,7 +49,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 		return (
 			<Container>
 				<ItemList className="itemList">
-					{contents.map((content) => {
+					{contents && contents.map((content) => {
 						return (
 							<Item key={content.id}>
 								<Button type="button" id={content.id} onClick={(e) => handleButton(e)} color={favorite.includes(content.id).toString()} />
@@ -79,7 +79,7 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 		}
 	
 		const farmId = Number(e.target.id);
-		console.log('입력된 농장 아이디', farmId);
+		// console.log('입력된 농장 아이디', farmId);
 		const element = e.target;
 		element.setAttribute('color', 'false');
 
@@ -99,7 +99,7 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 		return (
 			<Container>
 				<ItemList className="itemList">
-					{contents.map((content) => {
+					{contents && contents.map((content) => {
 						return (
 							<Item key={content.id}>
 								<Button
