@@ -83,7 +83,7 @@ const FloatingForm = () => {
 			<Form onSubmit={handleSubmit}>
 				<StyledParagraph>{date||'날짜를 선택하세요'}</StyledParagraph>
 				<StyledParagraph>{startTime || '시작시간'} ~ {endTime || '종료시간'}</StyledParagraph>
-				<StyledParagraph>{price.toLocaleString('ko-KR')}원/명</StyledParagraph>
+				<StyledParagraph>{price}원/명</StyledParagraph>
 				<SelectBox onChange={handleHeadCount} value={headCount}>
 					<option value='none'>=선택=</option>
 					{personnel && [...Array(personnel).keys()].map((n) => (
