@@ -133,12 +133,16 @@ const Review = ()=>{
             <StyledSubTitle>후기</StyledSubTitle>
             <hr />
             <div>
-                { review && 
-                    <ReviewDiv len={review.length}> 
-                        <ReviewItems review={review}/>
-                    </ReviewDiv>
+                { review && (
+                    <>
+                        <ReviewDiv len={review.length}> 
+                            <ReviewItems review={review}/>
+                        </ReviewDiv>
+                        {review.length > 6 && <ShowAllReviewBtn onClick = {() => dispatch(showModal())}>모두보기</ShowAllReviewBtn>}
+                    </>
+                    )
                 }
-                {review.length > 6 && <ShowAllReviewBtn onClick = {() => dispatch(showModal())}>모두보기</ShowAllReviewBtn>}
+                
                 { modalOpen &&
                     <ModalContainer h="80%">
                         <ModalLayout>
