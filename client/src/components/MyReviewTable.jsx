@@ -133,7 +133,7 @@ const MyReviewTable = () => {
       setData(result);
     setLoading(false);
     }catch(err) {
-      console.log(err)
+      console.log(err.response.data.Error);
     }
   }
 
