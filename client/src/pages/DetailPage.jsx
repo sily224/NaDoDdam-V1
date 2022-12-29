@@ -16,7 +16,6 @@ const DetailPage =  () => {
     const fetchData = async () => {
         try {
             await axios.get(`/api/farms/${id}`).then((res) => {
-                console.log(res.data);
                 setFarmData(res.data.data);
                 setreviewData(res.data.reviewInfo);
                 setFarmerData(res.data.farmer);                 
