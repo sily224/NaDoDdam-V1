@@ -21,6 +21,9 @@ const Header = styled(DisplayFlex)`
     display: block;
     width : 100%;
 `;
+const CarouselImg = styled.img`
+    height : 500px;
+`;
 const Title = styled(StyledTitle)`
     margin-bottom: 1%;
 `;
@@ -49,9 +52,7 @@ const TimButtonContainer = styled(DisplayFlex)`
     width : 30%;
     margin-left : 3%;
 `;
-const CarouselImg = styled.img`
-    height : 480px;
-`;
+
 
 const DetailHeader = ({ name, address }) => {
     return (
@@ -63,9 +64,8 @@ const DetailHeader = ({ name, address }) => {
 };
 
 const DetailImg = ({imgUrl}) =>{
-
     return (
-        <Carousel>
+        <Carousel interval={2000}>
         { 
             imgUrl.split(',').map((url,idx) => {    
                 return (
@@ -145,9 +145,7 @@ const Detail = () => {
                             <DetailCompany farm={farm} farmer={farmer}/>
                         </DetailInform>
                         <FloatingFormDiv><FloatingForm /></FloatingFormDiv>
-                    
                     </DetailContent>
-
                 </DetailContainer>
             }
         </>

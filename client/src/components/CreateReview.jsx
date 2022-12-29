@@ -1,13 +1,13 @@
 import { ImStarFull } from "react-icons/im";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import styled from 'styled-components'
 import * as userApi from "../lib/userApi";
-
-import { getToken } from '../utils/utils';
+import { StyledSubTitle,SubmitButton } from '../styles/Styled'
 
 const RatingBox = styled.div`
   margin: 0 auto;
+  padding-top: 1rem;
 
   & svg {
     color: #C4C4C4;
@@ -18,6 +18,13 @@ const RatingBox = styled.div`
   }
 `
 
+const StyledTextarea = styled.textarea`
+  background : #fff;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+  width: 50%;
+  height: 100px;
+`
 
 const CreateReview = ({id, farmId}) => {
   const [clicked, setClicked] = useState([false, false, false, false, false]);
@@ -36,21 +43,22 @@ const CreateReview = ({id, farmId}) => {
     const rating = starScore;
     const farm_id = farmId;
     try{
-      await userApi.post(`//localhost:3500/api/review/${id}`, {
+      await userApi.post(`/api/review/${id}`, {
         content,
         rating,
         farm_id
       })
-      navigate('/myreview');
+      navigate('/mypage/review');
     }catch(err){
       console.log(err);
     }
   };
 
   return (
-    <>
+    <div>
+      <hr />
+    <StyledSubTitle marginTop>농장 체험 경험은 어떠셨나요?</StyledSubTitle>
     <RatingBox>
-      <p>농장 체험 경험은 어떠셨나요?</p>
       {[0,1,2,3,4].map(item =>
       <ImStarFull 
       key={item}
@@ -60,10 +68,11 @@ const CreateReview = ({id, farmId}) => {
       }
     </RatingBox>
     <form onSubmit={postReviewDataHandler}>
-      <textarea name="content" placeholder="후기를 작성해주세요"></textarea>
-      <button type="submit">저장</button>
+      <StyledTextarea name="content" placeholder="후기를 작성해주세요"></StyledTextarea><br />
+      <SubmitButton type="submit">저장 하기</SubmitButton>
     </form>
-    </>
+    </div>
+    
   )
 }
 

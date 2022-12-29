@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import optionSlice from '../store/OptionSlice';
 import { setLocation, setFruit } from "../store/OptionSlice";
 import store from '../store/Store';
+import { HOST, yellow } from './../global-variables';
 
 // 옵션 변경
 const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
@@ -15,9 +16,9 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
   const option = useSelector(state=>state.option);
   const [cat, setCat] = useState([]);
 
-  useEffect(()=>{
-    console.log(option);
-  }, [option])
+  // useEffect(()=>{
+  //   console.log(option);
+  // }, [option])
 
   const setOption = async (e) => {
     await setTemp({
@@ -32,14 +33,14 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
   }, []);
 
   const getFruits = async () => {
-    await axios.get('http://localhost:3500/api/farms?limit=100000000')
+    await axios.get(`${HOST}/api/farms?limit=100000000`)
     .then(res=>res.data)
     .then(data=>{
       const cat = [];
       data.map(x=>{
         if (!cat.includes(x.type)) cat.push(x.type);
       })
-      console.log(cat);
+      // console.log(cat);
       setCat(cat);
     });
   }
@@ -56,7 +57,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
       </Container>
     ) || searchType === "fruit" && (
       <Container>
-        {cat.map((x, i)=>(
+        {cat && cat.map((x, i)=>(
           <Item to="/" key={i} id={x} onClick={e=>{
             dispatch(setFruit(e.target.id));
             dispatch(setLocation(null));
@@ -123,7 +124,7 @@ const Item = styled(Link)`
   &:hover {
     cursor: pointer;
 		font-weight:700;
-		color: #f4d815;
+		color: ${yellow};
 `;
 
 

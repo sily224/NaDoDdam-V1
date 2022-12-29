@@ -4,14 +4,14 @@ import { getHeadCount, getTotalPrice } from '../store/FormSlice';
 import { useNavigate } from 'react-router-dom';
 import { DetailContext } from '../pages/DetailPage';
 import styled from 'styled-components';
-import {StyledParagraph, SubmitButton} from '../styles/Styled'
+import {StyledParagraph, SubmitButton, StatusSelect} from '../styles/Styled'
 
 const Form = styled.form`
 	width: 70%;
-	height: 300px;
+	height: 310px;
 	padding: 8% 8%;
 	margin-top : 5%;
-	border: 1px solid black;
+	border: 2px solid lightgray;
 	top: 40%;
 	position: sticky;
 	border-radius: 15px;
@@ -20,7 +20,9 @@ const SubmitBtn = styled(SubmitButton)`
 	margin: 15% 0 5%;
 	width: 100%;
 `;
-const SelectBox = styled.select``;
+const SelectBox = styled(StatusSelect)`
+	color: black;
+`;
 const Hr = styled.hr`
 	margin : 5% 0;
 `;
@@ -35,10 +37,6 @@ const FloatingForm = () => {
 	const navigate = useNavigate();
 	const formData = useSelector(({form}) => form);
 	const {startTime, endTime, price, date, personnel, timeId} = formData;
-
-	const handleHeadCount = (e) => {
-		setHeadCount(e.target.value);
-	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -67,6 +65,10 @@ const FloatingForm = () => {
 		});
 	};
 
+	const handleHeadCount = (e) => {
+		setHeadCount(e.target.value);
+	};
+
 	useEffect(() => {
 		setTotalPrice(headCount * price);
 		dispatch(getHeadCount(headCount));
@@ -81,13 +83,11 @@ const FloatingForm = () => {
 			<Form onSubmit={handleSubmit}>
 				<StyledParagraph>{date||'날짜를 선택하세요'}</StyledParagraph>
 				<StyledParagraph>{startTime || '시작시간'} ~ {endTime || '종료시간'}</StyledParagraph>
-				<StyledParagraph>{price}원/명</StyledParagraph>
-
+				<StyledParagraph>{price.toLocaleString('ko-KR')}원/명</StyledParagraph>
 				<SelectBox onChange={handleHeadCount} value={headCount}>
 					<option value='none'>=선택=</option>
-
 					{personnel && [...Array(personnel).keys()].map((n) => (
-						<option key={`HeadCount-${n + 1}`} value={ n + 1 }>
+						<option key={`HeadCount-${n + 1}`} value={ n + 1 } >
 							{ n + 1 }
 						</option>
 					))}

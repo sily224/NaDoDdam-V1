@@ -1,9 +1,10 @@
-import ShowReservation from "../components/WriteReviewForm";
+import ReviewReservation from "../components/ReviewReservation";
 import UpdateReview from "../components/UpdateReview";
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import { useParams } from 'react-router';
 import { useState, useEffect } from "react";
+import { StyledTitle } from "../styles/Styled";
 
 const UpdateReviewPage = () => {
   const [reservationData, setReservationData] = useState([]);
@@ -11,7 +12,7 @@ const UpdateReviewPage = () => {
 
   const getReservationData = async () => {
     const token = getToken();
-    const res = await userApi.get(`//localhost:3500/api/reserve`, {
+    const res = await userApi.get(`/api/reserve`, {
       headers: {
         authorization: token,
       },
@@ -26,7 +27,8 @@ const UpdateReviewPage = () => {
 
     return (
       <>
-        <ShowReservation reservationData={reservationData}/>
+        <StyledTitle>리뷰 수정</StyledTitle>
+        <ReviewReservation reservationData={reservationData}/>
         <UpdateReview id={id}/>
       </>
     )

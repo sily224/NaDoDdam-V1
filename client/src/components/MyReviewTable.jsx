@@ -6,27 +6,17 @@ import { ImStarFull } from "react-icons/im";
 import { useDispatch, useSelector } from 'react-redux';
 import ModalContainer from './Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { Button } from 'bootstrap';
+import { Link } from 'react-router-dom';
+import { 
+  ConfirmButton, 
+  DeleteButton, 
+  StyledTitle, 
+  StyledConfirmModal 
+} from '../styles/Styled';
 
-const StyledTitleWrap = styled.div`
-  display:flex;
-`
-
-const StyledTitle = styled.div`
+const StyledFarmTitle = styled.h3`
   margin-bottom: 1%;
-
-  > h3 {
-    display: inline-block;
-    margin-bottom: 0;
-  }
-
-  > span {
-    background-color: lightgrey;
-    padding: 1%;
-    margin-left: 1%;
-    border-radius: 10px;
-  }
+  display: inline-block;
 `
 
 const StyledContent = styled.div`
@@ -35,17 +25,6 @@ const StyledContent = styled.div`
   >p {
     margin-bottom: 0;
   }
-`
-
-const StyledContentWrap = styled.div`
-  display:flex;
-  justify-content:space-between;
-`
-
-const StyledNavWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2%;
 `
 
 const StyledList = styled.div`
@@ -78,16 +57,9 @@ const StyledImageWrap = styled.div`
   }
 `
 
-const StarRateWrap = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin: 100px 0 0 15px;
-  .star_icon {
-    display: inline-flex;
-    margin-right: 5px;
-  }
-`
+const StyledNotData = styled.h2`
+ margin-top: 8rem;
+` 
 
 const RatingBox = styled.div`
   margin: 0 auto;
@@ -109,9 +81,9 @@ const StarRate = ({rating}) => {
     setClicked(clickStates);
    };
 
-useEffect(() => {
-  handleStarClick();
-},[])
+  useEffect(() => {
+    handleStarClick();
+  },[])
 
   return (
     <RatingBox>
@@ -127,14 +99,14 @@ useEffect(() => {
 
 const MyReviewTable = () => {
   const [data, setData] = useState([]);
-  const [dataIndex, setDataIndex] = useState(0);
+  const [dataIndex, setDataIndex] = useState(null);
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
     
   const getReviewData = async() => {
     try {
       const token = getToken();
-      const res = await userApi.get(`//localhost:3500/api/review`, {
+      const res = await userApi.get(`/api/review`, {
         headers: {
           authorization: token,
         },
@@ -147,7 +119,6 @@ const MyReviewTable = () => {
 				if (aTime < bTime) return 1;
 			});
       setData(result);
-      setData(res.data);
     }catch(err) {
       console.log(err)
     }
@@ -159,21 +130,20 @@ const MyReviewTable = () => {
 
   const ShowReviewList = () => {
     const deleteReviewHandler = async(e) => {
-      const id = e.target.name;
-      console.log(id)
       try{
-        await userApi.delete(`//localhost:3500/api/review/${id}`);
+        await userApi.delete(`/api/review/${dataIndex}`);
         alert('삭제되었습니다.');
         dispatch(closeModal());
         getReviewData();
       }catch(err){
-        console.log(err);
+        console.log(err.response.data.Error);
+        alert('문제가 발생하였습니다. 다시 시도해 주세요');
       }
     };
 
     return (<>
       {data.map((item, index) => { 
-        const {review, reserveInfo, time} = item || {};
+        const {review, reserveInfo, time} = item;
         const start_time = time.start_time.slice(0,5);
         const end_time = time.end_time.slice(0,5);
         return (
@@ -183,9 +153,9 @@ const MyReviewTable = () => {
                 <img src={time.url} alt="농장사진"/>
               </StyledImageWrap>
               <StyledContent>
-                <StyledTitle>
-                  <h3>{time.farmName}</h3>
-                </StyledTitle>
+                <StyledFarmTitle>
+                  {time.farmName}
+                </StyledFarmTitle>
                 <p>{time.date} {start_time} - {end_time}</p>
                 <p>인원: {reserveInfo.personnel}명</p>
                 <p>{review.content}</p>
@@ -193,27 +163,42 @@ const MyReviewTable = () => {
               </StyledContent>
             </StyledListInner>
             <div>
-            <button>
-              <Link to ={`/updatereview/${reserveInfo.id}`}>
+            <ConfirmButton>
+              <Link to ={`/mypage/updatereview/${reserveInfo.id}`}>
                 수정
               </Link>
-            </button>
-            <button onClick={() => dispatch(showModal())}>삭제</button>
-            {modalOpen && <ModalContainer>
-                  <p>리뷰를 삭제하시겠습니까?</p>
-                  <button>닫기</button>
-                  <button onClick={(e) => {deleteReviewHandler(e)}}>확인</button>
-            </ModalContainer>}
+            </ConfirmButton>
+            <DeleteButton 
+              name={review.id}
+              onClick={(e) => {
+                dispatch(showModal())
+                setDataIndex(e.target.name)
+              }}>삭제
+              </DeleteButton>
             </div>
           </StyledList>
           )
-        })}
-      </>  
+        })}  
+      {modalOpen && <ModalContainer w="320px" h="150px">
+        <StyledConfirmModal>
+          <p>리뷰를 삭제하시겠습니까?</p>
+          <DeleteButton onClick={(e) => {deleteReviewHandler(e)}}>삭제</DeleteButton>
+          <ConfirmButton onClick={() => dispatch(closeModal())} reject>취소</ConfirmButton>
+          </StyledConfirmModal>
+      </ModalContainer>}
+    </>
     );
   };
 
+  if(data.length === 0){
+    return <>
+    <StyledTitle>리뷰 목록</StyledTitle>
+    <StyledNotData>회원님의 후기 내역이 없습니다.</StyledNotData>
+    </>
+  }
   return (
     <>
+    <StyledTitle>리뷰 목록</StyledTitle>
     <ShowReviewList />
     </>
     )

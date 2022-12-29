@@ -1,15 +1,13 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import Moment from 'moment';
 import styled, {css} from 'styled-components';
-import { showModal } from '../store/ModalSlice';
-import { closeModal } from '../store/ModalSlice';
+import { showModal, closeModal } from '../store/ModalSlice';
 import ModalContainer from './Modal';
 import Location from './Location';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
-import { HOST } from "../global-variables";
 import {
   StyledConfirmModal, 
   ConfirmButton, 
@@ -23,12 +21,10 @@ import {
 } from '../styles/Styled';
 
 
-
 const StyledTitleWrap = styled.div`
   display:flex;
   align-items:center
 `
-
 const StyledContent = styled.div`
   width:70%;
 
@@ -128,16 +124,53 @@ const StyledPayWrap = styled.div`
   font-weight: bold;
  }
 `
+const StyledNotData = styled.h2`
+ margin-top: 8rem;
+` 
+
+const initialState = {
+  cancleModal: false,
+  confirmModal: false,
+  detailModal: false,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'CANCLE':
+      return {
+        ...state,
+        cancleModal: true,
+        detailModal: false,
+      };
+    case 'CONFIRM':
+      return {
+        ...state,
+       confirmModal: true,
+      };
+    case 'DETAIL':
+      return {
+        ...state,
+        detailModal: true,
+        cancleModal:false,
+      };
+    case 'CLOSE': 
+     return {
+      cancleModal: false,
+      confirmModal: false,
+      detailModal: false,
+      reviewModal: false,
+     }
+    default: return state;
+  }
+}
 
 const MyReservationTable = () => {
   const [originalData, setOriginalData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [dataIndex, setDataIndex] = useState(null);
 
-  const [cancleModal, setCancleModal] = useState(false);
-  const [confirmModal, setConfirmModal] = useState(false);
-  const [detailModal, setDtailModal] = useState(false);
-  const dispatch = useDispatch();
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const modalDispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
 
   const [statusOption , setStatusOption] = useState('전체');
@@ -146,7 +179,7 @@ const MyReservationTable = () => {
 
   const getReservationData = async () => {
     const token = getToken();
-    const res = await userApi.get(`${HOST}/api/reserve`, {
+    const res = await userApi.get(`/api/reserve`, {
       headers: {
         authorization: token,
       },
@@ -261,14 +294,12 @@ const MyReservationTable = () => {
                 name={index} 
                 onClick={(e)=> {
                 setDataIndex(e.target.name);
-                dispatch(showModal());
-                setCancleModal(false);
-                setConfirmModal(false);
-                setDtailModal(true);
+                modalDispatch(showModal());
+                dispatch({type: 'DETAIL'})
                 }}>
                 더보기
               </ConfirmButton>
-              {(reserve.status === '체험완료' && reserve.review === undefined) &&
+              {(reserve.status === '체험완료' && !reserve.review) &&
                 <ConfirmButton>
                   <Link to={`/mypage/writereview/${reserve.id}`}>
                     후기작성
@@ -280,10 +311,8 @@ const MyReservationTable = () => {
                   name={index}
                   onClick={(e)=> {
                     setDataIndex(e.target.name);
-                    dispatch(showModal());
-                    setCancleModal(true);
-                    setConfirmModal(false);
-                    setDtailModal(false);
+                    modalDispatch(showModal());
+                    dispatch({type: 'CANCLE'})
                   }}
                 >
                   예약취소
@@ -313,15 +342,15 @@ const MyReservationTable = () => {
                   <StyledImageWrap>
                     <img src={info.url} alt="농장사진"/>
                   </StyledImageWrap>
-                    <StyledSubTitle style={{
+                    <div>
+                      <h3 style={{
                       textDecoration : reserve.status === '예약취소' 
                       ? 'line-through' 
-                      : 'none'}}>
-                      {info.name}<br/>
+                      : 'none'}}>{info.name}</h3>
                       <StyledStatusLabel marginTop>
                         {reserve.status}
                       </StyledStatusLabel>
-                    </StyledSubTitle>
+                    </div>
                 </StyledTitleWrap>
               </StyledList>
                   <StyledSubTitle marginTop>예약정보</StyledSubTitle>
@@ -345,9 +374,8 @@ const MyReservationTable = () => {
                 {(reserve.status === "예약완료" || reserve.status === "예약대기") && 
                 <SubmitButton 
                   onClick={() => {
-                    setCancleModal(true);
-                    setConfirmModal(false);
-                    setDtailModal(false);
+                    modalDispatch(showModal());
+                    dispatch({type: 'CANCLE'})
                   }}> 
                     예약취소
                 </SubmitButton>}
@@ -360,11 +388,11 @@ const MyReservationTable = () => {
   const cancleResevationHandler = async(e) => {
     const id = e.target.name;
     try {
-      await userApi.patch(`${HOST}/api/reserve/${id}`, {
+      await userApi.patch(`/api/reserve/${id}`, {
         status: '예약취소',
       }); 
       alert('예약이 취소되었습니다.')
-      dispatch(closeModal());
+      modalDispatch(closeModal());
       getReservationData();
     } catch (err) {
       console.log(err.response.data.Error)
@@ -399,7 +427,6 @@ const MyReservationTable = () => {
               <option>취소 후 다시 예약하기 위함</option>
               <option>상품이 마음에 들지 않음</option>
               <option>다른 농장으로 변경하기 위함</option>
-              <option>다른 농장으로 변경하기 위함</option>
             </StatusSelect>
           </StyledSelectWrap>
           <hr />
@@ -410,23 +437,19 @@ const MyReservationTable = () => {
           <StyledCancleButtonWrap>
             <SubmitButton 
               onClick={() => {
-                setCancleModal(false);
-                setConfirmModal(false);
-                setDtailModal(true);
+                dispatch({type: 'DETAIL'})
               }}
                 reject
               >
                 이전
             </SubmitButton>
             <SubmitButton onClick={() => {
-              setCancleModal(true);
-              setConfirmModal(true);
-              setDtailModal(false);
+              dispatch({type: 'CONFIRM'})
             }}>
               예약취소
             </SubmitButton>
           </StyledCancleButtonWrap>
-          {confirmModal && modalOpen && 
+          {state.confirmModal && modalOpen && 
             <ModalContainer w="320px" h="170px">
               <StyledConfirmModal>
                 <p>예약을 취소하시겠습니까?</p>
@@ -438,8 +461,10 @@ const MyReservationTable = () => {
                     확인
                   </DeleteButton>
                   <ConfirmButton 
-                  onClick={() => 
-                  dispatch(closeModal())}
+                  onClick={() => {
+                    dispatch({type: 'CLOSE'})
+                    modalDispatch(closeModal())
+                  }}
                   reject
                   >
                     취소
@@ -454,16 +479,23 @@ const MyReservationTable = () => {
     )
   }
 
+  if(filteredData.length === 0){
+    return <>
+    <ShowDefault/>
+    <StyledNotData>회원님의 예약 내역이 없습니다.</StyledNotData>
+    </>
+  }
+
   return (
     <>
     <ShowDefault/>
     <ShowResrvation /> 
-    {detailModal && modalOpen && 
+    {state.detailModal && modalOpen && 
         <ModalContainer w="500px" h="510px">
           <DetailReservation />
         </ModalContainer>
     }
-    {cancleModal && modalOpen && 
+    {state.cancleModal && modalOpen && 
       <ModalContainer w="500px" h="510px">
         <CancleReservationPage/>
       </ModalContainer>

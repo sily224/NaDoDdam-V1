@@ -1,23 +1,31 @@
 import CreateReview from '../components/CreateReview';
-import ShowReservation from '../components/WriteReviewForm';
+import ReviewReservation from '../components/ReviewReservation';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import { useParams } from 'react-router';
 import { useState, useEffect } from "react";
+import { StyledTitle } from '../styles/Styled';
 
 const CreateReviewPage = () => {
     const [reservationData, setReservationData] = useState([]);
     const [farmId, setFarmId] = useState(null);
     const { id }= useParams();
-
+    
     const getReservationData = async () => {
         const token = getToken();
-        const res = await userApi.get(`//localhost:3500/api/reserve`, {
+        const res = await userApi.get(`/api/reserve`, {
           headers: {
             authorization: token,
           },
         });
-        const result  = res.data.filter(item => item.reserve.id === Number(id));
+        const dataSort = res.data.sort((a, b) => {
+          let aTime = a.info.date;
+          let bTime = b.info.date;
+          if (aTime > bTime) return -1;
+          if (aTime === bTime) return 0;
+          if (aTime < bTime) return 1;
+        })
+        const result = dataSort.filter(item => item.reserve.id === Number(id));
         setReservationData([result[0]]);
         setFarmId(result[0].info.id);
      };
@@ -28,8 +36,9 @@ const CreateReviewPage = () => {
     
     return (
     <>
-    <ShowReservation reservationData={reservationData}/>
-    <CreateReview id={id} farmId={farmId}/>
+      <StyledTitle>리뷰 작성</StyledTitle>
+      <ReviewReservation reservationData={reservationData} />
+      <CreateReview id={id} farmId={farmId}/>
     </>
     )
 }

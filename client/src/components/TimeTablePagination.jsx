@@ -44,11 +44,15 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
         }
     }
 
+    useEffect(() =>{
+        setLast(pageGroup *pageCount);
+    },[]);
+
     useEffect(()=>{
         if (current < last){
             setLast(current);
         }
-    },[current])
+    },[last])
 
     useEffect(()=>{
         setLast((pageGroup + 1)*pageCount); 
@@ -57,25 +61,31 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     useEffect(()=>{
         setPage(pageGroup * pageCount + 1);
     },[pageGroup]);
+    
+    useEffect(()=>{ 
+        setBtnActive(page);
+    },[page])
+
+    const handleNext = () => {
+        setPage(page + 1)
+    }
 
 	return (
 		<>
 			<PageWrapper>
-                <PageBtn onClick={() => handlePrevPage()}  disabled={page < pageCount+1}>
+                <PageBtn onClick={handlePrevPage}  disabled={page < pageCount+1}>
 					{'<<'}
 				</PageBtn>
 				<PageBtn onClick={() => setPage(page - 1)} disabled={page===first}>
 					&lt;
 				</PageBtn>
-
 				{
                     pageNum()
 				}
-
-				<PageBtn onClick={() => setPage(page + 1)} disabled={page === last}>
+				<PageBtn onClick={handleNext} disabled={page === last}>
 					&gt;
 				</PageBtn>
-                <PageBtn onClick={() => handleNextPage()} disabled={last < (pageGroup+1) * pageCount}>
+                <PageBtn onClick={handleNextPage} disabled={last < (pageGroup+1) * pageCount}>
 					{'>>'}
 				</PageBtn>
 			</PageWrapper>

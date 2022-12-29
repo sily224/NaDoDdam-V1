@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { IoConstructOutline } from 'react-icons/io5';
+import { HOST } from './../global-variables';
 
 const getFavorite = async () => {
 	const token = localStorage.getItem('token');
@@ -16,7 +17,7 @@ const getFavorite = async () => {
 	};
 
 	const result = await axios
-		.get('http://localhost:3500/api/like', header)
+		.get(`${HOST}/api/like`, header)
 		.then((res) => res.data)
 		.then((data) => {
 			return data.map((x) => x.id);
@@ -42,7 +43,7 @@ const Home = React.memo(() => {
 	}, []);
 
 	useEffect(() => {
-		console.log('찜 목록 상태 변화', favorite); // 찜 목록 변화 시 출력
+		// console.log('찜 목록 상태 변화', favorite); // 찜 목록 변화 시 출력
 	}, [favorite]);
 
 	const [contents, setContents] = useState([]);
@@ -54,7 +55,7 @@ const Home = React.memo(() => {
 	useEffect(() => {
     toggle=true;
     setPage(0);
-    console.log('서치 옵션', option);
+    // console.log('서치 옵션', option);
     setContents([]);
     getFarmData(option, 20);
 	}, [option]);
@@ -71,37 +72,36 @@ const Home = React.memo(() => {
         }
 			};
 
-			let url = `http://localhost:3500/api/farms?limit=${last}`; // default 전체 조회
+			let url = `${HOST}/api/farms?limit=${last}`; // default 전체 조회
 
 			if (location) {
-				url = `http://localhost:3500/api/farms/location`; // 지역 조회
+				url = `${HOST}/api/farms/location`; // 지역 조회
         await axios.get(url, header)
           .then((res) => {
-            const data = res.data;
+            const data = JSON.parse(res.data);
             setPage(0);
             setContents(data);
             toggle = false;
             return;
           });
 			} else if (fruit) {
-				url = `http://localhost:3500/api/farms`; // 과일 조회
+				url = `${HOST}/api/farms`; // 과일 조회
         await axios.get(url, header)
           .then((res) => {
-            const data = res.data;
+            const data = JSON.parse(res.data);
             setContents(data);
             setPage(0);
             toggle = false;
             return;
           });
 			} else{
-        console.log('전체 조회');
         await axios.get(url, header)
           .then((res) => {
-            const data = res.data;
+            const data = JSON.parse(res.data);
             const d = data.slice(length*page, length*(page+1));
-            console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
+            // console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
             if (d.length === 0) {
-              console.log('no data');
+              // console.log('no data');
               toggle = false;
               setPage(0);
               return;
