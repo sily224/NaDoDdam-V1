@@ -22,7 +22,6 @@ export async function getFarm(req, res, next) {
 		const farmerInfo = await db.Farmers.getFarmInfo(farmerId);
 		const farmId = farmerInfo.farmId;
 		const farmInfo = await db.Farms.findById(farmId);
-		console.log(farmInfo);
 		res.status(200).json({ farmInfo, farmerInfo });
 	} catch (err) {
 		next(err);
@@ -41,11 +40,23 @@ export async function getByLocation(req, res, next) {
 export async function getByFarm(req, res, next) {
 	const id = req.params.farmId;
 	try {
+		const reviewInfo = [];
 		const data = await db.Farms.findById(id);
-		const review = await db.Reviews.findByFarmId(id);
+		const review = await db.Reviews.findByFarmIdAndUser(id); //배열
 		const farmer = await db.Farmers.getFarmerInfoFromFarmId(id);
 
-		const datas = { data, review, farmer };
+		for (let i = 0; i < review.length; i++) {
+			reviewInfo.push({
+				id: review[i].id,
+				content: review[i].content,
+				rating: review[i].rating,
+				farm_id: review[i].farm_id,
+				name: review[i].dataValues.name,
+				email: review[i].dataValues.email
+			});
+		}
+
+		const datas = { data, reviewInfo, farmer };
 
 		res.status(200).json(datas);
 	} catch (err) {
