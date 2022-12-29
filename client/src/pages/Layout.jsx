@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setFavorite } from '../store/FavoriteSlice';
 import { Provider } from 'react-redux';
 import store from '../store/Store';
-import { HOST } from './../global-variables';
 
 const Container = styled.main`
 	min-height: 100%;
@@ -48,10 +47,10 @@ const Layout = () => {
 
 	// console.log('layout에서의 찜 목록', favorite);
 
-	useEffect(() => {
-		if (localStorage.getItem('token')) setFavoriteFarmIds();
-    // console.log('useEffect', favorite);
-	}, []);
+	// useEffect(() => {
+	// 	if (localStorage.getItem('token')) setFavoriteFarmIds();
+  //   // console.log('useEffect', favorite);
+	// }, []);
 
 	return (
 		<>

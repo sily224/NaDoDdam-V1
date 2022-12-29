@@ -13,7 +13,6 @@ import { logout } from '../utils/utils';
 import styled from 'styled-components'
 import { AiOutlineLock } from "react-icons/ai";
 import { AiOutlineUserDelete } from "react-icons/ai";
-import { HOST } from '../global-variables';
 import { 
   SubmitButton, 
   Input, 
@@ -53,7 +52,7 @@ const StyledUserInfoWrap = styled.div`
 }
 `
 
-const MyPageProfileEdit = ({id, name, title, userId}) => {
+const MyPageProfileEdit = ({id, name, title, userId, loading}) => {
   const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
   const textInput = useRef();
@@ -96,7 +95,7 @@ const MyPageProfileEdit = ({id, name, title, userId}) => {
   const DefaultView = () => {
     return (
       <StyledUserInfo>
-        <div><span>{reName.value}</span></div>
+        <div><span>{loading ? "..." : reName.value}</span></div>
         <div>
           <ConfirmButton onClick={changeEditMode}>수정</ConfirmButton> 
         </div>

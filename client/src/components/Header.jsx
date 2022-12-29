@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { AiOutlineMenu } from 'react-icons/ai';
 import { HiUserCircle, HiMenu } from 'react-icons/hi';
 import { useDispatch } from 'react-redux';
 import { getToken, getUserType, logout } from '../utils/utils';
@@ -38,6 +38,14 @@ const StyledSearchBar = styled.div`
 		border-radius: 50%;
 		padding: 2px;
 		color:#fff;
+	}
+
+	> P {
+		color: gray;
+		position: absolute;
+		top: 50%;
+		left: 20px;
+		transform: translateY(-50%);
 	}
 
 	${(props) =>
@@ -162,6 +170,8 @@ const StyledMenu = styled.div`
 `;
 const StyledLink = styled(Link)`
 	padding: 5%;
+	color:#000;
+	text-decoration: none;
 
 	&:hover {
 		background: lightgray;
@@ -311,7 +321,6 @@ const Header = () => {
 		// 검색 세부 옵션 핸들러
 		setOption(e.target.id);
 		e.target.id === 'location' ? setFruit(null) : setLocation(null);
-		console.log('전체 지역 과일 중 ', e.target.id);
 		if(e.target.id === 'total') dispatch(reset());
 	};
 
@@ -355,7 +364,8 @@ const Header = () => {
 			<StyledSearchBar 
 				toggle={isOpenSearchBar} 
 				onClick={handleSearchBar} >
-				<AiOutlineSearch size={25} />
+				<p>지역 또는 과일 선택하기</p>
+				<AiOutlineMenu size={25} />
 			</StyledSearchBar>
 
 			<div ref={ref}>

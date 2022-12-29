@@ -40,6 +40,10 @@ export const ConfirmButton = styled.button`
         margin-left: 6px;
     }
     
+    > a {
+        color: #d1b80d;
+    }
+    
 `
 //memo 가영 : 예약조회페이지 - 상태목록
 //클릭된 버튼에 props로 clicked 전달
@@ -144,14 +148,19 @@ export const StyledParagraph = styled.p`
 //memo 가영 : 예약조회, 후기조회 등 리스트의 이미지
 export const StyledImageWrap = styled.div`
   width: 30%;
-  height: 100%;
+  height: 8rem;
   margin-right: 20px;
   overflow: hidden;
   border-radius: 20px;
 
   >img {
     width: 100%;
+    height: auto;
   }
+
+  ${props => props.modalImg && css`
+  height: 72px;
+`}
 `
 //memo 지혜 : 페이지 wrapper
 export const PageWrapper = styled.div`
