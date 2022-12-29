@@ -22,6 +22,7 @@ const StyledInfoContainer = styled.div`
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({}); 
+  const [loading, setLoading] = useState(true);
 
   const getUserInfo = async () => {
     const token = getToken();
@@ -36,6 +37,7 @@ const MyPage = () => {
       phoneNum: res.data.phoneNum,
       email: res.data.email,
     })
+    setLoading(false);
   };
   
   useEffect(() => {
@@ -77,6 +79,7 @@ const MyPage = () => {
             name={item.name}
             title={item.title}
             userId={id}
+            loading={loading}
           />
         ))}
       </StyledInfoContainer>

@@ -1,0 +1,117 @@
+.skeleton {
+    background: #ddd;
+    margin : 10px 0;
+    border-radius: 4px;
+    width: 100%;
+    height: 30px;
+    background-color: #f2f2f2;
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-gradient {
+    0% {
+      background-color: rgba(165, 165, 165, 0.1);
+    }
+    50% {
+      background-color: rgba(165, 165, 165, 0.3);
+    }
+    100% {
+      background-color: rgba(165, 165, 165, 0.1);
+    }
+}
+
+.skeleton-list {
+  border: 1px solid lightgray;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 3%;
+  box-sizing: border-box;
+  margin-bottom: 2%;
+}
+
+.skeleton-inner {
+    display:flex;
+    align-items: center;
+    width: 70%;
+}
+
+.skeleton-content-inner {
+    width:70%;
+}
+
+.skeleton.review-warp {
+  border: 1px solid lightgray;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 3%;
+  box-sizing: border-box;
+  margin-bottom: 2%;
+}
+
+.skeleton.review-content {
+    width : 20%;
+    height : 12px;
+}
+
+.skeleton.review-farm-title {
+    margin-bottom: 1%;
+    display: inline-block;
+    width: 15%;
+    height: 20px;
+}
+
+.skeleton.imgwrap{
+    width: 20%;
+    height: 120px;
+    margin-right: 20px;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.skeleton-button-wrap {
+    display: flex;
+}
+
+.skeleton.confirm-button {
+    border-radius: 10px;
+    width: 43.45px;
+    height: 28px;
+    margin-left: 6px;
+}
+
+.shimmer-wrapper {
+    position : absolute;
+    top: 0;
+    left : 0;
+    width : 100%;
+    height : 100%;
+    animation: loading 2.5s infinite;
+}
+
+.shimmer {
+    width : 50%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.2);
+    transform: skewX(-20deg);
+    box-shadow: 0 0 30px 30px rgba(255,255,255,0.05);
+}
+
+@keyframes loading {
+    0% {
+      transform: translateX(-150%);
+    }
+    50% {
+      transform: translateX(-60%);
+    }
+    100% {
+      transform: translate(150%);
+    }
+  }

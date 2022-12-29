@@ -14,6 +14,8 @@ import {
   StyledConfirmModal 
 } from '../styles/Styled';
 
+import { SkeletonList } from './Skeleton';
+
 const StyledFarmTitle = styled.h3`
   margin-bottom: 1%;
   display: inline-block;
@@ -102,6 +104,7 @@ const MyReviewTable = () => {
   const [dataIndex, setDataIndex] = useState(null);
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
+  const [loading, setLoading] = useState(true);
     
   const getReviewData = async() => {
     try {
@@ -119,6 +122,7 @@ const MyReviewTable = () => {
 				if (aTime < bTime) return 1;
 			});
       setData(result);
+    setLoading(false);
     }catch(err) {
       console.log(err)
     }
@@ -146,11 +150,12 @@ const MyReviewTable = () => {
         const {review, reserveInfo, time} = item;
         const start_time = time.start_time.slice(0,5);
         const end_time = time.end_time.slice(0,5);
+        const title_img = (time.url).split(',')[0];
         return (
           <StyledList key={index}>
             <StyledListInner>
               <StyledImageWrap>
-                <img src={time.url} alt="농장사진"/>
+                <img src={title_img} alt="농장사진"/>
               </StyledImageWrap>
               <StyledContent>
                 <StyledFarmTitle>
@@ -190,18 +195,22 @@ const MyReviewTable = () => {
     );
   };
 
-  if(data.length === 0){
-    return <>
-    <StyledTitle>리뷰 목록</StyledTitle>
-    <StyledNotData>회원님의 후기 내역이 없습니다.</StyledNotData>
-    </>
-  }
   return (
     <>
     <StyledTitle>리뷰 목록</StyledTitle>
+    {loading ? <>
+      <SkeletonList />
+      <SkeletonList />
+      <SkeletonList />
+      <SkeletonList />
+    </> :
     <ShowReviewList />
+    }
+    {data.length === 0 ? <>
+    <StyledNotData>회원님의 후기 내역이 없습니다.</StyledNotData>
+    </> : <ShowReviewList />}
     </>
-    )
+  )
 }
 
 export default MyReviewTable;

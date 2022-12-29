@@ -8,6 +8,7 @@ import ModalContainer from './Modal';
 import Location from './Location';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
+import {SkeletonList} from "./Skeleton";
 import {
   StyledConfirmModal, 
   ConfirmButton, 
@@ -168,6 +169,7 @@ const MyReservationTable = () => {
   const [originalData, setOriginalData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [dataIndex, setDataIndex] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const modalDispatch = useDispatch();
@@ -193,6 +195,7 @@ const MyReservationTable = () => {
     });
     setOriginalData(result);
     setFilteredData(result);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -263,11 +266,12 @@ const MyReservationTable = () => {
         const {info, reserve} = reservation || {};
         const start_time = info.start_time.slice(0,5);
         const end_time = info.end_time.slice(0,5);
+        const title_img = (info.url).split(',')[0];
         return (
           <StyledList key={index}>
             <StyledListInner>
               <StyledImageWrap>
-                <img src={info.url} alt="농장사진"/>
+                <img src={title_img} alt="농장사진"/>
               </StyledImageWrap>
               <StyledContent>
                 <StyledTitleWrap>
@@ -335,12 +339,13 @@ const MyReservationTable = () => {
           const {info, reserve} = reservation || {};
           const start_time = info.start_time.slice(0,5);
           const end_time = info.end_time.slice(0,5);
+          const title_img = (info.url).split(',')[0];
           return (
             <div key={`${dataIndex}`-`${info.id}`}>
               <StyledList small>
                 <StyledTitleWrap>
-                  <StyledImageWrap>
-                    <img src={info.url} alt="농장사진"/>
+                  <StyledImageWrap modalImg>
+                    <img src={title_img} alt="농장사진"/>
                   </StyledImageWrap>
                     <div>
                       <h3 style={{
@@ -408,11 +413,12 @@ const MyReservationTable = () => {
         const {info, reserve} = reservation || {};
         const start_time = info.start_time.slice(0,5);
         const end_time = info.end_time.slice(0,5);
+        const title_img = (info.url).split(',')[0];
         return (
          <div key={`${dataIndex}-${info.id}`}>
           <StyledListInner>
               <StyledImageWrap>
-                <img src={info.url} alt="농장사진" />
+                <img src={title_img} alt="농장사진" />
               </StyledImageWrap>
             <StyledContent>
                 <h4>{info.name}</h4>
@@ -479,16 +485,16 @@ const MyReservationTable = () => {
     )
   }
 
-  if(filteredData.length === 0){
-    return <>
-    <ShowDefault/>
-    <StyledNotData>회원님의 예약 내역이 없습니다.</StyledNotData>
-    </>
-  }
-
   return (
     <>
-    <ShowDefault/>
+     <ShowDefault/>
+    {loading ? <>
+      <SkeletonList />
+      <SkeletonList />
+      <SkeletonList />
+      <SkeletonList />
+    </> : filteredData.length > 0 ?
+    <>
     <ShowResrvation /> 
     {state.detailModal && modalOpen && 
         <ModalContainer w="500px" h="510px">
@@ -499,6 +505,10 @@ const MyReservationTable = () => {
       <ModalContainer w="500px" h="510px">
         <CancleReservationPage/>
       </ModalContainer>
+    }
+    </>
+    :
+    <StyledNotData>회원님의 예약 내역이 없습니다.</StyledNotData>
     }
     </>
   )
