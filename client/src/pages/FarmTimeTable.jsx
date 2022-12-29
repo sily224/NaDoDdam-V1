@@ -89,19 +89,9 @@ const CommonInput = styled(Input)`
 `;
 const CostInput = styled(CommonInput)``;
 
-// const HaveFarm = async() => {
-//     try {
-//         const res = await API.get(`/api/farmers/farmInfo`);
-//         console.log(res.data);
-//         if(res.data.length < 1 ) return;
-//     }
-//     catch(e){
-//         console.log(e);
-//     }
-// }
-
 //memo 지혜 : TimeTable
 const TimeTable = ()=>{
+    let farmRegistraion = false;
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
     const [date, setDate] = useState([]);
@@ -127,13 +117,7 @@ const TimeTable = ()=>{
 
     const fetchData = async () => {
         try {
-            // await API.get(`/api/farmers/farmInfo`).then(
-                // (res)=> {
-                    // if (res.data.message ='농장주에게 등록된 농장이 없습니다.'){
-                    //     alert('농장을 등록하세요');
-                    //     return;
-                    // }
-            // });
+            await API.get(`/api/farmers/farmInfo`)
             await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
                 (res) => {
                     const data = res.data;
@@ -142,14 +126,15 @@ const TimeTable = ()=>{
             );
         }
         catch(e){
-            console.log(e);
+            if (e.response.data.message !='농장주에게 등록된 농장이 없습니다.'){
+                farmRegistraion = true;
+            }   
             return;
         }
     };
 
     const handleSubmit = async(e , target) =>{   
         e.preventDefault();
-        // HaveFarm();
         //memo 지혜 : 체험테이블 생성
         if (target === ''){ 
             if(postData.timeList.length < 1 || cost < 1 || !postData.startDate || !postData.endDate) {
@@ -194,7 +179,7 @@ const TimeTable = ()=>{
                     'start_time':postData.timeList[0][0],
                     'end_time':postData.timeList[0][1]
                 });
-                console.log(res);
+                // console.log(res);
             }
             catch(e){
                 console.log(e);
@@ -236,6 +221,10 @@ const TimeTable = ()=>{
         setCost(onlyNumber)
     }
     const handleCreate = () => {
+        if(!farmRegistraion){ 
+            alert('농장을 먼저 등록해주세요');
+            return;
+        }
         resetForm();
         dispatch(showModal());
     };
