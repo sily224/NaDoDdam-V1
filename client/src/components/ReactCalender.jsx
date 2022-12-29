@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { getDate } from '../store/FormSlice';
 import { DetailContext } from '../pages/DetailPage';
-import Calendar from 'react-calendar';
 import Moment from 'moment';
 import styled from 'styled-components';
+import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
 const CalendarContainer = styled.div`
@@ -74,7 +74,6 @@ const IsNotPay = () => {
 };
 
 const ReactCalender = (props) => {
-
 	const [date, setDate] = useState(null);
 	const dispatch = useDispatch();
 	let [min,max] = [new Date(), new Date()]
@@ -108,7 +107,6 @@ const ReactCalender = (props) => {
 				maxDate={max}
 			/>
 		</CalendarContainer>
-
 	);
 };
 

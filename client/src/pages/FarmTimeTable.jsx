@@ -29,7 +29,9 @@ const TimeTableList = styled(ContentContainer)`
 `;
 const FarmImg = styled.img`
     margin-right: 20px;
-    width: 20%;
+    width: 140px;
+    height: 120px;
+    object-fit : cover;
 `;
 const TimTableContent = styled.div`
     display:block
@@ -106,10 +108,9 @@ const TimeTable = ()=>{
     const [first,setFirst] = useState(1);
     const [last,setLast] = useState(1);
     const [pageGroup, setPageGroup] = useState(0);
-    
-    const limit = 20; // 받아오는 데이터 개수
-    const perpage = 5; // 한 페이지에 보이는 개수
 
+    const limit = 20;
+    const perpage = 5;
     const pageCount = limit / perpage;
     const offset = ((page-1) - (pageCount * pageGroup) )* perpage;
 
@@ -122,7 +123,6 @@ const TimeTable = ()=>{
             await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
                 (res) => {
                     const data = res.data;
-                    console.log(data);
                     setTimeTable([...data]);
                 }
             );
@@ -181,7 +181,6 @@ const TimeTable = ()=>{
                     'start_time':postData.timeList[0][0],
                     'end_time':postData.timeList[0][1]
                 });
-                // console.log(res);
             }
             catch(e){
                 console.log(e);

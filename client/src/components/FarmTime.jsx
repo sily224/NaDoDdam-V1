@@ -96,10 +96,8 @@ const FarmTime = (props) =>{
 
     const onDelTime = (e) =>{
         const idx = e.target.value;
-
         timeList.splice(idx,1);
         maxHeadCountList.splice(idx,1);
-
         setTimeList([...timeList]);
         setMaxHeadCountList([...maxHeadCountList]);
     };
