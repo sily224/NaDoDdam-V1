@@ -44,11 +44,15 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
         }
     }
 
+    useEffect(() =>{
+        setLast(pageGroup *pageCount);
+    },[]);
+
     useEffect(()=>{
         if (current < last){
             setLast(current);
         }
-    },[current])
+    },[last])
 
     useEffect(()=>{
         setLast((pageGroup + 1)*pageCount); 
