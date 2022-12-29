@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ModalContainer from './Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
 import { Link } from 'react-router-dom';
-import { HOST } from '../global-variables';
 import { 
   ConfirmButton, 
   DeleteButton, 
@@ -107,7 +106,7 @@ const MyReviewTable = () => {
   const getReviewData = async() => {
     try {
       const token = getToken();
-      const res = await userApi.get(`//localhost:3500/api/review`, {
+      const res = await userApi.get(`/api/review`, {
         headers: {
           authorization: token,
         },
@@ -132,7 +131,7 @@ const MyReviewTable = () => {
   const ShowReviewList = () => {
     const deleteReviewHandler = async(e) => {
       try{
-        await userApi.delete(`${HOST}/api/review/${dataIndex}`);
+        await userApi.delete(`/api/review/${dataIndex}`);
         alert('삭제되었습니다.');
         dispatch(closeModal());
         getReviewData();

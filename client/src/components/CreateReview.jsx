@@ -1,13 +1,9 @@
 import { ImStarFull } from "react-icons/im";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import styled from 'styled-components'
 import * as userApi from "../lib/userApi";
-
-import { getToken } from '../utils/utils';
-import { useParams } from "react-router";
-import {StyledTitle, StyledSubTitle,SubmitButton} from '../styles/Styled'
-import { HOST } from "../global-variables";
+import { StyledSubTitle,SubmitButton } from '../styles/Styled'
 
 const RatingBox = styled.div`
   margin: 0 auto;
@@ -47,7 +43,7 @@ const CreateReview = ({id, farmId}) => {
     const rating = starScore;
     const farm_id = farmId;
     try{
-      await userApi.post(`${HOST}/api/review/${id}`, {
+      await userApi.post(`/api/review/${id}`, {
         content,
         rating,
         farm_id

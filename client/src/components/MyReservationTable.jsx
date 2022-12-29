@@ -8,8 +8,6 @@ import ModalContainer from './Modal';
 import Location from './Location';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
-import { HOST } from "../global-variables";
-import CreateReview from "./CreateReview";
 import {
   StyledConfirmModal, 
   ConfirmButton, 
@@ -27,10 +25,6 @@ const StyledTitleWrap = styled.div`
   display:flex;
   align-items:center
 `
-// const StyledSubTitle = styled.div`
-//   display:flex;
-// `
-
 const StyledContent = styled.div`
   width:70%;
 
@@ -185,7 +179,7 @@ const MyReservationTable = () => {
 
   const getReservationData = async () => {
     const token = getToken();
-    const res = await userApi.get(`${HOST}/api/reserve`, {
+    const res = await userApi.get(`/api/reserve`, {
       headers: {
         authorization: token,
       },
@@ -394,7 +388,7 @@ const MyReservationTable = () => {
   const cancleResevationHandler = async(e) => {
     const id = e.target.name;
     try {
-      await userApi.patch(`${HOST}/api/reserve/${id}`, {
+      await userApi.patch(`/api/reserve/${id}`, {
         status: '예약취소',
       }); 
       alert('예약이 취소되었습니다.')
