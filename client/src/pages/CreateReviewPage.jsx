@@ -13,7 +13,7 @@ const CreateReviewPage = () => {
 
     const getReservationData = async () => {
         const token = getToken();
-        const res = await userApi.get(`//localhost:3500/api/reserve`, {
+        const res = await userApi.get(`/api/reserve`, {
           headers: {
             authorization: token,
           },

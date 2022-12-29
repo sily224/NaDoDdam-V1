@@ -2,7 +2,6 @@ import axios from 'axios';
 import { FavoriteList } from '../components/ItemList';
 import { useState } from 'react';
 import React, { useEffect, useCallback } from 'react';
-import { HOST } from './../global-variables';
 
 const Favorite = () => {
 
@@ -18,7 +17,7 @@ const Favorite = () => {
 		};
 
 		await axios
-			.get(`${HOST}/api/like`, header)
+			.get(`/api/like`, header)
 			.then((res) => res.data)
 			.then((data) => {
 				// console.log(data);

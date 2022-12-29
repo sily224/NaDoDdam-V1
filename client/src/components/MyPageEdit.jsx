@@ -82,7 +82,7 @@ const MyPageProfileEdit = ({id, name, title, userId}) => {
       ...reName,
       value: textInput.current.value,
       });
-     await userApi.patch(`//localhost:3500/api/myInfo/${userId}`, {
+     await userApi.patch(`/api/myInfo/${userId}`, {
       [textInput.current.dataset.id]: textInput.current.value,
       }); 
     } catch(err) {
@@ -145,7 +145,7 @@ const MyPageSecurityEdit = ({userId}) => {
 
   const upDatePassword = async({oldpassword, password}) => {
     try {
-      await userApi.patch(`//localhost:3500/api/myPassword/${userId}`, {
+      await userApi.patch(`/api/myPassword/${userId}`, {
         currentPassword: oldpassword,
         password: password,
       }); 
@@ -159,7 +159,7 @@ const MyPageSecurityEdit = ({userId}) => {
 
   const deleteUser = async() => {
     try {
-      await userApi.delete(`//localhost:3500/api/myInfo/${userId}`);
+      await userApi.delete(`/api/myInfo/${userId}`);
       logout();
     } catch (err) {
       console.log(err.response.data.Error)

@@ -6,7 +6,6 @@ import * as userApi from "../lib/userApi";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { StyledSubTitle, StyledTitle } from '../styles/Styled';
 
-
 const Container = styled.div`
   width: 80%;
   margin: 0 auto;
@@ -25,7 +24,7 @@ const MyPage = () => {
 
   const getUserInfo = async () => {
     const token = getToken();
-    const res = await userApi.get("//localhost:3500/api/myInfo", {
+    const res = await userApi.get(`/api/myInfo`, {
       headers: {
         authorization: token,
       },

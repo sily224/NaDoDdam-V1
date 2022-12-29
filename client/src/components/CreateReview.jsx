@@ -7,7 +7,6 @@ import * as userApi from "../lib/userApi";
 import { getToken } from '../utils/utils';
 import { useParams } from "react-router";
 import {StyledTitle, StyledSubTitle,SubmitButton} from '../styles/Styled'
-import { HOST } from "../global-variables";
 
 const RatingBox = styled.div`
   margin: 0 auto;
@@ -64,7 +63,7 @@ const CreateReview = () => {
    };
    const getReservationData = async () => {
     const token = getToken();
-    const res = await userApi.get(`${HOST}/api/reserve`, {
+    const res = await userApi.get(`/api/reserve`, {
       headers: {
         authorization: token,
       },
@@ -85,7 +84,7 @@ useEffect(() => {
     const rating = starScore;
     const farm_id = farmId;
     try{
-      await userApi.post(`${HOST}/api/review/${id}`, {
+      await userApi.post(`/api/review/${id}`, {
         content,
         rating,
         farm_id

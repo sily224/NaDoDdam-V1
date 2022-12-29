@@ -66,7 +66,7 @@ const FarmReservationTable = ({}) => {
 	// memo 지우: 모든 예약목록 받아오기
 	const fetchData = async () => {
 		try {
-			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
+			await API.get(`/api/reserve/farmer`).then((res) => {
 				setOriginalData(res.data);
 				setFilteredData(res.data);
 			});
@@ -112,7 +112,7 @@ const FarmReservationTable = ({}) => {
 		const id = e.target.name;
 
 		try {
-			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+			await API.patch(`/api/reserve/farmer/${id}`, {
 				status: '예약완료',
 			});
 			alert('예약이 확정되었습니다.');
@@ -127,7 +127,7 @@ const FarmReservationTable = ({}) => {
 		const id = e.target.name;
 
 		try {
-			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+			await API.patch(`/api/reserve/farmer/${id}`, {
 				status: '예약취소',
 			});
 			alert('예약이 취소되었습니다.');

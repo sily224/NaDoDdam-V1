@@ -5,7 +5,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { IoConstructOutline } from 'react-icons/io5';
-import { HOST } from './../global-variables';
 
 const getFavorite = async () => {
 	const token = localStorage.getItem('token');
@@ -17,7 +16,7 @@ const getFavorite = async () => {
 	};
 
 	const result = await axios
-		.get(`${HOST}/api/like`, header)
+		.get(`/api/like`, header)
 		.then((res) => res.data)
 		.then((data) => {
 			return data.map((x) => x.id);
@@ -72,10 +71,10 @@ const Home = React.memo(() => {
         }
 			};
 
-			let url = `${HOST}/api/farms?limit=${last}`; // default 전체 조회
+			let url = `/api/farms?limit=${last}`; // default 전체 조회
 
 			if (location) {
-				url = `${HOST}/api/farms/location`; // 지역 조회
+				url = `/api/farms/location`; // 지역 조회
         await axios.get(url, header)
           .then((res) => {
             const data = res.data;
@@ -85,7 +84,7 @@ const Home = React.memo(() => {
             return;
           });
 			} else if (fruit) {
-				url = `${HOST}/api/farms`; // 과일 조회
+				url = `/api/farms`; // 과일 조회
         await axios.get(url, header)
           .then((res) => {
             const data = res.data;

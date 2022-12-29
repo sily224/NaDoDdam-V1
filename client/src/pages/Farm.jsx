@@ -9,7 +9,7 @@ function MyFarm() {
 
 	const fetchData = async () => {
 		try {
-			await API.get('http://localhost:3500/api/farmers/farmInfo').then(
+			await API.get(`/api/farmers/farmInfo`).then(
 				(res) => {
 					if (res.data) {
 						setFarmData(res.data);

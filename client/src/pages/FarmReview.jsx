@@ -9,7 +9,6 @@ import Moment from 'moment';
 import * as API from '../lib/userApi';
 import { StatusSelect, NormalButton } from '../styles/Styled';
 import { yellow } from '../global-variables';
-import { HOST } from './../global-variables';
 
 const Subject = styled.h2`
 	text-align: center;
@@ -66,7 +65,7 @@ const FarmReview = () => {
 
 	const fetchData = async () => {
 		try {
-			await API.get(`${HOST}/api/review/farmer`).then((res) => {
+			await API.get(`/api/review/farmer`).then((res) => {
 				let fixedData = res.data.map(({ review, reserve }) => {
 					return {
 						id: review.id,

@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginformSchema } from '../hooks/useForm';
 import { SubmitButton, Input } from '../styles/Styled';
-import { HOST } from './../global-variables';
 
 const LoginWrapper = styled.div`
 	padding: 10%;
@@ -78,7 +77,7 @@ function Login() {
 
 	const loginUser = async (data) => {
 		try {
-			const res = await userApi.post(`${HOST}/api/login`, data);
+			const res = await userApi.post(`/api/login`, data);
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);
@@ -93,7 +92,7 @@ function Login() {
 
 	const loginFarmer = async (data) => {
 		try {
-			const res = await userApi.post(`${HOST}/api/farmers/login`, data);
+			const res = await userApi.post(`/api/farmers/login`, data);
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);

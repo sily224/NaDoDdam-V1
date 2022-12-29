@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setFavorite } from '../store/FavoriteSlice';
 import { Provider } from 'react-redux';
 import store from '../store/Store';
-import { HOST } from './../global-variables';
 
 const Container = styled.main`
 	min-height: 100%;
@@ -27,7 +26,7 @@ const getFavoriteFarmId = async () => {
 	};
 	// 찜 목록 조회
 	const result = await axios
-		.get(`${HOST}/api/like`, header)
+		.get(`/api/like`, header)
 		.then((res) => res.data)
 		.then((data) => {
 			// console.log(data);
