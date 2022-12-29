@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Pagination from './Pagination';
 import * as API from '../lib/userApi';
-
+import { yellow } from '../global-variables';
+import {
+	StyledConfirmModal,
+	ConfirmButton,
+	StyledImageWrap,
+	StyledTitle,
+	StyledSubTitle,
+	StatusButton,
+	StatusSelect,
+	SubmitButton,
+	StyledParagraph,
+	PageBtn,
+} from '../styles/Styled';
 const FilterWrapper = styled.div`
 	display: flex;
 	align-items: center;
@@ -23,21 +35,23 @@ const Table = styled.table`
 	width: 100%;
 	border: 1px solid black;
 	border-collapse: collapse;
+	box-shadow: 5px 5px 5px grey;
 `;
 
 const Thead = styled.thead``;
 
 const Tr = styled.tr`
-	border: 1px solid black;
+	border: 1px solid #777;
 	padding: 10px;
 `;
 const Td = styled.td`
-	border: 1px solid black;
+	border: 1px solid #777;
 	padding: 10px;
+	font-size: 16px;
 `;
 
 const BtnTd = styled.td`
-	height: 100%;
+	/* height: 100%; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -49,6 +63,29 @@ const Button = styled.button``;
 const FailAnnouncement = styled.p`
 	text-align: center;
 	margin-top: 5rem;
+`;
+const StyledStatusLabel = styled.span`
+	border: none;
+	background: #83d644;
+	border-radius: 10px;
+	padding: 0.3rem 0.5rem;
+	color: #fff;
+	/* margin: 0 0 0.5rem 0.5rem; */
+	font-size: 1rem;
+
+	${(props) =>
+		props.marginTop &&
+		css`
+			margin: 0.5rem 0 0 0;
+		`}
+`;
+const DeleteButton = styled.button`
+	border: 1px solid red;
+	border-radius: 10px;
+	color: red;
+	font-weight: 500;
+	background-color: rgba(255, 0, 0, 0.18);
+	margin: 0px;
 `;
 
 const FarmReservationTable = ({}) => {
@@ -152,24 +189,40 @@ const FarmReservationTable = ({}) => {
 			<>
 				<FilterWrapper>
 					{statusList.map((status) => (
-						<FilterBtn key={status} onClick={() => setStatusOption(status)}>
+						<StatusButton
+							key={status}
+							onClick={() => setStatusOption(status)}
+							clicked={statusOption === status ? true : false}
+						>
 							{status}
-						</FilterBtn>
+						</StatusButton>
 					))}
-					<FilterSelect onChange={(e) => setDateOption(e.target.value)}>
+					<StatusSelect onChange={(e) => setDateOption(e.target.value)}>
 						<option value="최근순">최근순</option>
 						<option value="오래된순">오래된순</option>
-					</FilterSelect>
+					</StatusSelect>
 				</FilterWrapper>
 				<Table>
 					<Thead>
 						<Tr>
-							<Td scope="col">예약날짜</Td>
-							<Td scope="col">예약번호</Td>
-							<Td scope="col">예약자</Td>
-							<Td scope="col">예약정보</Td>
-							<Td scope="col">결제</Td>
-							<Td scope="col">예약상태</Td>
+							<Td scope="col">
+								<StyledSubTitle>예약날짜</StyledSubTitle>
+							</Td>
+							<Td scope="col">
+								<StyledSubTitle>예약번호</StyledSubTitle>
+							</Td>
+							<Td scope="col">
+								<StyledSubTitle>예약자</StyledSubTitle>
+							</Td>
+							<Td scope="col">
+								<StyledSubTitle>예약정보</StyledSubTitle>
+							</Td>
+							<Td scope="col">
+								<StyledSubTitle>결제</StyledSubTitle>
+							</Td>
+							<Td scope="col">
+								<StyledSubTitle>예약상태</StyledSubTitle>
+							</Td>
 						</Tr>
 					</Thead>
 					<tbody>
@@ -199,23 +252,23 @@ const FarmReservationTable = ({}) => {
 										{reserve.payment === 'transfer' && '계좌이체'}
 									</Td>
 									<BtnTd>
-										{reserve.status}
+										<StyledStatusLabel>{reserve.status}</StyledStatusLabel>
 										{reserve.status === '예약대기' && (
-											<Button
+											<ConfirmButton
 												name={reserve.id}
 												onClick={(e) => onClickRezConfirm(e)}
 											>
 												예약확정
-											</Button>
+											</ConfirmButton>
 										)}
 										{(reserve.status === '예약대기' ||
 											reserve.status === '예약완료') && (
-											<Button
+											<DeleteButton
 												name={reserve.id}
 												onClick={(e) => onClickRezCancel(e)}
 											>
 												예약취소
-											</Button>
+											</DeleteButton>
 										)}
 									</BtnTd>
 								</Tr>
