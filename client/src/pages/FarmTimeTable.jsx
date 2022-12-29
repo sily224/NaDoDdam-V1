@@ -131,7 +131,7 @@ const TimeTable = ()=>{
             // await API.get(`${HOST}/api/farmers/farmInfo`).then(
                 // (res)=> {
                     // if (res.data.message ='농장주에게 등록된 농장이 없습니다.'){
-                    //     alert("농장을 등록하세요");
+                    //     alert('농장을 등록하세요');
                     //     return;
                     // }
             // });
@@ -159,8 +159,8 @@ const TimeTable = ()=>{
             };
 
             const {timeList,startDate,endDate} = postData;
-            const d1 = Moment(startDate,"YYYY-MM-DD");
-            const d2 = Moment(endDate,"YYYY-MM-DD");
+            const d1 = Moment(startDate,'YYYY-MM-DD');
+            const d2 = Moment(endDate,'YYYY-MM-DD');
             const diffDate = d2.diff(d1,'days');
             let date = d1;
 
@@ -169,7 +169,6 @@ const TimeTable = ()=>{
                     const start_time = timeList[j][0];
                     const end_time = timeList[j][1];
                     const personnel = maxHeadCount[j];
-
                     try {
                         await API.post(`${HOST}/api/timetables`,{
                             'date': date,
@@ -202,7 +201,6 @@ const TimeTable = ()=>{
                 console.log(e);
             }
         }
-        
         alert(`체험시간표 ${Isupdate()}완료`);
         dispatch(closeModal());
         dispatch(initDate());
@@ -280,19 +278,16 @@ const TimeTable = ()=>{
                                         </div>
                                         <div>
                                             <span>시작시간 : </span>
-                                            <span>{start_time}</span>
+                                            <span>{start_time.slice(0,5)}</span>
                                         </div>
-
                                         <div>
                                             <span>끝나는시간 : </span>
-                                            <span>{end_time}</span>
+                                            <span>{end_time.slice(0,5)}</span>
                                         </div>
-                                        
                                         <div>
                                             <span>가격 : </span>
                                             <span>{price.toLocaleString('ko-KR')}</span>  
                                         </div>
-                                            
                                         <div>
                                             <span>인원수 : </span>
                                             <span>{personnel}</span>
