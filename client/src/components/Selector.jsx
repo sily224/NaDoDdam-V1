@@ -33,7 +33,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
   }, []);
 
   const getFruits = async () => {
-    await axios.get(`${HOST}/api/farms?limit=100000000`)
+    await axios.get(`/api/farms?limit=100000000`)
     .then(res=>res.data)
     .then(data=>{
       const cat = [];
