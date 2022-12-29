@@ -77,7 +77,7 @@ const Home = React.memo(() => {
 				url = `/api/farms/location`; // 지역 조회
         await axios.get(url, header)
           .then((res) => {
-            const data = JSON.parse(res.data);
+            const data = res.data;
             setPage(0);
             setContents(data);
             toggle = false;
@@ -87,7 +87,7 @@ const Home = React.memo(() => {
 				url = `/api/farms`; // 과일 조회
         await axios.get(url, header)
           .then((res) => {
-            const data = JSON.parse(res.data);
+            const data = res.data;
             setContents(data);
             setPage(0);
             toggle = false;
@@ -96,7 +96,7 @@ const Home = React.memo(() => {
 			} else{
         await axios.get(url, header)
           .then((res) => {
-            const data = JSON.parse(res.data);
+            const data = res.data;
             const d = data.slice(length*page, length*(page+1));
             // console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
             if (d.length === 0) {
