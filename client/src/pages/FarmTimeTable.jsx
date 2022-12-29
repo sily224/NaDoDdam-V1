@@ -10,7 +10,6 @@ import FarmTime from '../components/FarmTime';
 import Pagination from '../components/TimeTablePagination';
 import styled from 'styled-components';
 import { ConfirmButton, DeleteButton, ContentContainer, NormalButton, SubmitButton, Input } from '../styles/Styled';
-import { HOST } from '../global-variables';
 import Moment from 'moment';
 
 import * as API from '../lib/userApi';
@@ -92,7 +91,7 @@ const CostInput = styled(CommonInput)``;
 
 // const HaveFarm = async() => {
 //     try {
-//         const res = await API.get(`${HOST}/api/farmers/farmInfo`);
+//         const res = await API.get(`/api/farmers/farmInfo`);
 //         console.log(res.data);
 //         if(res.data.length < 1 ) return;
 //     }
@@ -128,14 +127,14 @@ const TimeTable = ()=>{
 
     const fetchData = async () => {
         try {
-            // await API.get(`${HOST}/api/farmers/farmInfo`).then(
+            // await API.get(`/api/farmers/farmInfo`).then(
                 // (res)=> {
                     // if (res.data.message ='농장주에게 등록된 농장이 없습니다.'){
                     //     alert('농장을 등록하세요');
                     //     return;
                     // }
             // });
-            await API.get(`${HOST}/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
+            await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
                 (res) => {
                     const data = res.data;
                     setTimeTable([...data]);
@@ -170,7 +169,7 @@ const TimeTable = ()=>{
                     const end_time = timeList[j][1];
                     const personnel = maxHeadCount[j];
                     try {
-                        await API.post(`${HOST}/api/timetables`,{
+                        await API.post('/api/timetables',{
                             'date': date,
                             'personnel':personnel,
                             'price':cost,
@@ -188,7 +187,7 @@ const TimeTable = ()=>{
         //memo 지혜 : 체험테이블 수정
         else {
             try {
-                const res = await API.put(`${HOST}/api/timetables/${target}`,{
+                const res = await API.put(`/api/timetables/${target}`,{
                     'date': date[0],
                     'personnel':maxHeadCount[0],
                     'price':cost,
@@ -219,8 +218,11 @@ const TimeTable = ()=>{
     };
 
     const onTimeTableDelete = async(id) => {
-        await API.delete(`${HOST}/api/timetables/${id}`);
-        fetchData();
+        const result = confirm('삭제하시겠습니까?');
+        if(result){
+            await API.delete(`/api/timetables/${id}`);
+            fetchData();
+        }
     };
     const onTimeTableUpdate = (id)=>{
         resetForm();
