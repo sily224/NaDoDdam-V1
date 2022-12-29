@@ -90,7 +90,7 @@ const CostInput = styled(CommonInput)``;
 
 //memo 지혜 : TimeTable
 const TimeTable = ()=>{
-    let farmRegistraion = false;
+    let farmRegistraion = true;
     const [timeTable, setTimeTable] = useState([]);
     const [postData, setPostData] = useState({});
     const [date, setDate] = useState([]);
@@ -106,8 +106,10 @@ const TimeTable = ()=>{
     const [first,setFirst] = useState(1);
     const [last,setLast] = useState(1);
     const [pageGroup, setPageGroup] = useState(0);
-    const limit = 20;
-    const perpage = 5;
+    
+    const limit = 20; // 받아오는 데이터 개수
+    const perpage = 5; // 한 페이지에 보이는 개수
+
     const pageCount = limit / perpage;
     const offset = ((page-1) - (pageCount * pageGroup) )* perpage;
 
@@ -120,13 +122,14 @@ const TimeTable = ()=>{
             await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
                 (res) => {
                     const data = res.data;
+                    console.log(data);
                     setTimeTable([...data]);
                 }
             );
         }
         catch(e){
-            if (e.response.data.message !='농장주에게 등록된 농장이 없습니다.'){
-                farmRegistraion = true;
+            if (e.response.data.message ==='농장주에게 등록된 농장이 없습니다.'){
+                farmRegistraion = false;
             }   
             return;
         }
@@ -220,12 +223,12 @@ const TimeTable = ()=>{
         setCost(onlyNumber)
     }
     const handleCreate = () => {
-        if(!farmRegistraion){ 
-            alert('농장을 먼저 등록해주세요');
+        if(farmRegistraion){ 
+            resetForm();
+            dispatch(showModal());
             return;
         }
-        resetForm();
-        dispatch(showModal());
+        alert('농장을 먼저 등록해주세요');
     };
     const Isupdate = () => {
         return (target === '' ? '등록' : '수정');

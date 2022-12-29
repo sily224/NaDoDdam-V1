@@ -6,11 +6,6 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     const [btnActive, setBtnActive] = useState('');
     const current = Math.ceil(timeTable.length/perpage) + pageCount * pageGroup; 
 
-    const hadlePageBtn = (e,i) => {
-        setPage(i);
-        setBtnActive(e.target.value);
-    };
-
     const pageNum = () =>{
         let pageList = [];
         
@@ -29,16 +24,24 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
         }
         return pageList;
     };
+    
+    const handleNext = () => {
+        setPage(page + 1)
+    }
+
+    const hadlePageBtn = (e,i) => {
+        setPage(i);
+        setBtnActive(e.target.value);
+    };
 
     const handlePrevPage = () =>{
-        setFirst((last-1) -pageGroup *pageCount); 
+        setFirst((pageGroup+1)*pageCount - (last-1));
         setPageGroup(pageGroup - 1);
     }
 
     const handleNextPage = () =>{
         setFirst(last + 1);  
         setPageGroup(pageGroup + 1);
-
         if( lastId.filter( id => id >= timeTable[timeTable.length -1].id).length == 0 ){
             setLastId([...lastId, timeTable[timeTable.length -1].id]);
         }
@@ -46,15 +49,17 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 
     useEffect(() =>{
         setLast(pageGroup *pageCount);
-    },[]);
+    },[]); 
 
     useEffect(()=>{
+        // console.log("last:",last);
         if (current < last){
             setLast(current);
         }
     },[last])
 
     useEffect(()=>{
+        // console.log("last:",last);
         setLast((pageGroup + 1)*pageCount); 
     },[first,pageGroup]);
 
@@ -66,9 +71,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
         setBtnActive(page);
     },[page])
 
-    const handleNext = () => {
-        setPage(page + 1)
-    }
+
 
 	return (
 		<>
@@ -77,7 +80,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 					{'<<'}
 				</PageBtn>
 				<PageBtn onClick={() => setPage(page - 1)} disabled={page===first}>
-					&lt;
+					&lt; 
 				</PageBtn>
 				{
                     pageNum()
