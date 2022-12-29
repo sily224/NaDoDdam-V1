@@ -24,7 +24,7 @@ const MyPage = () => {
 
   const getUserInfo = async () => {
     const token = getToken();
-    const res = await userApi.get(`/api/myInfo`, {
+    const res = await userApi.get("/api/myInfo", {
       headers: {
         authorization: token,
       },

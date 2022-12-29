@@ -48,10 +48,7 @@ const ButtonWrapper = styled.div`
 	align-items: center;
 	margin-top: 20px;
 `;
-const RegisterBtn = styled(SubmitButton)`
-	width: 150px;
-	height: 40px;
-`;
+const RegisterBtn = styled(SubmitButton)``;
 
 const Line = styled.div`
 	content: '  ';

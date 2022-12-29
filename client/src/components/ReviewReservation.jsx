@@ -1,11 +1,20 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+const ReservationWrap = styled.div`
  display: flex;
- justify-content: space-evenly;
+ align-items: center;
 `
 
-const  ReviewReservation = ({reservationData}) => {
+const FarmImg = styled.div`
+  width: 30%;
+  margin-right: 1.5rem;
+  > img {
+    width: 100%;
+    border-radius: 20px;
+  }
+`
+
+const ReviewReservation = ({reservationData}) => {
     return (
      <>
        {reservationData.map(item => {
@@ -13,17 +22,19 @@ const  ReviewReservation = ({reservationData}) => {
          const start_time = info.start_time.slice(0,5);
          const end_time = info.end_time.slice(0,5);
          return (
-           <div key={info.id}>
-           <img src={info.url} alt="농장이미지"/>
-           <h1>{info.name}</h1>
-           <p>날짜: {info.date}</p>
-           <p>체험시간: {start_time} - {end_time}</p>
-           <p>인원: {reserve.personnel}명</p>
-           </div>
+          <ReservationWrap key={info.id}>
+           <FarmImg><img src={info.url} alt="농장이미지"/></FarmImg>
+           <div>
+            <h1>{info.name}</h1>
+            <p>날짜: {info.date}</p>
+            <p>체험시간: {start_time} - {end_time}</p>
+            <p>인원: {reserve.personnel}명</p>
+          </div>
+           </ReservationWrap>
          )
        })}
      </>
     )
 }
 
-export {Container, ReviewReservation};
+export default ReviewReservation;

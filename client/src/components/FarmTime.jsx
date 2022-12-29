@@ -104,12 +104,20 @@ const FarmTime = (props) =>{
         setMaxHeadCountList([...maxHeadCountList]);
     };
 
+    const handleForTime = (e) =>{
+        const value = e.target.value;
+        const onlyNumber = value.replace(/[^0-9]/g, '')
+        setForTime(onlyNumber)
+    }
+
     const handleStartTime = (e) =>{
         setStartTime(e.target.value);
     };
     
     const handleMaxHeadCount = (e)=>{
-        setMaxHeadCount(e.target.value);
+        const value = e.target.value;
+        const onlyNumber = value.replace(/[^0-9]/g, '')
+        setMaxHeadCount(onlyNumber);
     }
 
     // memo 지혜 : startTime변경시 endTime를 set시켜주는 사이드이펙트
@@ -154,7 +162,7 @@ const FarmTime = (props) =>{
                 <TimeConatiner>
                     <TimeContent>
                         <Label>시간</Label>
-                        <ForTimeInput type='text' id='forTime' placeholder='체험시간' value={forTime} onChange={(e)=>setForTime(e.target.value)}/>
+                        <ForTimeInput type='text' id='forTime' placeholder='체험시간' value={forTime} onChange={handleForTime}/>
                     </TimeContent>
                     <TimeContent>
                         <Label>시작시각</Label>

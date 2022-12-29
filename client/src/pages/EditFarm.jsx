@@ -5,7 +5,7 @@ import * as API from '../lib/userApi';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import FindAddress from '../components/FindAddress';
-import { StyledTitle, Input, SubmitButton } from '../styles/Styled';
+import { Input, SubmitButton } from '../styles/Styled';
 
 const Tittle = styled.h2`
 	text-align: center;

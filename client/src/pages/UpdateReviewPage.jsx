@@ -1,9 +1,10 @@
-import {Container, ReviewReservation} from "../components/ReviewReservation";
+import ReviewReservation from "../components/ReviewReservation";
 import UpdateReview from "../components/UpdateReview";
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import { useParams } from 'react-router';
 import { useState, useEffect } from "react";
+import { StyledTitle } from "../styles/Styled";
 
 const UpdateReviewPage = () => {
   const [reservationData, setReservationData] = useState([]);
@@ -26,6 +27,7 @@ const UpdateReviewPage = () => {
 
     return (
       <>
+        <StyledTitle>리뷰 수정</StyledTitle>
         <ReviewReservation reservationData={reservationData}/>
         <UpdateReview id={id}/>
       </>

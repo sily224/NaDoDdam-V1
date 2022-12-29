@@ -53,8 +53,6 @@ const ButtonWrapper = styled.div`
 `;
 
 const SubmitBtn = styled(SubmitButton)`
-	width: 150px;
-	height: 40px;
 	padding: 1rem 1rem;
 `;
 
@@ -77,7 +75,7 @@ function Login() {
 
 	const loginUser = async (data) => {
 		try {
-			const res = await userApi.post(`/api/login`, data);
+			const res = await userApi.post('/api/login', data);
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);
@@ -92,7 +90,7 @@ function Login() {
 
 	const loginFarmer = async (data) => {
 		try {
-			const res = await userApi.post(`/api/farmers/login`, data);
+			const res = await userApi.post('/api/farmers/login', data);
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);

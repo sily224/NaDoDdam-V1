@@ -3,6 +3,7 @@ import axios from "axios";
 import Detail from "../components/Detail";
 import { useParams } from 'react-router-dom';
 
+
 export const DetailContext = createContext();
 
 const DetailPage =  () => {
@@ -31,7 +32,7 @@ const DetailPage =  () => {
             try {
                 const {farmId} = farmerData;
                 await axios.get(`/api/timetables/${farmId}`).then((res) => {
-                    console.log("timeTable : ",res.data);
+                    // console.log("timeTable : ",res.data);
                     setTimeTable(res.data);
                 })
             }

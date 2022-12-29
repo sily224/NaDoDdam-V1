@@ -7,7 +7,7 @@ const Container = styled.div`
 	display: flex;
 `;
 const Content = styled.div`
-	width: 60%;
+	width: 100%;
 `;
 const FarmNav = styled.div`
 	display: flex;

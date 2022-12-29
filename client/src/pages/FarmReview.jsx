@@ -55,6 +55,10 @@ const SelectWrapper = styled.div`
 	justify-content: flex-end;
 `;
 
+const P = styled.p`
+	text-align: center;
+`;
+
 const FarmReview = () => {
 	const dispatch = useDispatch();
 	const modalOpen = useSelector((state) => state.modal.modal);
@@ -117,6 +121,32 @@ const FarmReview = () => {
 		dispatch(showModal());
 	};
 
+	const showData = (filteredData) => {
+		if (filteredData.length > 0) {
+			filteredData.map((review) => {
+				return (
+					<ReviewBox key={review.id}>
+						<InfoWrapper>
+							<Info>
+								<b>작성일:</b> {review.createDate}
+							</Info>
+							<Info>
+								<b>예약일:</b> {review.date}
+							</Info>
+							<Info>
+								<b>인원:</b> {review.people}
+							</Info>
+						</InfoWrapper>
+						<InfoText>{review.content}</InfoText>
+						<Button name={review.id} onClick={(e) => onClickBtn(e)}>
+							더보기
+						</Button>
+					</ReviewBox>
+				);
+			});
+		} else return <P>작성된 후기가 없습니다.</P>;
+	};
+
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -136,28 +166,7 @@ const FarmReview = () => {
 						<option value="지난 1년">지난 1년</option>
 					</DateSelect>
 				</SelectWrapper>
-				{filteredData &&
-					filteredData.map((review) => {
-						return (
-							<ReviewBox key={review.id}>
-								<InfoWrapper>
-									<Info>
-										<b>작성일:</b> {review.createDate}
-									</Info>
-									<Info>
-										<b>예약일:</b> {review.date}
-									</Info>
-									<Info>
-										<b>인원:</b> {review.people}
-									</Info>
-								</InfoWrapper>
-								<InfoText>{review.content}</InfoText>
-								<Button name={review.id} onClick={(e) => onClickBtn(e)}>
-									더보기
-								</Button>
-							</ReviewBox>
-						);
-					})}
+				{filteredData && showData(filteredData)}
 				{modalOpen && (
 					<ModalContainer>
 						<InfoWrapper>

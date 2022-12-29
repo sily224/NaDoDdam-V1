@@ -13,6 +13,7 @@ import { logout } from '../utils/utils';
 import styled from 'styled-components'
 import { AiOutlineLock } from "react-icons/ai";
 import { AiOutlineUserDelete } from "react-icons/ai";
+import { HOST } from '../global-variables';
 import { 
   SubmitButton, 
   Input, 
@@ -234,12 +235,12 @@ const MyPageSecurityEdit = ({userId}) => {
               setModalPassword(false);
             }}>회원탈퇴</DeleteButton>
             {modalConfirm && modalOpen && 
-              <ModalContainer w="320px" h="206px">
+              <ModalContainer w="320px" h="160px">
                 <StyledConfirmModal>
                 <p>탈퇴 시 복구할 수 없습니다. <br />
                   탈퇴하시겠습니까?</p>
-                <SubmitButton onClick={deleteUser}>확인</SubmitButton>
-                <SubmitButton reject>취소</SubmitButton>
+                <ConfirmButton onClick={deleteUser}>확인</ConfirmButton>
+                <ConfirmButton reject>취소</ConfirmButton>
                 </StyledConfirmModal>
               </ModalContainer>}
           </StyledUserInfo>

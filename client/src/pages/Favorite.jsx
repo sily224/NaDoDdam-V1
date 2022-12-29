@@ -17,8 +17,8 @@ const Favorite = () => {
 		};
 
 		await axios
-			.get(`/api/like`, header)
-			.then((res) => res.data)
+			.get(`${HOST}/api/like`, header)
+			.then((res) => JSON.parse(res.data))
 			.then((data) => {
 				// console.log(data);
 				setContents(data);
