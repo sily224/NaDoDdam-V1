@@ -9,6 +9,7 @@ import Location from './Location';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import {SkeletonList} from "./Skeleton";
+import apple from '../assets/apple.png';
 import {
   StyledConfirmModal, 
   ConfirmButton, 
@@ -125,9 +126,18 @@ const StyledPayWrap = styled.div`
   font-weight: bold;
  }
 `
-const StyledNotData = styled.h2`
- margin-top: 8rem;
-` 
+const StyledNotData = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+font-size: 20px;
+margin-top: 50px;
+
+img {
+  height: 50px;
+  margin-bottom: 20px;
+}
+`  
 
 const initialState = {
   cancleModal: false,
@@ -508,7 +518,10 @@ const MyReservationTable = () => {
     }
     </>
     :
-    <StyledNotData>회원님의 예약 내역이 없습니다.</StyledNotData>
+    <StyledNotData>
+      <img src={apple} alt="" />
+      <h4>회원님의 예약 내역이 없습니다.</h4>
+    </StyledNotData>
     }
     </>
   )
