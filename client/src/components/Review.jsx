@@ -35,7 +35,7 @@ const ReviewContent= styled.p`
     `};
 `;
 const ReviewItem = styled.div`
-    border  : 1px solid gray;
+    border  : 2px solid lightgray;
     border-radius : 10px;
     padding : 10px;
     overflow: hidden; 
@@ -73,9 +73,9 @@ const ReviewItems = ({review,showAll}) =>{
         if (idx >5) if(!showAll) return;
         return(      
             <ReviewItem key = {`reveiw-${idx}`} >
-                <ReviewId  key = {`${value.id}-${idx}`}>{id}</ReviewId>
+                <ReviewId  key = {`${id}-${idx}`}>{id}</ReviewId>
                 <StyledParagraph>★ {rating}</StyledParagraph>
-                <ReviewName key = {`${value.createdAt}-${idx}`}>{createdAt}</ReviewName>
+                <ReviewName key = {`${createdAt}-${idx}`}>{createdAt}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
                 { isTextOverflow && <ConfirmButton onClick={()=> setTab(!tab)} >더보기</ConfirmButton>}
             </ReviewItem>

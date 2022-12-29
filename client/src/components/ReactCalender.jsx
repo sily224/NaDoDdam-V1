@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { getDate } from '../store/FormSlice';
 import { DetailContext } from '../pages/DetailPage';
 import Calendar from 'react-calendar';
+import Moment from 'moment';
 import styled from 'styled-components';
 import 'react-calendar/dist/Calendar.css';
 
@@ -53,9 +54,7 @@ const IsNotPay = () => {
 			return [new Date(), new Date()]
 		}
 		const orderedDate = timeTable.sort((a, b) => new Date(a.date) - new Date(b.date));
-		const diffDate = new Date(orderedDate[orderedDate.length - 1].date).getTime() - new Date().getTime();
-		const diff = Math.ceil(diffDate /(1000*60*60*24));
-		// console.log(diff);
+		const diff = Moment(orderedDate[orderedDate.length - 1].date).diff(Moment(),'days');
 
 		// memo 지혜 : 오늘날짜보다 체험시간표의 끝 날짜가 더 이르다면 (전부 끝난 체험)
 		if(diff < 0){ 
@@ -93,9 +92,8 @@ const ReactCalender = (props) => {
 
 	useEffect(() => {
 		if (date){
-		const dateForm = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-		// console.log(dateForm);
-		dispatch(getDate(dateForm));
+			const dateForm = Moment(date).format('YYYY-MM-DD');
+			dispatch(getDate(dateForm));
 		}
 	}, [date]);
 
