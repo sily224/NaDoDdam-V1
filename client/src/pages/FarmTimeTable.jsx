@@ -162,9 +162,9 @@ const TimeTable = ()=>{
             const d1 = Moment(startDate,"YYYY-MM-DD");
             const d2 = Moment(endDate,"YYYY-MM-DD");
             const diffDate = d2.diff(d1,'days');
+            let date = d1;
 
             for (let i = 0; i <= diffDate ; i++){
-                let date = d1.add(i, 'days'); 
                 for (let j = 0; j< timeList.length; j++){
                     const start_time = timeList[j][0];
                     const end_time = timeList[j][1];
@@ -183,7 +183,7 @@ const TimeTable = ()=>{
                         console.log(e);
                     }
                 }
-                
+                date = d1.add(1, 'days'); 
             }
         }
         //memo 지혜 : 체험테이블 수정
