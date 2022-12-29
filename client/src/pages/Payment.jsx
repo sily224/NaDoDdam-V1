@@ -127,6 +127,7 @@ const ModalDiv = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	margin-top: 1rem;
 `;
 const NormalBtn = styled(NormalButton)`
 	width: 110px;
@@ -183,8 +184,8 @@ const SideBar = ({ payData }) => {
 			{payData && (
 				<div>
 					<StyledTitle>{farm}</StyledTitle>
-					<StyledSubTitle>요금 세부정보</StyledSubTitle>
-					<SmallH2>1인 체험권</SmallH2>
+					<SmallH2>요금 세부정보</SmallH2>
+					<StyledSubTitle>1인 체험권</StyledSubTitle>
 					<TextDiv>
 						<StyledSubTitle>
 							{price ? price.toLocaleString('ko-KR') : 0}원 X{headCount}
@@ -464,7 +465,7 @@ const Payment = () => {
 					</SideBarDiv>
 				</StickyBox>
 				{modalOpen && (
-					<ModalContainer w="600px" h="330px">
+					<ModalContainer w="600px" h="350px">
 						{pay ? (
 							<ModalDiv>
 								<ModalH1>결제완료</ModalH1>

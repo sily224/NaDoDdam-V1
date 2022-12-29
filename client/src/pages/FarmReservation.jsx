@@ -5,7 +5,11 @@ import FarmFormat from '../components/FarmFormat';
 import FarmReservationTable from '../components/FarmReservationTable';
 import { StyledTitle } from '../styles/Styled';
 
-const Subject = styled(StyledTitle)``;
+const Subject = styled(StyledTitle)`
+	display: flex;
+	justify-content: center;
+	min-width: 760px;
+`;
 
 const FarmReservation = () => {
 	return (
