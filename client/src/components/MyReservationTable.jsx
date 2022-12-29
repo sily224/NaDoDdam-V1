@@ -498,13 +498,15 @@ const MyReservationTable = () => {
   return (
     <>
      <ShowDefault/>
-    {loading ? <>
+    {loading 
+    ? <>
       <SkeletonList />
       <SkeletonList />
       <SkeletonList />
       <SkeletonList />
-    </> : filteredData.length > 0 ?
-    <>
+      </> 
+    : filteredData.length > 0 
+    ? <>
     <ShowResrvation /> 
     {state.detailModal && modalOpen && 
         <ModalContainer w="500px" h="510px">
@@ -517,11 +519,10 @@ const MyReservationTable = () => {
       </ModalContainer>
     }
     </>
-    :
-    <StyledNotData>
+    : <StyledNotData>
       <img src={apple} alt="" />
       <h4>회원님의 예약 내역이 없습니다.</h4>
-    </StyledNotData>
+     </StyledNotData>
     }
     </>
   )
