@@ -14,7 +14,7 @@ const FarmImg = styled.div`
   }
 `
 
-const  ReviewReservation = ({reservationData}) => {
+const ReviewReservation = ({reservationData}) => {
     return (
      <>
        {reservationData.map(item => {

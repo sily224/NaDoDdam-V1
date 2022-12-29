@@ -22,11 +22,10 @@ const StyledInfoContainer = styled.div`
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({}); 
-  const [loading, setLoading] = useState(true);
 
   const getUserInfo = async () => {
     const token = getToken();
-    const res = await userApi.get("//localhost:3500/api/myInfo", {
+    const res = await userApi.get("/api/myInfo", {
       headers: {
         authorization: token,
       },
@@ -37,7 +36,6 @@ const MyPage = () => {
       phoneNum: res.data.phoneNum,
       email: res.data.email,
     })
-    setLoading(false);
   };
   
   useEffect(() => {
