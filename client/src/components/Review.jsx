@@ -76,18 +76,33 @@ const RatingBox = styled.div`
 const Span = styled.span`
     font-size: 0.7rem;
 `
+const maskingName = (name) =>{
+    if(name.length > 2) {
+        const originName = name.split('');
+        originName.forEach((splitName,i) =>{
+            if( i === 0 || i === originName.length -1) return;
+            originName[i] = '*';
+        })
+        const joinNmae=originName.join();
+        return joinNmae.replace(/,/g,'');
+    }else{
+        const patter = /.$/;
+        return name.replace(patter,'*');
+    }
+}
+
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
     const MaxLength = 20;
 
     return review.map((value, idx) => {
-        const {id,content,createdAt,rating}= value;
+        const {id, name, content, date, rating} = value;
         const isTextOverflow = MaxLength < value.content.length;
         
         if (idx >5) if(!showAll) return;
         return(      
             <ReviewItem key = {`reveiw-${idx}`} >
-                <ReviewId  key = {`${id}-${idx}`}>{id}</ReviewId>
+                <ReviewId  key = {`${id}-${name}`}>{maskingName(name)}</ReviewId>
                 <RatingBox>
                     {[0,1,2,3,4].map(item =>
                         item < rating ?
@@ -99,7 +114,7 @@ const ReviewItems = ({review,showAll}) =>{
                     )}
                     <Span>({rating}점)</Span>
                 </RatingBox>
-                <ReviewName key = {`${createdAt}-${idx}`}>{createdAt.slice(0,-5)}</ReviewName>
+                <ReviewName key = {`${date}-${idx}`}>{date.slice(0,-8).split('T').join(" ")}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
                 { isTextOverflow && <ConfirmButton onClick={()=> setTab(!tab)} >더보기</ConfirmButton>}
             </ReviewItem>
@@ -118,12 +133,14 @@ const Review = ()=>{
             <StyledSubTitle>후기</StyledSubTitle>
             <hr />
             <div>
-                <ReviewDiv len={review.length}> 
-                    <ReviewItems review={review}/>
-                </ReviewDiv>
+                { review && 
+                    <ReviewDiv len={review.length}> 
+                        <ReviewItems review={review}/>
+                    </ReviewDiv>
+                }
                 {review.length > 6 && <ShowAllReviewBtn onClick = {() => dispatch(showModal())}>모두보기</ShowAllReviewBtn>}
                 { modalOpen &&
-                    <ModalContainer h="75%">
+                    <ModalContainer h="80%">
                         <ModalLayout>
                             <ModalTitle>
                                 <ReviewSubTitle>전체 후기</ReviewSubTitle>
