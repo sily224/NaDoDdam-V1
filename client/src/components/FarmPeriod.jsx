@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { initDate } from "../store/FormSlice";
+import { initDate } from '../store/FormSlice';
 import Calender from '../components/ReactCalender';
 import styled from 'styled-components';
-import { NormalButton , WhiteGreenBtn} from '../styles/Styled';
-import { Calendar } from 'react-calendar';
+import { WhiteGreenBtn} from '../styles/Styled';
+
 
 const CalenderContainer = styled.div`
     display : flex;
@@ -22,17 +22,14 @@ const SelectedDate = styled.p`
 `
 const CalendarBtn = styled(WhiteGreenBtn)``
 
-
-
 //memo 지혜 : period (체험운영기간)
 const FarmPeriod = (props) =>{
-
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [startCalenderOpen, setStartCalenderOpen] = useState(false);
     const [endCalenderOpen, setEndCalenderOpen] = useState(false);
-    const dispatch = useDispatch();
 
+    const dispatch = useDispatch();
     const date = useSelector(({form}) => form.date);
     
     useEffect (() => {

@@ -49,7 +49,7 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
     searchType === "location" && (
       <Container>
         {location.map((x, i) => (
-          <Item to="/" key={i} id={x[1]} onClick={e=>{
+          <Item to="/" key={i} id={x[0]} onClick={e=>{
             dispatch(setLocation(e.target.id));
             dispatch(setFruit(null));
           }}>{location[i][0]}</Item>

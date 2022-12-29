@@ -1,12 +1,11 @@
 import {useState, useContext} from 'react';
-import styled, {css} from 'styled-components';
-import { DetailContext } from '../pages/DetailPage'
-import ModalContainer from './../components/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
-import { StyledParagraph, StyledSubTitle, ContentContainer} from '../styles/Styled';
-import { ConfirmButton } from '../styles/Styled'
-import { ImStarFull } from "react-icons/im";
+import { DetailContext } from '../pages/DetailPage'
+import ModalContainer from './../components/Modal';
+import { ConfirmButton, StyledSubTitle, ContentContainer, StyledParagraph} from '../styles/Styled';
+import { ImStarFull } from 'react-icons/im';
+import styled, {css} from 'styled-components';
 
 const ReviewDiv = styled.div`
     display: grid;
@@ -64,7 +63,6 @@ const ShowAllReviewBtn = styled(ConfirmButton)`
 `;
 const RatingBox = styled.div`
     margin: 0 auto;
-
     & svg {
         color: #C4C4C4;
         cursor: pointer;
@@ -75,7 +73,8 @@ const RatingBox = styled.div`
 `;
 const Span = styled.span`
     font-size: 0.7rem;
-`
+`;
+
 const maskingName = (name) =>{
     if(name.length > 2) {
         const originName = name.split('');
@@ -114,7 +113,7 @@ const ReviewItems = ({review,showAll}) =>{
                     )}
                     <Span>({rating}점)</Span>
                 </RatingBox>
-                <ReviewName key = {`${date}-${idx}`}>{date.slice(0,-8).split('T').join(" ")}</ReviewName>
+                <ReviewName key = {`${date}-${idx}`}>{date.slice(0,-8).split('T').join(' ')}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
                 { isTextOverflow && <ConfirmButton onClick={()=> setTab(!tab)} >더보기</ConfirmButton>}
             </ReviewItem>
@@ -124,7 +123,6 @@ const ReviewItems = ({review,showAll}) =>{
 
 const Review = ()=>{
     const {reviewData : review} = useContext(DetailContext);
-
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
     

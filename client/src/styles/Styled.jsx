@@ -147,8 +147,8 @@ export const StyledParagraph = styled.p`
 
 //memo 가영 : 예약조회, 후기조회 등 리스트의 이미지
 export const StyledImageWrap = styled.div`
-  width: 30%;
-  height: 8rem;
+  width: 23rem;
+  height: 10rem;
   margin-right: 20px;
   overflow: hidden;
   border-radius: 20px;

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { FavoriteList } from '../components/ItemList';
 import { useState } from 'react';
 import React, { useEffect, useCallback } from 'react';
-import { HOST } from './../global-variables';
 
 const Favorite = () => {
 
