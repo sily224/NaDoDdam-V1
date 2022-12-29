@@ -319,7 +319,6 @@ const Header = () => {
 		// 검색 세부 옵션 핸들러
 		setOption(e.target.id);
 		e.target.id === 'location' ? setFruit(null) : setLocation(null);
-		console.log('전체 지역 과일 중 ', e.target.id);
 		if(e.target.id === 'total') dispatch(reset());
 	};
 
