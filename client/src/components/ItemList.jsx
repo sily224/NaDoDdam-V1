@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import heartLogo from '../assets/favorite.png';
+import apple from '../assets/apple.png';
 import { HOST, yellow } from './../global-variables';
 
 const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
@@ -44,7 +45,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 	};
 
 	if (contents.length === 0) {
-		return <Container>게시물 없음</Container>;
+		return <Container><Empty><img src={apple}/>찜 없음</Empty></Container>;
 	} else {
 		return (
 			<Container>
@@ -54,10 +55,10 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 							<Item key={content.id}>
 								<Button type="button" id={content.id} onClick={(e) => handleButton(e)} color={favorite.includes(content.id).toString()} />
 								<Link to={`/detail/${content.id}`}>
-									<img src={content.url} alt={content.name} />
+									<img src={content.url.split(',')[0]} alt={content.name} />
 									<TextContainer>
-										<div>농장 : {content.name}</div>
-										<div>주소 : {content.address}</div>
+										<div><Bold>{content.name}</Bold></div>
+										<div><Address>{content.address}</Address></div>
 									</TextContainer>
 								</Link>
 							</Item>
@@ -94,7 +95,7 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 	};
 
 	if (contents.length === 0) {
-		return <Container>게시물 없음</Container>;
+		return <Container><Empty><img src={apple}/>찜 없음</Empty></Container>;
 	} else {
 		return (
 			<Container>
@@ -109,10 +110,10 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 									color="true"
 								/>
 								<Link to={`/detail/${content.id}`}>
-									<img src={content.url} alt={content.name} />
+									<img src={content.url.split(',')[0]} alt={content.name} />
 									<TextContainer>
-										<div>농장 : {content.name}</div>
-										<div>주소 : {content.address}</div>
+									<div><Bold>{content.name}</Bold></div>
+										<div><Address>{content.address}</Address></div>
 									</TextContainer>
 								</Link>
 							</Item>
@@ -136,11 +137,11 @@ const Container = styled.div`
 
 const ItemList = styled.div`
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(400px, auto));
+	grid-template-columns: repeat(auto-fill, minmax(300px, auto));
 	grid-gap: 25px;
 	width: auto;
 	padding: 0 100px 100px 100px;
-	max-width: 2300px;
+	max-width: 1800px;
 	width: 100%;
 	height: auto;
 	position:absolute;
@@ -160,20 +161,20 @@ const Item = styled.div`
 
 	img {
 		width: 100%;
-		height: 330px;
+		height: 300px;
 		border-radius: 10px 10px 0 0;
 	}
 
 	&:hover {
 		transition: 0.5s;
-		transform: scale(1.2);
+		transform: scale(1.1);
 		border: solid 5px ${yellow};
 		img {
 			transition: 0.5s;
 			height: 400px;
 			width: 100%;
 		}
-		z-index:100;
+		z-index:1;
 	}
 `;
 
@@ -201,9 +202,10 @@ const Button = styled.button`
 
 const TextContainer = styled.div`
 	display: grid;
-	height: auto;
+	height: 20px;
+	padding: 10px;
 	object-fit: cover;
-	grid-template-rows: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
 	border-radius: 0 0 10px 10px;
 
 	&hover: {
@@ -211,5 +213,25 @@ const TextContainer = styled.div`
 		display:hidden;
 	}
 `;
+
+const Bold = styled.b`
+	font-size:16px;
+`
+
+const Address = styled.span`
+	color: gray;
+`
+const Empty = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 20px;
+	margin-top: 50px;
+
+	img {
+		height: 50px;
+		margin-bottom: 20px;
+	}
+`
 
 export { FarmList, FavoriteList };
