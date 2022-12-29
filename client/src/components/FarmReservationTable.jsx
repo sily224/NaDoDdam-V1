@@ -45,8 +45,8 @@ const BtnTd = styled.td`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: space-between;
+	justify-content: center;
+	height: 120px;
 	div {
 		margin: 5px;
 		display: flex;
@@ -58,21 +58,6 @@ const BtnTd = styled.td`
 const FailAnnouncement = styled.p`
 	text-align: center;
 	margin-top: 5rem;
-`;
-
-const StyledStatusLabel = styled.span`
-	border: none;
-	background: #83d644;
-	border-radius: 10px;
-	padding: 0.3rem 0.5rem;
-	color: #fff;
-	font-size: 1rem;
-
-	${(props) =>
-		props.marginTop &&
-		css`
-			margin: 0.5rem 0 0 0;
-		`}
 `;
 
 const DeleteButton = styled.button`
@@ -99,7 +84,7 @@ const FarmReservationTable = ({}) => {
 	// memo 지우: 모든 예약목록 받아오기
 	const fetchData = async () => {
 		try {
-			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
+			await API.get('/api/reserve/farmer').then((res) => {
 				setOriginalData(res.data);
 				setFilteredData(res.data);
 			});
@@ -145,7 +130,7 @@ const FarmReservationTable = ({}) => {
 		const id = e.target.name;
 
 		try {
-			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+			await API.patch(`/api/reserve/farmer/${id}`, {
 				status: '예약완료',
 			});
 			alert('예약이 확정되었습니다.');
@@ -160,7 +145,7 @@ const FarmReservationTable = ({}) => {
 		const id = e.target.name;
 
 		try {
-			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+			await API.patch(`/api/reserve/farmer/${id}`, {
 				status: '예약취소',
 			});
 			alert('예약이 취소되었습니다.');
@@ -254,7 +239,7 @@ const FarmReservationTable = ({}) => {
 										</Td>
 										<BtnTd>
 											<div>
-												<StyledStatusLabel>{reserve.status}</StyledStatusLabel>
+												<span>{reserve.status}</span>
 											</div>
 											<div>
 												{reserve.status === '예약대기' && (
@@ -293,7 +278,7 @@ const FarmReservationTable = ({}) => {
 			</>
 		);
 	} else {
-		return <FailAnnouncement>예약 정보가 없습니다.</FailAnnouncement>;
+		return <FailAnnouncement>등록된 농장이 없습니다.</FailAnnouncement>;
 	}
 };
 

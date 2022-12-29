@@ -16,8 +16,7 @@ import * as API from '../lib/userApi';
 
 const Subject = styled.h2`
 	text-align: center;
-	margin-top: 7%;
-	margin-bottom: 3%;
+	margin-bottom: 4%;
 `;
 const ModalTitle = styled(Subject)`
     font-size : 1.5rem;
@@ -218,7 +217,7 @@ const TimeTable = ()=>{
     };
 
     const onTimeTableDelete = async(id) => {
-        const result = confirm('삭제하시겠습니까?');
+        const result = window.confirm('삭제하시겠습니까?');
         if(result){
             await API.delete(`/api/timetables/${id}`);
             fetchData();
@@ -259,13 +258,6 @@ const TimeTable = ()=>{
         <FarmFormat>
             <Subject>체험시간표</Subject>
             <AddTimTable type='button' onClick = {handleCreate}>추가하기</AddTimTable>
-            { timeTable.length > 0 
-            && <Pagination pageCount={pageCount} timeTable={timeTable} 
-                perpage={perpage} page={page} setPage={setPage}
-                pageGroup={pageGroup} setPageGroup={setPageGroup} 
-                first={first} setFirst={setFirst} last={last} setLast={setLast} 
-                lastId = {lastId} setLastId={setLastId}/>}
-
             { timeTable.length > 0 ? 
                     timeTable.slice(offset, offset + perpage).map((table,idx) =>{
                         const {id, url, date, start_time, end_time, price, personnel} = table;
@@ -304,6 +296,13 @@ const TimeTable = ()=>{
                         )
                     }) 
                     : (<FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement>) 
+            }
+            { timeTable.length > 0 
+                && <Pagination pageCount={pageCount} timeTable={timeTable} 
+                perpage={perpage} page={page} setPage={setPage}
+                pageGroup={pageGroup} setPageGroup={setPageGroup} 
+                first={first} setFirst={setFirst} last={last} setLast={setLast} 
+                lastId = {lastId} setLastId={setLastId}/>
             }
         </FarmFormat>
 

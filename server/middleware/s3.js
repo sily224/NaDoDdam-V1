@@ -15,9 +15,9 @@ export const upload = multer({
 		s3: s3set,
 		bucket: 'nadoddam',
 		acl: 'public-read',
-		contentType: multerS3.AUTO_CONTENT_TYPE,
+		contentType: multerS3.AUTO_CONTENTTYPE,
 		key: function (req, file, cb) {
-			cb(null, `${Date.now()}_${file.originalname}`);
+			cb(null, `${Date.now()}${file.originalname}`);
 		},
 	}),
 	limits: { fileSize: 5 * 1024 * 1024 },

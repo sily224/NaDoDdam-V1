@@ -22,6 +22,7 @@ const Header = styled(DisplayFlex)`
     width : 100%;
 `;
 const CarouselImg = styled.img`
+    object-fit: cover;
     height : 500px;
 `;
 const Title = styled(StyledTitle)`

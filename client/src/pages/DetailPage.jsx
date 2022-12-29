@@ -18,7 +18,7 @@ const DetailPage =  () => {
             await axios.get(`/api/farms/${id}`).then((res) => {
                 console.log(res.data);
                 setFarmData(res.data.data);
-                setreviewData(res.data.review);
+                setreviewData(res.data.reviewInfo);
                 setFarmerData(res.data.farmer);                 
             });
         }
@@ -32,7 +32,6 @@ const DetailPage =  () => {
             try {
                 const {farmId} = farmerData;
                 await axios.get(`/api/timetables/${farmId}`).then((res) => {
-                    console.log("timeTable : ",res.data);
                     setTimeTable(res.data);
                 })
             }
