@@ -72,10 +72,10 @@ const Home = React.memo(() => {
         }
 			};
 
-			let url = `api/farms?limit=${last}`; // default 전체 조회
+			let url = `/api/farms?limit=${last}`; // default 전체 조회
 
 			if (location) {
-				url = `api/farms/location`; // 지역 조회
+				url = `/api/farms/location`; // 지역 조회
         await axios.get(url, header)
           .then((res) => {
             const data = res.data;
@@ -85,7 +85,7 @@ const Home = React.memo(() => {
             return;
           });
 			} else if (fruit) {
-				url = `api/farms`; // 과일 조회
+				url = `/api/farms`; // 과일 조회
         await axios.get(url, header)
           .then((res) => {
             const data = res.data;
