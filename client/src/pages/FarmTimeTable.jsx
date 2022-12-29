@@ -213,11 +213,9 @@ const TimeTable = ()=>{
     const LiftingHeadCount = state =>{
         setMaxHeadCount([...maxHeadCount,...state]);
     };
-
     const LiftingDate = state =>{
         setDate([state,...date]);
     };
-
     const stateLifting = state => {
         setPostData({...postData,...state});
     };
@@ -227,16 +225,24 @@ const TimeTable = ()=>{
         fetchData();
     };
     const onTimeTableUpdate = (id)=>{
+        resetForm();
         setTarget(id);
         dispatch(showModal());
     };
+
+    const handleCost =  (e) =>{
+        const value = e.target.value;
+        const onlyNumber = value.replace(/[^0-9]/g, '')
+        setCost(onlyNumber)
+    }
     const handleCreate = () => {
-        setTarget('');
+        resetForm();
         dispatch(showModal());
     };
     const Isupdate = () => {
         return (target === '' ? '등록' : '수정');
     };
+
     const resetForm  = () => {
         setDate('');
         setCost('');
@@ -320,7 +326,7 @@ const TimeTable = ()=>{
                     </Div>
                     <Div>
                         <H3>체험 비용</H3>
-                        <CostInput type='text' placeholder='체험비용을 입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></CostInput>
+                        <CostInput type='text' placeholder='체험비용을 입력하세요' value={cost} onChange={handleCost}></CostInput>
                     </Div>
                     <SubmitBtn type='submit'>{Isupdate()}</SubmitBtn>
                 </form>
