@@ -263,11 +263,11 @@ const TimeTable = ()=>{
 
             { timeTable.length > 0 ? 
                     timeTable.slice(offset, offset + perpage).map((table,idx) =>{
-                        const {id, farm, date, start_time, end_time, price, personnel} = table;
+                        const {id, url, date, start_time, end_time, price, personnel} = table;
                         return(
                             <TimeTableList key={idx}>
                                 <TimTableItem>
-                                    {/* <FarmImg src={farm.url? farm.url : ""} alt='농장이미지'></FarmImg> */}
+                                    <FarmImg src={url} alt='농장이미지'></FarmImg>
                                     <TimTableContent>
                                         <div>
                                             <span>날짜 : </span>
