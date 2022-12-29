@@ -134,7 +134,7 @@ const TimeTable = ()=>{
                     //     return;
                     // }
             // });
-            await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
+            await API.get(`api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
                 (res) => {
                     const data = res.data;
                     setTimeTable([...data]);
@@ -218,7 +218,7 @@ const TimeTable = ()=>{
     };
 
     const onTimeTableDelete = async(id) => {
-        const result = confirm('삭제하시겠습니까?');
+        const result = window.confirm('삭제하시겠습니까?');
         if(result){
             await API.delete(`/api/timetables/${id}`);
             fetchData();
