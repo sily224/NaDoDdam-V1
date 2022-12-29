@@ -13,7 +13,7 @@ import {
   StyledTitle, 
   StyledConfirmModal 
 } from '../styles/Styled';
-
+import apple from '../assets/apple.png';
 import { SkeletonList } from './Skeleton';
 
 const StyledFarmTitle = styled.h3`
@@ -59,8 +59,17 @@ const StyledImageWrap = styled.div`
   }
 `
 
-const StyledNotData = styled.h2`
- margin-top: 8rem;
+const StyledNotData = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+font-size: 20px;
+margin-top: 50px;
+
+img {
+  height: 50px;
+  margin-bottom: 20px;
+}
 ` 
 
 const RatingBox = styled.div`
@@ -207,7 +216,10 @@ const MyReviewTable = () => {
     <ShowReviewList />
     }
     {data.length === 0 ? <>
-    <StyledNotData>회원님의 후기 내역이 없습니다.</StyledNotData>
+    <StyledNotData>
+      <img src={apple} alt="" />
+      <h4>회원님의 후기 내역이 없습니다.</h4>
+      </StyledNotData>
     </> : <ShowReviewList />}
     </>
   )
