@@ -66,8 +66,9 @@ const IsNotPay = () => {
 		}
 		// 오늘날짜보다 체험시간표의 끝 날짜가 멀다면 (아직 체험이 남아있음)
 		else {
+			const start =  orderedDate[0].date;
 			const end =  orderedDate[orderedDate.length - 1].date;
-			return [new Date() , new Date(end)];
+			return [new Date(start) , new Date(end)];
 		}	
 	}
 };
