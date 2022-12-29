@@ -11,6 +11,7 @@ import Pagination from '../components/TimeTablePagination';
 import styled from 'styled-components';
 import { ConfirmButton, DeleteButton, ContentContainer, NormalButton, SubmitButton, Input } from '../styles/Styled';
 import { HOST } from '../global-variables';
+import Moment from 'moment';
 
 import * as API from '../lib/userApi';
 
@@ -158,22 +159,19 @@ const TimeTable = ()=>{
             };
 
             const {timeList,startDate,endDate} = postData;
-            const d1 = new Date(startDate);
-            const d2 = new Date(endDate);
-            
-            let diffDate = d1.getTime() - d2.getTime();
-            diffDate = Math.abs(diffDate /(1000*60*60*24));
+            const d1 = Moment(startDate,"YYYY-MM-DD");
+            const d2 = Moment(endDate,"YYYY-MM-DD");
+            const diffDate = d2.diff(d1,'days');
 
-            for (let i = 0; i <= diffDate ; i++ ){
-                const date = `${d1.getFullYear()}-${d1.getMonth() + 1}-${d1.getDate()+i}`;
-                
+            for (let i = 0; i <= diffDate ; i++){
+                let date = d1.add(i, 'days'); 
                 for (let j = 0; j< timeList.length; j++){
                     const start_time = timeList[j][0];
                     const end_time = timeList[j][1];
                     const personnel = maxHeadCount[j];
 
                     try {
-                        const res = await API.post(`${HOST}/api/timetables`,{
+                        await API.post(`${HOST}/api/timetables`,{
                             'date': date,
                             'personnel':personnel,
                             'price':cost,
@@ -185,12 +183,13 @@ const TimeTable = ()=>{
                         console.log(e);
                     }
                 }
+                
             }
         }
         //memo 지혜 : 체험테이블 수정
         else {
             try {
-                const res = await API.put(`{HOST}/api/timetables/${target}`,{
+                const res = await API.put(`${HOST}/api/timetables/${target}`,{
                     'date': date[0],
                     'personnel':maxHeadCount[0],
                     'price':cost,
