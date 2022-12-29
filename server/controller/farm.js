@@ -51,6 +51,7 @@ export async function getByFarm(req, res, next) {
 				content: review[i].content,
 				rating: review[i].rating,
 				farm_id: review[i].farm_id,
+				date: review[i].createdAt,
 				name: review[i].dataValues.name,
 				email: review[i].dataValues.email
 			});

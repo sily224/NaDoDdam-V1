@@ -71,6 +71,7 @@ const Reviews = (sequelize, DataTypes) => {
 			'reserve_id',
 			'farm_id',
 			'rating',
+			'createdAt',
 			[DataTypes.col('User.name'), 'name'],
 			[DataTypes.col('User.email'), 'email'],
 			],
