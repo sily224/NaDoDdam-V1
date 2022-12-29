@@ -5,7 +5,6 @@ import * as userApi from "../lib/userApi";
 import { useParams } from 'react-router';
 import { useState, useEffect } from "react";
 import { StyledTitle } from '../styles/Styled';
-import { HOST } from '../global-variables';
 
 const CreateReviewPage = () => {
     const [reservationData, setReservationData] = useState([]);
@@ -14,7 +13,7 @@ const CreateReviewPage = () => {
     
     const getReservationData = async () => {
         const token = getToken();
-        const res = await userApi.get(`${HOST}/api/reserve`, {
+        const res = await userApi.get(`/api/reserve`, {
           headers: {
             authorization: token,
           },

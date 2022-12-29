@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import * as userApi from "../lib/userApi";
 import { getToken } from '../utils/utils';
 import { StyledSubTitle, SubmitButton} from '../styles/Styled';
-import { HOST } from './../global-variables';
 
 const RatingBox = styled.div`
   margin: 0 auto;
@@ -37,7 +36,7 @@ const UpdateReview = ({id}) => {
   
     const getReviewData = async () => {
       const token = getToken();
-      const res = await userApi.get(`${HOST}/api/review`, {
+      const res = await userApi.get(`/api/review`, {
         headers: {
           authorization: token,
         },
@@ -73,7 +72,7 @@ const UpdateReview = ({id}) => {
       const content = textRef.current.value;
       const rating = starScore;
       try {
-        await userApi.patch(`${HOST}/api/review/${reviewId}`, {
+        await userApi.patch(`/api/review/${reviewId}`, {
           content,
           rating
         });

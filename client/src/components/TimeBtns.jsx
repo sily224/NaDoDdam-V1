@@ -10,7 +10,7 @@ const TimeButtonContainer = styled.div`
     flex-flow : column wrap;
     justify-content: flex-start;
     align-items: flex-start;
-    height : 270px;
+    height : 350px;
 
     > button:not(:last-child){
         margin-bottom: 7px;
@@ -19,17 +19,19 @@ const TimeButtonContainer = styled.div`
 `;
 const TimeButton = styled.button`
     width : 100%;
-    height : 82px;
+    height : 63px;
     font-size : 1rem;
     background-color : white;
     border : 1px ${green} solid;
+    border-radius : 10px;
+    
     &.active {
-        font-size : 1.2rem;
-        background-color : ${green};
-        color : white;
+        font-size : 1.1rem;
+        border : 4px solid ${green};
+        color : black;
     }
     &:hover{
-        background-color : ${green};
+        border : 4px solid ${green};
         opacity: 0.5;
     }
 `;
