@@ -23,7 +23,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 		// console.log('입력된 농장 아이디', farmId);
 
 		if (favorite.includes(farmId)){
-			await axios(`${HOST}/api/like/${farmId}`, {
+			await axios(`api/like/${farmId}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 			});
 			setFavorite(favorite.filter(x=>x!==farmId));
 		} else {
-			await axios(`${HOST}/api/like/${farmId}`, {
+			await axios(`api/like/${farmId}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 		const element = e.target;
 		element.setAttribute('color', 'false');
 
-		await axios(`${HOST}/api/like/${farmId}`, {
+		await axios(`api/like/${farmId}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',

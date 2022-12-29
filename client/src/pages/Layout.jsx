@@ -27,7 +27,7 @@ const getFavoriteFarmId = async () => {
 	};
 	// 찜 목록 조회
 	const result = await axios
-		.get(`${HOST}/api/like`, header)
+		.get(`api/like`, header)
 		.then((res) => res.data)
 		.then((data) => {
 			// console.log(data);

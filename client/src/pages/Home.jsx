@@ -17,7 +17,7 @@ const getFavorite = async () => {
 	};
 
 	const result = await axios
-		.get(`${HOST}/api/like`, header)
+		.get(`api/like`, header)
 		.then((res) => res.data)
 		.then((data) => {
 			return data.map((x) => x.id);
@@ -72,23 +72,23 @@ const Home = React.memo(() => {
         }
 			};
 
-			let url = `${HOST}/api/farms?limit=${last}`; // default 전체 조회
+			let url = `api/farms?limit=${last}`; // default 전체 조회
 
 			if (location) {
-				url = `${HOST}/api/farms/location`; // 지역 조회
+				url = `api/farms/location`; // 지역 조회
         await axios.get(url, header)
           .then((res) => {
-            const data = JSON.parse(res.data);
+            const data = res.data;
             setPage(0);
             setContents(data);
             toggle = false;
             return;
           });
 			} else if (fruit) {
-				url = `${HOST}/api/farms`; // 과일 조회
+				url = `api/farms`; // 과일 조회
         await axios.get(url, header)
           .then((res) => {
-            const data = JSON.parse(res.data);
+            const data = res.data;
             setContents(data);
             setPage(0);
             toggle = false;
@@ -97,7 +97,7 @@ const Home = React.memo(() => {
 			} else{
         await axios.get(url, header)
           .then((res) => {
-            const data = JSON.parse(res.data);
+            const data = res.data;
             const d = data.slice(length*page, length*(page+1));
             // console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
             if (d.length === 0) {
