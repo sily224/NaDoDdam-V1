@@ -151,9 +151,10 @@ const Item = styled.div`
 	display: flex;
 	flex-direction: column;
 	flex-basis: auto;
-	height: 400px;
+	height: 350px;
 	width: auto;
-	border: 1px solid black;
+	box-shadow: -1px -1px 10px rgba(0, 0, 0, 0.18);
+	border: 1px solid rgba(0, 0, 0, 0.18);
 	position: relative;
 	border-radius: 10px;
 	overflow:hidden;
@@ -161,14 +162,14 @@ const Item = styled.div`
 
 	img {
 		width: 100%;
-		height: 300px;
+		height: 250px;
 		border-radius: 10px 10px 0 0;
 	}
 
 	&:hover {
 		transition: 0.5s;
 		transform: scale(1.1);
-		border: solid 5px ${yellow};
+		border: solid 2px ${yellow};
 		img {
 			transition: 0.5s;
 			height: 400px;
@@ -179,8 +180,8 @@ const Item = styled.div`
 `;
 
 const Button = styled.button`
-	width: 30px;
-	height: 30px;
+	width: 20px;
+	height: 20px;
 	background-color: ${(props) => (props.color === 'true' ? 'red' : 'white')};
 	position: absolute;
 	transition: all 0.5s;

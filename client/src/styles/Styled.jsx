@@ -40,6 +40,10 @@ export const ConfirmButton = styled.button`
         margin-left: 6px;
     }
     
+    > a {
+        color: #d1b80d;
+    }
+    
 `
 //memo 가영 : 예약조회페이지 - 상태목록
 //클릭된 버튼에 props로 clicked 전달
