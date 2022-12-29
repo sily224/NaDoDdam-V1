@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(morgan('dev'));
+app.use(express.limit('5M'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
