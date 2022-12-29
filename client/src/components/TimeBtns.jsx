@@ -24,13 +24,14 @@ const TimeButton = styled.button`
     background-color : white;
     border : 1px ${green} solid;
     border-radius : 10px;
+    
     &.active {
         font-size : 1.1rem;
-        background-color : ${green};
-        color : white;
+        border : 4px solid ${green};
+        color : black;
     }
     &:hover{
-        background-color : ${green};
+        border : 4px solid ${green};
         opacity: 0.5;
     }
 `;
