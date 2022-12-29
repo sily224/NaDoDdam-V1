@@ -10,18 +10,7 @@
     border-radius: 4px;
 }
 
-@keyframes skeleton-gradient {
-    0% {
-      background-color: rgba(165, 165, 165, 0.1);
-    }
-    50% {
-      background-color: rgba(165, 165, 165, 0.3);
-    }
-    100% {
-      background-color: rgba(165, 165, 165, 0.1);
-    }
-}
-
+/* memo 가영 : SkeletonList 관련 */
 .skeleton-list {
   border: 1px solid lightgray;
   border-radius: 20px;
@@ -44,31 +33,7 @@
     width:70%;
 }
 
-.skeleton.review-warp {
-  border: 1px solid lightgray;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 3%;
-  box-sizing: border-box;
-  margin-bottom: 2%;
-}
-
-.skeleton.review-content {
-    width : 20%;
-    height : 12px;
-}
-
-.skeleton.review-farm-title {
-    margin-bottom: 1%;
-    display: inline-block;
-    width: 15%;
-    height: 20px;
-}
-
-.skeleton.imgwrap{
+.skeleton.img-wrap{
     width: 20%;
     height: 120px;
     margin-right: 20px;
@@ -85,6 +50,51 @@
     width: 43.45px;
     height: 28px;
     margin-left: 6px;
+}
+
+/* memo 가영 : SkeletonReviewReservation 관련 */
+.skeleton.review-warp {
+  border: 1px solid lightgray;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 3%;
+  box-sizing: border-box;
+  margin-bottom: 2%;
+}
+
+.skeleton.review-content {
+    width : 30%;
+    height : 12px;
+}
+
+.skeleton.review-farm-title {
+    margin-bottom: 1%;
+    display: inline-block;
+    width: 20%;
+    height: 20px;
+}
+
+.skeleton.review-form-farm-title {
+  margin-bottom: 1%;
+  display: inline-block;
+  width: 20%;
+  height: 50px;
+}
+
+.skeleton.big-img-wrap{
+  width: 94%;
+  margin-right: 1.5rem;
+  border-radius: 20px;
+  height:300px;
+}
+
+.skeleton-review-inner {
+  display:flex;
+  align-items: center;
+  width: 33%;
 }
 
 .shimmer-wrapper {
@@ -104,14 +114,7 @@
     box-shadow: 0 0 30px 30px rgba(255,255,255,0.05);
 }
 
-@keyframes loading {
-    0% {
-      transform: translateX(-150%);
-    }
-    50% {
-      transform: translateX(-60%);
-    }
-    100% {
-      transform: translate(150%);
-    }
-  }
+.skeleton-reservation-wrap {
+   display: flex;
+   align-items: center;
+}
