@@ -4,14 +4,14 @@ import { getHeadCount, getTotalPrice } from '../store/FormSlice';
 import { useNavigate } from 'react-router-dom';
 import { DetailContext } from '../pages/DetailPage';
 import styled from 'styled-components';
-import {StyledParagraph, SubmitButton} from '../styles/Styled'
+import {StyledParagraph, SubmitButton, StatusSelect} from '../styles/Styled'
 
 const Form = styled.form`
 	width: 70%;
 	height: 300px;
 	padding: 8% 8%;
 	margin-top : 5%;
-	border: 1px solid black;
+	border: 2px solid lightgray;
 	top: 40%;
 	position: sticky;
 	border-radius: 15px;
@@ -20,7 +20,9 @@ const SubmitBtn = styled(SubmitButton)`
 	margin: 15% 0 5%;
 	width: 100%;
 `;
-const SelectBox = styled.select``;
+const SelectBox = styled(StatusSelect)`
+	color: black;
+`;
 const Hr = styled.hr`
 	margin : 5% 0;
 `;
@@ -87,7 +89,7 @@ const FloatingForm = () => {
 					<option value='none'>=선택=</option>
 
 					{personnel && [...Array(personnel).keys()].map((n) => (
-						<option key={`HeadCount-${n + 1}`} value={ n + 1 }>
+						<option key={`HeadCount-${n + 1}`} value={ n + 1 } >
 							{ n + 1 }
 						</option>
 					))}

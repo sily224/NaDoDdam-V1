@@ -80,6 +80,7 @@ export const DeleteButton = styled.button`
     color: red;
     font-weight: 500;
     background-color:rgba(255, 0, 0, 0.18);
+    padding: 0.2rem 0.4rem;
 
     ${props => props.reject && css`
         border:1px solid #b1b0ac;
@@ -103,6 +104,7 @@ export const NormalButton = styled.button`
     color : black;
     font-weight: 500;
     background-color : white;
+    padding: 0.2rem 0.4rem;
 
     +button {
         margin-left: 6px;
@@ -159,7 +161,7 @@ export const PageWrapper = styled.div`
 	width: 100%;
 	margin-top: 10px;
 `;
-//memo 지혜 : 페이지
+//memo 지혜 : 페이지 버튼
 export const PageBtn = styled.button`
 	background-color: white;
     font-weight: 700;
@@ -184,4 +186,17 @@ export const ContentContainer = styled.div`
     display: block;
     width: 100%;
     margin: 8% 0;
+`
+//memo 지혜 : 배경 흰색, 테투리 green
+export const WhiteGreenBtn = styled.button`
+    border: 2px green solid;
+    border-radius: 10px;
+    color: green;
+    font-weight: 500;
+    background : white;
+    padding: 0.2rem 0.3rem;
+
+    +button {
+        margin-left: 6px;
+    }
 `

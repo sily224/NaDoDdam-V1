@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import heartLogo from '../assets/favorite.png';
+import { HOST, yellow } from './../global-variables';
 
 const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 
@@ -22,7 +23,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 		console.log('입력된 농장 아이디', farmId);
 
 		if (favorite.includes(farmId)){
-			await axios(`http://localhost:3500/api/like/${farmId}`, {
+			await axios(`${HOST}/api/like/${farmId}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
@@ -31,7 +32,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 			});
 			setFavorite(favorite.filter(x=>x!==farmId));
 		} else {
-			await axios(`http://localhost:3500/api/like/${farmId}`, {
+			await axios(`${HOST}/api/like/${farmId}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 		const element = e.target;
 		element.setAttribute('color', 'false');
 
-		await axios(`http://localhost:3500/api/like/${farmId}`, {
+		await axios(`${HOST}/api/like/${farmId}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
@@ -138,9 +139,10 @@ const ItemList = styled.div`
 	grid-template-columns: repeat(auto-fill, minmax(400px, auto));
 	grid-gap: 25px;
 	width: auto;
-	max-width: 2100px;
+	padding: 0 100px 100px 100px;
+	max-width: 2300px;
 	width: 100%;
-	height: 100%;
+	height: auto;
 	position:absolute;
 `;
 
@@ -164,8 +166,8 @@ const Item = styled.div`
 
 	&:hover {
 		transition: 0.5s;
-		transform: scale(1.3);
-		border: solid 5px #FFCC00;
+		transform: scale(1.2);
+		border: solid 5px ${yellow};
 		img {
 			transition: 0.5s;
 			height: 400px;

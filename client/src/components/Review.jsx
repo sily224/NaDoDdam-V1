@@ -5,7 +5,8 @@ import ModalContainer from './../components/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
 import { StyledParagraph, StyledSubTitle, ContentContainer} from '../styles/Styled';
-import {ConfirmButton} from '../styles/Styled'
+import { ConfirmButton } from '../styles/Styled'
+import { ImStarFull } from "react-icons/im";
 
 const ReviewDiv = styled.div`
     display: grid;
@@ -13,6 +14,10 @@ const ReviewDiv = styled.div`
     grid-template-rows: ${(props) => props.len > 6 ? `repeat(3,1fr)` : `repeat(${Math.ceil(props.len/2)},1fr)`};
     gap: 10px 20px;
 `; 
+const ReviewSubTitle = styled(StyledSubTitle)`
+    margin : 18% 0 10%;
+`;
+const ReviewTotalNum = styled(StyledParagraph)``;
 const ReviewId = styled.p`
     font-size: 1rem;
     font-weight: bold;
@@ -31,17 +36,21 @@ const ReviewContent= styled.p`
     `};
 `;
 const ReviewItem = styled.div`
-    border  : 1px solid black;
+    border  : 2px solid lightgray;
+    border-radius : 10px;
     padding : 10px;
-    overflow: hidden;   
-    p {  margin : 5px; }
+    overflow: hidden; 
+    :not(:last-child) { margin-bottom : 10px; }  
+    > button {margin-top: 10px;}
+    > p {  margin : 5px; }
 `;
 const ModalLayout = styled.div`
     display: felx;
 `;
 const ModalTitle = styled.div`
     width: 30%;
-    margin-right:5%;
+    padding-left: 5%;
+    margin-right: 5%;
 `;
 const ModalContent =styled.div`
     width: 60%;
@@ -50,7 +59,23 @@ const ModalContent =styled.div`
     overflow-y:auto;
     overflow-x:hidden;
 `;
+const ShowAllReviewBtn = styled(ConfirmButton)`
+    margin-top : 1%;
+`;
+const RatingBox = styled.div`
+    margin: 0 auto;
 
+    & svg {
+        color: #C4C4C4;
+        cursor: pointer;
+    }
+    .black {
+        color: yellow;
+    }
+`;
+const Span = styled.span`
+    font-size: 0.7rem;
+`
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
     const MaxLength = 20;
@@ -62,9 +87,19 @@ const ReviewItems = ({review,showAll}) =>{
         if (idx >5) if(!showAll) return;
         return(      
             <ReviewItem key = {`reveiw-${idx}`} >
-                <ReviewId  key = {`${value.id}-${idx}`}>{id}</ReviewId>
-                <StyledParagraph>★ {rating}</StyledParagraph>
-                <ReviewName key = {`${value.createdAt}-${idx}`}>{createdAt}</ReviewName>
+                <ReviewId  key = {`${id}-${idx}`}>{id}</ReviewId>
+                <RatingBox>
+                    {[0,1,2,3,4].map(item =>
+                        item < rating ?
+                            <ImStarFull 
+                                key={item}
+                                className={'black'}
+                            />  
+                            : <ImStarFull key={item}/>  
+                    )}
+                    <Span>({rating}점)</Span>
+                </RatingBox>
+                <ReviewName key = {`${createdAt}-${idx}`}>{createdAt.slice(0,-5)}</ReviewName>
                 <ReviewContent active={`${tab === true ? 'active' : ''}`} key = {`content-${idx}`}>{content}</ReviewContent>
                 { isTextOverflow && <ConfirmButton onClick={()=> setTab(!tab)} >더보기</ConfirmButton>}
             </ReviewItem>
@@ -86,13 +121,13 @@ const Review = ()=>{
                 <ReviewDiv len={review.length}> 
                     <ReviewItems review={review}/>
                 </ReviewDiv>
-                {review.length > 6 && <ConfirmButton onClick = {() => dispatch(showModal())}>모두보기</ConfirmButton>}
+                {review.length > 6 && <ShowAllReviewBtn onClick = {() => dispatch(showModal())}>모두보기</ShowAllReviewBtn>}
                 { modalOpen &&
-                    <ModalContainer>
+                    <ModalContainer h="75%">
                         <ModalLayout>
                             <ModalTitle>
-                                <StyledParagraph>리뷰</StyledParagraph>
-                                <StyledParagraph>후기 {review.length}개</StyledParagraph>
+                                <ReviewSubTitle>전체 후기</ReviewSubTitle>
+                                <ReviewTotalNum>총 {review.length}개</ReviewTotalNum>
                             </ModalTitle>
                             <ModalContent >
                                 <ReviewItems review={review} showAll/>
