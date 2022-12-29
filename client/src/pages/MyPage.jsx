@@ -6,7 +6,6 @@ import * as userApi from "../lib/userApi";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { StyledSubTitle, StyledTitle } from '../styles/Styled';
 
-
 const Container = styled.div`
   width: 80%;
   margin: 0 auto;

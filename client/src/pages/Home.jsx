@@ -5,7 +5,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { IoConstructOutline } from 'react-icons/io5';
-import { HOST } from './../global-variables';
 
 const getFavorite = async () => {
 	const token = localStorage.getItem('token');
@@ -17,7 +16,7 @@ const getFavorite = async () => {
 	};
 
 	const result = await axios
-		.get(`api/like`, header)
+		.get(`/api/like`, header)
 		.then((res) => res.data)
 		.then((data) => {
 			return data.map((x) => x.id);
