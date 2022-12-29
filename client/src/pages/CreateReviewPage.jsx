@@ -1,10 +1,11 @@
 import CreateReview from '../components/CreateReview';
-import { ReviewReservation } from '../components/ReviewReservation';
+import ReviewReservation from '../components/ReviewReservation';
 import { getToken } from '../utils/utils';
 import * as userApi from "../lib/userApi";
 import { useParams } from 'react-router';
 import { useState, useEffect } from "react";
 import { StyledTitle } from '../styles/Styled';
+import { HOST } from '../global-variables';
 
 const CreateReviewPage = () => {
     const [reservationData, setReservationData] = useState([]);
@@ -13,7 +14,7 @@ const CreateReviewPage = () => {
     
     const getReservationData = async () => {
         const token = getToken();
-        const res = await userApi.get(`//localhost:3500/api/reserve`, {
+        const res = await userApi.get(`${HOST}/api/reserve`, {
           headers: {
             authorization: token,
           },

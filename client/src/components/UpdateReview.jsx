@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import * as userApi from "../lib/userApi";
 import { getToken } from '../utils/utils';
 import { StyledSubTitle, SubmitButton} from '../styles/Styled';
+import { HOST } from './../global-variables';
 
 const RatingBox = styled.div`
   margin: 0 auto;
@@ -36,7 +37,7 @@ const UpdateReview = ({id}) => {
   
     const getReviewData = async () => {
       const token = getToken();
-      const res = await userApi.get(`//localhost:3500/api/review`, {
+      const res = await userApi.get(`${HOST}/api/review`, {
         headers: {
           authorization: token,
         },
@@ -72,12 +73,12 @@ const UpdateReview = ({id}) => {
       const content = textRef.current.value;
       const rating = starScore;
       try {
-        await userApi.patch(`//localhost:3500/api/review/${reviewId}`, {
+        await userApi.patch(`${HOST}/api/review/${reviewId}`, {
           content,
           rating
         });
         alert('수정되었습니다.');
-        navigate('/myreview');
+        navigate('/mypage/review');
       } catch (err) {
         console.log(err.response.data.Error);
         alert('문제가 발생했습니다. 다시 시도해 주세요.');

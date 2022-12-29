@@ -58,6 +58,10 @@ const StyledImageWrap = styled.div`
   }
 `
 
+const StyledNotData = styled.h2`
+ margin-top: 8rem;
+` 
+
 const RatingBox = styled.div`
   margin: 0 auto;
 
@@ -96,6 +100,7 @@ const StarRate = ({rating}) => {
 
 const MyReviewTable = () => {
   const [data, setData] = useState([]);
+  const [dataIndex, setDataIndex] = useState(null);
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal.modal);
     
@@ -126,22 +131,20 @@ const MyReviewTable = () => {
 
   const ShowReviewList = () => {
     const deleteReviewHandler = async(e) => {
-      const id = e.target.name;
-      console.log(id)
       try{
-        await userApi.delete(`${HOST}/api/review/${id}`);
+        await userApi.delete(`${HOST}/api/review/${dataIndex}`);
         alert('삭제되었습니다.');
         dispatch(closeModal());
         getReviewData();
       }catch(err){
-        console.log(err);
+        console.log(err.response.data.Error);
         alert('문제가 발생하였습니다. 다시 시도해 주세요');
       }
     };
 
     return (<>
       {data.map((item, index) => { 
-        const {review, reserveInfo, time} = item || {};
+        const {review, reserveInfo, time} = item;
         const start_time = time.start_time.slice(0,5);
         const end_time = time.end_time.slice(0,5);
         return (
@@ -166,7 +169,13 @@ const MyReviewTable = () => {
                 수정
               </Link>
             </ConfirmButton>
-            <DeleteButton onClick={() => dispatch(showModal())}>삭제</DeleteButton>
+            <DeleteButton 
+              name={review.id}
+              onClick={(e) => {
+                dispatch(showModal())
+                setDataIndex(e.target.name)
+              }}>삭제
+              </DeleteButton>
             </div>
           </StyledList>
           )
@@ -182,6 +191,12 @@ const MyReviewTable = () => {
     );
   };
 
+  if(data.length === 0){
+    return <>
+    <StyledTitle>리뷰 목록</StyledTitle>
+    <StyledNotData>회원님의 후기 내역이 없습니다.</StyledNotData>
+    </>
+  }
   return (
     <>
     <StyledTitle>리뷰 목록</StyledTitle>

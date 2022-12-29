@@ -27,6 +27,9 @@ const StyledTitleWrap = styled.div`
   display:flex;
   align-items:center
 `
+// const StyledSubTitle = styled.div`
+//   display:flex;
+// `
 
 const StyledContent = styled.div`
   width:70%;
@@ -127,6 +130,10 @@ const StyledPayWrap = styled.div`
   font-weight: bold;
  }
 `
+const StyledNotData = styled.h2`
+ margin-top: 8rem;
+` 
+
 const initialState = {
   cancleModal: false,
   confirmModal: false,
@@ -341,15 +348,15 @@ const MyReservationTable = () => {
                   <StyledImageWrap>
                     <img src={info.url} alt="농장사진"/>
                   </StyledImageWrap>
-                    <StyledSubTitle style={{
+                    <div>
+                      <h3 style={{
                       textDecoration : reserve.status === '예약취소' 
                       ? 'line-through' 
-                      : 'none'}}>
-                      {info.name}<br/>
+                      : 'none'}}>{info.name}</h3>
                       <StyledStatusLabel marginTop>
                         {reserve.status}
                       </StyledStatusLabel>
-                    </StyledSubTitle>
+                    </div>
                 </StyledTitleWrap>
               </StyledList>
                   <StyledSubTitle marginTop>예약정보</StyledSubTitle>
@@ -426,7 +433,6 @@ const MyReservationTable = () => {
               <option>취소 후 다시 예약하기 위함</option>
               <option>상품이 마음에 들지 않음</option>
               <option>다른 농장으로 변경하기 위함</option>
-              <option>다른 농장으로 변경하기 위함</option>
             </StatusSelect>
           </StyledSelectWrap>
           <hr />
@@ -477,6 +483,13 @@ const MyReservationTable = () => {
     )} 
     </>   
     )
+  }
+
+  if(filteredData.length === 0){
+    return <>
+    <ShowDefault/>
+    <StyledNotData>회원님의 예약 내역이 없습니다.</StyledNotData>
+    </>
   }
 
   return (

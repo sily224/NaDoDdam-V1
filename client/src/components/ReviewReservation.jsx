@@ -1,10 +1,5 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
- display: flex;
- justify-content: space-evenly;
-`
-
 const ReservationWrap = styled.div`
  display: flex;
  align-items: center;
@@ -42,4 +37,4 @@ const  ReviewReservation = ({reservationData}) => {
     )
 }
 
-export {Container, ReviewReservation};
+export default ReviewReservation;

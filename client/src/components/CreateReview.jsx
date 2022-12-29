@@ -52,7 +52,7 @@ const CreateReview = ({id, farmId}) => {
         rating,
         farm_id
       })
-      navigate('mypage/review');
+      navigate('/mypage/review');
     }catch(err){
       console.log(err);
     }

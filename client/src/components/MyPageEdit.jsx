@@ -13,6 +13,7 @@ import { logout } from '../utils/utils';
 import styled from 'styled-components'
 import { AiOutlineLock } from "react-icons/ai";
 import { AiOutlineUserDelete } from "react-icons/ai";
+import { HOST } from '../global-variables';
 import { 
   SubmitButton, 
   Input, 
@@ -82,7 +83,7 @@ const MyPageProfileEdit = ({id, name, title, userId}) => {
       ...reName,
       value: textInput.current.value,
       });
-     await userApi.patch(`//localhost:3500/api/myInfo/${userId}`, {
+     await userApi.patch(`${HOST}/api/myInfo/${userId}`, {
       [textInput.current.dataset.id]: textInput.current.value,
       }); 
     } catch(err) {
@@ -145,7 +146,7 @@ const MyPageSecurityEdit = ({userId}) => {
 
   const upDatePassword = async({oldpassword, password}) => {
     try {
-      await userApi.patch(`//localhost:3500/api/myPassword/${userId}`, {
+      await userApi.patch(`${HOST}/api/myPassword/${userId}`, {
         currentPassword: oldpassword,
         password: password,
       }); 
@@ -159,7 +160,7 @@ const MyPageSecurityEdit = ({userId}) => {
 
   const deleteUser = async() => {
     try {
-      await userApi.delete(`//localhost:3500/api/myInfo/${userId}`);
+      await userApi.delete(`${HOST}/api/myInfo/${userId}`);
       logout();
     } catch (err) {
       console.log(err.response.data.Error)
@@ -234,12 +235,12 @@ const MyPageSecurityEdit = ({userId}) => {
               setModalPassword(false);
             }}>회원탈퇴</DeleteButton>
             {modalConfirm && modalOpen && 
-              <ModalContainer w="320px" h="206px">
+              <ModalContainer w="320px" h="160px">
                 <StyledConfirmModal>
                 <p>탈퇴 시 복구할 수 없습니다. <br />
                   탈퇴하시겠습니까?</p>
-                <SubmitButton onClick={deleteUser}>확인</SubmitButton>
-                <SubmitButton reject>취소</SubmitButton>
+                <ConfirmButton onClick={deleteUser}>확인</ConfirmButton>
+                <ConfirmButton reject>취소</ConfirmButton>
                 </StyledConfirmModal>
               </ModalContainer>}
           </StyledUserInfo>
