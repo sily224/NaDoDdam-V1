@@ -134,7 +134,7 @@ const TimeTable = ()=>{
                     //     return;
                     // }
             // });
-            await API.get(`api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
+            await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
                 (res) => {
                     const data = res.data;
                     setTimeTable([...data]);
