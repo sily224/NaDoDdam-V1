@@ -52,7 +52,7 @@ const DetailPage =  () => {
     
     return (
         <div>
-            <DetailContext.Provider value={ {farmData,reviewData,farmerData,timeTable}}>
+            <DetailContext.Provider value={{farmData,reviewData,farmerData,timeTable}}>
                 <Detail />
             </DetailContext.Provider>
         </div>

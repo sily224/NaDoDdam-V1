@@ -132,31 +132,28 @@ const Review = ()=>{
         <ContentContainer>
             <StyledSubTitle>후기</StyledSubTitle>
             <hr />
-            <div>
-                { review && (
-                    <>
-                        <ReviewDiv len={review.length}> 
-                            <ReviewItems review={review}/>
-                        </ReviewDiv>
-                        {review.length > 6 && <ShowAllReviewBtn onClick = {() => dispatch(showModal())}>모두보기</ShowAllReviewBtn>}
-                    </>
-                    )
-                }
-                
-                { modalOpen &&
-                    <ModalContainer h="80%">
-                        <ModalLayout>
-                            <ModalTitle>
-                                <ReviewSubTitle>전체 후기</ReviewSubTitle>
-                                <ReviewTotalNum>총 {review.length}개</ReviewTotalNum>
-                            </ModalTitle>
-                            <ModalContent >
-                                <ReviewItems review={review} showAll/>
-                            </ModalContent>
-                        </ModalLayout>
-                    </ModalContainer>
-                }
-            </div>
+            { review && (
+                <>
+                    <ReviewDiv len={review.length}> 
+                        <ReviewItems review={review}/>
+                    </ReviewDiv>
+                    {review.length > 6 && <ShowAllReviewBtn onClick = {() => dispatch(showModal())}>모두보기</ShowAllReviewBtn>}
+                </>
+                )
+            }
+            { modalOpen &&
+                <ModalContainer h='80%'>
+                    <ModalLayout>
+                        <ModalTitle>
+                            <ReviewSubTitle>전체 후기</ReviewSubTitle>
+                            <ReviewTotalNum>총 {review.length}개</ReviewTotalNum>
+                        </ModalTitle>
+                        <ModalContent >
+                            <ReviewItems review={review} showAll/>
+                        </ModalContent>
+                    </ModalLayout>
+                </ModalContainer>
+            }
         </ContentContainer>
     );
 }
