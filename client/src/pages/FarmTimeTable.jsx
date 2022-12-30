@@ -242,7 +242,6 @@ const TimeTable = ()=>{
     };
 
     useEffect (() => {
-        console.log(lastId);
         fetchData();
     }, [lastId,pageGroup]);
 

@@ -4,7 +4,6 @@ import {PageWrapper, PageBtn} from '../styles/Styled'
 
 const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, page, setPage, first, setFirst, last, setLast , lastId, setLastId}) => {
     const [btnActive, setBtnActive] = useState('');
-    const current = Math.ceil(timeTable.length/perpage) + pageCount * pageGroup; 
 
     const hadlePageBtn = (e,i) => {
         setPage(i);
@@ -30,7 +29,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     };
 
     const handlePrevPage = () =>{
-        setFirst((pageGroup+1)*pageCount - (last-1));
+        setFirst((first) => first - 4);
         setPageGroup(pageGroup - 1);
     }
 
@@ -47,12 +46,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     },[]);
 
     useEffect(()=>{
-        if (current < last){
-            setLast(current);
-        }
-    },[first])
-
-    useEffect(()=>{
+        console.log((pageGroup + 1)*pageCount); 
         setLast((pageGroup + 1)*pageCount); 
     },[first,pageGroup]);
 
@@ -63,6 +57,13 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     useEffect(()=>{ 
         setBtnActive(page);
     },[page])
+
+    useEffect(()=>{
+        const current = Math.ceil(timeTable.length/perpage) + pageCount * pageGroup; 
+        if(current <last){
+            setLast(current);
+        }
+    },[timeTable.length])
 
 	return (
 		<>
