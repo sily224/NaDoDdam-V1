@@ -14,7 +14,6 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     const pageNum = () =>{
         let pageList = [];
         
-        console.log(first,last);
         for (let i = first; i <= last; i++) {
             pageList.push(
                 <PageBtn
@@ -31,7 +30,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     };
 
     const handlePrevPage = () =>{
-        setFirst((last-1) -pageGroup *pageCount); 
+        setFirst(first-pageCount); 
         setPageGroup(pageGroup - 1);
     }
 
@@ -66,10 +65,6 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
         setBtnActive(page);
     },[page])
 
-    const handleNext = () => {
-        setPage(page + 1)
-    }
-
 	return (
 		<>
 			<PageWrapper>
@@ -82,10 +77,10 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 				{
                     pageNum()
 				}
-				<PageBtn onClick={handleNext} disabled={page === last}>
+				<PageBtn onClick={()=>setPage(page + 1)} disabled={page === last}>
 					&gt;
 				</PageBtn>
-                <PageBtn onClick={handleNextPage} disabled={last < (pageGroup+1) * pageCount}>
+                <PageBtn onClick={handleNextPage} disabled={timeTable.length < 20}>
 					{'>>'}
 				</PageBtn>
 			</PageWrapper>

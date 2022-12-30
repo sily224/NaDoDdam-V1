@@ -1,8 +1,7 @@
-import React, { useState, useEffect,createContext } from "react";
+import { useState, useEffect,createContext } from "react";
 import axios from "axios";
 import Detail from "../components/Detail";
 import { useParams } from 'react-router-dom';
-
 
 export const DetailContext = createContext();
 
@@ -16,7 +15,6 @@ const DetailPage =  () => {
     const fetchData = async () => {
         try {
             await axios.get(`/api/farms/${id}`).then((res) => {
-                console.log(res.data);
                 setFarmData(res.data.data);
                 setreviewData(res.data.reviewInfo);
                 setFarmerData(res.data.farmer);                 
@@ -49,10 +47,9 @@ const DetailPage =  () => {
         fetchTimeTable()
     },[farmerData]);
 
-    
     return (
         <div>
-            <DetailContext.Provider value={ {farmData,reviewData,farmerData,timeTable}}>
+            <DetailContext.Provider value={{farmData,reviewData,farmerData,timeTable}}>
                 <Detail />
             </DetailContext.Provider>
         </div>

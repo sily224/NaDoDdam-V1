@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { getDate } from '../store/FormSlice';
 import { DetailContext } from '../pages/DetailPage';
-import Calendar from 'react-calendar';
 import Moment from 'moment';
 import styled from 'styled-components';
+import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
 const CalendarContainer = styled.div`
@@ -57,23 +57,27 @@ const IsNotPay = () => {
 		const diff = Moment(orderedDate[orderedDate.length - 1].date).diff(Moment(),'days');
 
 		// memo 지혜 : 오늘날짜보다 체험시간표의 끝 날짜가 더 이르다면 (전부 끝난 체험)
-		if(diff < 0){ 
+		// memo 지혜 : 오늘날짜보다 체험시간표의 끝 날짜가 같다면 (오늘까지 있는체험)
+		if(diff <= 0){ 
 			return [new Date(),new Date()];
 		}
-		// memo 지혜 : 오늘날짜보다 체험시간표의 끝 날짜가 같다면 (오늘까지 있는체험)
-		else if(diff == 0){ 
-			return [new Date() , new Date()];
-		}
 		// 오늘날짜보다 체험시간표의 끝 날짜가 멀다면 (아직 체험이 남아있음)
+		// 시작날짜가 오늘이전 , 오늘 이후 
 		else {
+			const today = Moment();
+			const start = Moment(orderedDate[0].date);
 			const end =  orderedDate[orderedDate.length - 1].date;
-			return [new Date() , new Date(end)];
+
+			if(start.diff(today, 'days') < 0) {
+				// todo 지혜 : 시작날짜가 오늘 이후 인 경우 첫날짜로 설정하고 싶음
+				return [new Date(today), new Date(end)];
+			}
+			return [new Date(start) , new Date(end)];
 		}	
 	}
 };
 
 const ReactCalender = (props) => {
-
 	const [date, setDate] = useState(null);
 	const dispatch = useDispatch();
 	let [min,max] = [new Date(), new Date()]
@@ -107,7 +111,6 @@ const ReactCalender = (props) => {
 				maxDate={max}
 			/>
 		</CalendarContainer>
-
 	);
 };
 

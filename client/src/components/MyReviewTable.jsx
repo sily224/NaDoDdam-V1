@@ -133,7 +133,7 @@ const MyReviewTable = () => {
       setData(result);
     setLoading(false);
     }catch(err) {
-      console.log(err)
+      console.log(err.response.data.Error);
     }
   }
 
@@ -207,20 +207,20 @@ const MyReviewTable = () => {
   return (
     <>
     <StyledTitle>리뷰 목록</StyledTitle>
-    {loading ? <>
+    {loading 
+    ? <>
       <SkeletonList />
       <SkeletonList />
       <SkeletonList />
       <SkeletonList />
-    </> :
-    <ShowReviewList />
-    }
-    {data.length === 0 ? <>
-    <StyledNotData>
-      <img src={apple} alt="" />
-      <h4>회원님의 후기 내역이 없습니다.</h4>
+      </> 
+    : data.length > 0 
+    ? <ShowReviewList /> 
+    : <StyledNotData>
+        <img src={apple} alt="" />
+        <h4>회원님의 후기 내역이 없습니다.</h4>
       </StyledNotData>
-    </> : <ShowReviewList />}
+    }
     </>
   )
 }
