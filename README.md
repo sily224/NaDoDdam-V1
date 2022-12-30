@@ -57,6 +57,7 @@ http://kdt-sw3-team01.elicecoding.com/
 2. [API 명세서](https://documenter.getpostman.com/view/16584157/2s8Z6sbvay)
 
 <br />
+
 ## 💡서비스 주요 기능
 
 ### 1.홈 화면 - 무한 스크롤, 찜 기능
