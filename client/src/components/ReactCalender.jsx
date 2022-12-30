@@ -67,10 +67,12 @@ const IsNotPay = () => {
 			const today = Moment();
 			const start = Moment(orderedDate[0].date);
 			const end =  orderedDate[orderedDate.length - 1].date;
-			if(start.diff(today, 'days') > 0) {
-				return [new Date(start) , new Date(end)];
+
+			if(start.diff(today, 'days') < 0) {
+				// todo 지혜 : 시작날짜가 오늘 이후 인 경우 첫날짜로 설정하고 싶음
+				return [new Date(today), new Date(end)];
 			}
-			return [new Date() , new Date(end)];
+			return [new Date(start) , new Date(end)];
 		}	
 	}
 };
