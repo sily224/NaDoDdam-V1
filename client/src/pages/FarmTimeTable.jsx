@@ -123,8 +123,6 @@ const TimeTable = ()=>{
             await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
                 (res) => {
                     const data = res.data;
-                    console.log(data);
-                    console.log(lastId[pageGroup]);
                     setTimeTable([...data]);
                 }
             );
@@ -242,7 +240,6 @@ const TimeTable = ()=>{
     };
 
     useEffect (() => {
-        console.log(lastId);
         fetchData();
     }, [lastId,pageGroup]);
 
@@ -255,7 +252,6 @@ const TimeTable = ()=>{
             { timeTable.length > 0 ? 
                     timeTable.slice(offset, offset + perpage).map((table,idx) =>{
                         const {id, url, date, start_time, end_time, price, personnel} = table;
-                        console.log(url);
                         return(
                             <TimeTableList key={idx}>
                                 <TimTableItem>
