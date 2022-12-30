@@ -13,7 +13,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 
     const pageNum = () =>{
         let pageList = [];
-        // console.log(first,last);
+
         for (let i = first; i <= last; i++) {
             pageList.push(
                 <PageBtn
@@ -30,13 +30,13 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     };
 
     const handlePrevPage = () =>{
-        setFirst(first-pageCount); 
+        setFirst((pageGroup+1)*pageCount - (last-1));
         setPageGroup(pageGroup - 1);
     }
 
     const handleNextPage = () =>{  
-        if( lastId.filter( id => id >= timeTable[timeTable.length-1].id).length == 0 ){
-            setLastId([...lastId, timeTable[timeTable.length-1].id]);
+        if( lastId.filter( id => id >= timeTable[0].id).length == 0 ){
+            setLastId([...lastId, timeTable[0].id]);
         }
         setFirst(last + 1);  
         setPageGroup(pageGroup + 1);
@@ -50,7 +50,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
         if (current < last){
             setLast(current);
         }
-    },[last])
+    },[first])
 
     useEffect(()=>{
         setLast((pageGroup + 1)*pageCount); 

@@ -92,7 +92,7 @@ const maskingName = (name) =>{
 
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
-    const MaxLength = 20;
+    const MaxLength = 40;
 
     return review.map((value, idx) => {
         const {id, name, content, date, rating} = value;
