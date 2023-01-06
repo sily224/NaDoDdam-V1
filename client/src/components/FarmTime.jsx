@@ -91,7 +91,6 @@ const FarmTime = (props) =>{
                 return;
             }
         }
-
         setTimeList([...timeList, [startTime, endTime]]);
         setMaxHeadCountList([...maxHeadCountList,maxHeadCount]);
     };
@@ -152,7 +151,6 @@ const FarmTime = (props) =>{
                 el.disabled = false;
             }
         }
-        
         renderTime();
     },[timeList]);
 
