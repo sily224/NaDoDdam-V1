@@ -486,7 +486,7 @@ const Payment = () => {
 										navigate(`/mypage/reservation`);
 									}}
 								>
-									구매내역보기
+									구매내역 보기
 								</ModalBtn>
 							</ModalDiv>
 						) : (
