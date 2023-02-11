@@ -8,8 +8,8 @@ export async function reserve(req, res, next) {
 	const user_id = req.userId;
 
 	const ispersonnel = await db.TimeTables.getById(time_id);
-	if(ispersonnel.personnel < personnel) {
-		throw new Error('해당 예약의 정원보다 신청 인원이 더 많습니다.')
+	if (ispersonnel.personnel < personnel) {
+		throw new Error('해당 예약의 정원보다 신청 인원이 더 많습니다.');
 	}
 
 	try {
@@ -23,11 +23,15 @@ export async function reserve(req, res, next) {
 			email,
 			personnel,
 		});
-		db.TimeTables.getById(new_reserve.dataValues.time_id).then( data => {
-			return data.decrement('personnel', {by: new_reserve.dataValues.personnel})
-		}).then(data => {
-			data.reload();
-		})
+		db.TimeTables.getById(new_reserve.dataValues.time_id)
+			.then((data) => {
+				return data.decrement('personnel', {
+					by: new_reserve.dataValues.personnel,
+				});
+			})
+			.then((data) => {
+				data.reload();
+			});
 
 		res.status(201).json(new_reserve);
 	} catch (err) {
@@ -62,30 +66,32 @@ export async function getReserveData(req, res, next) {
 	try {
 		const timeId = []; // 예약한 것들의 타임 id
 		const timeInfo = [];
-
 		let results = [];
 		const reserve = await db.Reservations.findByUserId(id);
+		console.log(reserve);
 		if (!reserve) {
 			throw new Error('유저의 예약 내역이 없습니다.');
 		}
-
 		reserve.forEach((res) => timeId.push(res.time_id));
-
 		for (let i = 0; i < timeId.length; i++) {
 			const time = await db.TimeTables.getAll(timeId[i]);
-			timeInfo.push({
-				id: time.id,
-				date: time.date,
-				start_time: time.start_time,
-				end_time: time.end_time,
-				people: time.personnel,
-				address: time.dataValues.address,
-				name: time.dataValues.name,
-				url: time.dataValues.url,
-			});
+			if (!time) continue;
+			else {
+				timeInfo.push({
+					id: time.id,
+					date: time.date,
+					start_time: time.start_time,
+					end_time: time.end_time,
+					people: time.personnel,
+					address: time.dataValues.address,
+					name: time.dataValues.name,
+					url: time.dataValues.url,
+				});
+			}
 		}
 		for (let i = 0; i < reserve.length; i++) {
 			const review = await db.Reviews.findByReserveId(reserve[i].id);
+			if (!timeInfo[i]) continue;
 			if (review !== null) {
 				results.push({
 					info: timeInfo[i],
@@ -111,6 +117,7 @@ export async function getReserveData(req, res, next) {
 				});
 			}
 		}
+		console.log(results);
 		res.status(200).json(results);
 	} catch (err) {
 		next(err);
@@ -229,13 +236,16 @@ export async function reserveUpdate(req, res, next) {
 
 		if (toUpdate.status === '예약취소') {
 			const reserveInfo = await db.Reservations.findByReserveNumId(id);
-			db.TimeTables.getById(reserveInfo.dataValues.time_id).then( data => {
-				return data.increment('personnel', {by: reserveInfo.dataValues.personnel})
-			}).then(data => {
-				data.reload();
-			})
+			db.TimeTables.getById(reserveInfo.dataValues.time_id)
+				.then((data) => {
+					return data.increment('personnel', {
+						by: reserveInfo.dataValues.personnel,
+					});
+				})
+				.then((data) => {
+					data.reload();
+				});
 		}
-		
 
 		const updateReserveInfo = await setReserve(reserveInfo, toUpdate);
 		res.status(200).json({ message: 'update!' });
