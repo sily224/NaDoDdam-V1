@@ -25,6 +25,12 @@ const MemberRoute = ({ children }) => {
 		return <Navigate to="/login" />;
 	}
 };
+// memo 혜실: 홈 화면의 하트는 일반 회원만 보이도록 구현
+const LikeRoute = ({ children }) => {
+	if (getUserType() === 'member') {
+		return children;
+	}
+};
 
 // memo 지우: 농장주 로그인 상태일 때만 페이지 이동
 // 일반 회원일 때 -> 알림창 띄움
@@ -40,4 +46,4 @@ const FarmerRoute = ({ children }) => {
 	}
 };
 
-export { NonMemberRoute, MemberRoute, FarmerRoute };
+export { NonMemberRoute, MemberRoute, FarmerRoute, LikeRoute };

@@ -1,6 +1,6 @@
 import { FarmList } from '../components/ItemList';
 import React, { useState, useEffect, useCallback } from 'react';
-
+import { getUserType } from '../utils/utils';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -21,7 +21,6 @@ const getFavorite = async () => {
 		.then((data) => {
 			return data.map((x) => x.id);
 		});
-
 	return result;
 };
 
@@ -32,13 +31,12 @@ const Home = React.memo(() => {
 	const [favorite, setFavorite] = useState([]); // 찜 목록 상태
 	const setInitialFavorite = async () => {
 		const data = await getFavorite(); // 찜 목록 가져오기
-
 		setFavorite(data);
 	};
 
 	// DB에서 찜 목록 가져오기
 	useEffect(() => {
-		if (localStorage.getItem('token')) setInitialFavorite(); // 찜 목록 초기화
+		if (getUserType() === 'member') setInitialFavorite(); // 찜 목록 초기화
 	}, []);
 
 	useEffect(() => {
@@ -47,79 +45,75 @@ const Home = React.memo(() => {
 
 	const [contents, setContents] = useState([]);
 	const [page, setPage] = useState(0);
-  const length = 20;
-  const last = length*(page+1);
+	const length = 20;
+	const last = length * (page + 1);
 
 	// 최초 렌더링 시 전체 데이터 조회
 	useEffect(() => {
-    toggle=true;
-    setPage(0);
-    // console.log('서치 옵션', option);
-    setContents([]);
-    getFarmData(option, 20);
+		toggle = true;
+		setPage(0);
+		// console.log('서치 옵션', option);
+		setContents([]);
+		getFarmData(option, 20);
 	}, [option]);
 
-	const getFarmData = useCallback(
-		async ({ location, fruit }, last) => {
+	const getFarmData = useCallback(async ({ location, fruit }, last) => {
+		const header = {
+			headers: {
+				'Content-Type': 'application/json;charset=UTF-8',
+			},
+			params: {
+				location: location,
+				type: fruit,
+			},
+		};
 
-			const header = {
-        headers: {
-          'Content-Type':'application/json;charset=UTF-8',
-        },
-        params: {
-          location:location, type:fruit
-        }
-			};
+		let url = `/api/farms?limit=${last}`; // default 전체 조회
 
-			let url = `/api/farms?limit=${last}`; // default 전체 조회
+		if (location) {
+			url = `/api/farms/location`; // 지역 조회
+			await axios.get(url, header).then((res) => {
+				const data = res.data;
+				setPage(0);
+				setContents(data);
+				toggle = false;
+				return;
+			});
+		} else if (fruit) {
+			url = `/api/farms`; // 과일 조회
+			await axios.get(url, header).then((res) => {
+				const data = res.data;
+				setContents(data);
+				setPage(0);
+				toggle = false;
+				return;
+			});
+		} else {
+			await axios.get(url, header).then((res) => {
+				const data = res.data;
+				const d = data.slice(length * page, length * (page + 1));
+				// console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
+				if (d.length === 0) {
+					// console.log('no data');
+					toggle = false;
+					setPage(0);
+					return;
+				}
 
-			if (location) {
-				url = `/api/farms/location`; // 지역 조회
-        await axios.get(url, header)
-          .then((res) => {
-            const data = res.data;
-            setPage(0);
-            setContents(data);
-            toggle = false;
-            return;
-          });
-			} else if (fruit) {
-				url = `/api/farms`; // 과일 조회
-        await axios.get(url, header)
-          .then((res) => {
-            const data = res.data;
-            setContents(data);
-            setPage(0);
-            toggle = false;
-            return;
-          });
-			} else{
-        await axios.get(url, header)
-          .then((res) => {
-            const data = res.data;
-            const d = data.slice(length*page, length*(page+1));
-            // console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
-            if (d.length === 0) {
-              // console.log('no data');
-              toggle = false;
-              setPage(0);
-              return;
-            }
-            
-            if (page === 0) setContents(d);
-            else setContents(contents.concat(d));
-            setPage(page + 1);
-          });
-      }
-    }
-	);
+				if (page === 0) setContents(d);
+				else setContents(contents.concat(d));
+				setPage(page + 1);
+			});
+		}
+	});
 
 	return (
 		<InfiniteScroll
 			dataLength={contents.length}
 			next={() => {
-        if (toggle) {
-          getFarmData(option, last);}
+				if (toggle) {
+					getFarmData(option, last);
+				}
 			}}
 			hasMore={true}
 			scrollThreshold="500px"

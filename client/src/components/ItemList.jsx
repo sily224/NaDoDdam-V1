@@ -5,25 +5,27 @@ import styled from 'styled-components';
 import heartLogo from '../assets/favorite.png';
 import apple from '../assets/apple.png';
 import { HOST, yellow } from './../global-variables';
+import { LikeRoute } from '../components/RestrictionRoute';
 
-const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
-
+const FarmList = React.memo(({ contents, favorite, setFavorite }) => {
 	const handleButton = async (e) => {
 		// 로그인 유무 확인
-		if (!localStorage.getItem('token')){
+		if (!localStorage.getItem('token')) {
 			alert('찜 기능은 로그인이 필요합니다.');
 			return;
 		}
 
 		const farmId = Number(e.target.id);
-		const element =	e.target;
+		const element = e.target;
 
-		if (element.getAttribute('color') === 'true') element.setAttribute('color', 'false');
-		else if (element.getAttribute('color') === 'false') element.setAttribute('color', 'true');
+		if (element.getAttribute('color') === 'true')
+			element.setAttribute('color', 'false');
+		else if (element.getAttribute('color') === 'false')
+			element.setAttribute('color', 'true');
 
 		// console.log('입력된 농장 아이디', farmId);
 
-		if (favorite.includes(farmId)){
+		if (favorite.includes(farmId)) {
 			await axios(`/api/like/${farmId}`, {
 				method: 'DELETE',
 				headers: {
@@ -31,7 +33,7 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 			});
-			setFavorite(favorite.filter(x=>x!==farmId));
+			setFavorite(favorite.filter((x) => x !== farmId));
 		} else {
 			await axios(`/api/like/${farmId}`, {
 				method: 'POST',
@@ -45,40 +47,58 @@ const FarmList = React.memo(({ contents, favorite, setFavorite}) => {
 	};
 
 	if (contents.length === 0) {
-		return <Container><Empty><img src={apple}/>농장 없음</Empty></Container>;
+		return (
+			<Container>
+				<Empty>
+					<img src={apple} />
+					농장 없음
+				</Empty>
+			</Container>
+		);
 	} else {
 		return (
 			<Container>
 				<ItemList className="itemList">
-					{contents && contents.map((content) => {
-						return (
-							<Item key={content.id}>
-								<Button type="button" id={content.id} onClick={(e) => handleButton(e)} color={favorite.includes(content.id).toString()} />
-								<Link to={`/detail/${content.id}`}>
-									<img src={content.url.split(',')[0]} alt={content.name} />
-									<TextContainer>
-										<div><Bold>{content.name}</Bold></div>
-										<div><Address>{content.address}</Address></div>
-									</TextContainer>
-								</Link>
-							</Item>
-						);
-					})}
+					{contents &&
+						contents.map((content) => {
+							return (
+								<Item key={content.id}>
+									<LikeRoute>
+										<Button
+											type="button"
+											id={content.id}
+											onClick={(e) => handleButton(e)}
+											color={favorite.includes(content.id).toString()}
+										/>
+									</LikeRoute>
+									<Link to={`/detail/${content.id}`}>
+										<img src={content.url.split(',')[0]} alt={content.name} />
+										<TextContainer>
+											<div>
+												<Bold>{content.name}</Bold>
+											</div>
+											<div>
+												<Address>{content.address}</Address>
+											</div>
+										</TextContainer>
+									</Link>
+								</Item>
+							);
+						})}
 				</ItemList>
 			</Container>
 		);
 	}
 });
 
-const FavoriteList = React.memo(({ contents, setContents}) => {
-
+const FavoriteList = React.memo(({ contents, setContents }) => {
 	const handleButton = async (e) => {
 		// 로그인 유무 확인
-		if (!localStorage.getItem('token')){
+		if (!localStorage.getItem('token')) {
 			alert('찜 기능은 로그인이 필요합니다.');
 			return;
 		}
-	
+
 		const farmId = Number(e.target.id);
 		// console.log('입력된 농장 아이디', farmId);
 		const element = e.target;
@@ -91,34 +111,45 @@ const FavoriteList = React.memo(({ contents, setContents}) => {
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 		});
-		setContents(contents.filter(x=>x.id!==farmId));
+		setContents(contents.filter((x) => x.id !== farmId));
 	};
 
 	if (contents.length === 0) {
-		return <Container><Empty><img src={apple}/>찜 없음</Empty></Container>;
+		return (
+			<Container>
+				<Empty>
+					<img src={apple} />찜 없음
+				</Empty>
+			</Container>
+		);
 	} else {
 		return (
 			<Container>
 				<ItemList className="itemList">
-					{contents && contents.map((content) => {
-						return (
-							<Item key={content.id}>
-								<Button
-									type="button"
-									id={content.id}
-									onClick={handleButton}
-									color="true"
-								/>
-								<Link to={`/detail/${content.id}`}>
-									<img src={content.url.split(',')[0]} alt={content.name} />
-									<TextContainer>
-									<div><Bold>{content.name}</Bold></div>
-										<div><Address>{content.address}</Address></div>
-									</TextContainer>
-								</Link>
-							</Item>
-						);
-					})}
+					{contents &&
+						contents.map((content) => {
+							return (
+								<Item key={content.id}>
+									<Button
+										type="button"
+										id={content.id}
+										onClick={handleButton}
+										color="true"
+									/>
+									<Link to={`/detail/${content.id}`}>
+										<img src={content.url.split(',')[0]} alt={content.name} />
+										<TextContainer>
+											<div>
+												<Bold>{content.name}</Bold>
+											</div>
+											<div>
+												<Address>{content.address}</Address>
+											</div>
+										</TextContainer>
+									</Link>
+								</Item>
+							);
+						})}
 				</ItemList>
 			</Container>
 		);
@@ -144,7 +175,7 @@ const ItemList = styled.div`
 	max-width: 1800px;
 	width: 100%;
 	height: auto;
-	position:absolute;
+	position: absolute;
 `;
 
 const Item = styled.div`
@@ -157,7 +188,7 @@ const Item = styled.div`
 	border: 1px solid rgba(0, 0, 0, 0.18);
 	position: relative;
 	border-radius: 10px;
-	overflow:hidden;
+	overflow: hidden;
 	background-color: white;
 
 	img {
@@ -175,7 +206,7 @@ const Item = styled.div`
 			height: 400px;
 			width: 100%;
 		}
-		z-index:1;
+		z-index: 1;
 	}
 `;
 
@@ -186,7 +217,8 @@ const Button = styled.button`
 	position: absolute;
 	transition: all 0.5s;
 	transform: rotateY(540deg);
-	filter: ${(props)=> (props.color === 'false' ? 'grayscale(100)' : 'grayscale(0)')};
+	filter: ${(props) =>
+		props.color === 'false' ? 'grayscale(100)' : 'grayscale(0)'};
 	top: 5%;
 	right: 5%;
 	border: none;
@@ -197,9 +229,9 @@ const Button = styled.button`
 
 	&:hover {
 		transition: 1s;
-		transform:scale(2);
+		transform: scale(2);
 	}
-`
+`;
 
 const TextContainer = styled.div`
 	display: grid;
@@ -211,17 +243,17 @@ const TextContainer = styled.div`
 
 	&hover: {
 		transition: 0.5s;
-		display:hidden;
+		display: hidden;
 	}
 `;
 
 const Bold = styled.b`
-	font-size:16px;
-`
+	font-size: 16px;
+`;
 
 const Address = styled.span`
 	color: gray;
-`
+`;
 const Empty = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -233,6 +265,6 @@ const Empty = styled.div`
 		height: 50px;
 		margin-bottom: 20px;
 	}
-`
+`;
 
 export { FarmList, FavoriteList };

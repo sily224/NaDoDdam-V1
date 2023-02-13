@@ -126,7 +126,6 @@ export async function getReserveData(req, res, next) {
 
 export async function getFarmerData(req, res, next) {
 	const id = req.farmerId;
-
 	try {
 		const farm = await db.Farmers.getFarmIdFromFarmer(id); //해당 농장주의 농장아이디 찾음
 		if (!farm) {
