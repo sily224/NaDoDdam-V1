@@ -183,12 +183,10 @@ const Item = styled.div`
 	flex-direction: column;
 	flex-basis: auto;
 	height: 350px;
-	width: auto;
 	box-shadow: -1px -1px 10px rgba(0, 0, 0, 0.18);
 	border: 1px solid rgba(0, 0, 0, 0.18);
 	position: relative;
 	border-radius: 10px;
-	overflow: hidden;
 	background-color: white;
 
 	img {
@@ -198,15 +196,13 @@ const Item = styled.div`
 	}
 
 	&:hover {
-		transition: 0.5s;
-		transform: scale(1.1);
-		border: solid 2px ${yellow};
+		overflow: hidden;
+		height: 350px;
 		img {
 			transition: 0.5s;
-			height: 400px;
-			width: 100%;
+			transform: scale(1.1);
+			overflow: hidden;
 		}
-		z-index: 1;
 	}
 `;
 
@@ -226,25 +222,14 @@ const Button = styled.button`
 	height: 50px;
 
 	background: url(${heartLogo}) no-repeat;
-
-	&:hover {
-		transition: 1s;
-		transform: scale(2);
-	}
 `;
 
 const TextContainer = styled.div`
 	display: grid;
 	height: 20px;
 	padding: 10px;
-	object-fit: cover;
 	grid-template-rows: 1fr 1fr;
 	border-radius: 0 0 10px 10px;
-
-	&hover: {
-		transition: 0.5s;
-		display: hidden;
-	}
 `;
 
 const Bold = styled.b`
