@@ -196,13 +196,8 @@ const Item = styled.div`
 	}
 
 	&:hover {
-		overflow: hidden;
-		height: 350px;
-		img {
-			transition: 0.5s;
-			transform: scale(1.1);
-			overflow: hidden;
-		}
+		transition: transform 0.35s;
+		transform: scale(1.03);
 	}
 `;
 
