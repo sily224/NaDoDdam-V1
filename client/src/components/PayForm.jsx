@@ -138,7 +138,6 @@ const PayForm = ({ payData, userData, setPaySuccess }) => {
 		try {
 			const res = await userApi.get(`/api/timetables/${payData.farmId}`);
 			const resData = await res.data;
-			// console.log(resData);
 			setResData(resData);
 			for (let i = 0; i < resData.length; i++) {
 				if (resData[i].id === payData.timeId) {
@@ -161,7 +160,6 @@ const PayForm = ({ payData, userData, setPaySuccess }) => {
 				personnel: payData.headCount,
 				time_id: payData.timeId,
 			});
-			// console.log(reqData);
 		} catch (e) {
 			console.log(e);
 		}
