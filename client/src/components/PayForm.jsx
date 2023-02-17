@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import { Accordion, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as userApi from '../lib/userApi';
-import { showModal, closeModal } from '../store/ModalSlice';
+import { showModal } from '../store/ModalSlice';
 import { yellow } from '../global-variables';
 import {
 	SubmitButton,
@@ -191,7 +191,7 @@ const PayForm = ({ payData, userData, setPaySuccess }) => {
 					<FlexStartDiv>
 						<Tittle>시간</Tittle>
 						<StyledParagraph>
-							{payData.startTime} ~ {payData.endTime}
+							{payData.startTime} - {payData.endTime}
 						</StyledParagraph>
 					</FlexStartDiv>
 					<FlexStartDiv>
