@@ -199,7 +199,7 @@ const PayForm = ({ payData, userData, setPaySuccess }) => {
 						<StyledParagraph>{payData.headCount}명</StyledParagraph>
 					</FlexStartDiv>
 					<ButtonDiv>
-						<GreenBtn onClick={() => navigate(-1)}>예약정보수정</GreenBtn>
+						<GreenBtn onClick={() => navigate(-1)}>예약정보 수정</GreenBtn>
 					</ButtonDiv>
 				</Box>
 				<Box>
